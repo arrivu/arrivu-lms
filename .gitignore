@@ -43,3 +43,7 @@
 /public/javascripts/plugins/
 /public/plugins/
 /spec/coffeescripts/plugins/
+.idea/*
+.idea/workspace.xml
+/.idea/*
+/.idea/workspace.xml
