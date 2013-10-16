@@ -3,7 +3,7 @@
   <component name="DataSourceManagerImpl" format="xml" hash="3370188018">
     <data-source source="LOCAL" name="Rails jigsaw-lms: production" product="" version="" jdbc-version="" driver-name="" driver-version="" uuid="ff16bc0f-7dbc-4040-8b75-f497e2720266">
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://127.0.0.1/canvas_production</jdbc-url>
+      <jdbc-url>jdbc:postgresql://127.0.0.1/jigsaw_production</jdbc-url>
       <user-name>canvas</user-name>
       <user-password>dfc9dfcbdfc4dfdcdfcbdfd9</user-password>
       <libraries>
@@ -30,7 +30,7 @@
     </data-source>
     <data-source source="LOCAL" name="Rails jigsaw-lms: development" product="" version="" jdbc-version="" driver-name="" driver-version="" uuid="d07bd4f2-fc6b-4ffb-93b2-6652f006dcdb">
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://127.0.0.1/canvas_development</jdbc-url>
+      <jdbc-url>jdbc:postgresql://127.0.0.1/jigsaw_production</jdbc-url>
       <user-name>canvas</user-name>
       <user-password>dfc9dfcbdfc4dfdcdfcbdfd9</user-password>
       <libraries>
