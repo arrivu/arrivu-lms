@@ -1,4 +1,4 @@
-source 'https://rubygems.org/'
+source 'http://rubygems.org/'
 
 if RUBY_VERSION < "1.9.3" || RUBY_VERSION >= "2.0"
   raise "Canvas requires Ruby 1.9.3"
@@ -144,9 +144,9 @@ group :development do
   # Option to DISABLE_RUBY_DEBUGGING is helpful IDE-based debugging.
   # The ruby debug gems conflict with the IDE-based debugger gem.
   # Set this option in your dev environment to disable.
-  unless ENV['DISABLE_RUBY_DEBUGGING']
-    gem 'debugger',     '1.5.0'
-  end
+  #unless ENV['DISABLE_RUBY_DEBUGGING']
+  #  gem 'debugger',     '1.5.0'
+  #end
 end
 
 group :development, :test do
