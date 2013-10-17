@@ -1363,4 +1363,6 @@ FakeRails3Routes.draw do
 
   # in rails 2 this was Jammit::Routes.draw(map)
   match '/assets/:package.:extension' => 'jammit#package', :as => :jammit if defined?(Jammit)
+  resources :omniauth_links
+  match '/auth/:provider/callback' => 'authentication#create'
 end
