@@ -2,6 +2,7 @@ class AuthenticationController < ApplicationController
 
   def create
     auth = request.env["omniauth.auth"]
+    provider = set_provider(auth)
     pseudonyms=@domain_root_account.pseudonyms.active.custom_find_by_unique_id(auth[:info][:email])
     unless pseudonyms.nil?
     @user= pseudonyms.user
@@ -9,7 +10,7 @@ class AuthenticationController < ApplicationController
     end
     # Try to find authentication first
       if !!@authentication
-        if @authentication.provider == auth['provider']
+        if @authentication.provider == provider
           if @authentication.user.workflow_state == "active"
             reset_session_for_login
             @pseudonym_session = @domain_root_account.pseudonym_sessions.new(@authentication.user)
@@ -20,7 +21,7 @@ class AuthenticationController < ApplicationController
             activation_pending
           end
         else
-          flash[:error] = " Sorry,You have already registred with #{@authentication.provider}"
+          flash[:error] = " Sorry,You have already registred with #{@authentication.provider} account."
           redirect_to root_url
         end
       else
@@ -36,9 +37,10 @@ class AuthenticationController < ApplicationController
       @user.communication_channels.create!(:path => auth[:info][:email]) { |cc| cc.workflow_state = 'active' }
       @user.save!
       @pseudonym.save!
-      @omniauth_authentication= OmniauthAuthentication.create!(:provider=>auth['provider'] ,
-                                                              :token=>auth[:credentials][:token],
-                                                              :uid=>auth['uid'], :user_id=>@user.id)
+      provider = set_provider(auth)
+      @omniauth_authentication= OmniauthAuthentication.create!(:provider => provider,
+                                                              :token => auth[:credentials][:token],
+                                                              :uid => auth['uid'], :user_id=>@user.id)
       un_successful_login
     end
  end
@@ -66,6 +68,12 @@ class AuthenticationController < ApplicationController
     redirect_to root_url
   end
 
-
+ def set_provider(auth)
+   if auth['provider'] == "google_oauth2"
+     provider = "Google"
+   else
+     provider = auth['provider']
+   end
+ end
 
 end
