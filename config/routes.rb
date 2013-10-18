@@ -1365,4 +1365,5 @@ FakeRails3Routes.draw do
   match '/assets/:package.:extension' => 'jammit#package', :as => :jammit if defined?(Jammit)
   resources :omniauth_links
   match '/auth/:provider/callback' => 'authentication#create'
+  get '/auth/failure' => 'authentication#auth_failure'
 end
