@@ -71,7 +71,7 @@ $(document).ready(function() {
 <% end %>
 <% login_handle_name = @domain_root_account.login_handle_name rescue AccountAuthorizationConfig.default_login_handle_name %>
 <div id="modal-box" class="login-box">
-    <div id="modal-box-inner">
+    <div id="modal-box-inner" style="margin-top: -9px;">
     <h1>Canvas</h1>
     <% if @is_delegated %>
       <div id="login_form">
@@ -118,6 +118,7 @@ $(document).ready(function() {
         </div>
       <% end %>
     <% else  %>
+          <div style="text-align: center;color:#000000"> <h3>Login or Register with your social account.</h3> </div> <br>
           <div style="text-align: center;">
           <span> <%= link_to image_tag("Facebook_light.png",:class => "login_img", alt: "Login with FB"), '/auth/facebook/' %></span> &nbsp;&nbsp;&nbsp;
           <span> <%= link_to image_tag("Googleplus_light.png", :class => "login_img", alt: "Login with Goole"), '/auth/google_oauth2/' %></span>&nbsp;&nbsp;&nbsp;
