@@ -1,10 +1,11 @@
+
 environment_configuration(defined?(config) && config) do |config|
   # Settings specified here will take precedence over those in config/application.rb
 
   # In the development environment your application's code is reloaded on
   # every request.  This slows down response time but is perfect for development
   # since you don't have to restart the webserver when you make code changes.
-  config.cache_classes = false
+  config.cache_classes = true
 
   # Log error messages when you accidentally call methods on nil.
   config.whiny_nils = true
@@ -17,6 +18,7 @@ environment_configuration(defined?(config) && config) do |config|
   end
   config.action_view.debug_rjs             = true
   config.action_controller.perform_caching = false
+  config.action_view.cache_template_loading = false
 
   # run rake js:build to build the optimized JS if set to true
   # ENV['USE_OPTIMIZED_JS']                            = 'true'
@@ -40,9 +42,9 @@ environment_configuration(defined?(config) && config) do |config|
   # Option to DISABLE_RUBY_DEBUGGING is helpful IDE-based debugging.
   # The ruby debug gems conflict with the IDE-based debugger gem.
   # Set this option in your dev environment to disable.
-  unless ENV['DISABLE_RUBY_DEBUGGING']
-    require "debugger"
-  end
+  #unless ENV['DISABLE_RUBY_DEBUGGING']
+  #  require "debugger"
+  #end
 
   if Rails.version < "3.0"
     config.to_prepare do

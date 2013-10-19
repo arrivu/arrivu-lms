@@ -1,4 +1,4 @@
-source 'https://rubygems.org/'
+source 'http://rubygems.org/'
 
 if RUBY_VERSION < "1.9.3" || RUBY_VERSION >= "2.0"
   raise "Canvas requires Ruby 1.9.3"
@@ -20,7 +20,8 @@ else
   if lts_file
     eval(File.read(lts_file))
   else
-    gem 'rails', :git => 'https://github.com/makandra/rails.git', :branch => '2-3-lts', :ref => 'e86daf8ff727d5efc0040c876ba00c9444a5d915'
+    #gem 'rails', :git => 'https://github.com/makandra/rails.git', :branch => '2-3-lts', :ref => 'e86daf8ff727d5efc0040c876ba00c9444a5d915'
+    gem 'rails', '2.3.18'
   end
   gem 'authlogic',    '2.1.3'
 end
@@ -144,9 +145,9 @@ group :development do
   # Option to DISABLE_RUBY_DEBUGGING is helpful IDE-based debugging.
   # The ruby debug gems conflict with the IDE-based debugger gem.
   # Set this option in your dev environment to disable.
-  unless ENV['DISABLE_RUBY_DEBUGGING']
-    gem 'debugger',     '1.5.0'
-  end
+  #unless ENV['DISABLE_RUBY_DEBUGGING']
+  #  gem 'debugger',     '1.5.0'
+  #end
 end
 
 group :development, :test do
