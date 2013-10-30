@@ -11,7 +11,7 @@ class AuthenticationController < ApplicationController
     # Try to find authentication first
       if !!@authentication
         if @authentication.provider == provider
-          if @authentication.user.workflow_state == "active"
+          if @authentication.user.workflow_state != "inactive"
             reset_session_for_login
             @pseudonym_session = @domain_root_account.pseudonym_sessions.new(@authentication.user)
             @pseudonym = @domain_root_account.pseudonyms.custom_find_by_unique_id(@authentication.user.email)

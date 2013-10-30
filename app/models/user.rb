@@ -31,6 +31,7 @@ class User < ActiveRecord::Base
                   :initial_enrollment_type,:avatar_image_url,:avatar_image_source,:avatar_image_updated_at,
                   :workflow_state
   attr_accessor :original_id, :menu_data
+  cattr_accessor :is_active
 
   before_save :infer_defaults
   serialize :preferences
@@ -859,6 +860,7 @@ class User < ActiveRecord::Base
     state :registered
 
     state :deleted
+    state :inactive
   end
 
   def unavailable?

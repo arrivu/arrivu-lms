@@ -535,6 +535,8 @@ FakeRails3Routes.draw do
     match 'users/:user_id/delete' => 'accounts#confirm_delete_user', :as => :confirm_delete_user
     match 'users/:user_id' => 'accounts#remove_user', :as => :delete_user, :via => :delete
     resources :users
+    match 'update_user',:to => 'users#update_user'
+    match 'activate_user' ,:to => 'users#activate_user'
     resources :account_notifications, :only => [:create, :destroy]
     concerns :announcements
     resources :assignments
