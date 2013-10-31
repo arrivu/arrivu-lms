@@ -48,7 +48,7 @@
         <tr><td><%= i+=1 %> </td>
            <td><%= image_tag(user.avatar_image_url,:size=>"30x30") unless user.avatar_image_url.nil?%></td>
            <td><%= user.name %></td>
-           <td><%= user.pseudonyms.first.email %></td>
+           <td><%= user.pseudonyms.first.email unless user.pseudonyms.first.nil?%></td>
                 <% form_for user,  :url => url_for(:controller => 'users', :action => 'activate_user')  ,
                    :html => {:id => "user"} do |f| %>
 
