@@ -328,16 +328,23 @@ class UsersController < ApplicationController
 
   def update_user
     @user=User.find(params[:id])
+    respond_to do |format|
     if params[:state] == "checked"
       @user.workflow_state ="registered"
        @user.save!
       if @user.workflow_state == "registered"
        Mailer.send_later(:deliver_user_activation_mail,@user)
+       format.json {
+          render(:json => @users)
+       }
       end
     elsif params[:state] == "unchecked"
       @user.workflow_state ="inactive"
       @user.save!
-
+      format.json {
+        render(:json => @users)
+      }
+    end
     end
   end
 
