@@ -1591,7 +1591,7 @@ class User < ActiveRecord::Base
     rid = in_root_account.id
     accts = self.associated_accounts.where("accounts.id = ? OR accounts.root_account_id = ?", rid, rid)
     return [] if accts.blank?
-    children = accts.inject({}) do |hash,acct| 
+    children = accts.inject({}) do |hash,acct|
       pid = acct.parent_account_id
       if pid.present?
         hash[pid] ||= []
@@ -2100,7 +2100,7 @@ class User < ActiveRecord::Base
       self.class.default_storage_quota :
       accounts.sum(&:default_user_storage_quota)
   end
-  
+
   def self.default_storage_quota
     Setting.get_cached('user_default_quota', 50.megabytes.to_s).to_i
   end

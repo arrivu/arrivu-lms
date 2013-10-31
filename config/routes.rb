@@ -1368,4 +1368,5 @@ FakeRails3Routes.draw do
   resources :omniauth_links
   match '/auth/:provider/callback' => 'authentication#create'
   get '/auth/failure' => 'authentication#auth_failure'
+  match '/discussion_topic_tags' => 'discussion_topics#discussion_topic_tags'
 end
