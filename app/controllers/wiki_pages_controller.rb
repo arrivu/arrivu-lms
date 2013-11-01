@@ -30,7 +30,7 @@ class WikiPagesController < ApplicationController
       if context.draft_state_enabled?
         url = c.send :polymorphic_path, [context, :pages]
       else
-        url = c.send :named_context_url, c.instance_variable_get("@context"), :context_wiki_pages_url, :type => c.instance_variable_get("@wiki_type")
+        url = c.send :named_context_url, c.instance_variable_get("@context"), :context_wiki_pages_url, c.instance_variable_get("@wiki_type")
       end
     end
     url
@@ -53,7 +53,7 @@ class WikiPagesController < ApplicationController
     if @page.deleted?
       flash[:notice] = t('notices.page_deleted', 'The page "%{title}" has been deleted.', :title => @page.title)
       if @wiki.has_front_page? && !@page.is_front_page?
-        redirect_to named_context_url(@context, :context_wiki_page_url, :type => @page.wiki_type, :id => @wiki.get_front_page_url)
+        redirect_to named_context_url(@context, :context_wiki_page_url, @page.wiki_type, @wiki.get_front_page_url)
       else
         redirect_to named_context_url(@context, :context_url)
       end
@@ -78,7 +78,7 @@ class WikiPagesController < ApplicationController
     if @context.draft_state_enabled?
       front_page
     else
-      redirect_to named_context_url(@context, :context_wiki_page_url, :type => @wiki_type, :id => @context.wiki.get_front_page_url || Wiki::DEFAULT_FRONT_PAGE_URL)
+      redirect_to named_context_url(@context, :context_wiki_page_url, @page.wiki_type, @context.wiki.get_front_page_url || Wiki::DEFAULT_FRONT_PAGE_URL)
     end
   end
 
@@ -114,10 +114,10 @@ class WikiPagesController < ApplicationController
       @page.context_module_action(@current_user, @context, :contributed)
       flash[:notice] = t('notices.page_updated', 'Page was successfully updated.')
       respond_to do |format|
-        format.html { return_to(params[:return_to], context_wiki_page_url(:type => @page.wiki_type, :edit => params[:action] == 'create')) }
+        format.html { return_to(params[:return_to], context_wiki_page_url(:edit => params[:action] == 'create')) }
         format.json {
           json = @page.as_json
-          json[:success_url] = context_wiki_page_url(:type => @page.wiki_type, :edit => params[:action] == 'create')
+          json[:success_url] = context_wiki_page_url(:edit => params[:action] == 'create')
           render :json => json
         }
       end
@@ -136,13 +136,13 @@ class WikiPagesController < ApplicationController
         @page.workflow_state = 'deleted'
         @page.save
         respond_to do |format|
-          format.html { redirect_to(named_context_url(@context, :context_wiki_pages_url, :type => @page.wiki_type)) }
+          format.html { redirect_to(named_context_url(@context, :context_wiki_pages_url, @page.wiki_type)) }
         end
       else #they dont have permissions to destroy this page
         respond_to do |format|
           format.html { 
             flash[:error] = t('errors.cannot_delete_front_page', 'You cannot delete the front page.')
-            redirect_to(named_context_url(@context, :context_wiki_pages_url, :type => @page.wiki_type))
+            redirect_to(named_context_url(@context, :context_wiki_pages_url, @page.wiki_type ))
           }
         end
       end
@@ -219,7 +219,7 @@ class WikiPagesController < ApplicationController
 
   def context_wiki_page_url(opts={})
     page_name = @page.url
-    res = named_context_url(@context, :context_wiki_page_url, page_name)
+    res = named_context_url(@context, :context_wiki_page_url, @page.wiki_type, page_name)
     if opts && opts[:edit]
       res += "#edit"
     end

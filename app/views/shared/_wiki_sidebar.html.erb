@@ -47,7 +47,7 @@
                 <% end %>
               <% end %>
             </ul>
-            <%= link_to t('links.new_page', "Link to a New Page"), context_url(@context, :new_context_wiki_page_url, :type => @wiki_type),  :id => 'new_page_link', :class => "add" %>
+            <%= link_to t('links.new_page', "Link to a New Page"), context_url(@context, :new_context_wiki_page_url, @wiki_type),  :id => 'new_page_link', :class => "add" %>
             <form id="new_page_drop_down" style="display:none; margin: 5px;">
               <div class="row-fluid">
                 <label for="new_page_name"><%= t('new_page_name', %{What would you like to call the new page?}) %></label><br />
