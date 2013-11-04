@@ -1004,7 +1004,7 @@ class ApplicationController < ActionController::Base
   def get_wiki_page
     @wiki = @context.wiki
     @wiki.check_has_front_page
-
+    @wiki.make_sure_wiki_has_front_page
     page_name = params[:wiki_page_id] || params[:id] || (params[:wiki_page] && params[:wiki_page][:title])
     page_name ||= WikiPage::DEFAULT_FAQ_FRONT_PAGE_URL if (@wiki_type ==  WikiPage::WIKI_TYPE_FAQS)
     page_name ||= WikiPage::DEFAULT_CAREER_FRONT_PAGE_URL if (@wiki_type ==  WikiPage::WIKI_TYPE_CAREERS)
@@ -1610,7 +1610,8 @@ class ApplicationController < ActionController::Base
   end
 
   def get_wiki_type
-    @wiki_type = params[:type]
+    @wiki_type =  WikiPage::WIKI_TYPE_PAGES
+    @wiki_type = params[:type] if params[:type]
   end
 
   def has_any_wiki_page_for_wiki_type?
@@ -1622,5 +1623,4 @@ class ApplicationController < ActionController::Base
        @context.wiki.wiki_pages.pages.count == 0
     end
   end
-
 end

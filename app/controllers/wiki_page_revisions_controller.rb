@@ -19,8 +19,8 @@
 class WikiPageRevisionsController < ApplicationController
   before_filter :require_context, :except => :latest_version_number
   before_filter :get_wiki_page, :except => :latest_version_number
-  add_crumb(proc { t '#crumbs.wiki_pages', "Pages"}, :except => [:latest_version_number]) { |c| c.send :named_context_url,  c.instance_variable_get("@context"), :context_wiki_pages_url }
-  before_filter { |c| c.active_tab = "pages" }
+  add_crumb(proc { t '#crumbs.wiki_pages', "Pages"}, :except => [:latest_version_number]) { |c| c.send :named_context_url,  c.instance_variable_get("@context"), :context_wiki_pages_url,  c.instance_variable_get("@wiki_type") }
+  before_filter { |c|  c.active_tab = (c.instance_variable_get("@wiki_type") ==  WikiPage::WIKI_TYPE_PAGES) ?  "pages" : c.instance_variable_get("@wiki_type") }
   
   def index
     if authorized_action(@page, @current_user, :update_content)
@@ -77,7 +77,7 @@ class WikiPageRevisionsController < ApplicationController
       except_fields = [:id] + WikiPage.new.attributes.keys - WikiPage.accessible_attributes.to_a
       @page.revert_to_version @revision, :except => except_fields
       flash[:notice] = t('notices.page_rolled_back', 'Page was successfully rolled-back to previous version.')
-      redirect_to polymorphic_url([@context, @page.wiki_type, @page])
+      redirect_to polymorphic_url([@context, @page])
     end
   end
 end

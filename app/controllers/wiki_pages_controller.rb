@@ -35,7 +35,7 @@ class WikiPagesController < ApplicationController
     end
     url
   end
-  before_filter { |c| c.active_tab = "pages" }
+  before_filter { |c|  c.active_tab = (c.instance_variable_get("@wiki_type") ==  WikiPage::WIKI_TYPE_PAGES) ?  "pages" : c.instance_variable_get("@wiki_type") }
 
   def js_rights
     [:wiki, :page]
