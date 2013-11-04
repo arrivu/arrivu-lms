@@ -22,30 +22,30 @@ require 'canvas_logger'
 log_level = ActiveSupport::BufferedLogger.const_get(log_config['log_level'].to_s.upcase)
 opts[:skip_thread_context] = true if log_config['log_context'] == false
 case log_config["logger"]
-when "syslog"
-  require 'syslog_wrapper'
-  log_config["app_ident"] ||= "canvas-lms"
-  log_config["daemon_ident"] ||= "canvas-lms-daemon"
-  facilities = 0
-  (log_config["facilities"] || []).each do |facility|
-    facilities |= Syslog.const_get "LOG_#{facility.to_s.upcase}"
-  end
-  ident = ENV['RUNNING_AS_DAEMON'] == 'true' ? log_config["daemon_ident"] : log_config["app_ident"]
-  opts[:include_pid] = true if log_config["include_pid"] == true
-  config.logger = RAILS_DEFAULT_LOGGER = SyslogWrapper.new(ident, facilities, opts)
-  config.logger.level = log_level
-else
-  log_path = Rails.version >= "3.0" ? config.paths.log.first : config.log_path
-  config.logger = RAILS_DEFAULT_LOGGER = CanvasLogger.new(log_path, log_level, opts)
+  when "syslog"
+    require 'syslog_wrapper'
+    log_config["app_ident"] ||= "canvas-lms"
+    log_config["daemon_ident"] ||= "canvas-lms-daemon"
+    facilities = 0
+    (log_config["facilities"] || []).each do |facility|
+      facilities |= Syslog.const_get "LOG_#{facility.to_s.upcase}"
+    end
+    ident = ENV['RUNNING_AS_DAEMON'] == 'true' ? log_config["daemon_ident"] : log_config["app_ident"]
+    opts[:include_pid] = true if log_config["include_pid"] == true
+    config.logger = RAILS_DEFAULT_LOGGER = SyslogWrapper.new(ident, facilities, opts)
+    config.logger.level = log_level
+  else
+    log_path = Rails.version >= "3.0" ? config.paths.log.first : config.log_path
+    config.logger = RAILS_DEFAULT_LOGGER = CanvasLogger.new(log_path, log_level, opts)
 end
 
 # RailsLTS configuration (doesn't apply to rails 3)
 if Rails.version < "3.0"
-  config.rails_lts_options = {
-    disable_xml_parsing: true,
-    # this is also taken care of below, since it defaults to false in rails3 as well
-    escape_html_entities_in_json: true,
-  }
+  #config.rails_lts_options = {
+  #  disable_xml_parsing: true,
+  #  # this is also taken care of below, since it defaults to false in rails3 as well
+  #  escape_html_entities_in_json: true,
+  #}
 end
 
 # Activate observers that should always be running
@@ -154,9 +154,9 @@ if defined?(PhusionPassenger)
 end
 
 if defined?(PhusionPassenger)
- PhusionPassenger.on_event(:after_installing_signal_handlers) do
-  Canvas::Reloader.trap_signal
- end
+  PhusionPassenger.on_event(:after_installing_signal_handlers) do
+    Canvas::Reloader.trap_signal
+  end
 else
   config.to_prepare do
     Canvas::Reloader.trap_signal

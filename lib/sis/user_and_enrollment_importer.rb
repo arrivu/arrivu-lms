@@ -1,23 +1,5 @@
-#
-# Copyright (C) 2011 Instructure, Inc.
-#
-# This file is part of Canvas.
-#
-# Canvas is free software: you can redistribute it and/or modify it under
-# the terms of the GNU Affero General Public License as published by the Free
-# Software Foundation, version 3 of the License.
-#
-# Canvas is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
-# details.
-#
-# You should have received a copy of the GNU Affero General Public License along
-# with this program. If not, see <http://www.gnu.org/licenses/>.
-#
-
 module SIS
-  class UserImporter < BaseImporter
+  class UserAndEnrollmentImporter < BaseImporter
 
     def process(updates_every, messages)
       start = Time.now
@@ -25,6 +7,12 @@ module SIS
       User.skip_updating_account_associations do
         User.process_as_sis(@sis_options) do
           Pseudonym.process_as_sis(@sis_options) do
+            yield importer
+            while importer.any_left_to_process?
+              importer.process_batch
+            end
+          end
+          UserAndEnrollment.process_as_sis(@sis_options) do
             yield importer
             while importer.any_left_to_process?
               importer.process_batch
@@ -41,11 +29,11 @@ module SIS
       return importer.success_count
     end
 
-  private
+    private
     class Work
       attr_accessor :success_count, :users_to_set_sis_batch_ids,
-          :pseudos_to_set_sis_batch_ids, :users_to_add_account_associations,
-          :users_to_update_account_associations
+                    :pseudos_to_set_sis_batch_ids, :users_to_add_account_associations,
+                    :users_to_update_account_associations
 
       def initialize(batch_id, root_account, logger, updates_every, messages)
         @batch_id = batch_id
@@ -62,7 +50,7 @@ module SIS
         @users_to_update_account_associations = []
       end
 
-      def add_user(user_id, login_id, status, first_name, last_name, email=nil, password=nil, ssha_password=nil,provider=nil)
+      def add_user(user_id, login_id, status, first_name, last_name, email=nil, password=nil, ssha_password=nil, provider)
         @logger.debug("Processing User #{[user_id, login_id, status, first_name, last_name, email, password, ssha_password, provider].inspect}")
 
         raise ImportError, "No user_id given for a user" if user_id.blank?
@@ -131,6 +119,7 @@ module SIS
                 should_update_account_associations = true
               end
             end
+
             pseudo ||= Pseudonym.new
             pseudo.unique_id = login_id unless pseudo.stuck_sis_fields.include?(:unique_id)
             pseudo.sis_user_id = user_id
@@ -225,7 +214,7 @@ module SIS
 
               if newly_active
                 other_ccs = ccs.reject { |other_cc| other_cc.user_id == user.id || other_cc.user.nil? || other_cc.user.pseudonyms.active.count == 0 ||
-                  !other_cc.user.pseudonyms.active.where("account_id=? AND sis_user_id IS NOT NULL", @root_account).empty? }
+                    !other_cc.user.pseudonyms.active.where("account_id=? AND sis_user_id IS NOT NULL", @root_account).empty? }
                 unless other_ccs.empty?
                   cc.send_merge_notification!
                 end
@@ -247,7 +236,6 @@ module SIS
               @pseudos_to_set_sis_batch_ids << pseudo.id
               @success_count += 1
             end
-
 
           end
         end
