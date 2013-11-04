@@ -176,7 +176,6 @@ class Wiki < ActiveRecord::Base
       self.save
       page = front_page
       page.set_as_front_page!
-      page.save
       self.has_no_front_page = false
     end
   end

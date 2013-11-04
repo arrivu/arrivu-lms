@@ -78,7 +78,13 @@ class WikiPagesController < ApplicationController
     if @context.draft_state_enabled?
       front_page
     else
+      if @page.wiki_type == WikiPage::WIKI_TYPE_FAQS
+        redirect_to named_context_url(@context, :context_wiki_page_url, @page.wiki_type, WikiPage::DEFAULT_FAQ_FRONT_PAGE_URL)
+      elsif @page.wiki_type == WikiPage::WIKI_TYPE_CAREERS
+        redirect_to named_context_url(@context, :context_wiki_page_url, @page.wiki_type, WikiPage::DEFAULT_CAREER_FRONT_PAGE_URL)
+       else
       redirect_to named_context_url(@context, :context_wiki_page_url, @page.wiki_type, @context.wiki.get_front_page_url || Wiki::DEFAULT_FRONT_PAGE_URL)
+       end
     end
   end
 

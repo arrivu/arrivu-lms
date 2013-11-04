@@ -77,7 +77,8 @@ class WikiPageRevisionsController < ApplicationController
       except_fields = [:id] + WikiPage.new.attributes.keys - WikiPage.accessible_attributes.to_a
       @page.revert_to_version @revision, :except => except_fields
       flash[:notice] = t('notices.page_rolled_back', 'Page was successfully rolled-back to previous version.')
-      redirect_to polymorphic_url([@context, @page])
+      #redirect_to polymorphic_url([@context,  @page])
+      redirect_to(named_context_url(@context, :context_wiki_pages_url, @page.wiki_type, @page ))
     end
   end
 end
