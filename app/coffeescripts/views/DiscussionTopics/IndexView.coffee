@@ -10,7 +10,7 @@ define [
     template: template
 
     el: '#content'
-
+    @child 'discussion_tag', '.discussion_tag.discussion-list'
     @child 'openDiscussionView',   '.open.discussion-list'
     @child 'lockedDiscussionView', '.locked.discussion-list'
     @child 'pinnedDiscussionView', '.pinned.discussion-list'
@@ -41,6 +41,7 @@ define [
 
     collections: ->
       [
+        @options.discussion_tag.collection
         @options.openDiscussionView.collection
         @options.lockedDiscussionView.collection
         @options.pinnedDiscussionView.collection

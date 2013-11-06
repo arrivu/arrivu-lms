@@ -68,6 +68,7 @@
   </div>
 
   <div class="discussion-collections">
+    <div class="discussion_tag discussion-list item-group"></div>
     <div class="pinned discussion-list item-group"></div>
     <div class="open discussion-list item-group"></div>
     <div class="locked discussion-list item-group"></div>
@@ -78,7 +79,7 @@
   {{#if lastPageFetched}}
     <div style="margin:auto; text-align: center; margin-top: 80px">
       <h1>
-        {{#t "there_are_no_discussion_topics_to_show"}}There are no discussion topics to show{{/t}}
+      Here tags come
       </h1>
       {{#if options.permissions.create}}
         <a href="{{new_topic_url}}" class="btn btn-large btn-primary">

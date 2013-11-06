@@ -204,6 +204,8 @@ class DiscussionTopicsController < ApplicationController
         hash = {USER_SETTINGS_URL: api_v1_user_settings_url(@current_user),
                 openTopics: open_topics,
                 lockedTopics: locked_topics,
+                isTagAvaillable: true,
+                discussionTagLists: @context.owned_tags.map(&:attributes).to_json,
                 newTopicURL: named_context_url(@context, :new_context_discussion_topic_url),
                 permissions: {
                     create: @context.discussion_topics.new.grants_right?(@current_user, session, :create),
@@ -531,13 +533,13 @@ class DiscussionTopicsController < ApplicationController
       tag_tokens.split(",").map do |n|
         ActsAsTaggableOn::Tagging.find_or_create_by_tag_id_and_taggable_id_and_taggable_type_and_context(tag_id: n.to_i,
                                    taggable_id: topic.id, taggable_type: "DiscussionTopic",
-                                   context: "tags",tagger_id: @context.id,tagger_type: "course")
+                                   context: "tags",tagger_id: @context.id,tagger_type: "Course")
       end
     else
       tags_list.split(",").map do |n|
         ActsAsTaggableOn::Tagging.find_or_create_by_tag_id_and_taggable_id_and_taggable_type_and_context(tag_id: n.to_i,
                                   taggable_id: topic.id, taggable_type: "DiscussionTopic",
-                                  context: "tags",tagger_id: @context.id,tagger_type: "course")
+                                  context: "tags",tagger_id: @context.id,tagger_type: "Course")
       end
     end
 
