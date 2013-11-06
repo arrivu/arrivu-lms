@@ -18,7 +18,7 @@ $(document).ready(function() {
   $("#register_link").click(function(){
     $.trackPageview("/clicked_register_on_login_form");
   });
-  
+
   $(".field-with-fancyplaceholder input").fancyPlaceholder();
   $("#forgot_password_form").formSubmit({
     object_name: 'pseudonym_session',
@@ -45,7 +45,7 @@ $(document).ready(function() {
     $("#login_form").show();
     $("#forgot_password_form").hide();
   });
-  
+
   $("#login_form")
     .submit(function(event) {
       var data = $(this).getFormData({object_name: 'pseudonym_session'});
@@ -71,7 +71,7 @@ $(document).ready(function() {
 <% end %>
 <% login_handle_name = @domain_root_account.login_handle_name rescue AccountAuthorizationConfig.default_login_handle_name %>
 <div id="modal-box" class="login-box">
-    <div id="modal-box-inner">
+    <div id="modal-box-inner" style="margin-top: -9px;">
     <h1>Canvas</h1>
     <% if @is_delegated %>
       <div id="login_form">
@@ -80,15 +80,15 @@ $(document).ready(function() {
             <div class="error_text"><%= flash[:delegated_message] %></div>
           </div>
         <% end %>
-        <% 
-           login_message = t('default_login_message', "Log in at your institution") 
+        <%
+           login_message = t('default_login_message', "Log in at your institution")
            if @domain_root_account && @domain_root_account.display_name
              login_message = t('login_at_account', "Log in at %{school_name}", :school_name => @domain_root_account.display_name)
            end
         %>
         <a href="<%= login_path %>" style="font-size: 1.3em;" class="btn"><%= login_message %></a>
       </div>
-    <% else %>
+    <% elsif request.request_uri == "/login?canvas_login=1" %>
       <% form_for :pseudonym_session, :url => login_path(:nonldap => (@domain_root_account && !@domain_root_account.ldap_authentication?).presence), :html => {:id => "login_form"} do |f| %>
         <%= link_to t("register_for_canvas", "*Need a Canvas Account?* **Click Here, It's Free!**", :wrapper => {'*' => '<i>\1</i>', '**' => '<b>\1</b>'}),  Setting.get_cached("registration_link", "/register_from_website"), :id => 'register_link', :class => 'not_external' if @domain_root_account.self_registration? && !hide_fft %>
         <h2 class="ui-helper-hidden-accessible"><%= t('log_in', 'Log In') %></h2>
@@ -117,16 +117,23 @@ $(document).ready(function() {
           <button type="submit" class="btn btn-primary"><%= t('log_in', 'Log In') %></button>
         </div>
       <% end %>
+    <% else  %>
+          <div style="text-align: center;color:#000000"> <h3>Login or Register with your social account.</h3> </div> <br>
+          <div style="text-align: center;">
+          <span> <%= link_to image_tag("Facebook_light.png",:class => "login_img", alt: "Login with FB"), '/auth/facebook/' %></span> &nbsp;&nbsp;&nbsp;
+          <span> <%= link_to image_tag("Googleplus_light.png", :class => "login_img", alt: "Login with Goole"), '/auth/google_oauth2/' %></span>&nbsp;&nbsp;&nbsp;
+          <span> <%= link_to image_tag("Linkedin_light.png", :class => "login_img", alt: "Login with Linkedin"), '/auth/linkedin/' %></span>&nbsp;&nbsp;&nbsp;
+          </div>
     <% end %>
-  
+
     <% form_for :pseudonym_session, :url => forgot_password_path, :html => {:id => "forgot_password_form", :style => "display: none;"} do |f| %>
-  
+
       <p><%= t('login_handle', "Enter your %{login_handle_name} and we'll send you a link to change your password.", :login_handle_name => login_handle_name) %></p>
       <div>
         <span class=" field-with-fancyplaceholder"><label for="pseudonym_session_unique_id_forgot"><%= login_handle_name %></label><input class="email_address text" type="text" name="pseudonym_session[unique_id_forgot]" value="<%= @unauthorized_user.email rescue '' %>" id="pseudonym_session_unique_id_forgot" /></span>
         <button type="submit" class="btn btn-primary"><%= t('buttons.request_password', 'Request Password') %></button>
       </div>
-  
+
       &larr; <%= link_to t('back_to_login', "Back to Login"), login_path, :class => "login_link" %>
     <% end %>
   </div>

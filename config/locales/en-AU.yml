@@ -5323,8 +5323,8 @@ en-AU:
     homework_submission_configured: "Homework submission configured"
     index_view: 
       add_new_tool: "Add New App"
-      external_tools_note: "Apps are an easy way to add new features to Canvas. They can be added to individual courses, or to all courses in an account. Once configured, you can link to them through course modules and create assignments for assessment tools."
-      external_tools_references: "Click *here* to see some LTI tools that work great with Canvas. You can also check out the Canvas Community topics about LTI tools **here**"
+      external_tools_note: "Apps are an easy way to add new features to Jigsaw Academy. They can be added to individual courses, or to all courses in an account. Once configured, you can link to them through course modules and create assignments for assessment tools."
+      external_tools_references: "Click *here* to see some LTI tools that work great with Jigsaw Academy. You can also check out the Jigsaw Academy Community topics about LTI tools **here**"
       search_filter: "Filter by name"
       view_app_center: "View App Centre"
       view_installed_tools: "View Installed Apps"
@@ -5346,7 +5346,7 @@ en-AU:
     user_navigation_configured: "User navigation configured"
   facebook: 
     authorization_required: "Only authorized users can access that page"
-    authorization_success: "Authorization successful!  Canvas and Facebook are now friends."
+    authorization_success: "Authorization successful!  Jigsaw Academy and Facebook are now friends."
     deleted: Deleted
     index: 
       all_set: "You're all set up!"

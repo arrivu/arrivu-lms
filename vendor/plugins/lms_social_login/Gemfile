@@ -1,0 +1,5 @@
+gem 'omniauth'
+gem 'omniauth-facebook'
+gem 'omniauth-linkedin'
+gem 'omniauth-google-oauth2'
+gem 'oauth2'

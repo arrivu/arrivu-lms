@@ -12,6 +12,7 @@ require [
     # Public: I18n strings.
     messages:
       lists:
+        discussion_tag: "Discussion forum tags"
         open:   I18n.t('discussions',         'Discussions')
         locked: I18n.t('closed_for_comments', 'Closed for Comments')
         pinned: I18n.t('pinned_discussions',  'Pinned Discussions')
@@ -39,10 +40,12 @@ require [
           destination: '.open.discussion-list, .locked.discussion-list'
           sortable: true
           pinned: true
+        discussion_tag: @_createListView 'discussion_tag'
 
     # Public: The index page action.
     index: ->
       @view = new IndexView
+        discussion_tag: @discussions.discussion_tag
         openDiscussionView:   @discussions.open
         lockedDiscussionView: @discussions.locked
         pinnedDiscussionView: @discussions.pinned
@@ -134,7 +137,7 @@ require [
     #
     # Returns an object.
     _groupModels: (pipeline) ->
-      defaults = { pinned: [], locked: [], open: [] }
+      defaults = { pinned: [], locked: [], open: [], discussion_tag: [] }
       _.extend(defaults, _.groupBy(pipeline, @_modelBucket))
 
     # Determine the name of the model's proper collection.
