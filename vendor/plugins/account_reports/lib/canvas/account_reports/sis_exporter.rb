@@ -66,9 +66,9 @@ module Canvas::AccountReports
     def users
       list_csv = CSV.generate do |csv|
         if @sis_format
-          headers = ['user_id','login_id','password','first_name','last_name','email','status']
+          headers = ['user_id','login_id','password','first_name','last_name','email','status','provider']
         else
-          headers = ['canvas_user_id','user_id','login_id','first_name','last_name','email','status']
+          headers = ['canvas_user_id','user_id','login_id','first_name','last_name','email','status','']
         end
         csv << headers
         users = root_account.pseudonyms.except(:includes).joins(:user).select(
