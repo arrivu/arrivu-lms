@@ -41,11 +41,11 @@ module SIS
       return importer.success_count
     end
 
-  private
+    private
     class Work
       attr_accessor :success_count, :users_to_set_sis_batch_ids,
-          :pseudos_to_set_sis_batch_ids, :users_to_add_account_associations,
-          :users_to_update_account_associations
+                    :pseudos_to_set_sis_batch_ids, :users_to_add_account_associations,
+                    :users_to_update_account_associations
 
       def initialize(batch_id, root_account, logger, updates_every, messages)
         @batch_id = batch_id
@@ -225,7 +225,7 @@ module SIS
 
               if newly_active
                 other_ccs = ccs.reject { |other_cc| other_cc.user_id == user.id || other_cc.user.nil? || other_cc.user.pseudonyms.active.count == 0 ||
-                  !other_cc.user.pseudonyms.active.where("account_id=? AND sis_user_id IS NOT NULL", @root_account).empty? }
+                    !other_cc.user.pseudonyms.active.where("account_id=? AND sis_user_id IS NOT NULL", @root_account).empty? }
                 unless other_ccs.empty?
                   cc.send_merge_notification!
                 end
@@ -250,7 +250,7 @@ module SIS
 
             if provider.present?
               my_logger ||= Logger.new("#{Rails.root}/log/my.log")
-               #user.omniauth_authentications.bulid(:user_id => user_id, :provider => provider)
+              #user.omniauth_authentications.bulid(:user_id => user_id, :provider => provider)
               my_logger.info "Creating omniauth_authentications, #{user_id}"
 
               oaa = OmniauthAuthentication.find_by_user_id(user.id)
