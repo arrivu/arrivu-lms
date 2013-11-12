@@ -2763,6 +2763,7 @@ class Course < ActiveRecord::Base
           tab[:args] = default_tab[:args]
           tab[:visibility] = default_tab[:visibility]
           tab[:external] = default_tab[:external]
+          #for add wiki type
           if default_tab[:type]
             tab[:type] = default_tab[:type]
           end
