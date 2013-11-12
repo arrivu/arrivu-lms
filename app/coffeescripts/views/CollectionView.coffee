@@ -53,6 +53,8 @@ define [
     initialize: (options) ->
       super
       @attachCollection()
+      @options.tagged = ENV.isTagAvaillable
+      @options.tagLists = eval(ENV.discussionTagLists)
 
     ##
     # Renders the main template and the item templates

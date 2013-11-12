@@ -146,8 +146,6 @@ define [
       @options.showMessage = true
       @_stopLoader()
       @_toggleNoContentMessage()
-      @options.tagged = ENV.isTagAvaillable
-      @options.tagLists = ENV.discussionTagLists
       # reset to render the whole sorted colleciton now
       @collection.reset(@collection.models)
 
