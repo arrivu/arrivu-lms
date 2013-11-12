@@ -331,7 +331,7 @@ class ApplicationController < ActionController::Base
   def delegated_authentication_url?
     @domain_root_account.delegated_authentication? &&
     !@domain_root_account.ldap_authentication? &&
-    !params[:canvas_login]
+    !params[:lms_login]
   end
 
   # To be used as a before_filter, requires controller or controller actions
