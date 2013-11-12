@@ -17,8 +17,6 @@ describe "Navigating to wiki pages" do
       wikiPage = @course.wiki.wiki_pages.create!(:title => "Foo",:wiki_type => 'wiki')
       #edit_url = edit_course_wiki_page_url(@course,wikiPage.wiki_type, wikiPage)
       edit_url = course_wiki_page_path(@course,wikiPage.wiki_type, wikiPage)
-      course_url = course_wiki_page_path(@course, wikiPage.wiki_type, wikiPage)
-
       get course_wiki_page_path(@course, wikiPage.wiki_type, wikiPage)
       f(".edit-wiki").click
 
