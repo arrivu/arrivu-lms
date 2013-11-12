@@ -29,7 +29,7 @@ class User < ActiveRecord::Base
   attr_accessible :name, :short_name, :sortable_name, :time_zone, :show_user_services, :gender, :visible_inbox_types,
                   :avatar_image, :subscribe_to_emails, :locale, :bio, :birthdate, :terms_of_use, :self_enrollment_code,
                   :initial_enrollment_type,:avatar_image_url,:avatar_image_source,:avatar_image_updated_at,
-                  :workflow_state
+                  :workflow_state,:phone
   attr_accessor :original_id, :menu_data
   cattr_accessor :is_active
 
