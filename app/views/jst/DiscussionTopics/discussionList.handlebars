@@ -22,15 +22,7 @@
     <b>{{#t "no_pinned_discussions"}}You currently have no pinned discussions{{/t}}</b>
     <p>{{#t "pinned_instructions"}}Drag a discussion here to pin it to the top of students' discussion page.{{/t}}</p>
   {{else}}
-     {{#if tagged}}
-     <ul>
-      {{#each tagLists}}
-                 <li class="token-input-token" value={{this.id}} >{{this.name}}</li>
-               {{/each}}
-             </ul>
-          {{else}}
-          {{#t "there_are_no_discussions_show"}}There are no discussions to show.{{/t}}
-     {{/if}}
+    {{#t "there_are_no_discussions_show"}}There are no discussions to show.{{/t}}
   {{/if}}
 </div>
 

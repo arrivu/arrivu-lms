@@ -1,0 +1,22 @@
+<div class="ig-header">
+  <h2 class="ig-header-title element_toggler"
+     aria-controls="{{listID}}"
+     aria-expanded="true"
+     aria-label="{{title}} {{toggleMessage}}"
+     role="button">
+    <i class="icon-mini-arrow-down"></i>
+    {{title}}
+  </h2>
+
+  {{#if titleHelp}}
+    <span class="pull-right title-help">{{titleHelp}}</span>
+  {{/if}}
+</div>
+
+<div id="{{listID}}">
+  <ul class="collectionViewItems ig-list discussion">
+     {{#each tagLists}}
+       <li class="token-input-token" value={{this.id}} >{{this.name}}</li>
+      {{/each}}
+  </ul>
+</div>

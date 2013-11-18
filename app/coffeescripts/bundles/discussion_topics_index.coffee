@@ -5,7 +5,8 @@ require [
   'compiled/collections/DiscussionTopicsCollection'
   'compiled/views/DiscussionTopics/DiscussionListView'
   'compiled/views/DiscussionTopics/IndexView'
-], (I18n, _, {Router}, DiscussionTopicsCollection, DiscussionListView, IndexView) ->
+  'compiled/views/DiscussionTopics/DiscussionTagListView'
+], (I18n, _, {Router}, DiscussionTopicsCollection, DiscussionListView, IndexView,DiscussionTagListView) ->
 
   class DiscussionIndexRouter extends Router
 
@@ -40,12 +41,12 @@ require [
           destination: '.open.discussion-list, .locked.discussion-list'
           sortable: true
           pinned: true
-        discussion_tag: @_createListView 'discussion_tag'
+        discussion_tag: @_createTagListView 'discussion_tag'
 
     # Public: The index page action.
     index: ->
       @view = new IndexView
-        discussion_tag: @discussions.discussion_tag
+        discussionTagView: @discussions.discussion_tag
         openDiscussionView:   @discussions.open
         lockedDiscussionView: @discussions.locked
         pinnedDiscussionView: @discussions.pinned
@@ -89,12 +90,29 @@ require [
         titleHelp: (if _.include(['open', 'locked'], type) then @messages.help.title else null)
         toggleMessage: @messages.toggleMessage
 
+    _createTagListView: (type, options = {}) ->
+      new DiscussionTagListView
+        tagLists: eval(ENV.discussionTagLists)
+        className: type
+        destination: options.destination
+        draggable: !!options.draggable
+        itemViewOptions: _.extend(options, pinnable: ENV.permissions.moderate)
+        listID: "#{type}-discussions"
+        locked: !!options.locked
+        taggable: true
+        title: @messages.lists[type]
+        titleHelp: (if _.include(['open', 'locked'], type) then @messages.help.title else null)
+        toggleMessage: @messages.toggleMessage
+
+#      new DiscussionTagListView
+#        collection: eval(ENV.discussionTagLists)
+
     # Internal: Attach events to the discussion topic collections.
     #
     # Returns nothing.
     _attachCollections: ->
       for key, view of @discussions
-        view.collection.on('change:locked change:pinned', @moveModel)
+        view.collection.on('change:locked change:pinned', @moveModel) unless view == @discussions.discussion_tag
 
     # Internal: Handle a page of discussion topic results, fetching the next
     # page if it exists.
@@ -112,7 +130,8 @@ require [
     #
     # Returns nothing.
     _onPipelineEnd: =>
-      view.collection.trigger('fetched:last') for key, view of @discussions
+      for key, view of @discussions
+        view.collection.trigger('fetched:last') unless view == @discussions.discussion_tag
       unless @discussions.pinned.collection.length or ENV.permissions.moderate
         @discussions.pinned.$el.remove()
 
@@ -137,7 +156,7 @@ require [
     #
     # Returns an object.
     _groupModels: (pipeline) ->
-      defaults = { pinned: [], locked: [], open: [], discussion_tag: [] }
+      defaults = { pinned: [], locked: [], open: [] }
       _.extend(defaults, _.groupBy(pipeline, @_modelBucket))
 
     # Determine the name of the model's proper collection.
