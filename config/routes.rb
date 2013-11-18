@@ -9,6 +9,8 @@
 # calling into the Rails 2 routing system.
 FakeRails3Routes.draw do
   resources :submission_comments, :only => :destroy
+  resources :offers
+
 
   match 'inbox' => 'context#mark_inbox_as_read', :as => :mark_inbox_as_read, :via => :delete
   match 'inbox' => 'context#inbox', :as => :inbox

@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class Arrivu-referral-systemTest < ActiveSupport::TestCase
+class ReferralTest < ActiveSupport::TestCase
   # Replace this with your real tests.
   test "the truth" do
     assert true

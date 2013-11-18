@@ -5,7 +5,7 @@ require 'rdoc/task'
 desc 'Default: run unit tests.'
 task :default => :test
 
-desc 'Test the arrivu_referral_system plugin.'
+desc 'Test the referral_system plugin.'
 Rake::TestTask.new(:test) do |t|
   t.libs << 'lib'
   t.libs << 'test'
@@ -13,10 +13,10 @@ Rake::TestTask.new(:test) do |t|
   t.verbose = true
 end
 
-desc 'Generate documentation for the arrivu_referral_system plugin.'
+desc 'Generate documentation for the referral_system plugin.'
 RDoc::Task.new(:rdoc) do |rdoc|
   rdoc.rdoc_dir = 'rdoc'
-  rdoc.title    = 'Arrivu-referral-system'
+  rdoc.title    = 'Referral-system'
   rdoc.options << '--line-numbers' << '--inline-source'
   rdoc.rdoc_files.include('README')
   rdoc.rdoc_files.include('lib/**/*.rb')
