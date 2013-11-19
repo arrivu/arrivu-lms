@@ -20,6 +20,10 @@ define [
       'click #edit_discussions_settings':  'toggleSettingsView'
       'change #onlyUnread, #onlyGraded':   'filterResults'
       'keyup #searchTerm':                 'filterResults'
+      'click .token-input-token': 'filterByTag'
+
+    filterByTag: (event) ->
+      alert "filert by tag #{event.target.value}"
 
     filters:
       onlyGraded:
