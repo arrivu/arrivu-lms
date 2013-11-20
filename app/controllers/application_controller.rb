@@ -115,6 +115,59 @@ class ApplicationController < ActionController::Base
   end
   helper_method :js_env
 
+  def discussion_topic_tags
+    respond_to do |format|
+      format.html
+      format.json { render json: tag_tokens(params[:q]) }
+    end
+  end
+
+  def tag_tokens(query)
+    tags = ActsAsTaggableOn::Tag.named_like(params[:q],@domain_root_account.id)
+    if tags.empty?
+      [{id: "<<<#{query}>>>", name: "New: \"#{query}\""}]
+    else
+      tags.map(&:attributes)
+    end
+  end
+
+  def tag_list(tag_tokens,topic)
+    tags_list= tag_tokens.gsub!(/<<<(.+?)>>>/) { ActsAsTaggableOn::Tag.find_or_create_by_name_and_account_id(name: $1,account_id: @domain_root_account.id).id }
+    if tags_list.nil?
+      delete_tags(topic,tag_tokens)
+      tag_tokens.split(",").map do |n|
+        ActsAsTaggableOn::Tagging.find_or_create_by_tag_id_and_taggable_id_and_taggable_type_and_context_and_account_id(tag_id: n.to_i,
+                                                               taggable_id: topic.id, taggable_type: "DiscussionTopic",
+                                                          context: "tags",tagger_id: @context.id,tagger_type: "course",
+                                                          account_id: @domain_root_account.id)
+      end
+    else
+      tags_list.split(",").map do |n|
+        ActsAsTaggableOn::Tagging.find_or_create_by_tag_id_and_taggable_id_and_taggable_type_and_context_and_account_id(tag_id: n.to_i,
+                                                               taggable_id: topic.id, taggable_type: "DiscussionTopic",
+                                                          context: "tags",tagger_id: @context.id,tagger_type: "course",
+                                                          account_id: @domain_root_account.id)
+      end
+    end
+
+  end
+
+  def delete_tags(topic,tag_tokens)
+    tag_id_arr = Array.new
+    topic.tags.each do |tag|
+      tag_id_arr  << tag.id.to_s
+    end
+    tag_array =tag_tokens.split(",")
+    deleted_tag=  tag_id_arr - tag_array
+    unless deleted_tag.nil?
+      deleted_tag.each do |tag_id|
+        topic.taggings.find_by_tag_id_and_account_id(tag_id,@domain_root_account.id).destroy
+      end
+    end
+  end
+
+
+
   protected
 
   def assign_localizer
