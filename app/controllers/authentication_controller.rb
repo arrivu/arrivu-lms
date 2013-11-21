@@ -12,6 +12,7 @@ class AuthenticationController < ApplicationController
       if !!@authentication
         if @authentication.provider == provider
           if @authentication.user.workflow_state != "inactive"
+            update_user_info(@authentication,auth)
             reset_session_for_login
             @pseudonym_session = @domain_root_account.pseudonym_sessions.new(@authentication.user)
             @pseudonym = @domain_root_account.pseudonyms.custom_find_by_unique_id(@authentication.user.email)
@@ -30,7 +31,8 @@ class AuthenticationController < ApplicationController
                            :sortable_name => auth[:info][:name],
                            :avatar_image_url=>auth[:info][:image],
                            :avatar_image_source=>auth['provider'],
-                           :avatar_image_updated_at => Time.now)
+                           :avatar_image_updated_at => Time.now,
+                           :phone => auth[:info][:phone])
       @user.workflow_state = 'inactive'
       @pseudonym = @user.pseudonyms.create!(:unique_id => auth[:info][:email],
                                             :account => @domain_root_account)
@@ -75,5 +77,12 @@ class AuthenticationController < ApplicationController
      provider = auth['provider']
    end
  end
+
+ def update_user_info(authentication,auth)
+   authentication.user.avatar_image_url ||= auth[:info][:image]
+   authentication.user.phone ||= auth[:info][:phone]
+   authentication.user.name ||= auth[:info][:name]
+   authentication.user.save!
+end
 
 end

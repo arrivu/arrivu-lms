@@ -143,12 +143,13 @@
 #        }
 #      }
 class DiscussionTopicsController < ApplicationController
-  before_filter :require_context, :except => [:public_feed,:discussion_topic_tags]
+  before_filter :require_context, :except => [:public_feed]
 
   include Api::V1::DiscussionTopics
   include Api::V1::Assignment
   include Api::V1::AssignmentOverride
   include KalturaHelper
+  include TagsHelper
 
   # @API List discussion topics
   #
@@ -276,7 +277,7 @@ class DiscussionTopicsController < ApplicationController
                      map { |category| { :id => category.id, :name => category.name } },
                  :CONTEXT_ID => @context.id,
                  :CONTEXT_ACTION_SOURCE => :discussion_topic,
-                 :TOPIC_TAGS => @topic.tags.map(&:attributes).to_json}
+                 :TOPIC_TAGS => @topic.tags.map(&:attributes).to_json(:except => ["account_id","created_at","updated_at"])}
       append_sis_data(js_hash)
       js_env(js_hash)
       render :action => "edit"
@@ -509,56 +510,6 @@ class DiscussionTopicsController < ApplicationController
   def public_topic_feed
   end
 
-  def discussion_topic_tags
-    respond_to do |format|
-      format.html
-      format.json { render json: tag_tokens(params[:q]) }
-    end
-
-  end
-
-  def tag_tokens(query)
-    tags = ActsAsTaggableOn::Tag.named_like(params[:q])
-    if tags.empty?
-      [{id: "<<<#{query}>>>", name: "New: \"#{query}\""}]
-    else
-      tags.map(&:attributes)
-    end
-  end
-
-  def tag_list(tag_tokens,topic)
-    tags_list= tag_tokens.gsub!(/<<<(.+?)>>>/) { ActsAsTaggableOn::Tag.find_or_create_by_name(name: $1).id }
-    if tags_list.nil?
-      delete_tags(topic,tag_tokens)
-      tag_tokens.split(",").map do |n|
-        ActsAsTaggableOn::Tagging.find_or_create_by_tag_id_and_taggable_id_and_taggable_type_and_context(tag_id: n.to_i,
-                                   taggable_id: topic.id, taggable_type: "DiscussionTopic",
-                                   context: "tags",tagger_id: @context.id,tagger_type: "Course")
-      end
-    else
-      tags_list.split(",").map do |n|
-        ActsAsTaggableOn::Tagging.find_or_create_by_tag_id_and_taggable_id_and_taggable_type_and_context(tag_id: n.to_i,
-                                  taggable_id: topic.id, taggable_type: "DiscussionTopic",
-                                  context: "tags",tagger_id: @context.id,tagger_type: "Course")
-      end
-    end
-
-  end
-
-  def delete_tags(topic,tag_tokens)
-    tag_id_arr = Array.new
-    topic.tags.each do |tag|
-      tag_id_arr  << tag.id.to_s
-    end
-    tag_array =tag_tokens.split(",")
-    deleted_tag=  tag_id_arr - tag_array
-    unless deleted_tag.nil?
-      deleted_tag.each do |tag_id|
-        topic.taggings.find_by_tag_id(tag_id).destroy
-      end
-    end
-  end
-
   protected
 
   def add_discussion_or_announcement_crumb
@@ -614,7 +565,7 @@ class DiscussionTopicsController < ApplicationController
       apply_positioning_parameters
       apply_attachment_parameters
       apply_assignment_parameters
-      tag_list(params[:tag_tokens],@topic)  unless params[:tag_tokens].nil?
+      tag_list(params[:tag_tokens], @topic, @context)  unless params[:tag_tokens].nil?
 
       render :json => discussion_topic_api_json(@topic, @context, @current_user, session)
     else

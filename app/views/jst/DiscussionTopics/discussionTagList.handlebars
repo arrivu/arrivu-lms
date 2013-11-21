@@ -17,6 +17,10 @@
   <ul class="collectionViewItems ig-list discussion">
      {{#each tagLists}}
        <li class="token-input-token" value={{this.id}} >{{this.name}}</li>
+       {{else}}
+       <div style="text-align: center;" >
+           There are no tagging to show.
+       </div>
       {{/each}}
   </ul>
 </div>

@@ -179,7 +179,8 @@ require [
     #
     # Returns nothing.
     moveModel: (model) =>
-      view.collection.remove(model) for key, view of @discussions
+      for key, view of @discussions
+        view.collection.remove(model) unless view == @discussions.discussion_tag
       @discussions[@_modelBucket(model)].collection.add(model)
 
   # Start up the page
