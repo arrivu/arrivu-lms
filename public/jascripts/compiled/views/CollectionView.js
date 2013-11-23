@@ -43,9 +43,7 @@
 
       CollectionView.prototype.initialize = function(options) {
         CollectionView.__super__.initialize.apply(this, arguments);
-        this.attachCollection();
-        this.options.tagged = ENV.isTagAvaillable;
-        return this.options.tagLists = eval(ENV.discussionTagLists);
+        return this.attachCollection();
       };
 
       CollectionView.prototype.render = function() {

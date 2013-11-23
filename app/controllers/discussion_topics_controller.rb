@@ -191,7 +191,21 @@ class DiscussionTopicsController < ApplicationController
     @topics = Api.paginate(scope, self, topic_pagination_url)
     @topics.reject! { |t| t.locked? || t.locked_for?(@current_user) } if params[:scope] == 'unlocked'
     @topics.select! { |t| t.locked? || t.locked_for?(@current_user) } if params[:scope] == 'locked'
-    @topics.each { |topic| topic.current_user = @current_user }
+    @topics.each do  |topic|
+      topic.current_user = @current_user
+    end
+    @tag_topic_ids={}
+    context_tag_ids = @context.owned_tag_ids.uniq
+    context_tag_ids.each do |tag_id|
+      taggings = ActsAsTaggableOn::Tagging.where(tag_id: tag_id,tagger_type: @context.class.name,tagger_id: @context.id)
+      topic_ids = []
+      taggings.each do |tagging|
+       topic_ids << tagging.taggable_id
+       @tag_topic_id = {tag_id.to_i => topic_ids}
+      end
+      @tag_topic_ids.merge!(@tag_topic_id)
+    end
+
 
     respond_to do |format|
       format.html do
@@ -205,14 +219,16 @@ class DiscussionTopicsController < ApplicationController
         hash = {USER_SETTINGS_URL: api_v1_user_settings_url(@current_user),
                 openTopics: open_topics,
                 lockedTopics: locked_topics,
-                isTagAvaillable: true,
-                discussionTagLists: @context.owned_tags.map(&:attributes).to_json,
                 newTopicURL: named_context_url(@context, :new_context_discussion_topic_url),
                 permissions: {
                     create: @context.discussion_topics.new.grants_right?(@current_user, session, :create),
                     moderate: user_can_moderate,
                     change_settings: user_can_edit_course_settings?
-                }}
+                },
+                discussionTagLists: @context.owned_tags.map(&:attributes).to_json,
+                TagWithDiscussionIds: @tag_topic_ids}
+
+
         append_sis_data(hash)
 
         js_env(hash)

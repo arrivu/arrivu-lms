@@ -142,7 +142,11 @@
         _results = [];
         for (key in _ref) {
           view = _ref[key];
-          _results.push(view.collection.on('change:locked change:pinned', this.moveModel));
+          if (view !== this.discussions.discussion_tag) {
+            _results.push(view.collection.on('change:locked change:pinned', this.moveModel));
+          } else {
+            _results.push(void 0);
+          }
         }
         return _results;
       };
@@ -163,7 +167,9 @@
         _ref = this.discussions;
         for (key in _ref) {
           view = _ref[key];
-          view.collection.trigger('fetched:last');
+          if (view !== this.discussions.discussion_tag) {
+            view.collection.trigger('fetched:last');
+          }
         }
         if (!(this.discussions.pinned.collection.length || ENV.permissions.moderate)) {
           this.discussions.pinned.$el.remove();
@@ -219,7 +225,9 @@
         _ref = this.discussions;
         for (key in _ref) {
           view = _ref[key];
-          view.collection.remove(model);
+          if (view !== this.discussions.discussion_tag) {
+            view.collection.remove(model);
+          }
         }
         return this.discussions[this._modelBucket(model)].collection.add(model);
       };

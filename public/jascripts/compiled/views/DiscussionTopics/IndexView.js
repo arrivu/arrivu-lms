@@ -8,6 +8,7 @@
     var IndexView, View;
     View = _arg.View;
     return IndexView = (function(_super) {
+      var check_dt;
 
       __extends(IndexView, _super);
 
@@ -39,8 +40,42 @@
       };
 
       IndexView.prototype.filterByTag = function(event) {
-        return alert("filert by tag " + event.target.value);
+        var clicked, clickedTag, clicked_tag_id, key, value, _ref,
+          _this = this;
+        clickedTag = event.target;
+        clicked_tag_id = event.target.value;
+        clicked_tag_id = parseInt(clicked_tag_id, 10);
+        _ref = ENV.TagWithDiscussionIds;
+        for (key in _ref) {
+          value = _ref[key];
+          key = parseInt(key, 10);
+          if (key === clicked_tag_id) {
+            _.each(this.collections(), function(collection) {
+              return collection.each(function(model) {
+                return model.set('hidden', check_dt(model.get('id'), value));
+              });
+            });
+          }
+        }
+        clicked = true;
+        $(".token-input-token").removeClass("token-input-selected-token");
+        return $(clickedTag).addClass("token-input-selected-token");
       };
+
+      check_dt = function(my_item, my_array) {
+        var item, _i, _len;
+        for (_i = 0, _len = my_array.length; _i < _len; _i++) {
+          item = my_array[_i];
+          if (item === my_item) {
+            return false;
+          }
+        }
+        return true;
+      };
+
+      $(document).click(function() {
+        return $(".token-input-token").removeClass("token-input-selected-token");
+      });
 
       IndexView.prototype.filters = {
         onlyGraded: {

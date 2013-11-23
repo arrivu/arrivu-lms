@@ -23,7 +23,27 @@ define [
       'click .token-input-token': 'filterByTag'
 
     filterByTag: (event) ->
-      alert "filert by tag #{event.target.value}"
+      $(event.target).toggleClass "token-input-selected-token"
+      $(event.target).siblings().removeClass "token-input-selected-token"
+      clicked_tag_id = event.target.value
+      clicked_tag_id = parseInt(clicked_tag_id, 10)
+      for key, value of ENV.TagWithDiscussionIds
+        key = parseInt(key, 10)
+        if key == clicked_tag_id
+          _.each @collections(), (collection) =>
+            collection.each (model) =>
+                model.set('hidden', check_dt(model.get('id'), value))
+
+
+    check_dt = (my_item, my_array) ->
+      for item in my_array
+        return false if item == my_item
+      true
+
+
+    $(document).click ->
+    $(".token-input-token").removeClass "token-input-selected-token" #make all inactive
+
 
     filters:
       onlyGraded:
