@@ -8,7 +8,7 @@ namespace :db  do
       DiscussionTopic.create!(title: title,
                    message: message,
                    context_type: "Course",
-                   context_id: 1)
+                   context_id: 3)
   end
  end
 end # Namespace: db
