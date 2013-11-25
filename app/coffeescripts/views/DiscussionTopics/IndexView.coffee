@@ -34,11 +34,10 @@ define [
             collection.each (model) =>
                 model.set('hidden', check_dt(model.get('id'), value))
 
-
     check_dt = (my_item, my_array) ->
       for item in my_array
         return false if item == my_item
-      true
+      true and $(event.target).hasClass('token-input-selected-token')
 
 
     $(document).click ->
