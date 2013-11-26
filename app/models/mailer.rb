@@ -41,6 +41,7 @@ class Mailer < ActionMailer::Base
     @user= user
     recipients  user.pseudonyms.first.email
     from "#{HostUrl.outgoing_email_default_name} "+ "<" + HostUrl.outgoing_email_address + ">"
+    subject "Account Activation"
     sent_on       Time.now
   end
 
