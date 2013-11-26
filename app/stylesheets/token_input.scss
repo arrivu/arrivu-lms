@@ -32,8 +32,10 @@ ul.token-input-list li input {
     padding: 2px 6px;
 }
 .discussion li.token-input-token:hover{
-    background: #5670a6;
-    color:white;
+  background: #ccd5e4;
+  border: 1px solid white;
+  color: black;
+  border-radius: 5px;
 }
 li.token-input-token {
     overflow: hidden;
