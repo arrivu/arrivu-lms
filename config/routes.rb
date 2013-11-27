@@ -9,8 +9,6 @@
 # calling into the Rails 2 routing system.
 FakeRails3Routes.draw do
   resources :submission_comments, :only => :destroy
-  resources :offers
-
 
   match 'inbox' => 'context#mark_inbox_as_read', :as => :mark_inbox_as_read, :via => :delete
   match 'inbox' => 'context#inbox', :as => :inbox
@@ -187,6 +185,15 @@ FakeRails3Routes.draw do
     match 'imports/files' => 'content_imports#files', :as => :import_files
   end
 
+  concern :rewards do
+    resources :offers do
+    end
+
+    resources :referrals do
+      match 'my-rewards' => 'referrals#my_rewards',  :as => :my_rewards
+    end
+  end
+
   # There are a lot of resources that are all scoped to the course level
   # (assignments, files, wiki pages, user lists, forums, etc.).  Many of
   # these resources also apply to groups and individual users.  We call
@@ -311,6 +318,7 @@ FakeRails3Routes.draw do
     concerns :wikis
     concerns :conferences
     concerns :question_banks
+    concerns :rewards
 
     match 'quizzes/publish'   => 'quizzes#publish',   :as => :quizzes_publish
     match 'quizzes/unpublish' => 'quizzes#unpublish', :as => :quizzes_unpublish
@@ -585,6 +593,7 @@ FakeRails3Routes.draw do
     concerns :files, :file_images, :relative_files, :folders
     concerns :media
     concerns :groups
+    concerns :rewards
 
     resources :outcomes
     match 'courses' => 'accounts#courses', :as => :courses
@@ -1373,4 +1382,14 @@ FakeRails3Routes.draw do
   match '/auth/:provider/callback' => 'authentication#create'
   get '/auth/failure' => 'authentication#auth_failure'
   match '/discussion_topic_tags' => 'discussion_topics#discussion_topic_tags'
+
+
+
+  #scope(:controller => :courses) do
+  #  concerns :rewards
+  #end
+  #
+  #scope(:controller => :accounts) do
+  #  concerns :rewards
+  #end
 end

@@ -3,11 +3,12 @@ class CreateReferrals < ActiveRecord::Migration
   def self.up
     create_table :referrals do |t|
       t.integer :user_id, :limit => 8
-      t.email :user_email
+      #t.email :referrer_email
       t.numeric :offer_id, :limit => 8
       t.text :email_subject
-      t.text :short_url
       t.text :email_text
+      t.text :short_url
+
 
       t.timestamps
     end
