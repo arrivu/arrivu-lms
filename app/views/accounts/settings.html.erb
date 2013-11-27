@@ -207,16 +207,16 @@
                     <%= settings.check_box :allow_invitation_previews, :checked => @account.settings[:allow_invitation_previews] %>
                     <%= settings.label :allow_invitation_previews, :en => "Invitation Previews" %>
                   </div>
-                  <div>
-                    <%= settings.check_box :enable_alerts, :checked => @account.settings[:enable_alerts] %>
-                    <%= settings.label :enable_alerts, :en => "Alerts (beta)" %>
-                  </div>
-                  <div id='allow_draft'>
-                    <%= settings.check_box :allow_draft, :checked => @account.settings[:allow_draft] %>
-                    <label for="account_settings_allow_draft"><%= t('allow_draft', 'Allow Draft State (beta)') %>
-                      <a href="#" class="allow_draft_help_link no-hover" title="<%= t(:allow_draft_help_tooltip, "What is draft state?") %>"><i class="icon-question standalone-icon"></i></a>
-                    </label>
-                  </div>
+                  <!--<div>-->
+                    <!--<%#= settings.check_box :enable_alerts, :checked => @account.settings[:enable_alerts] %>-->
+                    <!--<%#= settings.label :enable_alerts, :en => "Alerts (beta)" %>-->
+                  <!--</div>-->
+                  <!--<div id='allow_draft'>-->
+                    <!--<%#= settings.check_box :allow_draft, :checked => @account.settings[:allow_draft] %>-->
+                    <label for="account_settings_allow_draft"><%#= t('allow_draft', 'Allow Draft State (beta)') %>
+                      <!--<a href="#" class="allow_draft_help_link no-hover" title="<%#= t(:allow_draft_help_tooltip, "What is draft state?") %>"><i class="icon-question standalone-icon"></i></a>-->
+                    <!--</label>-->
+                  <!--</div>-->
                   <div id="allow_draft_help_dialog" style="display: none;">
                     <%= mt(:allow_draft_help_message, <<-DRAFT )
 Draft state is a *beta* feature that allows course content to be published and unpublished.
@@ -252,13 +252,13 @@ Allowing Draft State here will allow teachers to enable it in their individual c
                 <% end %>
               <% end %>
               <% if @account.canvas_authentication? %>
+                <!--<div>-->
+                  <!--<%#= settings.check_box :self_registration, :checked => @account.self_registration? %>-->
+                  <!--<%#= settings.label :self_registration, :en => "Self Registration" %>-->
+                <!--</div>-->
                 <div>
-                  <%= settings.check_box :self_registration, :checked => @account.self_registration? %>
-                  <%= settings.label :self_registration, :en => "Self Registration" %>
-                </div>
-                <div>
-                  <%= settings.check_box :open_registration, :checked => @account.open_registration? %>
-                  <%= settings.label :open_registration, :en => "Open Registration" %>
+                  <%#= settings.check_box :open_registration, :checked => @account.open_registration? %>
+                  <%#= settings.label :open_registration, :en => "Open Registration" %>
                   <% if @account.delegated_authentication? %>
                     <legend>
                       <%= link_to(image_tag('warning.png'), '#',
@@ -281,21 +281,21 @@ Allowing Draft State here will allow teachers to enable it in their individual c
                 <%= settings.label :users_can_edit_name, :en => "Users can edit display name" %>
               </div>
 
-              <div>
-                <%= settings.check_box :edit_institution_email, :checked => @account.edit_institution_email? %>
-                <%= settings.label     :edit_institution_email, :en => "Users can delete their institution-assigned email address" %>
-              </div>
+              <!--<div>-->
+                <!--<%#= settings.check_box :edit_institution_email, :checked => @account.edit_institution_email? %>-->
+                <!--<%#= settings.label     :edit_institution_email, :en => "Users can delete their institution-assigned email address" %>-->
+              <!--</div>-->
             <% end %>
-            <% unless @account.site_admin? %>
-              <div>
-                <input type="checkbox" id="enable_equella" <%= 'checked' if !@account.settings[:equella_endpoint].blank? %> />
-                <label for="enable_equella"><%= t 'labels.equella', 'Equella' %></label>
-              </div>
-              <div>
-                <input type="checkbox" name="turnitin" id="turnitin" <%= 'checked' unless @account.turnitin_account_id.blank? %> />
-                <label for="turnitin"><%= t 'labels.turnitin', 'Turnitin' %></label>
-              </div>
-             <% end %>
+            <%# unless @account.site_admin? %>
+              <!--<div>-->
+                <!--<input type="checkbox" id="enable_equella" <%#= 'checked' if !@account.settings[:equella_endpoint].blank? %> />-->
+                <!--<label for="enable_equella"><%#= t 'labels.equella', 'Equella' %></label>-->
+              <!--</div>-->
+              <!--<div>-->
+                <!--<input type="checkbox" name="turnitin" id="turnitin" <%#= 'checked' unless @account.turnitin_account_id.blank? %> />-->
+                <!--<label for="turnitin"><%#= t 'labels.turnitin', 'Turnitin' %></label>-->
+              <!--</div>-->
+             <%# end %>
           <% end %>
           <% f.fields_for :services do |services| %>
             <% Account.services_exposed_to_ui_hash(:setting, @current_user, @account).sort_by { |k,h| h[:name] }.each do |key, service| %>
@@ -443,9 +443,12 @@ Allowing Draft State here will allow teachers to enable it in their individual c
             <% f.fields_for :services do |services| %>
               <% exposed_services.sort_by { |k,h| h[:name] }.each do |key, service| %>
                 <div>
+                  <% unless (key == :delicious) || (key == :diigo)%>
                   <%= services.check_box key, :checked => @account.service_enabled?(key) %>
                   <%= services.label key, service[:name] + " " %>
+                  <% end  %>
                 </div>
+
               <% end %>
             <% end %>
             <div style="display:none;">
@@ -522,7 +525,7 @@ Allowing Draft State here will allow teachers to enable it in their individual c
                 <table class="formtable" style='margin-left: 1.5em;'>
                 <tr>
                   <td><%= t 'notifications.from', 'From' %></td>
-                  <td><%= HostUrl.outgoing_email_default_name %> <%= '<notifications@instructure.com>' %></td>
+                  <td><%= HostUrl.outgoing_email_default_name %> <%= '<notifications@jigsawacademy.com>' %></td>
                 </tr>
                 <tr>
                   <td><%= t 'notifications.subject', 'Subject' %></td>
@@ -534,11 +537,11 @@ Allowing Draft State here will allow teachers to enable it in their individual c
                 </tr>
                 <tr>
                   <td><%= t 'notifications.email_to', 'To' %></td>
-                  <td><%= 'recipient@instructure.com' %></td>
+                  <td><%= 'recipient@jigsawacademy.com' %></td>
                 </tr>
                 <tr>
                   <td><%= t 'notifications.email_reply_to', 'Reply-To' %></td>
-                  <td><%= 'notifications+e79df3ljk09s3jkl09ssljk3lkj2l-10191633@instructure.com' %></td>
+                  <td><%= 'notifications+e79df3ljk09s3jkl09ssljk3lkj2l-10191633@jigsawacademy.com' %></td>
                 </tr>
               </table>
               </blockquote>
@@ -562,7 +565,7 @@ Allowing Draft State here will allow teachers to enable it in their individual c
               <table class="formtable" style='margin-left: 1.5em;'>
                 <tr>
                   <td><%= t 'notifications.from', 'From' %></td>
-                  <td><strong id='custom_default_name_display'></strong> <%= '<notifications@instructure.com>' %></td>
+                  <td><strong id='custom_default_name_display'></strong> <%= '<notifications@jigsawacademy.com>' %></td>
                 </tr>
                 <tr>
                   <td><%= t 'notifications.subject', 'Subject' %></td>
@@ -574,11 +577,11 @@ Allowing Draft State here will allow teachers to enable it in their individual c
                 </tr>
                 <tr>
                   <td><%= t 'notifications.email_to', 'To' %></td>
-                  <td><%= 'recipient@instructure.com' %></td>
+                  <td><%= 'recipient@jigsawacademy.com' %></td>
                 </tr>
                 <tr>
                   <td><%= t 'notifications.email_reply_to', 'Reply-To' %></td>
-                  <td><%= 'notifications+e79df3ljk09s3jkl09ssljk3lkj2l-10191633@instructure.com' %></td>
+                  <td><%= 'notifications+e79df3ljk09s3jkl09ssljk3lkj2l-10191633@jigsawacademy.com' %></td>
                 </tr>
               </table>
               </blockquote>

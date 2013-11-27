@@ -405,7 +405,7 @@ class AccountsController < ApplicationController
        view_messages: (@account.settings[:admins_can_view_notifications] &&
                        @account.grants_right?(@current_user, session, :view_notifications)) ||
                       Account.site_admin.grants_right?(@current_user, :read_messages),
-       auth_logging: @account.grants_rights?(@current_user, :view_statistics, :manage_user_logins).values.any?,
+       auth_logging: false
       }
   end
 
