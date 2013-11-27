@@ -7,7 +7,7 @@ define ["ember", "compiled/ember/context_modules2/config/app", "compiled/ember/c
       application.Router.map(routes)
 
   App.reopen({
-    ModulesView: ModulesView
+    ModuleController: ModuleController
     ModulesController: ModulesController
     ModuleItemsAddController: ModuleItemsAddController
     ModuleItemController: ModuleItemController

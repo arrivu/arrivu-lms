@@ -124,6 +124,10 @@ define([
         instructure_buttons = instructure_buttons + ",instructure_external_button_clump";
       }
     }
+    INST.allowWistia = true
+    if(INST && INST.allowWistia) {
+        instructure_buttons = instructure_buttons + ",arrivu_wistia";
+    }
     if(INST && INST.allowMediaComments) {
       instructure_buttons = instructure_buttons + ",instructure_record";
     }

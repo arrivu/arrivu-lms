@@ -191,4 +191,11 @@ Dir[File.join(File.dirname(__FILE__),'vendor/plugins/*/Gemfile')].each do |g|
   eval(File.read(g))
 end
 
-gem 'acts-as-taggable-on', '~>2.1.0'
+gem 'acts-as-taggable-on', '2.1.1'
+
+gem 'wistia-api'
+
+
+#group :development do
+#  gem "coffee-script-redux-debugger", :git => "git://github.com/JetBrains/coffee-script-redux-debugger.git"
+#end
