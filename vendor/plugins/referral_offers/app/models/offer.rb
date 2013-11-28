@@ -10,16 +10,8 @@ class Offer < ActiveRecord::Base
   belongs_to :pseudonym
   has_many :referrals
 
-  validates_presence_of :name, :presence => true
-  validates_presence_of :description, :presence => true
-  #validates_presence_of :expiry_date, :presence => true
-  validates_presence_of :how_many, :presence => true
-  validates_presence_of :referrer_expiry_date, :presence => true
-  validates_presence_of :referree_expiry_date, :presence => true
-  validates_presence_of :email_subject, :presence => true
-  validates_presence_of :email_template_txt, :presence => true
-  validates_presence_of :alpha_mask, :presence => true
-  #validates_presence_of :metadata, :presence => true
+  validates_presence_of :name,  :description, :how_many, :referrer_expiry_date, :referree_expiry_date, :email_subject,
+                        :email_template_txt, :alpha_mask
 
 end
 

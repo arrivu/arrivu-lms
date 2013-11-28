@@ -3,16 +3,16 @@ require 'coupon_errors'
 class Coupon < ActiveRecord::Base
   has_many :redemptions
 
-  validates_presence_of :name, :presence => true
-  validates_presence_of :description, :presence => true
-  validates_presence_of :expiration, :presence => true
-  validates_presence_of :how_many, :presence => true, :numericality => true
+  validates_presence_of :name
+  validates_presence_of :description
+  validates_presence_of :expiration
+  validates_presence_of :how_many
   validates_presence_of do |coupon|
     errors.add(:how_many, "must be positive") unless coupon.how_many > 0
   end
 
-  validates_presence_of :category_one, :presence => true
-  validates_presence_of :amount_one, :presence => true, :numericality => true
+  validates_presence_of :category_one
+  validates_presence_of :amount_one, :numericality => true
   validates_presence_of :percentage_one, :presence => true, :numericality => true
 
   validates_presence_of :amount_two, :numericality => true

@@ -5,12 +5,13 @@ class CreateReferrees < ActiveRecord::Migration
       t.email :email
       t.text :name
       t.integer :phone
-      t.numeric :referral_id, :limit => 8
-      t.email :referral_email
+      t.references :referral, :limit => 8
+      t.references :coupon, :limit => 8
       t.text :status
-      t.text :coupon_code
       t.datetime :expiry_date
 
+      t.email :referral_email
+      t.text :coupon_code
       t.timestamps
     end
   end

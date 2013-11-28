@@ -2,5 +2,5 @@
 require_dependency 'referral_offers'
 # Should run with each request
 config.to_prepare do
-  Referral::Offers::initialize
+  Referrals::Offers::initialize
 end

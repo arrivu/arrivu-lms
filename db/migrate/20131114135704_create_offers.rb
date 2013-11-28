@@ -4,6 +4,7 @@ class CreateOffers < ActiveRecord::Migration
     create_table :offers do |t|
       t.text :name
       t.text :description
+      t.date :expiry_date
       t.integer :how_many
       t.integer :referrer_amount
       t.integer :referrer_percentage

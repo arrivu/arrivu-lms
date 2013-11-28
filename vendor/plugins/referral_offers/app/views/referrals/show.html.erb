@@ -1,0 +1,15 @@
+
+<% form_for :referral, :url => new_course_referral_path, :html => {:method => :get } do |f| %>
+<table id="dataTable">
+  <tr>
+    <td><%= f.blabel :email_subject, :en => "Email Subject" %></td>
+    <td><%= f.text_field :email_subject  %></td>
+  </tr>
+
+  <tr>
+    <td><%= f.blabel :email_text, :en => "Email Text" %></td>
+    <td><%= f.text_field :email_text  %></td>
+  </tr>
+
+    </table>
+<% end %>

@@ -1,4 +1,4 @@
-module Referral #:nodoc:
+module Referrals #:nodoc:
   module Offers #:nodoc:
     module Routing #:nodoc:
       module MapperExtensions
@@ -26,4 +26,4 @@ module Referral #:nodoc:
   end
 end
 
-ActionController::Routing::RouteSet::Mapper.send :include, Referral::Offers::Routing::MapperExtensions
+ActionController::Routing::RouteSet::Mapper.send :include, Referrals::Offers::Routing::MapperExtensions

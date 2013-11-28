@@ -7,7 +7,7 @@ class CreateReferrances < ActiveRecord::Migration
       #t.numeric :referral_id, :limit => 8
       #t.numeric :provider_id, :limit => 8
       t.integer :visit_count
-      t.text :unique_url_token
+      t.text :short_url
       t.email :referree_email
       t.text :status
 

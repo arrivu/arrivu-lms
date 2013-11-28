@@ -1,6 +1,6 @@
 Pseudonym.class_eval do
   has_many :offers
-  has_many :referrals
+  has_many :referral
 
   def has_offer?
     offers.present?

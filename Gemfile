@@ -192,5 +192,4 @@ Dir[File.join(File.dirname(__FILE__),'vendor/plugins/*/Gemfile')].each do |g|
 end
 
 gem 'acts-as-taggable-on', '~>2.1.0'
-gem 'coupon'
-gem 'googl'
+gem 'googl', '0.6.3'

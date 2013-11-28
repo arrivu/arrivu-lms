@@ -1,6 +1,6 @@
 class Redemption < ActiveRecord::Base
   belongs_to :coupon, :counter_cache => true
-  validates_presence_of :coupon_id, :presence => true
+  validates_presence_of :coupon_id
 end
 
 
