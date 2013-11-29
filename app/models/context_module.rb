@@ -24,6 +24,7 @@ class ContextModule < ActiveRecord::Base
   belongs_to :cloned_item
   has_many :context_module_progressions, :dependent => :destroy
   has_many :content_tags, :dependent => :destroy, :order => 'content_tags.position, content_tags.title'
+  has_many :user_module_enrollments , :dependent => :destroy
   acts_as_list :scope => :context
   
   serialize :prerequisites
@@ -147,7 +148,8 @@ class ContextModule < ActiveRecord::Base
   end
   
   def available_for?(user, opts={})
-    return true if self.active? && !self.to_be_unlocked && self.prerequisites.blank? && !self.require_sequential_progress
+    return true if self.active? && !self.to_be_unlocked && self.prerequisites.blank? && !self.require_sequential_progress &&
+        UserModuleEnrollment.find_by_context_module_id_and_user_id(self.id,user.id)
     if self.grants_right?(user, nil, :update)
      return true
     elsif !self.active?
@@ -596,7 +598,18 @@ class ContextModule < ActiveRecord::Base
     Shackles.activate(:master) do
       progression.save if progression.workflow_state_changed? || requirements_met_changed
     end
-    progression
+    check_for_user_enrollment(user,progression)
+  end
+
+  def check_for_user_enrollment(user,progression)
+   enrollment = UserModuleEnrollment.find_by_context_module_id_and_user_id(self.id,user.id)
+   if enrollment
+     progression
+   else
+     progression.workflow_state = "locked"
+     progression.save!
+     progression
+   end
   end
 
   def to_be_unlocked
