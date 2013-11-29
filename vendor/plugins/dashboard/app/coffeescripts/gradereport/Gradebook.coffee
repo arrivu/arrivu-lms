@@ -1,6 +1,6 @@
 # This class both creates the slickgrid instance, and acts as the data source for that instance.
 define [
-  'compiled/gradebook2/TotalColumnHeaderView'
+  'compiled/gradereport/TotalColumnHeaderView'
   'compiled/util/round'
   'compiled/views/InputFilterView'
   'i18n!gradebook2'
@@ -12,15 +12,15 @@ define [
   'vendor/spin'
   'compiled/multi_grid'
   'compiled/SubmissionDetailsDialog'
-  'compiled/gradebook2/AssignmentGroupWeightsDialog'
-  'compiled/gradebook2/SubmissionCell'
-  'compiled/gradebook2/GradebookHeaderMenu'
+  'compiled/gradereport/AssignmentGroupWeightsDialog'
+  'compiled/gradereport/SubmissionCell'
+  'compiled/gradereport/GradebookHeaderMenu'
   'str/htmlEscape'
   'jst/gradebook_uploads_form'
-  'jst/gradebook2/section_to_show_menu'
-  'jst/gradebook2/column_header'
-  'jst/gradebook2/group_total_cell'
-  'jst/gradebook2/row_student_name'
+  'jst/gradereport/section_to_show_menu'
+  'jst/gradereport/column_header'
+  'jst/gradereport/group_total_cell'
+  'jst/gradereport/row_student_name'
   'jst/_avatar' #needed by row_student_name
   'jquery.ajaxJSON'
   'jquery.instructure_date_and_time'
@@ -138,14 +138,7 @@ define [
         @students[student.id].sections ||= []
         @students[student.id].sections.push(studentEnrollment.course_section_id)
 
-    can_display_link: (student_id) ->
-      if @options.gradebook_is_editable
-        true
-      else
-        (ENV.current_user.id == student_id)
-
-
-     gotAllStudents: ->
+    gotAllStudents: ->
       for id, student of @students
         student.computed_current_score ||= 0
         student.computed_final_score ||= 0
@@ -157,7 +150,6 @@ define [
         student.display_name = rowStudentNameTemplate
           avatar_image_url: student.avatar_url
           display_name: student.name
-          display_url: @can_display_link(student.id)
           url: student.enrollment.grades.html_url
           sectionNames: sectionNames
 
@@ -533,7 +525,7 @@ define [
       if e.target.className.match(/cell|slick/) or !@gradeGrid.getActiveCell
         return
 
-      if e.target.className is 'grade' and @gradeGrid.getCellEditor() instanceof SubmissionCell.out_of 
+      if e.target.className is 'grade' and @gradeGrid.getCellEditor() instanceof SubmissionCell.out_of
         # We can assume that a user clicked the up or down arrows on the
         # number input, we want to allow them to keep doing that.
         return
@@ -546,7 +538,7 @@ define [
       $('#gradebook_wrapper').show()
       @$grid = grid = $('#gradebook_grid')
         .fillWindowWithMe({
-          alsoResize: '#gradebook_students_grid',
+          alsoResize: '# gradebook_students_grid',
           onResize: => @multiGrid.resizeCanvas()
         })
         .delegate '.slick-cell',
@@ -556,7 +548,7 @@ define [
             grid.find('.hover, .focus').removeClass('hover focus')
             $(this).addClass (if event.type == 'mouseenter' then 'hover' else 'focus')
           'mouseleave focusout' : -> $(this).removeClass('hover focus')
-        .delegate '.gradebook-cell-comment', 'click.gradebook', (event) =>
+         .delegate '.gradebook-cell-comment', "click.gradebook", (event) =>
           event.preventDefault()
           data = $(event.currentTarget).data()
           SubmissionDetailsDialog.open @assignments[data.assignmentId], @students[data.userId], @options

@@ -292,12 +292,14 @@ class RoleOverride < ActiveRecord::Base
           'DesignerEnrollment',
           'TeacherEnrollment',
           'AccountAdmin',
-          'AccountMembership'
+          'AccountMembership',
+          'StudentEnrollment'
         ],
         :true_for => [
           'TaEnrollment',
           'TeacherEnrollment',
-          'AccountAdmin'
+          'AccountAdmin',
+          'StudentEnrollment'
         ]
       },
       :manage_grades => {

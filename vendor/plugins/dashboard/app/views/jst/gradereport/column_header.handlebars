@@ -13,10 +13,9 @@
   {{/if}}
   {{{assignment.name}}}
 </a>
- {{#if ENV.GRADEBOOK_OPTIONS.gradebook_header_drop }}
-    <a class="gradebook-header-drop assignment_header_drop" data-assignment-id="{{assignment.id}}" href="#" role="button">
+<a class="gradebook-header-drop assignment_header_drop" data-assignment-id="{{assignment.id}}" href="#" role="button">
   {{#t "assignment_options"}}Assignment Options{{/t}}
-  {{/if}}
+</a>
 {{#if showPointsPossible}}
   <div class='assignment-points-possible'>
     {{#t "points_out_of"}}Out of {{assignment.points_possible}}{{/t}}

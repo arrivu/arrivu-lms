@@ -5,8 +5,26 @@ class Gradebook2Controller < ApplicationController
 
   def show
     if authorized_action(@context, @current_user, [:manage_grades, :view_all_grades])
-      @gradebook_is_editable = @context.grants_right?(@current_user, session, :manage_grades)
+      @for_statistics = params["for-statistics"].to_i == 1
+      if @context.all_students.find_by_id(@current_user.id)
+        @settings_tab=false
+        @section_to_show = false
+      else
+        @settings_tab=true
+        @section_to_show=true
+      end
 
+      if @for_statistics || @current_user.enrollments.find_by_course_id(@context.id).type == 'StudentEnrollment'
+
+        add_crumb(t('#crumbs.settings', "Setttings"), named_context_url(@context, :context_details_url))
+        add_crumb(t('#crumb.reports',"Reports"), named_context_url(@context, :context_grades_url))
+        @gradebook_header_drop = false
+      else
+        add_crumb(t('#crumbs.gradebook', "Gradebook"), named_context_url(@context, :context_grades_url))
+        active_tab = "grades"
+        @gradebook_header_drop = true
+      end
+      @gradebook_is_editable = (@context.grants_right?(@current_user, session, :manage_grades) and !@for_statistics)
       per_page = Setting.get_cached('api_max_per_page', '50').to_i
       js_env  :GRADEBOOK_OPTIONS => {
         :chunk_size => Setting.get_cached('gradebook2.submissions_chunk_size', '35').to_i,
@@ -24,9 +42,10 @@ class Gradebook2Controller < ApplicationController
         :group_weighting_scheme => @context.group_weighting_scheme,
         :grading_standard =>  @context.grading_standard_enabled? && (@context.grading_standard.try(:data) || GradingStandard.default_grading_standard),
         :course_is_concluded => @context.completed?,
-        :gradebook_is_editable => @gradebook_is_editable,
         :speed_grader_enabled => @context.allows_speed_grader?,
-        :draft_state_enabled => @context.draft_state_enabled?
+        :draft_state_enabled => @context.draft_state_enabled?,
+        :gradebook_is_editable => @gradebook_is_editable,
+        :gradebook_header_drop => @gradebook_header_drop
       }
     end
   end
