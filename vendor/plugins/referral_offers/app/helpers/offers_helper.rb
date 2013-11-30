@@ -1,4 +1,0 @@
-module OffersHelper
-
-
-end

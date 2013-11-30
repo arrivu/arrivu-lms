@@ -185,8 +185,9 @@ FakeRails3Routes.draw do
     match 'imports/files' => 'content_imports#files', :as => :import_files
   end
 
-  concern :rewards do
-    resources :offers do
+  concern :reward_system do
+    resources :rewards do
+
     end
 
     resources :referrals do
@@ -318,7 +319,7 @@ FakeRails3Routes.draw do
     concerns :wikis
     concerns :conferences
     concerns :question_banks
-    concerns :rewards
+    concerns :reward_system
 
     match 'quizzes/publish'   => 'quizzes#publish',   :as => :quizzes_publish
     match 'quizzes/unpublish' => 'quizzes#unpublish', :as => :quizzes_unpublish
@@ -593,7 +594,7 @@ FakeRails3Routes.draw do
     concerns :files, :file_images, :relative_files, :folders
     concerns :media
     concerns :groups
-    concerns :rewards
+    concerns :reward_system
 
     resources :outcomes
     match 'courses' => 'accounts#courses', :as => :courses

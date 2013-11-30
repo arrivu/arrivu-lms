@@ -144,7 +144,6 @@ stylesheets:
   account_settings:
     - public/stylesheets/compiled/account_settings.css
     - public/stylesheets/compiled/external_tools.css
-
   account_admin_tools:
     - public/stylesheets/compiled/account_admin_tools.css
   select_content_dialog:
@@ -187,5 +186,3 @@ stylesheets:
     - public/stylesheets/compiled/token_input.css
 
   <%= plugin_assets.anchors_yml %>
-  offers:
-    - public/stylesheets/compiled/offers.css

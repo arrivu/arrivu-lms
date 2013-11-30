@@ -1,5 +1,0 @@
-stylesheets:
-#  datatables:
-#    - public/stylesheets/compiled/datatables.css
-  referralsystem:
-    - public/stylesheets/compiled/referraloffers.css
