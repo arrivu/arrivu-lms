@@ -13,7 +13,7 @@ class RewardsController < ApplicationController
     @reward = Reward.new(params[:reward])
     @reward.account_id=@domain_root_account.id
     @reward.pseudonym_id = Pseudonym.find(@reward.account_id).id
-    @reward.metadata_type = Course.name
+
 
     if @reward.save!
       redirect_to account_rewards_path

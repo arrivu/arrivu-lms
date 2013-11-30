@@ -4,38 +4,26 @@ class ReferralsController < ApplicationController
   add_crumb(proc { t('#crumbs.referrals', "Referrals")}) { |c| c.send :named_context_url, c.instance_variable_get("@context"), :context_referrals_url }
   before_filter { |c| c.active_tab = "Referrals" }
 
-
   def new
     @referral = Referral.new
+    @reward =  Reward.where(:metadata => @context.id.to_s, :metadata_type => @context.class.name)
+    @referral.email_subject =  @reward.email_subject
+    @referral.email_text =  @reward.email_template_txt
   end
 
   def create
-
-    @referral = Referral.new(params[:referral])
-
-    if @context.is_a?(Course)
-
-      @referral.reward_id = Reward.find(params[:course_id]).id
-      @referral.pseudonym_id = Reward.find(@referral.reward_id).pseudonym_id
-      @referral.email_subject = Reward.find(@referral.reward_id).email_subject
-      @referral.email_text = Reward.find(@referral.reward_id).email_template_txt
+    @reward =  Reward.where(:metadata => @context.id.to_s, :metadata_type => @context.class.name)
+    @reward.build_referral(params[:referral])
       #@referral.create_referrees
       @referral.short_url_code =  url_generate
       if @referral.save!
         redirect_to course_referrals_path
-      end
-      elsif @context.is_a?(Account)
-        @domain_root_account
-    end
+
   end
 
   def url_generate
-    referral_url = Googl.shorten("http://localhost:3000/courses/#{@context.id}")
+    referral_url = Googl.shorten("http://localhost:3000/accounts/#{@domain_root_account.id}").short_url
   end
- #def fb(provid,src = params[:src])
- #      provid = referral_url
- #end
-
 
   def edit
     @referral = Referral.find(params[:id])
