@@ -1,4 +1,4 @@
-class Referree < ActiveRecord::Base
+class Referee < ActiveRecord::Base
 
   belongs_to :referral
   belongs_to :referrance

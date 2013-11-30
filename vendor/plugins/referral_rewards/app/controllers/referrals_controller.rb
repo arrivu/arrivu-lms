@@ -5,63 +5,51 @@ class ReferralsController < ApplicationController
   before_filter { |c| c.active_tab = "Referrals" }
 
   def new
-    @referral = Referral.new
-    @reward =  Reward.where(:metadata => @context.id.to_s, :metadata_type => @context.class.name)
-    @referral.email_subject =  @reward.email_subject
-    @referral.email_text =  @reward.email_template_txt
+    @reward = Reward.find_by_metadata(@context.id.to_s)
+    if @reward
+      @referral = @reward.referral.find_by_pseudonym_id(@current_pseudonym.id)
+      if @referral.nil?
+        @referral = @reward.build_referral(pseudonym_id: @current_pseudonym.id,email_text: @reward.email_template_txt,
+
+                                           email_subject: @reward.email_subject)
+
+        @references1 = @referral.build_reference(short_url_code: SecureRandom.uuid,provider: "facebook")
+        @references2 = @referral.build_reference(short_url_code: SecureRandom.uuid,provider: "twitter")
+        @references3 = @referral.build_reference(short_url_code: SecureRandom.uuid,provider: "linkedin")
+        @references4 = @referral.build_reference(short_url_code: SecureRandom.uuid,provider: "google")
+        @references5 = @referral.build_reference(short_url_code: SecureRandom.uuid,provider: "global")
+        @referral.save!
+      else
+
+
+      end
+    else
+      flash[:info] = "There is no reward"
+      redirect_to course_reward_path(@context)
+    end
   end
 
   def create
-    @reward =  Reward.where(:metadata => @context.id.to_s, :metadata_type => @context.class.name)
-    @reward.build_referral(params[:referral])
-      #@referral.create_referrees
-      @referral.short_url_code =  url_generate
-      if @referral.save!
-        redirect_to course_referrals_path
-
+    @referral = Referral.find(params[:referral])
+    params [:referral][:email_subject]
+    params [:referral][:emails]
+    params [:referral][:email_text]
+    @references1 = @referral.build_reference(short_url_code: SecureRandom.uuid,provider: @email)
   end
 
-  def url_generate
-    referral_url = Googl.shorten("http://localhost:3000/accounts/#{@domain_root_account.id}").short_url
-  end
-
-  def edit
-    @referral = Referral.find(params[:id])
-  end
-
-
-  def update
-    @referral = Referral.find(params[:id])
-    @referral.user_id=@context.id
-
-    if @referral.update_attributes(params[:referral])
-      #flash[:success] ="Successfully Updated Category."
-      redirect_to account_rewards_path
-    end
-
-  end
-
-  def show
-    @referral = Referral.find(params[:id])
-  end
-  def destroy
-    @referral = Referral.find(params[:id])
-    @referral.destroy
-    #flash[:success] = "Successfully Destroyed Category."
-    redirect_to course_path
-  end
+  #def url_generate
+  #  referral_url = Googl.shorten("http://localhost:3000/accounts/#{@domain_root_account.id}").short_url
+  #end
 
   def index
-    @referrals = Referral.all
-    #@referral = Referral.new(params[:referral])
-    #@referral.reward_id = Reward.find(params[:course_id]).id
-    #@referral.pseudonym_id = Reward.find(@referral.reward_id).pseudonym_id
-    #@referral.email_subject = Reward.find(@referral.reward_id).email_subject
-    #@referral.email_text = Reward.find(@referral.reward_id).email_template_txt
+    @reward = Reward.find_by_metadata(@context.id.to_s)
+    if @reward
+      @referral = @reward.referral.find_by_pseudonym_id(@current_pseudonym.id)
+    end
+    @references = @referral.references
   end
 
 
-  def my_rewards
-  end
+
 
 end

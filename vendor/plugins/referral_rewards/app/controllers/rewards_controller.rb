@@ -11,8 +11,8 @@ class RewardsController < ApplicationController
   def create
 
     @reward = Reward.new(params[:reward])
-    @reward.account_id=@domain_root_account.id
-    @reward.pseudonym_id = Pseudonym.find(@reward.account_id).id
+    @reward.account_id = @domain_root_account.id
+    @reward.pseudonym_id = @current_pseudonym.id
 
 
     if @reward.save!
