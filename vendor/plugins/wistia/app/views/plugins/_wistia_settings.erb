@@ -1,0 +1,28 @@
+<% fields_for :settings, OpenObject.new(settings) do |f| %>
+  <table style="width: 500px;" class="formtable">
+    <tr>
+      <td><%= f.label :username, :en => "username" %></td>
+      <td>
+        <%= f.text_field :username %>
+      </td>
+    </tr>
+    <tr>
+      <td><%= f.label :secret_password, :en => "Secret Password" %></td>
+      <td>
+        <%= f.text_field :secret_password %>
+      </td>
+    </tr>
+    <tr>
+      <td><%= f.label :public_token, :en => "Public Token" %></td>
+      <td>
+        <%= f.text_field :public_token %>
+      </td>
+    </tr>
+    <tr>
+      <td><%= f.label :cache_timeout, :en => "Cache timeout" %></td>
+      <td>
+        <%= f.text_field :cache_timeout %>
+      </td>
+    </tr>
+  </table>
+<% end %>

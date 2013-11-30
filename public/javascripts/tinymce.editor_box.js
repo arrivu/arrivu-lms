@@ -124,6 +124,10 @@ define([
         instructure_buttons = instructure_buttons + ",instructure_external_button_clump";
       }
     }
+    INST.allowWistia = true
+    if(INST && INST.allowWistia) {
+        instructure_buttons = instructure_buttons + ",wistia";
+    }
     if(INST && INST.allowMediaComments) {
       instructure_buttons = instructure_buttons + ",instructure_record";
     }
@@ -151,7 +155,7 @@ define([
       theme : "advanced",
       plugins: "autolink,instructure_external_tools,instructure_contextmenu,instructure_links," +
                "instructure_embed,instructure_image,instructure_equation,instructure_record,instructure_equella," +
-               "media,paste,table,inlinepopups",
+               "media,paste,table,wistia,inlinepopups",
       dialog_type: 'modal',
       language_load: false,
       relative_urls: false,
