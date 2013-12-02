@@ -402,7 +402,7 @@ FakeRails3Routes.draw do
     match 'student_view' => 'courses#leave_student_view', :as => :student_view, :via => :delete
     match 'test_student' => 'courses#reset_test_student', :as => :test_student, :via => :delete
     match 'content_migrations' => 'content_migrations#index', :as => :content_migrations, :via => :get
-    resources :user_module_enrollements
+    resources :user_module_enrollments
   end
 
   match 'quiz_statistics/:quiz_statistics_id/files/:file_id/download' => 'files#show', :as => :quiz_statistics_download, :download => '1'
