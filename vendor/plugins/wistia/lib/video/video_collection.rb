@@ -1,22 +1,21 @@
 module VideoCollection
 
   class Collection
-    def initialize(id, hash_id, name, description, mediaCount, medias=nil)
-      @id = id
-      @hash_id = hash_id
-      @name    = name
-      @description = description
-      @mediaCount = mediaCount
-      @medias =   medias
+  attr_accessor :id, :hash_id, :name, :description, :mediaCount
 
-      def medias(medias)
-        @medias = medias
-      end
+  def initialize(id, hash_id, name, description, mediaCount)
+    @id = id
+    @hash_id = hash_id
+    @name    = name
+    @description = description
+    @mediaCount = mediaCount
+  end
 
-    end
   end
 
   class Media
+    attr_accessor  :id, :hash_id, :name,:description,:embed_code ,:thumbnail_url,:thumbnail_height,:thumbnail_width
+
     def initialize(id, hash_id, name, description, embed_code,
         thumbnail_url, thumbnail_height, thumbnail_width)
       @id = id
@@ -29,5 +28,7 @@ module VideoCollection
       @thumbnail_width =   thumbnail_width
     end
   end
-end
+
+  end
+
 

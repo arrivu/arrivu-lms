@@ -4,7 +4,7 @@ class WistiaVideoAPI
   require 'net/http'
   require 'net/https'
   require 'uri'
-
+  require  'video/video_collection'
   def self.config_check(settings)
     username = settings['username']
     secret_password = settings['secret_password']
@@ -23,31 +23,39 @@ class WistiaVideoAPI
   end
 
   def self.list_collections
-   begin
+    @collections =[]
+    begin
       projects = Wistia::Project.find(:all)
-      collections = []
+      @collections = []
       projects.each do  |project|
-       collections << collection_from_project(project)
+        collection_from_project(project)
+        @collections << @collection
       end
+      @collections
 
       rescue => e
-      return "Error while connecting Wistia"
-   end
-  end
-
-  def self.get_collection(id)
-    project = Wistia::Project.get(id)
-    collections = []
-    projects.each do  |project|
-      collections << collection_from_project(project)
+        return "Error #{e.message}"
     end
   end
 
-  #def self.load_colection_medias(id)
-  #  project_details = Wistia::Media.find(:all, :params => { :project_id => id })
-  #end
+  def self.get_medias(collection_id)
+    @collection =[]
+    @medias =[]
+    begin
+    @collection = Wistia::Project.get(collection_id)
 
-  #protected
+      if project['medias']
+        project['medias'].each do  |media|
+          @medias << media_from_wistia_project(media)
+        end
+      end
+
+    @medias
+    end
+  rescue => e
+    return "Error #{e.message}"
+  end
+
   def self.authenticate(secret_password)
     begin
       Wistia.use_config!(:wistia => {
@@ -59,28 +67,17 @@ class WistiaVideoAPI
       #test to list all the projects
       #load_collections
     rescue => e
-      return "Wistia Video API Configuration check failed, please check your settings"
+      return "Wistia Video API Configuration check failed, please check your settings #{e.message}"
     end
     #self.authenticate=true
   end
 
   def self.collection_from_project(project)
-    id = project.id , hash_id = project.hashedId
-        name = project.name, description = project.description, mediaCount = project.mediaCount
-    medias = nil
-    if(project.medias)
-      projects.medias.each do  |media|
-        medias << media_from_wistia_media(media)
-      end
-    end
-    collection = VideoCollection::Collection.new(id, hash_id, name, description, mediaCount, medias)
+    @collection = VideoCollection::Collection.new(project.id, project.hashedId, project.name, project.description, project.mediaCount)
   end
 
-  def self.media_from_wistia_media(media)
-    id = media.id, hash_id = media.hash_id, name = media.name, description = media.description,
-        embed_code = media.embed_code,thumbnail_url = media.thumbnail_url, thumbnail_height = media.thumbnail_height,
-        thumbnail_width = media.thumbnail_width
-    media = VideoCollection::Media(id, hash_id, name, description, embed_code,
-                                   thumbnail_url, thumbnail_height, thumbnail_width)
+  def self.media_from_wistia_project(media)
+   VideoCollection::Media.new(media['id'], media['hashed_id'], media['name'], media['description'], media['embed_code'],
+                                       media['thumbnail']['url'], media['thumbnail']['height'], media['thumbnail']['width'])
   end
 end
