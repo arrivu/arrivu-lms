@@ -17,7 +17,7 @@ define([
         // Internal wistia object like as iframe placeholder
         if (ed.dom.getAttrib(selectedNode, 'class', '').indexOf('mceItem') != -1) return;
 
-        require(['public/javascripts/plugins/wistia/compiled/tinymce/WistiaVideoView'], function(WistiaVideoView){
+        require(['plugins/wistia/compiled/tinymce/WistiaVideoView'], function(WistiaVideoView){
           new WistiaVideoView(ed, selectedNode);
         });
       });
