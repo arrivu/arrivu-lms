@@ -9,14 +9,14 @@ class RewardsController < ApplicationController
   end
 
   def create
-
     @reward = Reward.new(params[:reward])
     @reward.account_id = @domain_root_account.id
     @reward.pseudonym_id = @current_pseudonym.id
-
-
+    @reward.metadata = @context.id
+    @reward.metadata_type = @context.class.name
+    @reward.status = "active"
     if @reward.save!
-      redirect_to account_rewards_path
+      redirect_to course_rewards_path
     end
   end
 
@@ -31,7 +31,7 @@ class RewardsController < ApplicationController
 
     if @reward.update_attributes(params[:reward])
       #flash[:success] ="Successfully Updated Category."
-      redirect_to account_rewards_path
+      redirect_to course_rewards_path
     end
 
   end
@@ -43,11 +43,11 @@ class RewardsController < ApplicationController
     @reward = Reward.find(params[:id])
     @reward.destroy
     #flash[:success] = "Successfully Destroyed Category."
-    redirect_to account_rewards_path
+    redirect_to course_rewards_path
   end
 
   def index
-    @rewards = Reward.all
+    @rewards = Reward.find_by_metadata(@context.id.to_s)
   end
 end
 

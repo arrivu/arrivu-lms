@@ -17,13 +17,17 @@ class CreateRewards < ActiveRecord::Migration
       t.text :alpha_mask
       t.text :metadata
       t.text :metadata_type
+      t.text :status
       t.references :account, :limit => 8
       t.references :pseudonym, :limit => 8
+
       t.timestamps
     end
+    add_index :rewards, [:metadata, :metadata_type, :status], :unique => true, :name => 'metadata_metadata_type_status'
   end
 
   def self.down
     drop_table :rewards
   end
+
 end

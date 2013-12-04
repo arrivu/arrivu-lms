@@ -594,7 +594,7 @@ FakeRails3Routes.draw do
     concerns :files, :file_images, :relative_files, :folders
     concerns :media
     concerns :groups
-    concerns :reward_system
+    #concerns :reward_system
 
     resources :outcomes
     match 'courses' => 'accounts#courses', :as => :courses
@@ -1383,7 +1383,8 @@ FakeRails3Routes.draw do
   match '/auth/:provider/callback' => 'authentication#create'
   get '/auth/failure' => 'authentication#auth_failure'
   match '/discussion_topic_tags' => 'discussion_topics#discussion_topic_tags'
-  get '/rr/:short_url_code' => 'referees#referee_register'
+  match '/rr/:short_url_code' => 'referrals#referree_register',  :via => :get
+  match 'update_referree'  => 'referrals#update_referree', :via => :post
 
 
 end

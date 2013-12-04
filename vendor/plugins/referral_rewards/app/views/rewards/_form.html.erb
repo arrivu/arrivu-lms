@@ -14,18 +14,9 @@
     </div>
 <% end %>
 
-<% form_for :reward, :url => account_rewards_path, :html => {:method => :post } do |f| %>
+<% form_for :reward, :url => course_rewards_path, :html => {:method => :post } do |f| %>
 
     <table id="dataTable">
-      <tr>
-        <td><%= f.blabel :name, :en => "Course Name" %></td>
-        <td>
-          <div id='all_course'>
-            <%= f.select(:metadata, Course.find(:all).collect {|u| [u.name, u.id]}, :prompt => 'Select Course') %>
-          </div>
-        </td>
-
-      </tr>
       <tr>
         <td><%= f.blabel :name, :en => "Reward Name" %></td>
         <td><%= f.text_field :name  %></td>
@@ -85,6 +76,10 @@
       <tr>
         <td><%= f.blabel :alpha_mask, :en => "Alpha Mask" %></td>
         <td><%= f.text_field :alpha_mask  %></td>
+      </tr>
+      <tr>
+        <td><%= f.blabel :expiry_date, :en => "Expiry Date" %></td>
+        <td><%= f.text_field :expiry_date, :class => 'datetime_field' %></td>
       </tr>
       <tr><td></td><td class="hint">  ["e.g., AA-AA-AA"]</td></tr>
       <tr>

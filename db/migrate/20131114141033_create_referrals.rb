@@ -6,7 +6,7 @@ class CreateReferrals < ActiveRecord::Migration
       t.references :pseudonym, :limit => 8
       t.text :email_subject
       t.text :email_text
-      t.text :short_url_code
+      #t.text :short_url_code
       t.text :referral_emails
       t.timestamps
     end

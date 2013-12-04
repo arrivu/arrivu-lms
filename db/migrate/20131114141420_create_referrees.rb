@@ -10,7 +10,7 @@ class CreateReferrees < ActiveRecord::Migration
       t.text :status
       t.datetime :expiry_date
 
-      t.email :referral_email
+      t.email :referral_emails
       t.text :coupon_code
       t.timestamps
     end

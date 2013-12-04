@@ -3,4 +3,12 @@ class ReferralProvider < ActiveRecord::Base
   has_many :referrals
 
   validates_presence_of :name
+
+  FACEBOOK ='facebook'
+  GOOGLE ='google'
+  TWITTER ='twitter'
+  LINKEDIN ='linkedin'
+  GLOBAL  = 'global'
+  EMAIL = 'email'
+
 end
