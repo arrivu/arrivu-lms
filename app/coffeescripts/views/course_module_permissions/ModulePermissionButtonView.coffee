@@ -17,14 +17,22 @@ define [
       super
       @user_id = @options.user_id if @options.user_id
 
+    toJSON: ->
+      json = super
 
-    afterRender: ->
-      @setDataAttributes()
+      json['user_id'] = @user_id
+      json['module_id'] = @model.id
 
-    setDataAttributes: -> 
-      @$el.attr 'data-module_id', @model.id
-      @$el.attr 'data-user_id', @user_id
+
+      json
+
+
 
     updatePermission: (event) ->
-      alert "#{event}"
-
+#      alert $(event.currentTarget).attr("data-module_id")
+      icon = $(event.currentTarget).children().first().prop("class")
+#      alert icon
+      if icon is "icon-x"
+       $(event.currentTarget).find("i").removeClass("icon-x").addClass "icon-check"
+      else
+       $(event.currentTarget).find("i").removeClass("icon-check").addClass "icon-x"

@@ -46,7 +46,7 @@ define [
     renderTable: => 
       @renderHeader()
       @$el.find('tbody').html '' # Clear tbody in case it gets re-drawing.
-
+      
       # Add each permission item.
       _.each @enrolled_users , (enrolled_user) =>
 
