@@ -863,7 +863,7 @@ class Course < ActiveRecord::Base
     return 'unpublished' if workflow_state == 'created' || workflow_state == 'claimed'
     workflow_state
   end
-  
+
   alias_method :destroy!, :destroy
   def destroy
     self.workflow_state = 'deleted'
@@ -2690,15 +2690,14 @@ class Course < ActiveRecord::Base
   TAB_DISCUSSIONS = 8
   TAB_CHAT = 9
   TAB_MODULES = 10
-  TAB_PERMISSIONS = 11
-  TAB_FILES = 12
-  TAB_CONFERENCES = 13
-  TAB_SETTINGS = 14
-  TAB_ANNOUNCEMENTS = 15
-  TAB_OUTCOMES = 16
-  TAB_COLLABORATIONS = 17
-  TAB_FAQS = 18
-  TAB_CAREERS = 19
+  TAB_FILES = 11
+  TAB_CONFERENCES = 12
+  TAB_SETTINGS = 13
+  TAB_ANNOUNCEMENTS = 14
+  TAB_OUTCOMES = 15
+  TAB_COLLABORATIONS = 16
+  TAB_FAQS = 17
+  TAB_CAREERS = 18
   def self.default_tabs
     [
       { :id => TAB_HOME, :label => t('#tabs.home', "Home"), :css_class => 'home', :href => :course_path },
@@ -2714,7 +2713,6 @@ class Course < ActiveRecord::Base
       { :id => TAB_OUTCOMES, :label => t('#tabs.outcomes', "Outcomes"), :css_class => 'outcomes', :href => :course_outcomes_path },
       { :id => TAB_QUIZZES, :label => t('#tabs.quizzes', "Quizzes"), :css_class => 'quizzes', :href => :course_quizzes_path },
       { :id => TAB_MODULES, :label => t('#tabs.modules', "Modules"), :css_class => 'modules', :href => :course_context_modules_path },
-      { :id => TAB_PERMISSIONS, :label =>t('#tabs.permissions', "Permissions"), :css_class => 'permissions', :href => :course_user_module_enrollments_path },
       { :id => TAB_CONFERENCES, :label => t('#tabs.conferences', "Conferences"), :css_class => 'conferences', :href => :course_conferences_path },
       { :id => TAB_COLLABORATIONS, :label => t('#tabs.collaborations', "Collaborations"), :css_class => 'collaborations', :href => :course_collaborations_path },
       { :id => TAB_FAQS, :label =>t('#tabs.faq', "FAQ"), :css_class => 'faq',:href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_FAQS  },
@@ -2807,7 +2805,6 @@ class Course < ActiveRecord::Base
           tabs.delete_if { |t| t[:id] == TAB_CONFERENCES }
           tabs.delete_if { |t| t[:id] == TAB_COLLABORATIONS }
           tabs.delete_if { |t| t[:id] == TAB_MODULES }
-          tabs.delete_if { |t| t[:id] == TAB_PERMISSIONS }
         end
         unless self.grants_rights?(user, opts[:session], :participate_as_student, :manage_content).values.any?
           tabs.delete_if{ |t| t[:visibility] == 'members' }

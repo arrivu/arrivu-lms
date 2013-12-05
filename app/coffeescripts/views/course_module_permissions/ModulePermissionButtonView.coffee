@@ -22,7 +22,7 @@ define [
       @setDataAttributes()
 
     setDataAttributes: -> 
-      @$el.attr 'data-role_name', @model.id
+      @$el.attr 'data-module_id', @model.id
       @$el.attr 'data-user_id', @user_id
 
     updatePermission: (event) ->
