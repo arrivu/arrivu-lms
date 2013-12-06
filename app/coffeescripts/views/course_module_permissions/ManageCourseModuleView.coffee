@@ -9,7 +9,8 @@ define [
   class ManageCourseModuleView extends Backbone.View
     template: template
     className: 'manage-roles-table'
-
+    events:
+      'click #btnclassid' : "selectalluser"
     # Method Summary
     #   When a new Role is added/removed from the collection, re-draw the table.
     initialize: -> 
@@ -28,6 +29,28 @@ define [
     afterRender: ->
       @renderTable()
 
+    selectalluser: (event) ->
+
+      btnselect =$(event.currentTarget).text()
+      if btnselect is "SelectAll"
+        $(event.currentTarget).addClass "ui-state-active"
+        $(event.currentTarget).text "UnSelectAll"
+        $("a[data-user_id]").val ->
+         mid= $(this).attr "data-user_id"
+         sid= $(event.currentTarget).attr("data-select_user_id")
+         btnselectvalue = $(event.currentTarget).text()
+         if mid is sid and btnselectvalue is "UnSelectAll"
+          $(this).find("i").removeClass("icon-x").addClass "icon-check"
+      else
+        $(event.currentTarget).removeClass "ui-state-active"
+        $(event.currentTarget).text "SelectAll"
+        $("a[data-user_id]").val ->
+         mid= $(this).attr "data-user_id"
+         sid= $(event.currentTarget).attr("data-select_user_id")
+         btnselectvalue = $(event.currentTarget).text()
+         if mid is sid and btnselectvalue is "SelectAll"
+          $(this).find("i").removeClass("icon-check").addClass "icon-x"
+
     # Method Summary
     #   The table has two parts. A header and the tbody part. The header 
     #   has some functionality to do with deleting a role so contains its
@@ -35,7 +58,7 @@ define [
     #   called, which should get called when role is added or removed.
     # @api private
     renderHeader: -> 
-      @$el.find('thead tr').html "<th>Modules</th>"
+      @$el.find('thead tr').html "<th>Modules</th><th class='permissionButtonView'></th>"
 
       @collection.each (module) =>
         moduleHeaderView = new ModuleHeaderView
@@ -46,13 +69,22 @@ define [
     renderTable: => 
       @renderHeader()
       @$el.find('tbody').html '' # Clear tbody in case it gets re-drawing.
-      
+
+      _.each @permission_groups, (permission_group) =>
+        # Add the headers to the group
+        permission_group_header = """
+                                    <tr class="toolbar">
+                                      <th colspan="#{@collection.length + 1}">#{permission_group.group_name.toUpperCase()}</th>
+                                    </tr>
+                                  """
+
+        @$el.find('tbody').append permission_group_header
       # Add each permission item.
       _.each @enrolled_users , (enrolled_user) =>
 
         user_row_html = """
                           <tr>
-                            <th role="rowheader">#{enrolled_user.name}</th>
+                            <th role="rowheader">#{enrolled_user.name}</th><th class="permissionButtonView"><button id="btnclassid" class="ui-button ui-widget ui-state-default ui-button-text-only ui-corner-right" data-select_user_id="#{enrolled_user.id}">SelectAll</button></th>
                           </tr>
                          """
 
