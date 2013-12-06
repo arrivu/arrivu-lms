@@ -17,8 +17,8 @@ define([
         // Internal wistia object like as iframe placeholder
         if (ed.dom.getAttrib(selectedNode, 'class', '').indexOf('mceItem') != -1) return;
 
-        require(['plugins/wistia/compiled/tinymce/WistiaVideoView'], function(WistiaVideoView){
-          new WistiaVideoView(ed, selectedNode);
+        require(['compiled/views/tinymce/WistiaVideoView'], function(WistiaVideo){
+          new WistiaVideo(ed, selectedNode);
         });
       });
 
@@ -26,7 +26,7 @@ define([
       ed.addButton('wistia', {
         title : htmlEscape(I18n.t('embed_video', 'Embed Wistia Video')),
         cmd : 'mceWistia',
-        image : url + '/img/button.jpg'
+        image : url + '/img/button.gif'
       });
 
       // highlight our button when an image is selected
