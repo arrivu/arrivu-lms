@@ -58,7 +58,7 @@ define [
               done()
         when 'tabFlickr'
           loadTab (done) =>
-            require ['compiled/views/FindFlickrImageView'], (FindFlickrImageView) =>
+            require ['compiled/onThumbLinkDblclick'], (FindFlickrImageView) =>
               new FindFlickrImageView().render().$el.appendTo(ui.panel)
               done()
 

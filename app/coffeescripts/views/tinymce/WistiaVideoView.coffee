@@ -7,8 +7,9 @@ define [
   'compiled/views/DialogBaseView'
   'jst/tinymce/WistiaVideoView'
   'compiled/views/tinymce/WistiaVideoComboView'
+  'jst/FindWistiaVideoResult'
 
-], (I18n, $, _, h, preventDefault, DialogBaseView, template,WistiaVideoComboView) ->
+], (I18n, $, _, h, preventDefault, DialogBaseView, template,WistiaVideoComboView,resultTemplate) ->
 
   class WistiaVideoView extends DialogBaseView
 
@@ -16,7 +17,7 @@ define [
 
     events:
       'change #combo_field': 'onComboSelect'
-      'dblclick .flickrImageResult, .treeFile' : 'onFileLinkDblclick'
+      'dblclick .findWistiaMediaView' : 'onThumbLinkDblclick'
 
     dialogOptions:
       width: 625
@@ -40,18 +41,34 @@ define [
 
 
     onComboSelect: (event, ui) ->
-      alert(event.target.value)
-#      require ['compiled/views/FindFlickrImageView'], (FindFlickrImageView) =>
-#        new FindFlickrImageView().render().$el.appendTo(ui.panel)
-#        done()
+      wistiaMediaURL = "http://localhost:3000/get_collection/#{event.target.value}"
+      @$('.findWistiaMediaView').show().disableWhileLoading @request = $.getJSON wistiaMediaURL, (data) =>
+        @renderResults(data.collections.medias)
 
-    onFileLinkDblclick: (event) =>
+    renderResults: (medias) ->
+      html = _.map medias, (media) ->
+        resultTemplate
+          thumb:    "#{media.thumbnail.url}"
+          title:    media.name
+          hashed_id:    media.hashed_id
+
+      @$('.findWistiaMediaView').showIf(!!medias.length).html html.join('')
+
+
+    onThumbLinkDblclick: (event) =>
       # click event is handled on the first click
-      @update()
+      @update(event)
 
 
-    update: =>
+
+    update: (event) =>
       @editor.selection.moveToBookmark(@prevSelection)
-      @$editor.editorBox 'insert_code', @generateImageHtml()
+      @$editor.editorBox 'insert_code', @generateImageHtml(event)
       @editor.focus()
       @close()
+
+
+    generateImageHtml: (event) =>
+      hashed_id = event.target.id
+      img_tag = @editor.dom.createHTML("iframe",{src: "https://fast.wistia.net/embed/medias/#{hashed_id}?playerColor=ff0000&amp;fullscreenButton=true"},{width: 600} ,{height: 450})
+

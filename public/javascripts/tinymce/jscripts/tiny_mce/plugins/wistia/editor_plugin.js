@@ -26,7 +26,7 @@ define([
       ed.addButton('wistia', {
         title : htmlEscape(I18n.t('embed_video', 'Embed Wistia Video')),
         cmd : 'mceWistia',
-        image : url + '/img/button.gif'
+        image : url + '/img/button.png'
       });
 
       // highlight our button when an image is selected
