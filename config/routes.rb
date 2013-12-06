@@ -321,6 +321,10 @@ FakeRails3Routes.draw do
     concerns :question_banks
     concerns :reward_system
 
+    match 'create_reference' => 'referrals#create_reference'
+    match 'create_email_referrals' => 'referrals#create_email_referrals'
+
+
     match 'quizzes/publish'   => 'quizzes#publish',   :as => :quizzes_publish
     match 'quizzes/unpublish' => 'quizzes#unpublish', :as => :quizzes_unpublish
     resources :quizzes do
@@ -1385,6 +1389,4 @@ FakeRails3Routes.draw do
   match '/discussion_topic_tags' => 'discussion_topics#discussion_topic_tags'
   match '/rr/:short_url_code' => 'referrals#referree_register',  :via => :get
   match 'update_referree'  => 'referrals#update_referree', :via => :post
-
-
 end

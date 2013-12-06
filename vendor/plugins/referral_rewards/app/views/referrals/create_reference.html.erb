@@ -8,8 +8,10 @@
     <div class="span5">
       <h5 style="border-bottom: 1px solid;width: 100%;margin:9px;">Invite by Email </h5>
 
-      <% form_for @referral, :url => url_for(:controller=>'referrals', :action=>'create_email_referrals') do |f| %>
-          <label>Friend's emails *</label>
+       <% form_for @referral, :url => course_create_reference_path, :controller => 'referrals', :action => 'create_email_referrals', :html => {:method => :put } do |f| %>
+
+
+    <label>Friend's emails *</label>
           <td><%= f.text_area :referral_emails, :rows=>"5", :class=>"span5"  %></td>
 
           <tr>
@@ -22,8 +24,7 @@
 
             <td><%= f.text_area :email_text, :rows=>"5", :class=>"span5"  %></td>
           </tr>
-          <button type="submit" class="btn btn-small submit_button"><%= t :send_invites, "Send Invites" %></button>
-
+          <%= f.submit('Send Invites', :class => "button", :controller => 'referrals', :action => 'create_email_referrals') %>
           </div>
           <div class="span3" style="margin: 0px 50px;">
             <p style="margin:12px 3px">Your invite url to share<br>Paste it in your blog!</p>
