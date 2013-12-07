@@ -1030,6 +1030,7 @@ class Account < ActiveRecord::Base
   TAB_DEVELOPER_KEYS = 16
   TAB_ADMIN_TOOLS = 17
 
+
   def external_tool_tabs(opts)
     tools = ContextExternalTool.active.find_all_for(self, :account_navigation)
     tools.sort_by(&:id).map do |tool|

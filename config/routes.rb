@@ -185,6 +185,16 @@ FakeRails3Routes.draw do
     match 'imports/files' => 'content_imports#files', :as => :import_files
   end
 
+  concern :reward_system do
+    resources :rewards do
+
+    end
+
+    resources :referrals do
+      match 'my-rewards' => 'referrals#my_rewards',  :as => :my_rewards
+    end
+  end
+
   # There are a lot of resources that are all scoped to the course level
   # (assignments, files, wiki pages, user lists, forums, etc.).  Many of
   # these resources also apply to groups and individual users.  We call
@@ -309,6 +319,11 @@ FakeRails3Routes.draw do
     concerns :wikis
     concerns :conferences
     concerns :question_banks
+    concerns :reward_system
+
+    match 'create_reference' => 'referrals#create_reference'
+    match 'create_email_referrals' => 'referrals#create_email_referrals'
+
 
     match 'quizzes/publish'   => 'quizzes#publish',   :as => :quizzes_publish
     match 'quizzes/unpublish' => 'quizzes#unpublish', :as => :quizzes_unpublish
@@ -583,6 +598,7 @@ FakeRails3Routes.draw do
     concerns :files, :file_images, :relative_files, :folders
     concerns :media
     concerns :groups
+    #concerns :reward_system
 
     resources :outcomes
     match 'courses' => 'accounts#courses', :as => :courses
@@ -1371,4 +1387,6 @@ FakeRails3Routes.draw do
   match '/auth/:provider/callback' => 'authentication#create'
   get '/auth/failure' => 'authentication#auth_failure'
   match '/discussion_topic_tags' => 'tags#discussion_topic_tags'
+  match '/rr/:short_url_code' => 'referrals#referree_register',  :via => :get
+  match 'update_referree'  => 'referrals#update_referree', :via => :post
 end
