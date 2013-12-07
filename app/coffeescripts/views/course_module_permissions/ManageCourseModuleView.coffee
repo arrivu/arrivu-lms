@@ -16,7 +16,13 @@ define [
     initialize: -> 
       super
       @enrolled_users = @options.enrolled_users if @options.enrolled_users
+    toJSON: ->
+      json = super
 
+      json['selected_module_users'] = @selected_module_users
+
+
+      json
     # Method Summary
     #   Gets called after this backbone view has
     #   been rendered. For each permission in the 
@@ -94,7 +100,21 @@ define [
           modulePermissionButtonView = new ModulePermissionButtonView
                                    model: module
                                    user_id: enrolled_user.id
+                                   user_enrolled: @check_permission(module.id,enrolled_user.id)
 
           @$el.find("tr")
               .last()
               .append modulePermissionButtonView.render().el
+
+
+    check_permission:(module_id,user_id) ->
+      for key, value of ENV.MODULE_PERMISSION_USER_IDS
+        module_id == parseInt(module_id, 10)
+        if key == module_id
+          find_in_array(user_id, value)
+
+
+    find_in_array = (my_item, my_array) ->
+      for item in my_array
+        return true if item == my_item
+      false
