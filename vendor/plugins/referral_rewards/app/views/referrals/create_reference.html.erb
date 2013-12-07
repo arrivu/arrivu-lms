@@ -1,41 +1,6 @@
-<html>
-<head>
-</head>
-<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
-<body>
-<div class="container">
-  <div class="span10" style="background-color:whitesmoke;margin:20px auto;">
-    <div class="span5">
-      <h5 style="border-bottom: 1px solid;width: 100%;margin:9px;">Invite by Email </h5>
+<%
+   jammit_css :course_references
+   js_bundle :course_references
+   @active_tab = "referrals"
 
-       <% form_for @referral, :url => course_create_reference_path, :controller => 'referrals', :action => 'create_email_referrals', :html => {:method => :put } do |f| %>
-
-
-    <label>Friend's emails *</label>
-          <td><%= f.text_area :referral_emails, :rows=>"5", :class=>"span5"  %></td>
-
-          <tr>
-            <label>Email Subject *</label>
-
-            <td><%= f.text_field :email_subject  %></td>
-          </tr>
-          <tr>
-            <label>Email Message *</label>
-
-            <td><%= f.text_area :email_text, :rows=>"5", :class=>"span5"  %></td>
-          </tr>
-          <%= f.submit('Send Invites', :class => "button", :controller => 'referrals', :action => 'create_email_referrals') %>
-          </div>
-          <div class="span3" style="margin: 0px 50px;">
-            <p style="margin:12px 3px">Your invite url to share<br>Paste it in your blog!</p>
-            <td><%= f.text_field :short_url_code, :value => Reference.find(:all,:conditions => {:referral_id => @referral.id, :provider => 'global'})%></td>
-            <br>
-            <p>Or invite via social media</p>
-            <button class="btn" type="button" style="width:180px;"><img src="images/li.jpg"style="width:20px;float:left" > Share on Linkedin</button><br><br>
-            <button class="btn" type="button" style="width:180px;"><img src="images/gg.jpg" style="width:20px;float:left" > Share on Facebook</button><br><br>
-            <button class="btn" type="button" style="width:180px;"><img src="images/download (1).jpg" style="width:20px;float:left">Tweet on Twitter</button><br><br>
-            <button class="btn" type="button" style="width:180px;"><img src="images/gogl.jpg" style="width:20px;float:left">Share on Google+</button>
-          </div></div></div>
-          </body>
-          </html>
-      <% end %>
+%>
