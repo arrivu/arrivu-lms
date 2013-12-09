@@ -1,12 +1,12 @@
 require [
   'jquery'
   'underscore'
-  #'compiled/models/Role'
+  'compiled/models/ModulePermission'
  # 'compiled/models/Account'
   'compiled/collections/CourseModuleCollection'
   'compiled/views/course_module_permissions/CourseModulePermissionIndexView'
   'compiled/views/course_module_permissions/ManageCourseModuleView'
-], ($, _, CourseModuleCollection, CourseModulePermissionIndexView, ManageCourseModuleView) ->
+], ($, _, ModulePermission, CourseModuleCollection, CourseModulePermissionIndexView, ManageCourseModuleView) ->
 
   course_modules = new CourseModuleCollection ENV.COURSE_MODULES_FOR_ENROLLMENT
 

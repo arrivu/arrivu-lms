@@ -35,6 +35,11 @@ define [
     afterRender: ->
       @renderTable()
 
+    saveModel:(module_id,user_id,work_status) ->
+      @model.save {module_id: module_id,user_id:user_id,status:work_status},
+        failure: ->
+          alert 'Permission was not be saved!'
+
     selectalluser: (event) ->
 
       btnselect =$(event.currentTarget).text()
@@ -42,11 +47,18 @@ define [
         $(event.currentTarget).addClass "ui-state-active"
         $(event.currentTarget).text "UnSelectAll"
         $("a[data-user_id]").val ->
-         mid= $(this).attr "data-user_id"
+         uid= $(this).attr "data-user_id"
+         mid= $(this).attr "data-module_id"
          sid= $(event.currentTarget).attr("data-select_user_id")
          btnselectvalue = $(event.currentTarget).text()
-         if mid is sid and btnselectvalue is "UnSelectAll"
+         work_status = "active"
+#         alert uid
+#         alert mid
+#         alert sid
+         if uid is sid and btnselectvalue is "UnSelectAll"
           $(this).find("i").removeClass("icon-x").addClass "icon-check"
+
+
       else
         $(event.currentTarget).removeClass "ui-state-active"
         $(event.currentTarget).text "SelectAll"
@@ -58,6 +70,9 @@ define [
           $(this).find("i").removeClass("icon-check").addClass "icon-x"
 
     # Method Summary
+
+
+
     #   The table has two parts. A header and the tbody part. The header 
     #   has some functionality to do with deleting a role so contains its
     #   own logic. renderHeader gets called when renderTable gets 
@@ -109,12 +124,20 @@ define [
 
     check_permission:(module_id,user_id) ->
       for key, value of ENV.MODULE_PERMISSION_USER_IDS
-        module_id == parseInt(module_id, 10)
-        if key == module_id
-          find_in_array(user_id, value)
+        module_id = parseInt(module_id, 10)
+        key_module_id = parseInt(key, 10)
+        if key_module_id == module_id
+          for item in value
+            user_id_in_array = parseInt(item, 10)
+            user_id = parseInt(user_id, 10)
+            return true if user_id_in_array == user_id
+          false
+#          @find_in_array(user_id, value)
 
 
-    find_in_array = (my_item, my_array) ->
+    find_in_array:(my_item, my_array) ->
       for item in my_array
-        return true if item == my_item
+        user_id_in_array = parseInt(item, 10)
+        user_id = parseInt(my_item, 10)
+        return true if user_id_in_array == user_id
       false

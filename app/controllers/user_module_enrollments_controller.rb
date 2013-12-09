@@ -7,6 +7,7 @@ class UserModuleEnrollmentsController < ApplicationController
       @context_modules = @context.context_modules.active
       js_env :COURSE_MODULES_FOR_ENROLLMENT => @context_modules.map(&:attributes)
       js_env :ENROLLED_COURSE_USERS => @context.students.map(&:attributes)
+      js_env :COURSE_ID => @context.id
       # { 1:  [2,3,4]}
       # module_id: user_id array
       @module_user_ids = {}
@@ -39,6 +40,9 @@ class UserModuleEnrollmentsController < ApplicationController
 
   def update
     if authorized_action(@context.context_modules.new, @current_user, :update)
+      #params[:user_id]
+      #params[:status]
+      #params[:module_id]
 
     end
   end
