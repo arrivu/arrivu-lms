@@ -39,10 +39,8 @@ class ReferralsController < ApplicationController
        @referral = @reward.referrals.build(pseudonym_id: @current_pseudonym.id,email_text: @reward.email_template_txt,email_subject: @reward.email_subject)
        create_social_references
        @referral.save!
-     else
-       flash[:notice] = "There is no reward for this course"
-       redirect_to course_path(@context)
      end
+     js_env(COURSE_REFERRAL: @referral.map(&:attributes).to_json)
    end
 
   def create_email_referrals
