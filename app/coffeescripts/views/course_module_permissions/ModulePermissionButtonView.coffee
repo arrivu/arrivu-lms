@@ -10,7 +10,8 @@ define [
     className: 'permissionButtonView'
 
     events:
-      'click .dropdown-toggle' : "updatePermission"
+      'click .dropdown-toggle' : "updatePermission",
+      'click #btnclassidnot' : "selectalluserid"
 
 
     initialize: ->
@@ -50,3 +51,35 @@ define [
       @model.save {module_id: module_id,user_id:user_id,status:work_status},
         failure: ->
           alert 'Permission was not be saved!'
+
+    selectalluserid: (event) ->
+      btnselect = $(event.currentTarget).text()
+      total_module_id = []
+      if btnselect is "SelectAll"
+        $(event.currentTarget).addClass "ui-state-active"
+        $(event.currentTarget).text "UnSelectAll"
+        selected_user_id= $(event.currentTarget).attr("data-select_user_id")
+        work_status = "active"
+        $("a[data-user_id]").val ->
+          uid= $(this).attr "data-user_id"
+          mid= $(this).attr "data-module_id"
+          sid= $(event.currentTarget).attr("data-select_user_id")
+          btnselectvalue = $(event.currentTarget).text()
+
+          if uid is sid and btnselectvalue is "UnSelectAll"
+            $(this).find("i").removeClass("icon-x").addClass "icon-check"
+            @saveModel(mid,sid,work_status)
+
+
+      else
+        $(event.currentTarget).removeClass "ui-state-active"
+        $(event.currentTarget).text "SelectAll"
+        $("a[data-user_id]").val ->
+          uid= $(this).attr "data-user_id"
+          mid= $(this).attr "data-module_id"
+          sid= $(event.currentTarget).attr("data-select_user_id")
+          work_status = "inactive"
+          btnselectvalue = $(event.currentTarget).text()
+          if uid is sid and btnselectvalue is "SelectAll"
+            $(this).find("i").removeClass("icon-check").addClass "icon-x"
+            @saveModel(mid,sid,work_status)

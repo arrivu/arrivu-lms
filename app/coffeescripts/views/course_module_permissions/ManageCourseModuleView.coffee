@@ -2,10 +2,11 @@ define [
   'jquery'
   'underscore'
   'Backbone'
+  'compiled/models/ModulePermission'
   'jst/course_module_permissions/manageModules'
   'compiled/views/course_module_permissions/ModulePermissionButtonView'
   'compiled/views/course_module_permissions/ModuleHeaderView'
-], ($, _, Backbone, template, ModulePermissionButtonView, ModuleHeaderView) ->
+], ($, _, Backbone, ModulePermission, template, ModulePermissionButtonView, ModuleHeaderView) ->
   class ManageCourseModuleView extends Backbone.View
     template: template
     className: 'manage-roles-table'
@@ -15,6 +16,7 @@ define [
     #   When a new Role is added/removed from the collection, re-draw the table.
     initialize: -> 
       super
+
       @enrolled_users = @options.enrolled_users if @options.enrolled_users
     toJSON: ->
       json = super
@@ -35,39 +37,40 @@ define [
     afterRender: ->
       @renderTable()
 
-    saveModel:(module_id,user_id,work_status) ->
-      @model.save {module_id: module_id,user_id:user_id,status:work_status},
-        failure: ->
-          alert 'Permission was not be saved!'
-
     selectalluser: (event) ->
-
-      btnselect =$(event.currentTarget).text()
+      btnselect = $(event.currentTarget).text()
+      total_module_id = []
       if btnselect is "SelectAll"
         $(event.currentTarget).addClass "ui-state-active"
         $(event.currentTarget).text "UnSelectAll"
+        selected_user_id= $(event.currentTarget).attr("data-select_user_id")
+        work_status = "active"
         $("a[data-user_id]").val ->
          uid= $(this).attr "data-user_id"
          mid= $(this).attr "data-module_id"
          sid= $(event.currentTarget).attr("data-select_user_id")
          btnselectvalue = $(event.currentTarget).text()
-         work_status = "active"
-#         alert uid
-#         alert mid
-#         alert sid
          if uid is sid and btnselectvalue is "UnSelectAll"
           $(this).find("i").removeClass("icon-x").addClass "icon-check"
-
-
+        @collection.each (module) ->
+          module.save {module_id: module.id,user_id:selected_user_id,status:work_status},
+            failure: ->
+          alert 'module was not be saved!'
       else
         $(event.currentTarget).removeClass "ui-state-active"
         $(event.currentTarget).text "SelectAll"
+        work_status = "inactive"
         $("a[data-user_id]").val ->
-         mid= $(this).attr "data-user_id"
-         sid= $(event.currentTarget).attr("data-select_user_id")
+         uid= $(this).attr "data-user_id"
+         mid= $(this).attr "data-module_id"
+         selected_user_id= $(event.currentTarget).attr("data-select_user_id")
          btnselectvalue = $(event.currentTarget).text()
-         if mid is sid and btnselectvalue is "SelectAll"
+         if uid is sid and btnselectvalue is "SelectAll"
           $(this).find("i").removeClass("icon-check").addClass "icon-x"
+        @collection.each (module) ->
+          module.save {module_id: module.id,user_id:selected_user_id,status:work_status},
+            failure: ->
+          alert 'module was not be saved!'
 
     # Method Summary
 
@@ -78,6 +81,11 @@ define [
     #   own logic. renderHeader gets called when renderTable gets 
     #   called, which should get called when role is added or removed.
     # @api private
+    saveModel:(model,module_id,user_id,work_status) ->
+      model.save {module_id: module_id,user_id:user_id,status:work_status},
+        failure: ->
+          alert 'module was not be saved!'
+
     renderHeader: -> 
       @$el.find('thead tr').html "<th>Modules</th><th class='permissionButtonView'></th>"
 
@@ -141,3 +149,4 @@ define [
         user_id = parseInt(my_item, 10)
         return true if user_id_in_array == user_id
       false
+
