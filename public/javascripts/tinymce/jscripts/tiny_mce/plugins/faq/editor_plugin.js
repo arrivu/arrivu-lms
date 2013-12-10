@@ -10,22 +10,23 @@ define([
 
     tinymce.create('tinymce.plugins.faq', {
         init : function(ed, url) {
-            // Register commands
+
+            // Register commands100
             ed.addCommand('mcefaq', function() {
                 var selectedNode = ed.selection.getNode();
 
                 // Internal wistia object like as iframe placeholder
                 if (ed.dom.getAttrib(selectedNode, 'class', '').indexOf('mceItem') != -1) return;
-
-                require(['compiled/views/tinymce/WistiaVideoView'], function(WistiaVideo){
-                    new WistiaVideo(ed, selectedNode);
+                require(['compiled/views/tinymce/FAQView'], function(FAQView){
+                    new FAQView(ed, selectedNode);
                 });
+
             });
 
             // Register buttons
             ed.addButton('faq', {
-                title : htmlEscape(I18n.t('faq', 'Embed Accordian FAQ')),
-                cmd : 'mceWistia',
+                title : htmlEscape(I18n.t('embed_faq', 'Embed Accordian FAQ')),
+                cmd : 'mcefaq',
                 image : url + '/img/button.jpg'
             });
 
