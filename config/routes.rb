@@ -186,9 +186,9 @@ FakeRails3Routes.draw do
   end
 
   concern :reward_system do
-    resources :rewards do
-
-    end
+    #resources :rewards
+    #                           ``
+    #end
 
     resources :referrals do
       match 'my-rewards' => 'referrals#my_rewards',  :as => :my_rewards
@@ -213,6 +213,7 @@ FakeRails3Routes.draw do
     match 'enrollment_invitation' => 'courses#enrollment_invitation', :as => :enrollment_invitation
     # this needs to come before the users concern, or users/:id will preempt it
     match 'users/prior' => 'context#prior_users', :as => :prior_users
+    resources :rewards
     concerns :users
     match 'statistics' => 'courses#statistics', :as => :statistics
     match 'unenroll/:id' => 'courses#unenroll_user', :as => :unenroll, :via => :delete
@@ -226,6 +227,7 @@ FakeRails3Routes.draw do
       match 'crosslist' => 'sections#crosslist', :as => :crosslist, :via => :post
       match 'crosslist' => 'sections#uncrosslist', :as => :uncrosslist, :via => :delete
     end
+
 
     match 'undelete' => 'context#undelete_index', :as => :undelete_items
     match 'undelete/:asset_string' => 'context#undelete_item', :as => :undelete_item
@@ -310,10 +312,9 @@ FakeRails3Routes.draw do
         get :homework_submissions
       end
     end
-
+    resources :rewards
     resources :submissions
     resources :calendar_events
-
     concerns :files, :file_images, :relative_files, :folders
     concerns :groups
     concerns :wikis
