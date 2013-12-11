@@ -28,7 +28,7 @@ define [
       if errored_users.length > 0
         @renderErrorView(errored_users)
       else
-        @model.save(valid_emails)
+        @model.save(valid_emails: valid_emails)
 
     renderErrorView:(errored_users) =>
       @.$el.find('#invite_friends_error_box').empty() # Clear error box every time

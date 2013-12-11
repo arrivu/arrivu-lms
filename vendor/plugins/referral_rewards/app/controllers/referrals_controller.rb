@@ -5,7 +5,6 @@ class ReferralsController < ApplicationController
   before_filter { |c| c.active_tab = "Referrals" }
 
 
-
    def create_reference
      @reward = Reward.find_by_metadata_and_metadata_type_and_status(@context.id.to_s, @context.class.name, Reward::STATUS_ACTIVE)
 
@@ -24,22 +23,26 @@ class ReferralsController < ApplicationController
      js_env(DOMAIN_URL: @domain_url.to_json)
    end
 
-  def create_email_referrals
+  def update
+    @email_references = []
     @reward = Reward.find_by_metadata_and_metadata_type_and_status(@context.id.to_s, @context.class.name, Reward::STATUS_ACTIVE)
-    @referral = Referral.find(params[:referral][:referral_id])
-    @referral.email_subject = params[:referral][:email_subject]
-    @referral.email_text = params[:referral][:email_text]
-    referral_emails = params[:referral][:referral_emails]
-    emails =  split_csv_emails(referral_emails)
-    emails.each do |email|
-      reference = @referral.references.build(provider: email)
+    @referral = Referral.find(params[:id])
+    @referral.email_subject = params[:email_subject]
+    @referral.email_text = params[:email_text]
+    referral_emails = params[:valid_emails]
+    referral_emails.each do |email|
+      @email_references << @referral.references.build(provider: email)
     end
-      if @referral.errors.any?
-        render course_referrals_path
-      else
-        redirect_to course_referrals_path
-      end
-   end
+    @referral.save!
+    respond_to do |format|
+        format.json {
+
+              render(:json => @email_references)
+
+        }
+    end
+    end
+
 
   def index
     create_reference

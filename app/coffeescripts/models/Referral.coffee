@@ -18,13 +18,9 @@ define [
     #      /courses/1/referrals/1
     #
     # @api override backbone
-    @urlRoot: -> "courses/#{$.parseJSON(ENV.COURSE_REWARD).reward.metadata}/referrals"
+    urlRoot: -> "referrals"
 
-    # Method Summary
-    #   ResourceName is used by a collection to help determin the url
-    #   that should be generated for the resource.
-    # @api custom backbone override
-    resourceName: 'referrals'
+
 
 
     # Method Summary
