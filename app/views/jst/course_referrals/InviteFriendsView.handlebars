@@ -1,0 +1,38 @@
+<div id="invite_friends_error_box"></div>
+<div class="container">
+        <div class="span10">
+            <div class="span5">
+                <h5 style="border-bottom: 1px solid;width: 100%;margin:9px;">Invite by Email </h5>
+
+                    <label for="referral_friends_email">Friends Email:</label>
+                    <textarea class="span5" cols="40" id="referral_referral_emails" name="referral[referral_emails]" rows="4" placeholder='student@example.com,firstlast@example.com'></textarea>
+
+                    <label for="referral_email_subject">Email Subject:</label>
+
+                    <input class="span5" type="text" name="referral[email_subject]" value="{{ email_subject }}">
+
+                    <label for="referral_email_message">Email Message:</label>
+
+                    <textarea class="span5" cols="40" id="referral_email_text" name="referral[email_text]" rows="9">
+                        {{ email_text }}
+                    </textarea>
+
+                    <input class="btn btn-primary" id="referral_submit" name="commit" type="submit" value="Send Invites">
+
+            </div>
+            <div class="span3" style="margin: 0px 50px;">
+                <p style="margin:12px 3px">Your invite url to share<br>Paste it in your blog!</p>
+                <input type="text" name="email address" style="height:35px" value={{domain_url}}{{gl_reference}}>
+                <br>
+                Or
+
+                <p>  invite via social media</p>
+                <div id="right-side" style="margin: 0 0 0; width: 227px;">
+                    <a href="{{domain_url}}{{li_reference}}" class="btn button-sidebar-wide"><i class="icon-linkedin "></i> Share on LinkedIn</a>
+                    <a href="{{domain_url}}{{fb_reference}}" class="btn button-sidebar-wide"><i class="icon-facebook-boxed"></i> Share on Facebook</a>
+                    <a href="{{domain_url}}{{tw_reference}}" class="btn button-sidebar-wide"><i class="icon-twitter-boxed"></i> Share on Twitter</a>
+                    <a href="{{domain_url}}{{go_reference}}" class="btn button-sidebar-wide"><i class="icon-peer-review"></i> Share on Google</a>
+                 </div>
+          </div>
+        </div>
+     </div>
