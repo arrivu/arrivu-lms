@@ -191,4 +191,4 @@ Dir[File.join(File.dirname(__FILE__),'vendor/plugins/*/Gemfile')].each do |g|
   eval(File.read(g))
 end
 
-gem 'acts-as-taggable-on', '~>2.1.0'
+gem 'acts-as-taggable-on',:git => 'http://github.com/arrivu/acts-as-taggable-on.git', :branch => 'multitenant'

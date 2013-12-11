@@ -1386,7 +1386,7 @@ FakeRails3Routes.draw do
   resources :omniauth_links
   match '/auth/:provider/callback' => 'authentication#create'
   get '/auth/failure' => 'authentication#auth_failure'
-  match '/discussion_topic_tags' => 'discussion_topics#discussion_topic_tags'
+  match '/discussion_topic_tags' => 'tags#discussion_topic_tags'
   match '/rr/:short_url_code' => 'referrals#referree_register',  :via => :get
   match 'update_referree'  => 'referrals#update_referree', :via => :post
 end

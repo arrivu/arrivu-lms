@@ -2699,7 +2699,6 @@ class Course < ActiveRecord::Base
   TAB_FAQS = 17
   TAB_CAREERS = 18
   TAB_REFERRALS=19
-  TAB_REWARDS = 20
 
   def self.default_tabs
     [
@@ -2720,8 +2719,7 @@ class Course < ActiveRecord::Base
       { :id => TAB_COLLABORATIONS, :label => t('#tabs.collaborations', "Collaborations"), :css_class => 'collaborations', :href => :course_collaborations_path },
       { :id => TAB_FAQS, :label =>t('#tabs.faq', "FAQ"), :css_class => 'faq',:href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_FAQS  },
       { :id => TAB_CAREERS, :label =>t('#tabs.career', "Career"), :css_class => 'career', :href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_CAREERS },
-      { :id => TAB_REWARDS, :label => t('#tab_rewards', "Rewards"), :css_class => 'rewards', :href => :new_course_reward_path },
-      { :id => TAB_REFERRALS, :label => t('#tabs.referrals', "Referrals"), :css_class => 'referrals', :href => :course_create_reference_path },
+      { :id => TAB_REFERRALS, :label => t('#tabs.referrals', "Referrals"), :css_class => 'referrals', :href => :course_referrals_path},
       { :id => TAB_SETTINGS, :label => t('#tabs.settings', "Settings"), :css_class => 'settings', :href => :course_settings_path }
 
     ]

@@ -145,10 +145,9 @@ class GradebooksController < ApplicationController
       log_asset_access("gradebook:#{@context.asset_string}", "grades", "other")
       respond_to do |format|
         format.html {
-          unless @context.old_gradebook_visible?
+
             redirect_to polymorphic_url([@context, 'gradebook2'])
             return
-          end
 
           Shackles.activate(:slave) do
             @groups = @context.assignment_groups.active

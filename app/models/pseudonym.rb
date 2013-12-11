@@ -27,6 +27,7 @@ class Pseudonym < ActiveRecord::Base
   has_many :communication_channels, :order => 'position'
   belongs_to :communication_channel
   belongs_to :sis_communication_channel, :class_name => 'CommunicationChannel'
+  has_many :referrals
   MAX_UNIQUE_ID_LENGTH = 100
   validates_length_of :unique_id, :maximum => MAX_UNIQUE_ID_LENGTH
   validates_length_of :sis_user_id, :maximum => maximum_string_length, :allow_blank => true

@@ -138,7 +138,14 @@ define [
         @students[student.id].sections ||= []
         @students[student.id].sections.push(studentEnrollment.course_section_id)
 
-    gotAllStudents: ->
+    can_display_link: (student_id) ->
+      if @options.gradebook_is_editable
+        true
+      else
+        (ENV.current_user.id == student_id)
+
+
+     gotAllStudents: ->
       for id, student of @students
         student.computed_current_score ||= 0
         student.computed_final_score ||= 0
@@ -150,6 +157,7 @@ define [
         student.display_name = rowStudentNameTemplate
           avatar_image_url: student.avatar_url
           display_name: student.name
+          display_url: @can_display_link(student.id)
           url: student.enrollment.grades.html_url
           sectionNames: sectionNames
 

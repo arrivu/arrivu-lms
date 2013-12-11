@@ -1,0 +1,14 @@
+<%
+  js_bundle :coursetable, :plugin => :dashboard
+  jammit_css :datatables, :plugin => :dashboard
+%>
+
+<div id="sfu_stats_courses">
+  <h1>Courses</h1>
+
+  <div id="sfu_stats_courses_widget_container">
+    <%= render :partial => 'courses_widget_filter' %>
+  </div>
+
+
+</div>

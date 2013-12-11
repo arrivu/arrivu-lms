@@ -20,7 +20,7 @@
 <% new_submissions = @context.submissions.before(@range_end).having_submission.where('submitted_at > ?', @range_start).count %>
 <% total_assignments = @context.assignments.active.before(@range_end).select{|a| a.expects_submission? }.length %>
 <% total_submissions = @context.submissions.before(@range_end).having_submission.count %>
-
+<% course_sections = @context.active_course_sections %>
 <%
   rubric_associations = @context.rubric_associations.bookmarked.before(@range_end)
   rubric_associations = rubric_associations.select(&:rubric_id).once_per(&:rubric_id)
@@ -31,6 +31,7 @@
     <li><a href="#tab-assignments"><%= t('tabs.assignments', %{Assignments}) %></a></li>
     <li><a href="#tab-students" id="students_stats_tab"><%= t('tabs.students', %{Students}) %></a></li>
     <li><a href="#tab-files"><%= t('tabs.files', %{File Storage}) %></a></li>
+    <li><a href="#tab-sections" id="sections_tab">By Sections</a></li>
   </ul>
   <div class="stats" id="tab-totals">
     <h3><%= t('headings.totals', %{Running Totals}) %></h3>
@@ -145,5 +146,35 @@
       </tr>
     </table>
   </div>
+  <div id="tab-sections">
+    <table cellpadding="9">
+      <thead>
+      <th>Section Name</th>
+      <th>Active Students</th>
+      <th>Starting Date</th>
+      <th>Ending Date</th>
+      </thead>
+      <%course_sections.each do |sections| %>
+          <tr>
+
+            <td> <a href="<%=context_url(@context,:context_section_url,sections)+"/statistics?for-statistics=1"%>" >
+              <%= sections.name %></td>
+            <td style="text-align: center">
+               <span class="users_count">
+                 <%= t 'enrollment_count', 'User', :count => sections.enrollments.not_fake.count %><% if sections && sections.sis_source_id %>
+                 <%end %>
+                </span>
+            </td>
+            <%if !sections.start_at.nil? %>
+                <td style="text-align: center"><%=Date.parse(sections.start_at.to_s).strftime("%m/%d/%Y")   %></td>
+            <%end %>
+            <%if !sections.end_at.nil? %>
+                <td style="text-align: center"><%=Date.parse(sections.end_at.to_s).strftime("%m/%d/%Y")  %></td>
+            <%end %>
+          </tr>
+      <%end %>
+    </table>
+  </div>
+</div>
 </div>
 <% js_bundle :course_statistics %>

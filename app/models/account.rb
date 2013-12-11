@@ -93,7 +93,7 @@ class Account < ActiveRecord::Base
   
   serialize :settings, Hash
   include TimeZoneHelper
-  time_zone_attribute :default_time_zone, default: "America/Denver"
+  time_zone_attribute :default_time_zone, default: "New Delhi"
 
   validates_locale :default_locale, :allow_nil => true
   validates_length_of :name, :maximum => maximum_string_length, :allow_blank => true
@@ -172,7 +172,7 @@ class Account < ActiveRecord::Base
   add_setting :allow_invitation_previews, :boolean => true, :root_only => true, :default => false
   add_setting :self_registration, :boolean => true, :root_only => true, :default => false
   add_setting :large_course_rosters, :boolean => true, :root_only => true, :default => false
-  add_setting :edit_institution_email, :boolean => true, :root_only => true, :default => true
+  add_setting :edit_institution_email, :boolean => true, :root_only => true, :default => false
   add_setting :enable_quiz_regrade, :boolean => true, :root_only => true, :default => false
 
   def settings=(hash)
@@ -1128,16 +1128,16 @@ class Account < ActiveRecord::Base
         :description => "",
         :expose_to_ui => (Twitter.config ? :service : false)
       },
-      :delicious => {
-        :name => "Delicious", 
-        :description => "",
-        :expose_to_ui => :service
-      },
-      :diigo => {
-        :name => "Diigo", 
-        :description => "",
-        :expose_to_ui => :service
-      },
+      #:delicious => {
+      #  :name => "Delicious",
+      #  :description => "",
+      #  :expose_to_ui => :service
+      #},
+      #:diigo => {
+      #  :name => "Diigo",
+      #  :description => "",
+      #  :expose_to_ui => :service
+      #},
       # TODO: move avatars to :settings hash, it makes more sense there
       # In the meantime, we leave it as a service but expose it in the
       # "Features" (settings) portion of the account admin UI

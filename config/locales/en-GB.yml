@@ -7766,7 +7766,7 @@ en-GB:
         subject: "%{user_name} just sent you a message in Canvas."
         unknown_user: "Unknown user"
       twitter: 
-        tweet: "Canvas Alert - Message from %{user_name}."
+        tweet: "Jigsaw LMS Alert - Message from %{user_name}."
     course_already_started: 
       email: 
         body: |-
@@ -7869,7 +7869,7 @@ en-GB:
         body_teacher: "%{user} just accepted their invitation to participate in the course, %{course}, as a teacher."
         subject: "%{user} accepted the course invitation"
       twitter: 
-        body: "Canvas Alert - Accepted: %{user}, %{enrollment_type}, course, %{course}"
+        body: "Jigsaw LMS Alert - Accepted: %{user}, %{enrollment_type}, course, %{course}"
     enrollment_invitation: 
       email: 
         body_designer: "You've been invited to participate in the course, %{course}, as a designer."
@@ -7927,7 +7927,7 @@ en-GB:
         body_teacher: "You've been invited to participate in the course, %{course}, as a teacher."
         subject: "Course invitation"
       twitter: 
-        body: "Canvas Alert - Invited: course as %{enrollment_type}"
+        body: "Jigsaw LMS Alert - Invited: course as %{enrollment_type}"
     enrollment_notification: 
       email: 
         body_designer: "You've been enrolled in the course, %{course}, as a designer."
@@ -7986,7 +7986,7 @@ en-GB:
         body_teacher: "You've been enrollment in the course, %{course}, as a teacher."
         subject: "Course enrolment"
       twitter: 
-        body: "Canvas Alert - Enrolled: course as %{enrollment_type}"
+        body: "Jigsaw LMS Alert - Enrolled: course as %{enrollment_type}"
     enrollment_registration: 
       email: 
         body_designer: "You've been invited to participate in a class at %{website}.  The class is called %{course}, and you've been invited to participate as a designer."
@@ -8035,7 +8035,7 @@ en-GB:
         body_teacher: "You've been invited to participate in a class at %{website}.  The class is called %{course}, and you've been invited to participate as a teacher."
         subject: "Course invitation"
       twitter: 
-        body: "Canvas Alert - Invited: course as %{enrollment_type}"
+        body: "Jigsaw LMS Alert - Invited: course as %{enrollment_type}"
     event_date_changed: 
       email: 
         email_body: "The event, %{event_title}, for the course, %{course_name}, has changed times. It's now:"
@@ -8125,7 +8125,7 @@ en-GB:
           grades_based_on_percent: "Grading is based on the weighted total for each assignment group"
           subject: "Grade weight changed"
       twitter: 
-        grade_changed: "Canvas Alert - Grading policy changed: %{course_name}"
+        grade_changed: "Jigsaw LMS Alert - Grading policy changed: %{course_name}"
     group_assignment_submitted_late: 
       email: 
         body: "The group %{group_name} has just submitted late to %{assignment_name} in the course %{course_name}."
@@ -8145,7 +8145,7 @@ en-GB:
         body: "The group %{group_name} submitted late to %{assignment_name} in the course %{course_name}."
         subject: "Late assignment: %{group_name}, %{assignment_name}"
       twitter: 
-        subject: "Canvas Alert - Late group submission: %{group_name}, %{assignment_name}"
+        subject: "Jigsaw LMS Alert - Late group submission: %{group_name}, %{assignment_name}"
     group_membership_accepted: 
       email: 
         account_group: "Your request to join the group %{group_name} for the account %{account_name} has been accepted."
@@ -8173,8 +8173,8 @@ en-GB:
         course_group: "Your request to join the group %{group_name} for the course %{course_name} has been accepted."
         subject: "Group membership accepted: %{group_name}"
       twitter: 
-        account_group: "Canvas Alert - Group membership accepted: %{group_name} for the account %{account_name}."
-        course_group: "Canvas Alert - Group membership accepted: %{group_name} for the course %{course_name}."
+        account_group: "Jigsaw LMS Alert - Group membership accepted: %{group_name} for the account %{account_name}."
+        course_group: "Jigsaw LMS Alert - Group membership accepted: %{group_name} for the course %{course_name}."
     group_membership_rejected: 
       email: 
         account_group: "Your request to join the group %{group_name} for the account %{account_name} has been rejected."
@@ -8201,8 +8201,8 @@ en-GB:
         course_group: "Your request to join the group %{group_name} for the course %{course_name} has been rejected."
         subject: "Group membership rejected for %{group_name}"
       twitter: 
-        account_group: "Canvas Alert - Group membership rejected: %{group_name} for the account %{account_name}."
-        course_group: "Canvas Alert - Group membership rejected: %{group_name} for the course %{course_name}."
+        account_group: "Jigsaw LMS Alert - Group membership rejected: %{group_name} for the account %{account_name}."
+        course_group: "Jigsaw LMS Alert - Group membership rejected: %{group_name} for the course %{course_name}."
     html_message: 
       html_not_exist: "The HTML version of this message was not created nor sent"
     index: 
@@ -8266,7 +8266,7 @@ en-GB:
         body: "A new admin, %{user}, has been added for the account %{account}"
         subject: "New account user"
       twitter: 
-        body: "Canvas Alert - New admin: %{user}, %{account}"
+        body: "Jigsaw LMS Alert - New admin: %{user}, %{account}"
     new_announcement: 
       email: 
         html: 
@@ -8281,7 +8281,7 @@ en-GB:
         details: "More info at %{url}"
         subject: "New announcement: %{title}, %{course}"
       twitter: 
-        body: "Canvas Alert - announcement: %{title}, %{course}."
+        body: "Jigsaw LMS Alert - announcement: %{title}, %{course}."
     new_context_group_membership: 
       email: 
         body_account: "You've been added to a new group for the account %{account}.  The name of the group is %{group_name}."
@@ -8308,8 +8308,8 @@ en-GB:
         body_course: "You've been added to a new group for the course %{course}.  The name of the group is %{group_name}."
         subject: "New group membership for %{course_or_account}"
       twitter: 
-        body_account: "Canvas Alert - New group: %{group} for the account %{account}"
-        body_course: "Canvas Alert - New group: %{group} for the course %{course}"
+        body_account: "Jigsaw LMS Alert - New group: %{group} for the account %{account}"
+        body_course: "Jigsaw LMS Alert - New group: %{group} for the course %{course}"
     new_context_group_membership_invitation: 
       email: 
         body_account: "You've been invited to join the group %{group} for the account %{account}."
@@ -8335,8 +8335,8 @@ en-GB:
         body_course: "You've been invited to join the group %{group} for the course %{course}."
         subject: "New group membership for %{course_or_account}"
       twitter: 
-        body_account: "Canvas Alert - Invitation: %{group} for the account %{account}"
-        body_course: "Canvas Alert - Invitation: %{group} for the course %{course}."
+        body_account: "Jigsaw LMS Alert - Invitation: %{group} for the account %{account}"
+        body_course: "Jigsaw LMS Alert - Invitation: %{group} for the course %{course}."
     new_course: 
       email: 
         body: "A course, %{course}, has been added for the account %{account}"
@@ -8367,7 +8367,7 @@ en-GB:
           teachers: Teachers
         subject: "New course"
       twitter: 
-        body: "Canvas Alert - New course: %{course}, %{account}"
+        body: "Jigsaw LMS Alert - New course: %{course}, %{account}"
     new_discussion_entry: 
       email: 
         body: "%{user} posted a new comment on the thread %{discussion_topic} for %{course}:"
@@ -8385,7 +8385,7 @@ en-GB:
       summary: 
         subject: "New comment for %{discussion_topic}: %{course}"
       twitter: 
-        body: "Canvas Alert - Comment: %{discussion_topic}, %{course}."
+        body: "Jigsaw LMS Alert - Comment: %{discussion_topic}, %{course}."
     new_discussion_topic: 
       email: 
         body: "A new discussion has been started that may be interesting to you:"
@@ -8407,7 +8407,7 @@ en-GB:
       summary: 
         subject: "New discussion - %{discussion_topic}: %{course}"
       twitter: 
-        subject: "Canvas Alert - Topic: %{discussion_topic}, %{course}"
+        subject: "Jigsaw LMS Alert - Topic: %{discussion_topic}, %{course}"
     new_event_created: 
       email: 
         body: "There's a new event scheduled for %{course_name} that you should be aware of:"
@@ -8438,7 +8438,7 @@ en-GB:
       twitter: 
         from_to_time: "from %{start_date_time} to %{end_date_time}"
         no_time_set: "No time set"
-        subject: "Canvas Alert - Event: %{event_title}, %{course_name}"
+        subject: "Jigsaw LMS Alert - Event: %{event_title}, %{course_name}"
     new_file_added: 
       email: 
         body: "A new file has been added for the course, %{name}:"
@@ -8456,7 +8456,7 @@ en-GB:
       summary: 
         subject: "New file added: %{title}, %{name}"
       twitter: 
-        body: "Canvas Alert - new file: %{title} (%{size}) for %{name}:"
+        body: "Jigsaw LMS Alert - new file: %{title} (%{size}) for %{name}:"
     new_files_added: 
       email: 
         body: "%{count} new files have been added for the course, %{name}:"
@@ -8477,7 +8477,7 @@ en-GB:
         link: "You can view them here"
         subject: "%{count} new files added for the course, %{name}:"
       twitter: 
-        body: "Canvas Alert - %{count} new files for %{name}"
+        body: "Jigsaw LMS Alert - %{count} new files for %{name}"
     new_student_organized_group: 
       email: 
         body_account: "A new student organised group named \"%{group_name}\" was created for the account %{account}. The first member is %{user}."
@@ -8503,8 +8503,8 @@ en-GB:
         body_course: "A new student organised group named \"%{group_name}\" was created for the course %{course}. The first member is %{user}."
         subject: "New student group for %{course_or_account}"
       twitter: 
-        body_account: "Canvas Alert - New group: %{group_name} for the account %{account}"
-        body_course: "Canvas Alert - New group: %{group_name} for the course %{course}"
+        body_account: "Jigsaw LMS Alert - New group: %{group_name} for the account %{account}"
+        body_course: "Jigsaw LMS Alert - New group: %{group_name} for the course %{course}"
     new_teacher_registration: 
       email: 
         body: "%{user} just registered as a teacher at %{website}."
@@ -8536,7 +8536,7 @@ en-GB:
           school_position: "School position"
         subject: "New teacher registration"
       twitter: 
-        body: "Canvas Alert - New teacher: %{user}, %{account}"
+        body: "Jigsaw LMS Alert - New teacher: %{user}, %{account}"
     new_user: 
       email: 
         body: "A new user, %{user}, has just registered for the account %{account}"
@@ -8556,7 +8556,7 @@ en-GB:
         body: "A new user, %{user}, has just registered for the account %{account}"
         subject: "New user"
       twitter: 
-        body: "Canvas Alert - New user: %{user}, %{account}"
+        body: "Jigsaw LMS Alert - New user: %{user}, %{account}"
     page_locked: "This page is currently locked."
     page_locked_at: "This page was locked %{at}."
     page_locked_module: "This page is part of the module *%{module}* and hasn't been unlocked yet."
@@ -8593,7 +8593,7 @@ en-GB:
         body: "A regrade has finished for your quiz %{title}."
         subject: "Quiz regraded: %{quiz}, %{context}"
       twitter: 
-        body: "Canvas Alert - Quiz regraded : %{quiz}"
+        body: "Jigsaw LMS Alert - Quiz regraded : %{quiz}"
     quiz_unpublished_module: "This quiz is part of an unpublished module and is not available yet."
     report_generated: 
       email: 
@@ -8625,7 +8625,7 @@ en-GB:
         body: "You've been reminded to assess: %{rubric}, %{context}:"
         subject: "Reminder to assess: %{rubric}, %{context}"
       twitter: 
-        tweet: "Canvas Alert - Reminder: assess %{rubric}, %{context}"
+        tweet: "Jigsaw LMS Alert - Reminder: assess %{rubric}, %{context}"
     rubric_association_created: 
       email: 
         body: "A new assessment has been created for %{context}:"
@@ -8644,7 +8644,7 @@ en-GB:
         body: "A new assessment has been created for %{context}:"
         subject: "New assessment: %{title}, %{context}"
       twitter: 
-        tweet: "Canvas Alert - New assessment: %{title}, %{context}."
+        tweet: "Jigsaw LMS Alert - New assessment: %{title}, %{context}."
     send_form: 
       labels: 
         message_body: Message
@@ -8671,7 +8671,7 @@ en-GB:
         someone: Someone
         subject: "Submission Comment: %{user}, %{assignment}, %{context}"
       twitter: 
-        tweet: "Canvas Alert - Comment: %{author} for %{assignment}, %{user}, %{context}."
+        tweet: "Jigsaw LMS Alert - Comment: %{author} for %{assignment}, %{user}, %{context}."
     submission_comment_for_teacher: 
       email: 
         body: "%{author} just made a new comment on the submission for %{user} for %{assignment}"
@@ -8694,7 +8694,7 @@ en-GB:
         someone: Someone
         subject: "Submission comment: %{user}, %{assignment}, %{context}"
       twitter: 
-        tweet: "Canvas Alert - Comment: %{author} for %{assignment}, %{user}, %{context}."
+        tweet: "Jigsaw LMS Alert - Comment: %{author} for %{assignment}, %{user}, %{context}."
     submission_grade_changed: 
       email: 
         body: "The grade on your assignment, %{assignment_title} has been changed."
@@ -8741,7 +8741,7 @@ en-GB:
         not_applicable: N/A
         score: "score:  %{score} out of %{total}"
         score_pending: "(pending review)"
-        tweet: "Canvas Alert - Grade change: %{date}"
+        tweet: "Jigsaw LMS Alert - Grade change: %{date}"
     submission_graded: 
       email: 
         body: "Your assignment, %{assignment}, has been graded."
@@ -8788,7 +8788,7 @@ en-GB:
         not_applicable: N/A
         score: "score:  %{score} out of %{total}"
         score_pending_review: "(pending review)"
-        tweet: "Canvas Alert - Graded: %{assignment}, %{context}"
+        tweet: "Jigsaw LMS Alert - Graded: %{assignment}, %{context}"
     submission_needs_grading: 
       email: 
         body: "%{user_name} has completed the quiz %{quiz_title}, and it requires manual grading."
@@ -8816,7 +8816,7 @@ en-GB:
         subject: "Quiz submitted: %{quiz}, %{context}"
         submitted_date: "submitted: %{date}"
       twitter: 
-        body: "Canvas Alert - Quiz submitted: %{quiz}, %{user_name}"
+        body: "Jigsaw LMS Alert - Quiz submitted: %{quiz}, %{user_name}"
     summaries: 
       email: 
         daily_body: "You're signed up to receive a daily report of some notifications from your Canvas account.  Below is the report for %{date}:"
@@ -8834,7 +8834,7 @@ en-GB:
       sms: 
         notifications_sms: "%{notifications_count} new notifications at %{url}"
       twitter: 
-        tweet: "Canvas Alert - %{notification_count} new notifications"
+        tweet: "Jigsaw LMS Alert - %{notification_count} new notifications"
     topic_locked: "This topic is currently locked."
     topic_locked_at: "This topic was locked %{at}."
     topic_locked_module: "This topic is part of the module *%{module}* and hasn't been unlocked yet."
@@ -8857,7 +8857,7 @@ en-GB:
       summary: 
         subject: "Updated Wiki Page: %{title}, %{user}"
       twitter: 
-        tweet: "Canvas Alert - Page Updated: %{title}, %{user}."
+        tweet: "Jigsaw LMS Alert - Page Updated: %{title}, %{user}."
     visit_modules_page: "*Visit the course modules page for information on how to unlock this content.*"
     web_conference_invitation: 
       email: 
@@ -8877,7 +8877,7 @@ en-GB:
         body: "You've been invited to participate in a web conference, %{title} for %{name}."
         subject: "Web conference invitation: %{name}"
       twitter: 
-        tweet: "Canvas Alert - Invite: attend %{title}, %{name}"
+        tweet: "Jigsaw LMS Alert - Invite: attend %{title}, %{name}"
   migration: 
     announcement_type: Announcement
     assignment_group_type: "Assignment group"

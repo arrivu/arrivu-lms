@@ -39,30 +39,26 @@ class ReferralsController < ApplicationController
        create_social_references
        @referral.save!
      else
-       #flash[:info] = "There is no reward"
-       flash[:warn] = t(:no_active_reward_notice, "There is no active Reward for this #{@context.class.name}")
+       flash[:notice] = "There is no reward for this course"
        redirect_to course_path(@context)
      end
    end
 
   def create_email_referrals
     @reward = Reward.find_by_metadata_and_metadata_type_and_status(@context.id.to_s, @context.class.name, Reward::STATUS_ACTIVE)
-    @referral = Referral.find(params[:id])
+    @referral = @reward.referrals.build(pseudonym_id: @current_pseudonym.id,email_text: @reward.email_template_txt,email_subject: @reward.email_subject)
     @referral.update_attribute(:email_subject, params[:referral][:email_subject])
     @referral.update_attribute(:email_text, params[:referral][:email_text])
-    referral_emails = params [:referral][:referral_emails]
+    referral_emails = params[:referral][:referral_emails]
     emails =  split_csv_emails(referral_emails)
     emails.each do |email|
-      reference = @referral.references.build(provider: email )
+      reference = @referral.references.build(provider: ReferralProvider::EMAIL )
     end
   end
 
   def index
-    @reward = Reward.find_by_metadata(@context.id.to_s)
-    if @reward
-      @referral = @reward.referrals.find_by_pseudonym_id(@current_pseudonym.id)
-    end
-    #@references = @referral.references
+    create_reference
+    get_all_references
   end
 
   def referree_register
@@ -80,12 +76,20 @@ class ReferralsController < ApplicationController
 
   end
 
+  def get_all_references
+    @references =[]
+    @referrals = @current_pseudonym.referrals
+    @referrals.each do |referral|
+      @references << referral.references
+    end
+  end
 
 
 
-    private
 
       def create_social_references
+        domains = HostUrl.context_hosts(@domain_root_account)
+        @domain_url =  "#{HostUrl.protocol}://#{domains.first}/rr/"
         @reference_fb = @referral.references.build(provider: ReferralProvider::FACEBOOK)
         @reference_tw = @referral.references.build(provider: ReferralProvider::TWITTER)
         @reference_li = @referral.references.build(provider: ReferralProvider::LINKEDIN)

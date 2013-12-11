@@ -91,11 +91,11 @@
       <span class="user_id" style="display: none;">&nbsp;</span>
     </td>
   </tr>
-  <tr>
-    <td colspan="3" style="text-align: center;">
-      <a href="#" class="add_email_link icon-add"><%= t('links.add_email_address', "Add Email Address") %></a>
-    </td>
-  </tr>
+  <!--<tr>-->
+    <!--<td colspan="3" style="text-align: center;">-->
+      <!--<a href="#" class="add_email_link icon-add"><%#= t('links.add_email_address', "Add Email Address") %></a>-->
+    <!--</td>-->
+  <!--</tr>-->
 </table>
 <table class="summary channel_list other_channels" style="width: 100%; margin-left: 0; margin-right: 0;">
   <thead>
@@ -144,33 +144,33 @@
 </div>
 <div id="communication_channels" style="display: none;">
 <ul>
-  <li><a href="#register_email_address"><%= t('links.email', "Email") %></a></li>
+  <!--<li><a href="#register_email_address"><%#= t('links.email', "Email") %></a></li>-->
   <li><a href="#register_sms_number"><%= t('links.text_sms', "Text (SMS)") %></a></li>
 </ul>
-<% form_tag communication_channels_url, {:id => "register_email_address", :class => 'form-horizontal'} do %>
-    <input type="hidden" name="communication_channel[type]" value="email"/>
-    <div class="control-group">
-      <%= label :communication_channel, :address, t('labels.email_address', 'Email Address'), :class => 'control-label' %>
-      <div class="controls">
-        <%= text_field :communication_channel, :address %>
-      </div>
-    </div>
+<% #form_tag communication_channels_url, {:id => "register_email_address", :class => 'form-horizontal'} do %>
+    <!--<input type="hidden" name="communication_channel[type]" value="email"/>-->
+    <!--<div class="control-group">-->
+      <!--<%#= label :communication_channel, :address, t('labels.email_address', 'Email Address'), :class => 'control-label' %>-->
+      <!--<div class="controls">-->
+        <!--<%#= text_field :communication_channel, :address %>-->
+      <!--</div>-->
+    <!--</div>-->
 
-    <% if @domain_root_account == Account.default %>
-      <div class="control-group">
-        <div class="controls">
-          <label class='checkbox' for="build_pseudonym_for_email">
-            <input type="checkbox" id="build_pseudonym_for_email" name="build_pseudonym" value="1"/>
-            <%= t('labels.enable_login_for_email', "I want to log in to Jigsaw LMS using this email address") %>
-          </label>
-        </div>
-      </div>
-    <% end %>
+    <% #if @domain_root_account == Account.default %>
+      <!--<div class="control-group">-->
+        <!--<div class="controls">-->
+          <!--<label class='checkbox' for="build_pseudonym_for_email">-->
+            <!--<input type="checkbox" id="build_pseudonym_for_email" name="build_pseudonym" value="1"/>-->
+            <!--<%#= t('labels.enable_login_for_email', "I want to log in to Jigsaw LMS using this email address") %>-->
+          <!--</label>-->
+        <!--</div>-->
+      <!--</div>-->
+    <%# end %>
 
-    <div class="form-actions">
-      <button type="submit" class="btn btn-primary"><%= t('buttons.register_email', "Register Email") %></button>
-    </div>
-<% end %>
+    <!--<div class="form-actions">-->
+      <!--<button type="submit" class="btn btn-primary"><%#= t('buttons.register_email', "Register Email") %></button>-->
+    <!--</div>-->
+<%# end %>
 <% form_tag communication_channels_url, {:id => "register_sms_number", :class => 'form-horizontal'} do %>
     <input type="hidden" name="communication_channel[type]" value="sms"/>
     <div class="control-group">
