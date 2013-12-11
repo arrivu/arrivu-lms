@@ -10,6 +10,8 @@ require [
 
   course_modules = new CourseModuleCollection ENV.COURSE_MODULES_FOR_ENROLLMENT
 
+#  user_modules = new CourseModuleCollection ENV.ENROLLED_COURSE_USERS
+
   enrolled_users = ENV.ENROLLED_COURSE_USERS
 
   selected_module_users=ENV.MODULE_PERMISSION_USER_IDS

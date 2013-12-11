@@ -12,6 +12,7 @@ define [
     className: 'manage-roles-table'
     events:
       'click #btnclassid' : "selectalluser"
+      'click #btnclass' : "selectallmodule"
     # Method Summary
     #   When a new Role is added/removed from the collection, re-draw the table.
     initialize: -> 
@@ -39,38 +40,23 @@ define [
 
     selectalluser: (event) ->
       btnselect = $(event.currentTarget).text()
-      total_module_id = []
+      selected_user_id= $(event.currentTarget).attr("data-select_user_id")
       if btnselect is "SelectAll"
         $(event.currentTarget).addClass "ui-state-active"
         $(event.currentTarget).text "UnSelectAll"
-        selected_user_id= $(event.currentTarget).attr("data-select_user_id")
         work_status = "active"
-        $("a[data-user_id]").val ->
-         uid= $(this).attr "data-user_id"
-         mid= $(this).attr "data-module_id"
-         sid= $(event.currentTarget).attr("data-select_user_id")
-         btnselectvalue = $(event.currentTarget).text()
-         if uid is sid and btnselectvalue is "UnSelectAll"
-          $(this).find("i").removeClass("icon-x").addClass "icon-check"
-        @collection.each (module) ->
-          module.save {module_id: module.id,user_id:selected_user_id,status:work_status},
-            failure: ->
-          alert 'module was not be saved!'
+        btnselectvalue = $(event.currentTarget).text()
+        @getEachRow(work_status,selected_user_id,btnselectvalue)
       else
         $(event.currentTarget).removeClass "ui-state-active"
         $(event.currentTarget).text "SelectAll"
         work_status = "inactive"
-        $("a[data-user_id]").val ->
-         uid= $(this).attr "data-user_id"
-         mid= $(this).attr "data-module_id"
-         selected_user_id= $(event.currentTarget).attr("data-select_user_id")
-         btnselectvalue = $(event.currentTarget).text()
-         if uid is sid and btnselectvalue is "SelectAll"
-          $(this).find("i").removeClass("icon-check").addClass "icon-x"
-        @collection.each (module) ->
-          module.save {module_id: module.id,user_id:selected_user_id,status:work_status},
-            failure: ->
-          alert 'module was not be saved!'
+        btnselectvalue = $(event.currentTarget).text()
+        @getEachRow(work_status,selected_user_id,btnselectvalue)
+      @collection.each (module) ->
+        module.save {module_id: module.id,user_id:selected_user_id,status:work_status},
+          failure: ->
+        alert 'module was not be saved!'
 
     # Method Summary
 
@@ -85,6 +71,23 @@ define [
       model.save {module_id: module_id,user_id:user_id,status:work_status},
         failure: ->
           alert 'module was not be saved!'
+    getEachRow:(status,selected_user_id,btnselectvalue) ->
+      $("a[data-user_id]").val ->
+        uid= $(this).attr "data-user_id"
+        if uid is selected_user_id and btnselectvalue is "UnSelectAll"
+          $(this).find("i").removeClass("icon-x").addClass "icon-check"
+        else if uid is selected_user_id and btnselectvalue is "SelectAll"
+          $(this).find("i").removeClass("icon-check").addClass "icon-x"
+    getEachModelRow:(selected_module_id,btnselectvalue) ->
+      $("a[data-module_id]").val ->
+        mid= $(this).attr "data-module_id"
+        uid= $(this).attr "data-user_id"
+        if mid is selected_module_id and btnselectvalue is "UnSelectAll"
+          $(this).find("i").removeClass("icon-x").addClass "icon-check"
+          return uid
+        else if mid is selected_module_id and btnselectvalue is "SelectAll"
+          $(this).find("i").removeClass("icon-check").addClass "icon-x"
+          return uid
 
     renderHeader: -> 
       @$el.find('thead tr').html "<th>Modules</th><th class='permissionButtonView'></th>"
@@ -150,3 +153,34 @@ define [
         return true if user_id_in_array == user_id
       false
 
+    getEachModel:(mid,sid,work_status) ->
+      @collection.each (module) ->
+        if mid is module.id
+          module.save {module_id: mid,user_id:sid,status:work_status},
+            failure: ->
+          alert 'module was not be saved!'
+
+    selectallmodule: (event) ->
+      selected_module_id= $(event.currentTarget).attr("data-select_module_id")
+      btnselect =$(event.currentTarget).text()
+      if btnselect is "SelectAll"
+        $(event.currentTarget).addClass "ui-state-active"
+        $(event.currentTarget).text "UnSelectAll"
+        work_status = "active"
+        btnselectvalue = $(event.currentTarget).text()
+        @getEachModelRow(selected_module_id,btnselectvalue)
+      else
+        $(event.currentTarget).removeClass "ui-state-active"
+        $(event.currentTarget).text "SelectAll"
+        work_status = "inactive"
+        btnselectvalue = $(event.currentTarget).text()
+        @getEachModelRow(selected_module_id,btnselectvalue)
+
+      _.each @enrolled_users , (enrolled_user) =>
+        @collection.each (module) ->
+          module_id = parseInt(module.id, 10)
+          key_selected_module_id = parseInt(selected_module_id, 10)
+          if module_id is key_selected_module_id
+            module.save {module_id: key_selected_module_id,user_id:enrolled_user.id,status:work_status},
+              failure: ->
+                alert 'module was not be saved!'
