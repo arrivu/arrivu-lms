@@ -39,6 +39,10 @@ define [
       @renderTable()
 
     selectalluser: (event) ->
+      @$el.disableWhileLoading
+      @clickalluser(event)
+
+    clickalluser:(event) ->
       btnselect = $(event.currentTarget).text()
       selected_user_id= $(event.currentTarget).attr("data-select_user_id")
       if btnselect is "SelectAll"
@@ -57,7 +61,6 @@ define [
         module.save {module_id: module.id,user_id:selected_user_id,status:work_status},
           failure: ->
         alert 'module was not be saved!'
-
     # Method Summary
 
 
@@ -116,7 +119,7 @@ define [
 
         user_row_html = """
                           <tr>
-                            <th role="rowheader">#{enrolled_user.name}</th><th class="permissionButtonView"><button id="btnclassid" class="ui-button ui-widget ui-state-default ui-button-text-only ui-corner-right" data-select_user_id="#{enrolled_user.id}">SelectAll</button></th>
+                            <th role="rowheader">#{enrolled_user.name}</th><th class="permissionButtonView"><button id="btnclassid" class="ui-button ui-widget ui-state-default ui-button-text-only ui-corner-right ui-get-user-id#{enrolled_user.id} " data-select_user_id="#{enrolled_user.id}">SelectAll</button></th>
                           </tr>
                          """
 
@@ -159,7 +162,7 @@ define [
           module.save {module_id: mid,user_id:sid,status:work_status},
             failure: ->
           alert 'module was not be saved!'
-
+    spinnerevent:
     selectallmodule: (event) ->
       selected_module_id= $(event.currentTarget).attr("data-select_module_id")
       btnselect =$(event.currentTarget).text()
