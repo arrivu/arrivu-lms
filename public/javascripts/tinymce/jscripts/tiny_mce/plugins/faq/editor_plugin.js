@@ -4,9 +4,15 @@ define([
     'compiled/editor/stocktiny',
     'i18n!editor',
     'jquery',
+    'underscore',
     'str/htmlEscape',
-    'jqueryui/dialog'
-], function(tinymce, I18n, $, htmlEscape) {
+    'jqueryui/dialog',
+    'compiled/fn/preventDefault',
+    'jqueryui/accordion' ,
+    'jqueryui/tabs',
+    'jqueryui/button',
+    'jqueryui/tooltip'
+    ], function(tinymce, I18n, $,_, htmlEscape) {
 
     tinymce.create('tinymce.plugins.faq', {
         init : function(ed, url) {

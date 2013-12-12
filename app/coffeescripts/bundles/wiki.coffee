@@ -1,2 +1,5 @@
-require ['wiki']
+require ['wiki'
+         'jquery'
+         'jqueryui/accordion'
+]
 

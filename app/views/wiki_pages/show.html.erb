@@ -1,9 +1,25 @@
-<% 
+<%
   js_bundle :wiki
   jammit_css :tinymce
   content_for :page_title, join_title(@page.title.to_s, @context.name)
   content_for :right_side, render(:partial => 'wiki_pages/wiki_right_side')
+
 %>
+
+<% js_block do %>
+    <script type="text/javascript">
+        require([
+            'jquery' /* $ */
+        ], function($) {
+
+            $( document ).ready(function() {
+                $(".accordion").accordion();
+            });
+        });
+    </script>
+<% end %>
+
+
 
 <% if reason = @page.locked_for?(@current_user, :context => @context) %>
   <h2><%= @page.title %></h2>
@@ -13,3 +29,7 @@
 <% end %>
 
 <%= render :partial => "shared/sequence_footer", :locals => {:asset => @page} if @page.context_module_tag_for(@context) %>
+
+
+
+

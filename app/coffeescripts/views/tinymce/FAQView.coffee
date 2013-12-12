@@ -6,20 +6,19 @@ define [
   'compiled/fn/preventDefault'
   'compiled/views/DialogBaseView'
   'jst/tinymce/FAQView'
+  'jqueryui/accordion'
+  'jqueryui/tabs'
+  'jqueryui/button'
 
 ], (I18n, $, _, h, preventDefault, DialogBaseView, template) ->
 
-  class WistiaVideoView extends DialogBaseView
+  class FAQView extends DialogBaseView
 
     template: template
 
-    events:
-      'change #combo_field': 'onComboSelect'
-      'dblclick .findWistiaMediaView' : 'onThumbLinkDblclick'
-
     dialogOptions:
       width: 625
-      title: I18n.t 'titles.insert_edit_image', 'Insert FAQ '
+      title: 'Insert FAQ'
 
     initialize: (@editor, selectedNode) ->
       @$editor = $("##{@editor.id}")
@@ -28,20 +27,32 @@ define [
       super
       @render()
       @show()
-    onThumbLinkDblclick: (event) =>
-      # click event is handled on the first click
-      @update(event)
-
-
+    $(".accordion").accordion header: "h3"
 
     update: (event) =>
-      @editor.selection.moveToBookmark(@prevSelection)
-      @$editor.editorBox 'insert_code', @generateImageHtml(event)
-      @editor.focus()
-      @close()
+       @editor.selection.moveToBookmark(@prevSelection)
+       if $(tinymce.activeEditor.getBody()).find('.accordion').length == 0
+         @$editor.editorBox 'insert_code', @generateAccordionHtml()
+       else
+#        @$editor.editorBox(this.$(".accordion")).append(@AccordionHtmlWithoutMainDiv())
+#         @$editor.this.$(".accordion") 'insert_code', @AccordionHtmlWithoutMainDiv
+         @AccordionHtmlWithoutMainDiv()
+       @editor.focus()
+       @close()
+
+    generateAccordionHtml:  =>
+        htmlview  = '<div class="accordion">'
+        htmlview += '<h3>' + @editor.dom.createHTML("a",{href: '#'},this.$('input[name=question]').val()) + '</h3>'
+        htmlview += '<div>' + '<p>' + this.$('textarea[name=answer]').val() + '</p>' + '</div>'
+        htmlview += '</div>'
+
+    AccordionHtmlWithoutMainDiv:  =>
+#        htmlview  = '<h3>' + @editor.dom.createHTML("a",{href: '#'},this.$('input[name=question]').val()) + '</h3>'
+#        htmlview += '<div>' + '<p>' + this.$('textarea[name=answer]').val() + '</p>' + '</div>'
+         $(tinymce.activeEditor.getBody()).find('.accordion').append("<h3>" + @editor.dom.createHTML("a",{href: '#'},this.$('input[name=question]').val()) + "</h3>" + '<div>' + '<p>' + this.$('textarea[name=answer]').val() + '</p>' + '</div>')
 
 
-    generateImageHtml: (event) =>
-      hashed_id = event.target.id
-      img_tag = @editor.dom.createHTML("iframe",{src: "https://fast.wistia.net/embed/medias/#{hashed_id}?playerColor=ff0000&amp;fullscreenButton=true"},{width: 600} ,{height: 450})
+
+
+
 
