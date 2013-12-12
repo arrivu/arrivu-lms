@@ -31,6 +31,7 @@ class ReferralsController < ApplicationController
     referral_emails = params[:valid_emails]
     referral_emails.each do |email|
       @email_references << @referral.references.build(provider: email)
+      #@email_references << @referral.references.build(provider: ReferralProvider::EMAIL)
     end
     @referral.save!
     respond_to do |format|
