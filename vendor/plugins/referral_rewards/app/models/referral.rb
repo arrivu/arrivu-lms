@@ -6,7 +6,7 @@ class Referral < ActiveRecord::Base
   #has_many :referrees
 
   attr_accessible :pseudonym_id, :email_subject,  :email_text,  :referral_emails
-
+  cattr_accessor :referral_id
   validates_presence_of :email_subject, :email_text
 
   def create_referrees

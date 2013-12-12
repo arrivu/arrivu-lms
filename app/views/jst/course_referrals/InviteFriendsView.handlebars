@@ -1,0 +1,44 @@
+<div id="invite_friends_error_box"></div>
+<div class="container">
+        <div class="span10">
+            <div class="span5">
+                <h5 style="width: 100%;font-weight: bold;color: #333333">Invite by Email </h5>
+                     <textarea class="span5" cols="40" id="referral_referral_emails" name="referral[referral_emails]" rows="4" placeholder='student@example.com,firstlast@example.com'></textarea>
+                <h5 style="width: 100%;font-weight: bold;color: #333333">Email Subject </h5>
+                    <input class="span5" type="text" name="referral[email_subject]" value="{{ email_subject }}">
+                <h5 style="width: 100%;font-weight: bold;color: #333333">Email Message </h5>
+                    <textarea class="span5" cols="40" id="referral_email_text" name="referral[email_text]" rows="9">
+                        {{ email_text }}
+                    </textarea>
+
+                    <input class="btn btn-primary" id="referral_submit" name="commit" type="submit" value="Send Invites">
+
+            </div>
+            <div class="span3" style="margin: 0px 50px;">
+             <h5 style="margin:12px 3px;font-weight: bold;color: #333333">Your invite url to share<br> Paste it in your blog!</h5>
+
+                <input type="text" name="email address" style="height:35px" value={{domain_url}}{{gl_reference}}>
+                <br>
+
+                <h5 style="font-weight: bold;color: #333333">Or</h5>
+                <h5 style="font-weight: bold;color: #333333">invite via social media </h5>
+
+                <div id="right-side" style="margin: 0 0 0; width: 227px;">
+
+
+<a href="http://www.facebook.com/sharer/sharer.php?s=100&p[url]= {{domain_url}}{{fb_reference}} &p[title]= Ruby &p[summary]= In this course used only part of Webdevelopment " onclick="javascript:window.open(this.href,
+                    '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=550,width=500');return false;"class="btn button-sidebar-wide"><i class="icon-facebook-boxed"></i> Share on Facebook</a>
+
+ <a href="http://www.linkedin.com/shareArticle?mini=true&url={{domain_url}}{{li_reference}} &title= Ruby &summary= In this course are New course and Open Source Web development "onclick="javascript:window.open(this.href,
+                     '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=550,width=500');return false;"class="btn button-sidebar-wide"><i class="icon-linkedin "></i> Share on LinkedIn</a>
+
+ <a href="http://plus.google.com/share?url= {{domain_url}}{{go_reference}}" onclick="javascript:window.open(this.href,
+              '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=550,width=500');return false;"class="btn button-sidebar-wide"><i class="icon-peer-review"></i> Share on Google</a>
+
+ <a href="http://twitter.com/intent/tweet?&url={{domain_url}}{{tw_reference}} &text= Ruby In this course are new one {{domain_url}}{{tw_reference}}" onclick="javascript:window.open(this.href,
+                    '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=550,width=500');return false;" class="btn button-sidebar-wide"><i class="icon-twitter-boxed"></i> Share on Twitter</a>
+
+                 </div>
+          </div>
+        </div>
+     </div>
