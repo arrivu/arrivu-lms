@@ -7,7 +7,6 @@ class ReferralsController < ApplicationController
 
    def create_reference
      @reward = Reward.find_by_metadata_and_metadata_type_and_status(@context.id.to_s, @context.class.name, Reward::STATUS_ACTIVE)
-
      if @reward
        @referral = @reward.referrals.build(pseudonym_id: @current_pseudonym.id,email_text: @reward.email_template_txt,email_subject: @reward.email_subject)
        create_social_references
