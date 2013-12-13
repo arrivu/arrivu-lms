@@ -6,21 +6,6 @@
 
 %>
 
-<% js_block do %>
-    <script type="text/javascript">
-        require([
-            'jquery' /* $ */
-        ], function($) {
-
-            $( document ).ready(function() {
-                $(".accordion").accordion();
-            });
-        });
-    </script>
-<% end %>
-
-
-
 <% if reason = @page.locked_for?(@current_user, :context => @context) %>
   <h2><%= @page.title %></h2>
   <%= lock_explanation(reason, 'page', @context) %>

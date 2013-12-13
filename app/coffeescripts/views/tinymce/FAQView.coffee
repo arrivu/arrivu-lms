@@ -6,9 +6,6 @@ define [
   'compiled/fn/preventDefault'
   'compiled/views/DialogBaseView'
   'jst/tinymce/FAQView'
-  'jqueryui/accordion'
-  'jqueryui/tabs'
-  'jqueryui/button'
 
 ], (I18n, $, _, h, preventDefault, DialogBaseView, template) ->
 
@@ -25,17 +22,13 @@ define [
       @prevSelection = @editor.selection.getBookmark()
       @$selectedNode = $(selectedNode)
       super
-      @render()
       @show()
-    $(".accordion").accordion header: "h3"
 
     update: (event) =>
        @editor.selection.moveToBookmark(@prevSelection)
        if $(tinymce.activeEditor.getBody()).find('.accordion').length == 0
          @$editor.editorBox 'insert_code', @generateAccordionHtml()
        else
-#        @$editor.editorBox(this.$(".accordion")).append(@AccordionHtmlWithoutMainDiv())
-#         @$editor.this.$(".accordion") 'insert_code', @AccordionHtmlWithoutMainDiv
          @AccordionHtmlWithoutMainDiv()
        @editor.focus()
        @close()
@@ -47,9 +40,9 @@ define [
         htmlview += '</div>'
 
     AccordionHtmlWithoutMainDiv:  =>
-#        htmlview  = '<h3>' + @editor.dom.createHTML("a",{href: '#'},this.$('input[name=question]').val()) + '</h3>'
-#        htmlview += '<div>' + '<p>' + this.$('textarea[name=answer]').val() + '</p>' + '</div>'
-         $(tinymce.activeEditor.getBody()).find('.accordion').append("<h3>" + @editor.dom.createHTML("a",{href: '#'},this.$('input[name=question]').val()) + "</h3>" + '<div>' + '<p>' + this.$('textarea[name=answer]').val() + '</p>' + '</div>')
+        $(tinymce.activeEditor.getBody()).find('.accordion').append("<h3>" + @editor.dom.createHTML("a",{href: '#'},
+          this.$('input[name=question]').val()) + "</h3>" + '<div>' + '<p>' + this.$('textarea[name=answer]').val()
+          + '</p>' + '</div>')
 
 
 

@@ -31,7 +31,7 @@ define([
 
             // Register buttons
             ed.addButton('faq', {
-                title : htmlEscape(I18n.t('embed_faq', 'Embed Accordian FAQ')),
+                title : htmlEscape(I18n.t('embed_faq', 'Inert FAQ')),
                 cmd : 'mcefaq',
                 image : url + '/img/button.jpg'
             });

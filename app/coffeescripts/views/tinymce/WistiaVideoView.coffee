@@ -59,14 +59,11 @@ define [
       # click event is handled on the first click
       @update(event)
 
-
-
     update: (event) =>
       @editor.selection.moveToBookmark(@prevSelection)
       @$editor.editorBox 'insert_code', @generateImageHtml(event)
       @editor.focus()
       @close()
-
 
     generateImageHtml: (event) =>
       hashed_id = event.target.id
