@@ -1,35 +1,29 @@
 define [
-  'i18n!rewards'
   'jst/rewards/EditView'
   'compiled/views/ValidatedFormView'
   'compiled/jquery/fixDialogButtons'
-], (I18n, template, ValidatedFormView) ->
-
+], (template, ValidatedFormView) ->
   class EditView extends ValidatedFormView
     template: template
     tagName: 'form'
-    id: 'external_tool_form'
+    id: 'reward_form'
 
     className: 'validated-form-view form-horizontal bootstrap-form'
-
-    events:
-      'change #external_tool_config_type': 'onConfigTypeChange'
 
     afterRender: ->
       super
       @$el.dialog
-        title: I18n.t 'dialog_title_edit_tool', 'Add Reward'
+        title: 'Add Reward'
         width: 520
         height: "auto"
         resizable: true
         close: => @$el.remove()
         buttons: [
           class: "btn-primary"
-          text: I18n.t 'submit', 'Submit'
-          'data-text-while-loading': I18n.t 'saving', 'Saving...'
+          text: 'Submit'
+          'data-text-while-loading':  'Saving...'
           click: => @submit()
         ]
-      @onConfigTypeChange()
       @$el.submit (e) =>
         @submit()
         return false
@@ -38,11 +32,6 @@ define [
     submit: ->
       this.$el.parent().find('.btn-primary').removeClass('ui-state-hover')
       super
-
-    onConfigTypeChange: ->
-      configType = @$('#external_tool_config_type').val()
-      @$('.config_type').hide().attr('aria-expanded', false)
-      @$(".config_type.#{configType}").show().attr('aria-expanded', true)
 
     showErrors: (errors) ->
       @removeErrors()
@@ -66,6 +55,6 @@ define [
 
     onSaveFail: (xhr) =>
       super
-      message = I18n.t 'generic_error', 'There was an error in processing your request'
+      message = 'There was an error in processing your request'
       @$el.prepend("<div class='alert alert-error'>#{message}</span>")
 

@@ -52,6 +52,7 @@
     <% if can_do(@context, @current_user, :manage_account_settings) %>
       <li><a href="#tab-tools" id="tab-tools-link"><%= t(:tab_external_tools, "Apps") %></a></li>
     <% end %>
+    <li><a href="#tab-rewards" id="tab-rewards-link"><%= t(:tab_rewards, "Rewards") %></a></li>
     <% if @context.root_account.settings[:enable_alerts] && can_do(@context, @current_user, :manage_interaction_alerts) %>
       <li><a href="#tab-alerts" id="tab-alerts-link"><%= t(:tab_alerts, "Alerts") %></a></li>
     <% end %>
@@ -616,7 +617,14 @@ Allowing Draft State here will allow teachers to enable it in their individual c
       <% end %>
     </div>
   <% end %>
+  <div id="tab-rewards">
 
+    <%= render :partial => 'rewards/rewards', :object => @context.context_external_tools.active %>
+
+    <% form_for :course_section, :url => "", :html => {:id => "edit_section_form", :method => :put, :style => "display: none;"} do |f| %>
+        <%= f.text_field :name %>
+    <% end %>
+  </div>
   <div id="tab-users">
     <h2><%= t(:account_admins_title, "Account Admins") %></h2>
     <ul class="admins_list user_list list admins">

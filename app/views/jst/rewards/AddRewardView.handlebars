@@ -1,31 +1,70 @@
 <fieldset>
   <div class="control-group">
-    <label class="control-label" for="reward_name">Name</label>
+    <label class="control-label" for="offer_name">Offer Name</label>
     <div class="controls">
-      <input type="text" id="reward_name" value="{{name}}" name="canvas_app_name">
+      <input type="text" id="offer_name" value="{{name}}" name="name">
     </div>
   </div>
-  {{#each configOptions}}
-    <div class="control-group">
-      {{#if this.isCheckbox}}
-        <div class="controls">
-          <label class="checkbox">
-            <input type="checkbox" id="reward_{{this.name}}" name="{{this.name}}" value="1"> {{this.description}}
-          </label>
-        </div>
-      {{else}}
-        {{#if isText}}
-          <label class="control-label" for="app_{{this.name}}">{{this.description}}</label>
-          <div class="controls">
-            <input type="text" id="reward_{{this.name}}" name="{{this.name}}">
-          </div>
-        {{else}}
-          <label class="control-label" for="app_{{this.name}}">{{this.description}}</label>
-          <div class="controls">
-            <input type="text" id="reward_{{this.name}}" name="{{this.name}}">
-          </div>
-        {{/if}}
+    <div class="control-group ">
+      <label class="control-label" for="reward_description">
+        {{#t "reward_description"}}Reward Description{{/t}}
+      </label>
+      <div class="controls">
+        <textarea
+          id="reward_description"
+          name="description"
+        >{{description}}</textarea>
+      </div>
+    </div>
+  <div class="control-group">
+    <label class="control-label" for="how_many">How Many</label>
+    <div class="controls">
+      <input type="text" id="how_many" value="{{how_many}}" name="how_many">
+      {{#if id}}
+        <p class="help-block">{{#t "shared_secret_note"}}Enter a new value
+        to change{{/t}}</p>
       {{/if}}
     </div>
-  {{/each}}
+  </div>
+   <div class="control-group">
+       <label class="control-label" for="referrar_amount">Referrer Amount</label>
+       <div class="controls">
+         <input type="text" id="referrar_amount" value="{{referrer_amount}}" name="referrar_amount">
+       </div>
+    </div>
+   <div class="control-group">
+          <label class="control-label" for="referrar_percentage">Referrer Percentage</label>
+          <div class="controls">
+            <input type="text" id="referrar_percentage" value="{{referrer_percentage}}" name="referrar_percentage">
+          </div>
+    </div>
+   <div class="control-group">
+          <label class="control-label" for="referree_amount">Referree Amount</label>
+          <div class="controls">
+            <input type="text" id="referree_amount" value="{{referree_amount}}" name="referree_amount">
+          </div>
+       </div>
+    <div class="control-group">
+             <label class="control-label" for="referree_percentage">Referree Percentage</label>
+             <div class="controls">
+               <input type="text" id="referree_percentage" value="{{referree_percentage}}" name="referree_percentage">
+             </div>
+     </div>
+      <div class="control-group">
+        <label class="control-label" for="email_subject">Email Subject</label>
+        <div class="controls">
+          <input type="text" id="email_subject" value="{{email_subject}}" name="email_subject">
+        </div>
+      </div>
+        <div class="control-group ">
+          <label class="control-label" for="email_text">
+            {{#t "email_text"}}Email Text{{/t}}
+          </label>
+          <div class="controls">
+            <textarea
+              id="email_text"
+              name="email_text"
+            >{{email_template_text}}</textarea>
+          </div>
+        </div>
 </fieldset>

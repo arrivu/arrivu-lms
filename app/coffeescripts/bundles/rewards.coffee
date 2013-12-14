@@ -1,13 +1,13 @@
 require [
   'compiled/collections/RewardCollection',
   'compiled/views/Rewards/IndexView'
-], (RewardsCollection, IndexView) ->
+], (RewardCollection, IndexView) ->
 
   # Collections
-  rewards = new RewardsCollection
-  rewards.fetch()
+
+
   indexview = new IndexView
-#    rewardsView: rewardsCollectionView
-    el: '#rewards'
+     el: '#rewards'
 
   indexview.render()
+

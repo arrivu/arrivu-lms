@@ -1,39 +1,23 @@
 define [
   'Backbone'
-  'compiled/backbone-ext/DefaultUrlMixin'
-], ({Model}, DefaultUrlMixin) ->
+  'underscore'
+], (Backbone, _) ->
+  class Reward extends Backbone.Model
 
-  class Reward extends Model
+   resourceName: "rewards"
 
-    resourceName: 'rewards'
-
-    urlRoot: -> 'rewards'
-
+   urlRoot: -> "rewards"
 
 
-#    initialize: ->
-#      console.log 'a project has be instantiated'
-#
-    defaults:
-      name: "Sample task"
-      description: "Sample task"
-      expiry_date: new Date()
-      how_many: "2"
-      referrer_amount: "10"
-      referrer_percentage: "1"
-      referree_amount: "10"
-      referree_percentage: "1"
-      email_subject: "Sample task"
-      email_template_txt: "Sample task"
-      alpha_mask: "AA"
-      metadata: "Sample task"
-      referrar_expiry_date: new Date()
-      referree_expiry_date: new Date()
-      account_id: "1"
-      user_id: "1"
-      pseudonym_id: "1"
-#
-    toJSON: ->
-      @options
+    # Method Summary
+    #   See backbones explaination of a validate method for in depth
+    #   details but in short, if your return something from validate
+    #   there is an error, if you don't, there are no errors. Throw
+    #   in the error object to any validation function you make. It's
+    #   passed by reference dawg.
+    # @api override backbone
+   validate: (attrs) ->
+     errors = {}
+     errors unless _.isEmpty errors
 
 

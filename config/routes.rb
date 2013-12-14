@@ -530,6 +530,7 @@ FakeRails3Routes.draw do
     match 'statistics/over_time/:attribute' => 'accounts#statistics_graph', :as => :statistics_graph
     match 'statistics/over_time/:attribute.:format' => 'accounts#statistics_graph', :as => :formatted_statistics_graph
     match 'turnitin_confirmation' => 'accounts#turnitin_confirmation', :as => :turnitin_confirmation
+    resources :rewards
     resources :permissions, :controller => :role_overrides, :only => [:index, :create] do
       collection do
         post :add_role
@@ -1004,6 +1005,17 @@ FakeRails3Routes.draw do
         post "#{context}s/:#{context}_id/external_tools", :action => :create, :path_name => "#{context}_external_tools_create"
         put "#{context}s/:#{context}_id/external_tools/:external_tool_id", :action => :update, :path_name => "#{context}_external_tools_update"
         delete "#{context}s/:#{context}_id/external_tools/:external_tool_id", :action => :destroy, :path_name => "#{context}_external_tools_delete"
+      end
+      et_routes("course")
+      et_routes("account")
+    end
+
+    scope(:controller => :rewards) do
+      def et_routes(context)
+        get "#{context}s/:#{context}_id/rewards", :action => :index, :path_name => "#{context}_rewards"
+        post "#{context}s/:#{context}_id/rewards", :action => :create, :path_name => "#{context}_rewards_create"
+        put "#{context}s/:#{context}_id/rewards/:reward_id", :action => :update, :path_name => "#{context}_rewards_update"
+        delete "#{context}s/:#{context}_id/rewards/:reward_id", :action => :destroy, :path_name => "#{context}_rewards_delete"
       end
       et_routes("course")
       et_routes("account")

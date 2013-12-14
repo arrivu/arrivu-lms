@@ -15,11 +15,14 @@ class RewardsController < ApplicationController
     @reward.metadata = @context.id
     @reward.metadata_type = @context.class.name
     @reward.status = "active"
-    if @reward.save!
-      redirect_to course_rewards_path
+    respond_to do |format|
+      if @reward.save
+         format.json {render :json => @reward.to_json}
+      else
+         format.json { render :json => @reward.errors.to_json, :status => :bad_request }
+      end
     end
   end
-
   def edit
     @reward = Reward.find(params[:id])
   end
@@ -47,7 +50,11 @@ class RewardsController < ApplicationController
   end
 
   def index
-    @rewards = Reward.find_by_metadata(@context.id.to_s)
+
+    respond_to do |format|
+      @rewards = Reward.find_by_metadata(@context.id.to_s)
+      format.json {render :json => @rewards.to_json}
+    end
   end
 end
 

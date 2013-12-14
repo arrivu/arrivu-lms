@@ -1,7 +1,9 @@
 define [
-  'compiled/collections/PaginatedCollection'
+  'Backbone'
+  'underscore'
   'compiled/models/Reward'
-], (PaginatedCollection, Reward) ->
+], (Backbone, _, Reward) ->
 
-  class RewardCollection extends PaginatedCollection
+  class RewardCollection extends Backbone.Collection
     model: Reward
+
