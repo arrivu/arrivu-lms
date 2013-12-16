@@ -13,19 +13,19 @@ define [
 
 
     initialize: ->
-      @reward_name = @options.name
-      @description = @options.description
-      @expiry_date = @options.expiry_date
-      @alpha_mask = @options.alpha_mask
-      @referrar_amount = @options.referrer_amount
+      @reward_name = @options.reward.name
+      @description = @options.reward.description
+      @expiry_date = @options.reward.expiry_date
+      @alpha_mask = @options.reward.alpha_mask
+      @referrar_amount = @options.reward.referrer_amount
       @referrar_percentage = @options.referrer_percentage
-      @referree_amount = @options.referree_amount
-      @referree_percentage = @options.referree_percentage
-      @referrer_expiry_date = @options.referrer_expiry_date
-      @referree_expiry_date = @options.referree_expiry_date
-      @how_many = @options.how_many
-      @email_subject = @options.email_subject
-      @email_text = @options.email_template_txt
+      @referree_amount = @options.reward.referree_amount
+      @referree_percentage = @options.reward.referree_percentage
+      @referrer_expiry_date = @options.reward.referrer_expiry_date
+      @referree_expiry_date = @options.reward.referree_expiry_date
+      @how_many = @options.reward.how_many
+      @email_subject = @options.reward.email_subject
+      @email_text = @options.reward.email_template_txt
 
 
 
