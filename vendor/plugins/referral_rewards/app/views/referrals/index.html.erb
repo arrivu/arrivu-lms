@@ -19,7 +19,7 @@
           <h5 style="border-bottom: 1px solid;width: 100%;margin:9px;">Invite by Email </h5>
 
           <% form_for @referral, :url => url_for(:controller => 'referrals', :action => 'create_email_referrals')  do |f| %>
-
+                  <%= f.hidden_field :referral_id,:value=> @referral.id%>
               <td><%= f.blabel :friends_email, :en => "Friends Email" %></td>
               <td><%= f.text_area :referral_emails, :rows=>"5", :class=>"span5"  %></td>
 

@@ -39,23 +39,26 @@ class ReferralsController < ApplicationController
        @referral = @reward.referrals.build(pseudonym_id: @current_pseudonym.id,email_text: @reward.email_template_txt,email_subject: @reward.email_subject)
        create_social_references
        @referral.save!
-     else
-       flash[:notice] = "There is no reward for this course"
-       redirect_to course_path(@context)
      end
+     js_env(COURSE_REFERRAL: @referral.map(&:attributes).to_json)
    end
 
   def create_email_referrals
     @reward = Reward.find_by_metadata_and_metadata_type_and_status(@context.id.to_s, @context.class.name, Reward::STATUS_ACTIVE)
-    @referral = Referral.find(params[:id])
-    @referral.update_attribute(:email_subject, params[:referral][:email_subject])
-    @referral.update_attribute(:email_text, params[:referral][:email_text])
-    referral_emails = params [:referral][:referral_emails]
+    @referral = Referral.find(params[:referral][:referral_id])
+    @referral.email_subject = params[:referral][:email_subject]
+    @referral.email_text = params[:referral][:email_text]
+    referral_emails = params[:referral][:referral_emails]
     emails =  split_csv_emails(referral_emails)
     emails.each do |email|
-      reference = @referral.references.build(provider: email )
+      reference = @referral.references.build(provider: email)
     end
-  end
+      if @referral.errors.any?
+        render course_referrals_path
+      else
+        redirect_to course_referrals_path
+      end
+   end
 
   def index
     create_reference
@@ -102,7 +105,7 @@ class ReferralsController < ApplicationController
         emails = []
         referral_emails.split(/,\s*/).each do |email|
           unless email =~ /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i
-            errors.add(:referral_emails, "are invalid due to #{email}")
+            @referral.errors.add(:references, "are invalid due to #{email}")
           end
           emails << email
         end
