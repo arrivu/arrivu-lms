@@ -27,7 +27,7 @@ define [
     renderListView: ->
       @rewards.each (reward) =>
         rewardListView = new RewardListView
-          reward: reward.attributes.reward
+          reward: reward.attributes.reward.reward
         $('#rewardlist').append rewardListView.render().el
 
 
@@ -39,7 +39,12 @@ define [
 
 
     onRewardSync: (model) =>
-      @addAppView.remove() if @addAppView
-      @editView.remove() if @editView
+      $('.ui-dialog').hide()
+      $('.ui-widget-overlay').hide()
       $.flashMessage("Reward saved successfully")
+      rewardListView = new RewardListView
+        reward: model
+      $('#rewardlist').prepend rewardListView.render().el
+
+
 

@@ -9,7 +9,9 @@ class RewardsController < ApplicationController
   end
 
   def create
-    @reward = Reward.new(params[:reward])
+    @reward = Reward.new(name:params['name'],description:params['description'],expiry_date:params['expiry_date'],how_many:params['how_many'],referrer_amount:params['referrer_amount'],referrer_percentage:params['referrer_percentage'],
+                         referrer_expiry_date:params['referrer_expiry_date'],referree_amount:params['referree_amount'],referree_percentage:params['referree_percentage'],referree_expiry_date:params['referree_expiry_date'],email_subject:params['email_subject'],email_template_txt:params['email_template_txt'],
+                         alpha_mask:params['alpha_mask'],status:params['status'])
     @reward.account_id = @domain_root_account.id
     @reward.pseudonym_id = @current_pseudonym.id
     @reward.metadata = @context.id
@@ -52,7 +54,7 @@ class RewardsController < ApplicationController
   def index
 
     respond_to do |format|
-      @rewards = Reward.find_by_metadata(@context.id.to_s)
+      @rewards = Reward.where(metadata: @context.id.to_s, metadata_type: Reward::METADATA_COURSE)
       format.json {render :json => @rewards.to_json}
     end
   end

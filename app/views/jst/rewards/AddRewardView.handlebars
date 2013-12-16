@@ -29,13 +29,13 @@
    <div class="control-group">
        <label class="control-label" for="referrar_amount">Referrer Amount</label>
        <div class="controls">
-         <input type="text" id="referrar_amount" value="{{referrer_amount}}" name="referrar_amount">
+         <input type="text" id="referrar_amount" value="{{referrer_amount}}" name="referrer_amount">
        </div>
     </div>
    <div class="control-group">
           <label class="control-label" for="referrar_percentage">Referrer Percentage</label>
           <div class="controls">
-            <input type="text" id="referrar_percentage" value="{{referrer_percentage}}" name="referrar_percentage">
+            <input type="text" id="referrar_percentage" value="{{referrer_percentage}}" name="referrer_percentage">
           </div>
     </div>
    <div class="control-group">
@@ -56,15 +56,39 @@
           <input type="text" id="email_subject" value="{{email_subject}}" name="email_subject">
         </div>
       </div>
+      <div class="control-group">
+              <label class="control-label" for="referrer_expiry_date"> referrer_expiry_date</label>
+              <div class="controls">
+                <input type="text" id="referrer_expiry_date" value="{{referrer_expiry_date}}" name="referrer_expiry_date">
+              </div>
+            </div>
+            <div class="control-group">
+                    <label class="control-label" for="referree_expiry_date">referree_expiry_date</label>
+                    <div class="controls">
+                      <input type="text" id="referree_expiry_date" value="{{referree_expiry_date}}" name="referree_expiry_date">
+                    </div>
+                  </div>
+                  <div class="control-group">
+                          <label class="control-label" for="alpha_mask">alpha_mask</label>
+                          <div class="controls">
+                            <input type="text" id="alpha_mask" value="{{alpha_mask}}" name="alpha_mask">
+                          </div>
+                        </div>
+            <div class="control-group">
+                    <label class="control-label" for="expiry_date">expiry_date </label>
+                    <div class="controls">
+                      <input type="text" id="expiry_date" value="{{expiry_date}}" name="expiry_date">
+                    </div>
+                  </div>
         <div class="control-group ">
-          <label class="control-label" for="email_text">
+          <label class="control-label" for="email_template_txt">
             {{#t "email_text"}}Email Text{{/t}}
           </label>
           <div class="controls">
             <textarea
               id="email_text"
-              name="email_text"
-            >{{email_template_text}}</textarea>
+              name="email_template_txt"
+            >{{email_template_txt}}</textarea>
           </div>
         </div>
 </fieldset>
