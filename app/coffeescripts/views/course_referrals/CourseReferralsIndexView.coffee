@@ -23,6 +23,8 @@ define [
       @$referralTabs.tabs()
       inviteFriendsView = new InviteFriendsView
         model: course_referral
+
+        title_name: $.parseJSON(ENV.COURSE_CONTEXT).title_name
         email_subject: $.parseJSON(ENV.COURSE_REFERRAL).referral.email_subject
         email_text: $.parseJSON(ENV.COURSE_REFERRAL).referral.email_text
         domain_url: eval(ENV.DOMAIN_URL)

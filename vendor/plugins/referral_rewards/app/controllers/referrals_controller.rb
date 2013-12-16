@@ -14,6 +14,7 @@ class ReferralsController < ApplicationController
      end
      js_env(COURSE_REFERRAL: @referral.to_json)
      js_env(COURSE_REWARD: @reward.to_json)
+     js_env(COURSE_CONTEXT: @context.to_json)
      js_env(COURSE_REFERENCE_FB: @reference_fb.to_json)
      js_env(COURSE_REFERENCE_TW: @reference_tw.to_json)
      js_env(COURSE_REFERENCE_LI: @reference_li.to_json)

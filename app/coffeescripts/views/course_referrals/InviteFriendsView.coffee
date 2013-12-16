@@ -45,6 +45,8 @@ define [
 
 
     initialize: ->
+
+      @course_name = @options.title_name
       @email_subject = @options.email_subject
       @email_text = @options.email_text
       @domain_url = @options.domain_url
@@ -57,7 +59,7 @@ define [
 
     toJSON: ->
       json = super
-
+      json['name'] = @course_name
       json['email_subject'] = @email_subject
       json['email_text'] = @email_text
       json['domain_url'] = @domain_url
