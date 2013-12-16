@@ -21,7 +21,7 @@ define([
             ed.addCommand('mcefaq', function() {
                 var selectedNode = ed.selection.getNode();
 
-                // Internal wistia object like as iframe placeholder
+
                 if (ed.dom.getAttrib(selectedNode, 'class', '').indexOf('mceItem') != -1) return;
                 require(['compiled/views/tinymce/FAQView'], function(FAQView){
                     new FAQView(ed, selectedNode);
@@ -31,7 +31,7 @@ define([
 
             // Register buttons
             ed.addButton('faq', {
-                title : htmlEscape(I18n.t('embed_faq', 'Inert FAQ')),
+                title : htmlEscape(I18n.t('embed_faq', 'Insert FAQ')),
                 cmd : 'mcefaq',
                 image : url + '/img/button.jpg'
             });

@@ -22,6 +22,7 @@ define [
       @prevSelection = @editor.selection.getBookmark()
       @$selectedNode = $(selectedNode)
       super
+      @render()
       @show()
 
     update: (event) =>
