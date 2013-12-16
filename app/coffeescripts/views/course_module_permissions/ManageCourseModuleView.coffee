@@ -161,8 +161,8 @@ define [
         if mid is module.id
           module.save {module_id: mid,user_id:sid,status:work_status},
             failure: ->
-          alert 'module was not be saved!'
-    spinnerevent:
+              alert 'module was not be saved!'
+
     selectallmodule: (event) ->
       selected_module_id= $(event.currentTarget).attr("data-select_module_id")
       btnselect =$(event.currentTarget).text()

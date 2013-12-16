@@ -9,12 +9,12 @@ class UserModuleEnrollmentsController < ApplicationController
       js_env :ENROLLED_COURSE_USERS => @context.students.map(&:attributes)
       js_env :COURSE_ID => @context.id
       # { 1:  [2,3,4]}
-      # module_id: user_id array
+      # module_id: user_id array of user ids
       @module_user_ids = {}
       user_ids = []
       @context_modules.each do |context_module|
         module_id = context_module.id
-        @user_module_enrollments = UserModuleEnrollment.where(context_module_id: module_id )
+        @user_module_enrollments = UserModuleEnrollment.where(context_module_id: module_id ,workflow_state: UserModuleEnrollment::ACTIVE)
         @user_module_enrollments.each do |user_module_enrollment|
           user_ids << user_module_enrollment.user_id
         end
@@ -40,10 +40,20 @@ class UserModuleEnrollmentsController < ApplicationController
 
   def update
     if authorized_action(@context.context_modules.new, @current_user, :update)
-      #params[:user_id]
-      #params[:status]
-      #params[:module_id]
-
+      @user_module_enrollment = UserModuleEnrollment.find_or_create_by_user_id_and_context_module_id(params[:user_id],params[:module_id])
+      respond_to do |format|
+        format.json {
+          if params[:status] == UserModuleEnrollment::ACTIVE
+            @user_module_enrollment.workflow_state = UserModuleEnrollment::ACTIVE
+            @user_module_enrollment.save!
+            render :json => @user_module_enrollment
+          else
+            @user_module_enrollment.workflow_state = UserModuleEnrollment::DELETED
+            @user_module_enrollment.save!
+            render :json => @user_module_enrollment
+          end
+        }
+        end
     end
   end
 
