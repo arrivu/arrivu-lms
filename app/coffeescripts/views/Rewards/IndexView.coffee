@@ -27,7 +27,7 @@ define [
     renderListView: ->
       @rewards.each (reward) =>
         rewardListView = new RewardListView
-          reward: reward.attributes.reward.reward
+          reward: reward.attributes.reward
         $('#rewardlist').append rewardListView.render().el
 
 
@@ -43,7 +43,7 @@ define [
       $('.ui-widget-overlay').hide()
       $.flashMessage("Reward saved successfully")
       rewardListView = new RewardListView
-        reward: model
+        reward: model.attributes
       $('#rewardlist').prepend rewardListView.render().el
 
 
