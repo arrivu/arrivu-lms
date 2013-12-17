@@ -186,9 +186,9 @@ FakeRails3Routes.draw do
   end
 
   concern :reward_system do
-    resources :rewards do
-
-    end
+    #resources :rewards
+    #                           ``
+    #end
 
     resources :referrals do
       match 'my-rewards' => 'referrals#my_rewards',  :as => :my_rewards
@@ -213,6 +213,7 @@ FakeRails3Routes.draw do
     match 'enrollment_invitation' => 'courses#enrollment_invitation', :as => :enrollment_invitation
     # this needs to come before the users concern, or users/:id will preempt it
     match 'users/prior' => 'context#prior_users', :as => :prior_users
+    resources :rewards
     concerns :users
     match 'statistics' => 'courses#statistics', :as => :statistics
     match 'unenroll/:id' => 'courses#unenroll_user', :as => :unenroll, :via => :delete
@@ -226,6 +227,7 @@ FakeRails3Routes.draw do
       match 'crosslist' => 'sections#crosslist', :as => :crosslist, :via => :post
       match 'crosslist' => 'sections#uncrosslist', :as => :uncrosslist, :via => :delete
     end
+
 
     match 'undelete' => 'context#undelete_index', :as => :undelete_items
     match 'undelete/:asset_string' => 'context#undelete_item', :as => :undelete_item
@@ -310,10 +312,9 @@ FakeRails3Routes.draw do
         get :homework_submissions
       end
     end
-
+    resources :rewards
     resources :submissions
     resources :calendar_events
-
     concerns :files, :file_images, :relative_files, :folders
     concerns :groups
     concerns :wikis
@@ -529,6 +530,7 @@ FakeRails3Routes.draw do
     match 'statistics/over_time/:attribute' => 'accounts#statistics_graph', :as => :statistics_graph
     match 'statistics/over_time/:attribute.:format' => 'accounts#statistics_graph', :as => :formatted_statistics_graph
     match 'turnitin_confirmation' => 'accounts#turnitin_confirmation', :as => :turnitin_confirmation
+    resources :rewards
     resources :permissions, :controller => :role_overrides, :only => [:index, :create] do
       collection do
         post :add_role
@@ -1003,6 +1005,17 @@ FakeRails3Routes.draw do
         post "#{context}s/:#{context}_id/external_tools", :action => :create, :path_name => "#{context}_external_tools_create"
         put "#{context}s/:#{context}_id/external_tools/:external_tool_id", :action => :update, :path_name => "#{context}_external_tools_update"
         delete "#{context}s/:#{context}_id/external_tools/:external_tool_id", :action => :destroy, :path_name => "#{context}_external_tools_delete"
+      end
+      et_routes("course")
+      et_routes("account")
+    end
+
+    scope(:controller => :rewards) do
+      def et_routes(context)
+        get "#{context}s/:#{context}_id/rewards", :action => :index, :path_name => "#{context}_rewards"
+        post "#{context}s/:#{context}_id/rewards", :action => :create, :path_name => "#{context}_rewards_create"
+        put "#{context}s/:#{context}_id/rewards/:reward_id", :action => :update, :path_name => "#{context}_rewards_update"
+        delete "#{context}s/:#{context}_id/rewards/:reward_id", :action => :destroy, :path_name => "#{context}_rewards_delete"
       end
       et_routes("course")
       et_routes("account")

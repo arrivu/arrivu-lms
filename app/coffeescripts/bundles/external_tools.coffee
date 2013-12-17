@@ -13,7 +13,6 @@ require [
     apps = new PaginatedCollection
     apps.resourceName = 'app_center/apps'
 
-    # Views
     appCenterView = new AppCenterView
       collection: apps
 
