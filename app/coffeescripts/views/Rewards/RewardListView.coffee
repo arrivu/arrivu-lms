@@ -18,7 +18,7 @@ define [
       @expiry_date = @options.reward.expiry_date
       @alpha_mask = @options.reward.alpha_mask
       @referrar_amount = @options.reward.referrer_amount
-      @referrar_percentage = @options.referrer_percentage
+      @referrar_percentage = @options.reward.referrer_percentage
       @referree_amount = @options.reward.referree_amount
       @referree_percentage = @options.reward.referree_percentage
       @referrer_expiry_date = @options.reward.referrer_expiry_date
@@ -38,10 +38,11 @@ define [
       json['expiry_date'] = @expiry_date
       json['alpha_mask'] = @alpha_mask
       json['referrar_amount'] = @referrar_amount
-      json['referrer_percentage'] = @referrar_percentage
+      json['referrar_percentage'] = @referrar_percentage
       json['referree_amount'] = @referree_amount
       json['referree_percentage'] = @referree_percentage
-      json['referree_expiry_date'] = @referrar_expiry_date
+      json['referree_expiry_date'] = @referree_expiry_date
+      json['referrer_expiry_date'] = @referrer_expiry_date
       json['how_many']  = @how_many
 
       json
