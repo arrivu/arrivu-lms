@@ -10,8 +10,8 @@ class Reward < ActiveRecord::Base
   belongs_to :pseudonym
   has_many :referrals
 
-  #validates_presence_of :name,  :description, :how_many, :referrer_expiry_date, :referree_expiry_date, :email_subject,
-  #                      :email_template_txt, :alpha_mask, :expiry_date
+  validates_presence_of :name,  :description, :how_many, :referrer_expiry_date, :referree_expiry_date, :email_subject,
+                        :email_template_txt, :alpha_mask, :expiry_date
 
   STATUS_ACTIVE ='active'
   STATUS_INACTIVE ='inactive'
