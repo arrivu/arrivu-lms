@@ -1388,5 +1388,5 @@ FakeRails3Routes.draw do
   get '/auth/failure' => 'authentication#auth_failure'
   match '/discussion_topic_tags' => 'tags#discussion_topic_tags'
   match '/rr/:short_url_code' => 'referrals#referree_register',  :via => :get
-  match 'update_referree'  => 'referrals#update_referree', :via => :post
+  match '/update_referree'  => 'referrals#update_referree', :as => :referree_registration, :via => :post
 end

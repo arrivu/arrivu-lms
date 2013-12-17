@@ -1,3 +1,4 @@
+{{#if referral}}
 <div id="invite_friends_error_box"></div>
 <div class="loader"></div>
 <div class="container">
@@ -37,3 +38,10 @@
           </div>
         </div>
      </div>
+{{else}}
+    <div style="border-width: 1px; border-style: dashed; text-align: center;">
+        <p>
+            Sorry, There is no reward for this course at this moment.
+        </p>
+    </div>
+{{/if}}

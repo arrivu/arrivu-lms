@@ -9,8 +9,7 @@ class CreateReferrees < ActiveRecord::Migration
       t.references :coupon, :limit => 8
       t.text :status
       t.datetime :expiry_date
-
-      t.email :referral_emails
+      t.email :referral_email
       t.text :coupon_code
       t.timestamps
     end

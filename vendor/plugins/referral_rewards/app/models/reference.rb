@@ -3,7 +3,15 @@ class Reference < ActiveRecord::Base
   belongs_to :referral
   has_many :referrees
 
-  attr_accessible  :short_url_code, :provider, :status, :visit_count
+  attr_accessible  :short_url_code, :provider, :status, :visit_count,:referral_id
+
+  FACEBOOK ='facebook'
+  GOOGLE ='google'
+  TWITTER ='twitter'
+  LINKEDIN ='linkedin'
+  GLOBAL  = 'global'
+  ACCOUNT = 'account'
+  SELF = 'self'
 
   STATUS_CREATE = 'create'
   STATUS_VISIT = 'visit'
@@ -13,6 +21,10 @@ class Reference < ActiveRecord::Base
   CHARSETS = {
       :alphanum => ('a'..'z').to_a + (0..9).to_a,
       :alphanumcase => ('a'..'z').to_a + ('A'..'Z').to_a + (0..9).to_a }
+
+  providers = [FACEBOOK,GOOGLE,TWITTER,LINKEDIN,GLOBAL,ACCOUNT,SELF]
+
+  scope :not_in_social, where('provider not in (?)',providers)
 
   # default key length: 5 characters
   mattr_accessor :unique_key_length

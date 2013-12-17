@@ -1,0 +1,46 @@
+<%
+   jammit_css :login
+   js_bundle :registration_confirmation
+   @headers = false
+   @body_classes << "modal"
+   content_for :page_title, "Referral Registration"
+%>
+
+<div id="modal-box">
+  <h2>Welcome</h2>
+  <% if @reward.nil? %>
+  <center>Sorry, There is no reward program at this moment.</center>
+  <% else  %>
+      <center><h1><%= @reward.description %> </h1></center>
+      <% form_for :referree, :url => referree_registration_url, :html => {:id => "referree_registration_form", :class => 'form-horizontal bootstrap-form' } do |form| %>
+          <%= form.error_messages %>
+          <p class="instructions"> Register here and get your coupon code </p>
+          <div class="control-group">
+            <%= form.blabel :name,:en => "Name", :class => 'control-label' %>
+            <div class="controls" style="padding-top: 5px">
+              <%= form.text_field :name%>
+            </div>
+          </div>
+          <div class="control-group">
+            <%= form.blabel :email, :en => "Email",:class => 'control-label' %>
+            <div class="controls">
+              <%= form.text_field :email%>
+            </div>
+          </div>
+          <div class="control-group">
+            <%= blabel :user, :phone,:en => "Phone Number", :class => 'control-label' %>
+            <div class="controls">
+              <%= form.text_field :user%>
+            </div>
+          </div>
+        <%= form.hidden_field :reference_id ,:value=> @reference.id %>
+
+          <div class="control-group">
+            <div class="controls">
+              <button type="submit" class="btn btn-primary btn-large"><%= t 'buttons.register', "Register" %></button>
+            </div>
+          </div>
+      <% end %>
+
+<% end %>
+</div>
