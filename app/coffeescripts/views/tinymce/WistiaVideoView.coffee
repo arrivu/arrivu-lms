@@ -68,14 +68,23 @@ define [
       @update(event)
 
     update: (event) =>
-      @editor.selection.moveToBookmark(@prevSelection)
-      @$editor.editorBox 'insert_code', @generateImageHtml(event)
+      if @hashed_id
+        @editor.selection.moveToBookmark(@prevSelection)
+        @$editor.editorBox 'insert_code', @generateImageHtml(event)
+      else
+        alert('else loop')
+        @editor.selection.moveToBookmark(@prevSelection)
+        @$editor.editorBox 'insert_code', @generateImageHtml(event)
       @editor.focus()
       @close()
 
     generateImageHtml: (event) =>
-      hashed_id = event.target.id
-      img_tag = @editor.dom.createHTML("iframe",{src: "https://fast.wistia.net/embed/medias/#{hashed_id}?playerColor=ff0000&amp;fullscreenButton=true"},{width: 600} ,{height: 450})
+      if @hashed_id
+        video_id = @hashed_id
+        img_tag = @editor.dom.createHTML("iframe",{src: "https://fast.wistia.net/embed/medias/#{video_id}?playerColor=ff0000&amp;fullscreenButton=true"},{width: 600} ,{height: 450})
+      else
+        hashed_id = event.target.id
+        img_tag = @editor.dom.createHTML("iframe",{src: "https://fast.wistia.net/embed/medias/#{hashed_id}?playerColor=ff0000&amp;fullscreenButton=true"},{width: 600} ,{height: 450})
 
     cancel: (e) =>
       e.preventDefault()
@@ -86,3 +95,8 @@ define [
       @$('.active').removeClass('active').parent().removeAttr('aria-selected')
       $a = $(event.currentTarget).addClass('active')
       $a.parent().attr('aria-selected', true)
+      @hashed_id = $a.attr('video_id')
+
+    htmlGenerate: (event) ->
+      video_id = @hashed_id
+      img_tag = @editor.dom.createHTML("iframe",{src: "https://fast.wistia.net/embed/medias/#{video_id}?playerColor=ff0000&amp;fullscreenButton=true"},{width: 600} ,{height: 450})
