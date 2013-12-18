@@ -1,7 +1,7 @@
 <% p = asset.is_a?(Pseudonym) ? asset : asset.pseudonym %>
 <% cc = asset.is_a?(CommunicationChannel) ? asset : (p.communication_channel || p.user.communication_channel) %>
 <% define_content :link do %>
-  <% if p.user.registered? %>
+     <% if p.user.registered? %>
     <%= HostUrl.protocol %>://<%= HostUrl.context_host((p.account rescue nil)) %>/pseudonyms/<%= p.id %>/change_password/<%= cc.confirmation_code %>
   <% else %>
     <%= HostUrl.protocol %>://<%= HostUrl.context_host((p.account rescue nil)) %>/register/<%= cc.confirmation_code %>

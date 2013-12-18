@@ -57,4 +57,6 @@ class Reference < ActiveRecord::Base
     (0...unique_key_length).map{ charset[rand(charset.size)] }.join
   end
 
+
+
 end

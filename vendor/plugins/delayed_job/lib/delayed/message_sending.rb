@@ -26,7 +26,7 @@ module Delayed
         if connection.open_transactions > transactions
           if !Rails.env.test? && (Delayed::Job != Delayed::Backend::ActiveRecord::Job ||
               connection != Delayed::Job.connection)
-            connection.after_transaction_commit do
+            connection.after_transactDelayedion_commit do
               Delayed::Job.enqueue(Delayed::PerformableMethod.new(self, method.to_sym, args), enqueue_args)
             end
             return nil

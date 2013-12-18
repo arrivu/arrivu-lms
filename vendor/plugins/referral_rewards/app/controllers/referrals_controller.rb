@@ -22,6 +22,8 @@ class ReferralsController < ApplicationController
      js_env(DOMAIN_URL: @domain_url.to_json)
    end
 
+
+
   def update
     @email_references = []
     @reward = Reward.find_by_metadata_and_metadata_type_and_status(@context.id.to_s, @context.class.name, Reward::STATUS_ACTIVE)
@@ -31,17 +33,28 @@ class ReferralsController < ApplicationController
     referral_emails = params[:valid_emails]
     referral_emails.each do |email|
       @email_references << @referral.references.build(provider: email)
-      #@email_references << @referral.references.build(provider: ReferralProvider::EMAIL)
     end
     @referral.save!
+    send_referral_emails(@email_references,@referral)
     respond_to do |format|
         format.json {
-
-              render(:json => @email_references)
-
+          render(:json => @email_references)
         }
     end
+   end
+
+  def send_referral_emails(email_references,referral)
+    domains = HostUrl.context_hosts(@domain_root_account)
+    @domain_url =  "#{HostUrl.protocol}://#{domains.first}/rr/"
+    email_references.each do |email_reference|
+      m = Message.new
+      m.to = email_reference.provider
+      m.subject = referral.email_subject
+      m.html_body = referral.email_text
+      m.body = @domain_url+"#{email_reference.short_url_code}"
+      Mailer.send_later(:deliver_send_referral_email,m)
     end
+  end
 
 
   def index
@@ -82,15 +95,4 @@ class ReferralsController < ApplicationController
     @reference_gl = @referral.references.build(provider: ReferralProvider::GLOBAL)
 
   end
-
-  def split_csv_emails(referral_emails)
-    emails = []
-    referral_emails.split(/,\s*/).each do |email|
-      unless email =~ /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i
-        @referral.errors.add(:references, "are invalid due to #{email}")
-      end
-      emails << email
-    end
-    emails
-  end
-end
+ end
