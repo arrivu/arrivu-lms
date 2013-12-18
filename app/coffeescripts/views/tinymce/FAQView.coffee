@@ -35,10 +35,9 @@ define [
        @close()
 
     generateAccordionHtml:  =>
-      if $("#txtQuestion").val() is "" and $("#txtAnswer").val() is ""
+      if this.$("#txtQuestion").val() is "" and this.$("#txtAnswer").val() is ""
         alert('textboxes are emty')
-        $('.ui-dialog ui-widget ui-widget-content ui-corner-all ui-draggable ui-dialog-buttons')
-        $('.ui-widget-overlay')
+
       else
         htmlview  = '<div class="accordion">'
         htmlview += '<h3>' + @editor.dom.createHTML("a",{href: '#'},this.$('input[name=question]').val()) + '</h3>'
@@ -46,10 +45,9 @@ define [
         htmlview += '</div>'
 
     AccordionHtmlWithoutMainDiv:  =>
-      if $("#txtQuestion").val() is "" and $("#txtAnswer").val() is ""
+      if this.$("#txtQuestion").val() is "" and this.$("#txtAnswer").val() is ""
         alert('textboxes are emty')
-        $('.ui-dialog ui-widget ui-widget-content ui-corner-all ui-draggable ui-dialog-buttons')
-        $('.ui-widget-overlay')
+
       else
         $(tinymce.activeEditor.getBody()).find('.accordion').append("<h3>" + @editor.dom.createHTML("a",{href: '#'},
           this.$('input[name=question]').val()) + "</h3>" + '<div>' + '<p>' + this.$('textarea[name=answer]').val()
