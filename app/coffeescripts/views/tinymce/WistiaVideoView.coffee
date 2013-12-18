@@ -19,7 +19,7 @@ define [
       'change #combo_field': 'onComboSelect'
       'dblclick .findWistiaMediaView' : 'onThumbLinkDblclick'
       'click .ui-icon-closethick' : 'closeDialog'
-
+      'click .thumbnail, .treeFile' : 'onFileLinkClick'
     closeDialog: (event) ->
       event.preventDefault()
       $('#combo_field').remove()
@@ -80,3 +80,9 @@ define [
     cancel: (e) =>
       e.preventDefault()
       @close()
+
+    onFileLinkClick: (event) ->
+      event.preventDefault()
+      @$('.active').removeClass('active').parent().removeAttr('aria-selected')
+      $a = $(event.currentTarget).addClass('active')
+      $a.parent().attr('aria-selected', true)
