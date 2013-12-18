@@ -18,10 +18,18 @@ define [
     events:
       'change #combo_field': 'onComboSelect'
       'dblclick .findWistiaMediaView' : 'onThumbLinkDblclick'
+      'click .ui-icon-closethick' : 'closeDialog'
+
+    closeDialog: (event) ->
+      event.preventDefault()
+      $('#combo_field').remove()
+      @dialog.dialog('close')
+
 
     dialogOptions:
       width: 625
       title: I18n.t 'titles.insert_edit_image', 'Insert Video '
+      id: "wistia-dialog"
 
     initialize: (@editor, selectedNode) ->
       @$editor = $("##{@editor.id}")
@@ -37,7 +45,7 @@ define [
             option_name: project.name
             option_value: project.id
           @$('#combo_field')
-            .append wistiaVideoComboView.render().el
+            .append wistiaVideoComboView.render().$el
 
 
     onComboSelect: (event, ui) ->
@@ -69,3 +77,6 @@ define [
       hashed_id = event.target.id
       img_tag = @editor.dom.createHTML("iframe",{src: "https://fast.wistia.net/embed/medias/#{hashed_id}?playerColor=ff0000&amp;fullscreenButton=true"},{width: 600} ,{height: 450})
 
+    cancel: (e) =>
+      e.preventDefault()
+      @close()

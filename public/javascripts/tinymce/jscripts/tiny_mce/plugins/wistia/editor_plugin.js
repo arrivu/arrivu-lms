@@ -13,7 +13,7 @@ define([
       // Register commands
       ed.addCommand('mceWistia', function() {
         var selectedNode = ed.selection.getNode();
-
+        $('#combo_field').remove();
         // Internal wistia object like as iframe placeholder
         if (ed.dom.getAttrib(selectedNode, 'class', '').indexOf('mceItem') != -1) return;
 
