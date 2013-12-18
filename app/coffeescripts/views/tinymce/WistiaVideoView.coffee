@@ -66,15 +66,17 @@ define [
     onThumbLinkDblclick: (event) =>
       # click event is handled on the first click
       @update(event)
-
+      @flag = true
     update: (event) =>
       if @hashed_id
         @editor.selection.moveToBookmark(@prevSelection)
         @$editor.editorBox 'insert_code', @generateImageHtml(event)
       else
-        alert('else loop')
-        @editor.selection.moveToBookmark(@prevSelection)
-        @$editor.editorBox 'insert_code', @generateImageHtml(event)
+        if @flag is true
+          @editor.selection.moveToBookmark(@prevSelection)
+          @$editor.editorBox 'insert_code', @generateImageHtml(event)
+        else
+          alert('video not selected')
       @editor.focus()
       @close()
 
