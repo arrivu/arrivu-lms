@@ -149,7 +149,7 @@ class ContextModule < ActiveRecord::Base
   
   def available_for?(user, opts={})
     return true if self.active? && !self.to_be_unlocked && self.prerequisites.blank? && !self.require_sequential_progress &&
-        UserModuleEnrollment.find_by_context_module_id_and_user_id(self.id,user.id)
+        UserModuleEnrollment.find_by_context_module_id_and_user_id_and_workflow_state(self.id,user.id,UserModuleEnrollment::ACTIVE)
     if self.grants_right?(user, nil, :update)
      return true
     elsif !self.active?
@@ -602,7 +602,7 @@ class ContextModule < ActiveRecord::Base
   end
 
   def check_for_user_enrollment(user,progression)
-   enrollment = UserModuleEnrollment.find_by_context_module_id_and_user_id(self.id,user.id)
+   enrollment = UserModuleEnrollment.find_by_context_module_id_and_user_id_and_workflow_state(self.id,user.id,UserModuleEnrollment::ACTIVE)
    if enrollment
      progression
    else
