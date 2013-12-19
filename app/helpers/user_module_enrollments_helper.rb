@@ -1,0 +1,2 @@
+module UserModuleEnrollmentsHelper
+end
