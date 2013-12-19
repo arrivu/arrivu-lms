@@ -60,7 +60,7 @@ define [
       @collection.each (module) ->
         module.save {module_id: module.id,user_id:selected_user_id,status:work_status},
           failure: ->
-        alert 'module was not be saved!'
+            alert 'module was not be saved!'
     # Method Summary
 
 

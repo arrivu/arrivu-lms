@@ -28,7 +28,10 @@ define [
       json
 
 
-
+    saveModel:(module_id,user_id,work_status) ->
+      @model.save {module_id: module_id,user_id:user_id,status:work_status},
+        failure: ->
+          alert 'module was not be saved!'
     updatePermission: (event) ->
 
       switch $(event.currentTarget).children().first().prop("class")
