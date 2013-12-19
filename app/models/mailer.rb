@@ -55,6 +55,5 @@ class Mailer < ActionMailer::Base
     @inner_html = m.html_body
     @url = m.body
     content_type 'multipart/alternative'
-    part :content_type => 'text/html; charset=utf-8',  :body => m.html_body
   end
-end
+ end
