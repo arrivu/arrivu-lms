@@ -40,9 +40,7 @@ class ReferralsController < ApplicationController
     @referral.save!
     respond_to do |format|
         format.json {
-
-              render(:json => @email_references)
-
+          render(:json => @email_references)
         }
     end
     end
@@ -53,6 +51,7 @@ class ReferralsController < ApplicationController
     @active_tab = "Referrals"
     create_reference
     get_all_references
+    get_my_rewards
   end
 
   def referree_register
@@ -60,6 +59,7 @@ class ReferralsController < ApplicationController
     if @reference
       @referral = @reference.referral
       @reward = @referral.reward
+      @reference.update_attributes(status: Reference::STATUS_VISIT)
     else
       #The entered short url code is junk so find for account level reward
       #Once account level reward is there we have to look for the referral,referrence
@@ -67,47 +67,67 @@ class ReferralsController < ApplicationController
                                                                 @domain_root_account.class.name, Reward::STATUS_ACTIVE)
       if @reward
         @referral = Referral.find_or_create_by_reward_id_and_pseudonym_id(reward_id: @reward.id,
-                                                            pseudonym_id: Account.site_admin.pseudonyms.active.first)
+                                                            pseudonym_id: Account.site_admin.pseudonyms.active.first,
+                                                            email_subject: @reward.email_subject ,
+                                                            email_text: @reward.email_template_txt )
         @reference = Reference.find_or_create_by_referral_id_and_short_url_code_and_provider(referral_id: @referral.id,
                                                                                 short_url_code: params[:short_url_code],
                                                                                 provider: Reference::SELF)
       end
     end
+   social_providers = [Reference::FACEBOOK,Reference::GOOGLE,Reference::TWITTER,Reference::LINKEDIN,Reference::ACCOUNT,Reference::SELF]
+    unless social_providers.include?(@reference.provider)
+      @reference_email = @reference.provider
+    end
   end
 
 
   def update_referree
-    @referree = Referree.create(name: params[:referree][:name],email: params[:referree][:email])
-    respond_to do |format|
-    if @referree.save!
-    @reference = Reference.find(params[:referree][:reference_id])
-    @coupon = Coupon.create!(name: "Self Registered",
-                              description: "User entered junk url code and registered",
-                              how_many: 1,
-                              expiration: 1.years.from_now,
-                              category_one: "Self",
-                              amount_one: 0,
-                              percentage_one:0,
-                              amount_two:0,
-                              percentage_two:0,
-                              alpha_mask: alpha_mask,
-                              alpha_code: Coupon.generate_alpha_code(alpha_mask),
-                              metadata: @reference.id)
+    if params[:referree]
+      @reference = Reference.find(params[:referree][:reference_id])
+      @referral = @reference.referral
+      @reward = @referral.reward
+      @reference.update_attributes(status: Reference::STATUS_REGISTER)
+      @referree = Referree.find_by_reference_id_and_name_and_email(@reference.id,params[:referree][:name],
+                                                                             params[:referree][:email])
+      if @referree.nil?
+          @coupon = generate_coupon(@reward,@reference.id.to_s)
+          @referree = Referree.find_or_create_by_reference_id_and_name_and_email(@reference.id,params[:referree][:name],
+                                                                     params[:referree][:email],
+                                                                     phone: params[:referree][:phone],
+                                                                     referral_email: @reference.provider,
+                                                                     status: ReferrerCoupon::STATUS_WAIT_FOR_ENROLL,
+                                                                     coupon_id: @coupon.id,
+                                                                     coupon_code: @coupon.alpha_code,
+                                                                     expiry_date: @reward.referree_expiry_date)
 
-    else
-      format.html { redirect_to referree_registration_url(@referree) }
+          @coupon2 = generate_coupon(@reward,@reference.id.to_s) #referrer coupon
+
+          ReferrerCoupon.find_or_create_by_referral_id_and_referree_id_and_coupon_id(@referral.id,@referree.id, @coupon2.id,
+                                                                                   status: ReferrerCoupon::STATUS_WAIT_FOR_ENROLL,expiry_date: @coupon2.expiration,
+                                                                                   coupon_code: @coupon2.alpha_code,
+                                                                                   expiry_date: @reward.referrer_expiry_date)
+        end
       end
     end
-end
 
-  def update_referrer_coupon
+    def generate_coupon(reward,metadata)
+       Coupon.create!(metadata: metadata, name: reward.name,description: reward.description,
+                               how_many: 1,expiration: reward.referree_expiry_date,category_one: "Reward",
+                               amount_one: reward.referree_amount,percentage_one: reward.referree_percentage,
+                               amount_two: reward.referrer_amount,percentage_two: reward.referrer_percentage,
+                               alpha_mask: reward.alpha_mask,alpha_code: Coupon.generate_alpha_code(reward.alpha_mask))
+    end
 
-  end
 
   def get_all_references
     @references =[]
+    @my_rewards=[]
     @referrals = @current_pseudonym.referrals
     @referrals.each do |referral|
+       referral.referrer_coupons.each do |referrer_coupon|
+        @my_rewards << referrer_coupon
+       end
       referral.references.not_in_social.each do |reference|
       @references << reference
         end
@@ -126,14 +146,7 @@ end
 
   end
 
-  def split_csv_emails(referral_emails)
-    emails = []
-    referral_emails.split(/,\s*/).each do |email|
-      unless email =~ /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i
-        @referral.errors.add(:references, "are invalid due to #{email}")
-      end
-      emails << email
-    end
-    emails
-  end
+ def get_my_rewards
+
+ end
 end

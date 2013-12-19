@@ -1400,6 +1400,6 @@ FakeRails3Routes.draw do
   match '/auth/:provider/callback' => 'authentication#create'
   get '/auth/failure' => 'authentication#auth_failure'
   match '/discussion_topic_tags' => 'tags#discussion_topic_tags'
-  match '/rr/:short_url_code' => 'referrals#referree_register',  :via => :get
-  match '/update_referree'  => 'referrals#update_referree', :as => :referree_registration, :via => :post
+  match '/rr/:short_url_code' => 'referrals#referree_register',:as => :rr
+  match '/update_referree'  => 'referrals#update_referree',:path_name => "reward", :as => :referree_registration, :via => :post
 end

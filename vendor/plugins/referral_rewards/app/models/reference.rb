@@ -13,10 +13,10 @@ class Reference < ActiveRecord::Base
   ACCOUNT = 'account'
   SELF = 'self'
 
-  STATUS_CREATE = 'create'
-  STATUS_VISIT = 'visit'
-  STATUS_REGISTER = 'register'
-  STATUS_ENROLL = 'enroll'
+  STATUS_CREATE = 'Created'
+  STATUS_VISIT = 'Visited'
+  STATUS_REGISTER = 'Registered'
+  STATUS_ENROLL = 'Enrolled'
 
   CHARSETS = {
       :alphanum => ('a'..'z').to_a + (0..9).to_a,
