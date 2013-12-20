@@ -1372,4 +1372,6 @@ FakeRails3Routes.draw do
   match '/auth/:provider/callback' => 'authentication#create'
   get '/auth/failure' => 'authentication#auth_failure'
   match '/discussion_topic_tags' => 'tags#discussion_topic_tags'
+  get '/list_collections' =>'videos#list_collections'
+  get '/get_collection/:collection_id' =>'videos#get_collection'
 end
