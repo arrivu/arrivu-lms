@@ -1,0 +1,39 @@
+<h2 class="page-header">{{#t "app_headder"}}Rewards{{/t}}
+
+  <button class="btn btn-primary add_tool_link lm pull-right">
+    {{#t "add_new_tool"}}Add Reward{{/t}}
+  </button>
+
+
+</h2>
+<div data-view="externalTools"></div>
+
+  <table id="dataTable"  class = "table table-bordered table-striped">
+     <tr>
+       <th>Course Name</th>
+       <th>Coupon Name</th>
+       <th>Alpha Mask</th>
+       <th>Referrer Amount </th>
+       <th>Referrer Percentage </th>
+       <th>Referree Amount </th>
+       <th>Referree Percentage </th>
+       <th>Referrer Expiry Date</th>
+       <th>Referree Expiry Date</th>
+       <th>How Many</th>
+       <th>Actions</th>
+     </tr>
+               <tr>
+                 <td>{{metadata}}</td>
+                 <td>{{name}}</td>
+                 <td>{{alpha_mask}}</td>
+                 <td>{{referrer_amount}} </td>
+                 <td>{{referrer_percentage}}</td>
+                 <td>{{referree_amount}} </td>
+                 <td>{{referree_percentage}}</td>
+                 <td>{{referrar_expiry_date}}</td>
+                 <td>{{referree_expiry_date}}</td>
+                 <td>{{how_many}}</td>
+                 <td></td>
+               </tr>
+      </table>
+

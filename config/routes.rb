@@ -185,6 +185,12 @@ FakeRails3Routes.draw do
     match 'imports/files' => 'content_imports#files', :as => :import_files
   end
 
+  concern :reward_system do
+    resources :referrals do
+      match 'my-rewards' => 'referrals#my_rewards',  :as => :my_rewards
+    end
+  end
+
   # There are a lot of resources that are all scoped to the course level
   # (assignments, files, wiki pages, user lists, forums, etc.).  Many of
   # these resources also apply to groups and individual users.  We call
@@ -203,6 +209,7 @@ FakeRails3Routes.draw do
     match 'enrollment_invitation' => 'courses#enrollment_invitation', :as => :enrollment_invitation
     # this needs to come before the users concern, or users/:id will preempt it
     match 'users/prior' => 'context#prior_users', :as => :prior_users
+    resources :rewards
     concerns :users
     match 'statistics' => 'courses#statistics', :as => :statistics
     match 'unenroll/:id' => 'courses#unenroll_user', :as => :unenroll, :via => :delete
@@ -300,7 +307,7 @@ FakeRails3Routes.draw do
         get :homework_submissions
       end
     end
-
+    resources :rewards
     resources :submissions
     resources :calendar_events
 
@@ -309,6 +316,11 @@ FakeRails3Routes.draw do
     concerns :wikis
     concerns :conferences
     concerns :question_banks
+    concerns :reward_system
+
+    match 'create_reference' => 'referrals#create_reference'
+    match 'create_email_referrals' => 'referrals#create_email_referrals'
+
 
     match 'quizzes/publish'   => 'quizzes#publish',   :as => :quizzes_publish
     match 'quizzes/unpublish' => 'quizzes#unpublish', :as => :quizzes_unpublish
@@ -515,6 +527,7 @@ FakeRails3Routes.draw do
     match 'statistics/over_time/:attribute' => 'accounts#statistics_graph', :as => :statistics_graph
     match 'statistics/over_time/:attribute.:format' => 'accounts#statistics_graph', :as => :formatted_statistics_graph
     match 'turnitin_confirmation' => 'accounts#turnitin_confirmation', :as => :turnitin_confirmation
+    resources :rewards
     resources :permissions, :controller => :role_overrides, :only => [:index, :create] do
       collection do
         post :add_role
@@ -584,6 +597,7 @@ FakeRails3Routes.draw do
     concerns :files, :file_images, :relative_files, :folders
     concerns :media
     concerns :groups
+    #concerns :reward_system
 
     resources :outcomes
     match 'courses' => 'accounts#courses', :as => :courses
@@ -993,6 +1007,17 @@ FakeRails3Routes.draw do
       et_routes("account")
     end
 
+    scope(:controller => :rewards) do
+      def et_routes(context)
+        get "#{context}s/:#{context}_id/rewards", :action => :index, :path_name => "#{context}_rewards"
+        post "#{context}s/:#{context}_id/rewards", :action => :create, :path_name => "#{context}_rewards_create"
+        put "#{context}s/:#{context}_id/rewards/:reward_id", :action => :update, :path_name => "#{context}_rewards_update"
+        delete "#{context}s/:#{context}_id/rewards/:reward_id", :action => :destroy, :path_name => "#{context}_rewards_delete"
+      end
+      et_routes("course")
+      et_routes("account")
+    end
+
     scope(:controller => :external_feeds) do
       def ef_routes(context)
         get "#{context}s/:#{context}_id/external_feeds", :action => :index, :path_name => "#{context}_external_feeds"
@@ -1374,4 +1399,7 @@ FakeRails3Routes.draw do
   match '/discussion_topic_tags' => 'tags#discussion_topic_tags'
   get '/list_collections' =>'videos#list_collections'
   get '/get_collection/:collection_id' =>'videos#get_collection'
+  match '/rr/:short_url_code' => 'referrals#referree_register',:as => :rr
+  match '/update_referree'  => 'referrals#update_referree',:path_name => "reward", :as => :referree_registration, :via => :post
+
 end

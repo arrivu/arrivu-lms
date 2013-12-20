@@ -1,0 +1,17 @@
+<%
+   jammit_css :login
+   @headers = false
+   @body_classes << "modal"
+   content_for :page_title, "Jigsaw Academy Reward"
+%>
+
+<div id="modal-box">
+  <h2>Welcome</h2>
+
+      <% if @referree.coupon_code%>
+      <center><h1>Your Reward code:&nbsp;<b><%= @referree.coupon_code %></b>  </h1></center>
+       <% else  %>
+          <center>Sorry, There is no reward.</center>
+       <% end  %>
+
+</div>
