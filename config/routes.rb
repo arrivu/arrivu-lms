@@ -159,6 +159,8 @@ FakeRails3Routes.draw do
 
     type_regexp = Regexp.new([:wiki, :faq, :career].join("|"))
     resources :wiki_pages, path: ':type', constraints: { type: type_regexp } do
+    match 'comments_create' => 'wiki_pages#comments_create' ,:as => :comments_create, :via => :post
+    match 'comment_destroy/:id'=> 'wiki_pages#comment_destroy', :as => :comment_destroy,:only => [:destroy]
     #resources :wiki_pages, :path => :wiki do
       match 'revisions/latest' => 'wiki_page_revisions#latest_version_number', :as => :latest_version_number
       resources :wiki_page_revisions, :path => :revisions
@@ -1373,4 +1375,5 @@ FakeRails3Routes.draw do
   match '/discussion_topic_tags' => 'tags#discussion_topic_tags'
   get '/list_collections' =>'videos#list_collections'
   get '/get_collection/:collection_id' =>'videos#get_collection'
+
 end

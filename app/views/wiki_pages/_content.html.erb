@@ -118,6 +118,11 @@ course will see this page first.  You can change that from [the course home page
           %>
           <%= t 'editing_roles.prompt', '%{options} can edit this page', :options => select_html %>
         </div>
+          <div style="text-align: left;">
+            <%= f.check_box :allow_comments, :class => "allow_comments" %>
+            <%=f.label :allow_comments, t('labels.allow_comments', "Allow Comments on this Page") %>
+          </div>
+
       <% end %>
       <div class="someone_else_edited" style="display: none; text-align: left;">
         <%= image_tag "warning.png" %>

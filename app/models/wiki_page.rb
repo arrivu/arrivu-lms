@@ -17,7 +17,7 @@
 #
 
 class WikiPage < ActiveRecord::Base
-  attr_accessible :title, :body, :url, :user_id, :hide_from_students, :editing_roles, :notify_of_update,:wiki_type
+  attr_accessible :title, :body, :url, :user_id, :hide_from_students, :editing_roles, :notify_of_update,:wiki_type ,:allow_comments
   attr_readonly :wiki_id
   validates_length_of :body, :maximum => maximum_long_text_length, :allow_nil => true, :allow_blank => true
   validates_presence_of :wiki_id
@@ -40,6 +40,7 @@ class WikiPage < ActiveRecord::Base
 
   TITLE_LENGTH = WikiPage.columns_hash['title'].limit rescue 255
   SIMPLY_VERSIONED_EXCLUDE_FIELDS = [:workflow_state, :hide_from_students, :editing_roles, :notify_of_update]
+  has_many :page_comments
 
   def validate_front_page_visibility
     if self.hide_from_students && self.is_front_page?

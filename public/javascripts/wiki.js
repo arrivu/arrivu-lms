@@ -17,6 +17,7 @@
  */
 
 define([
+  'i18n!wiki',
   'jquery' /* $ */,
   'wikiSidebar',
   'jquery.ajaxJSON' /* ajaxJSON */,
@@ -25,7 +26,8 @@ define([
   'jquery.instructure_misc_plugins' /* confirmDelete, fragmentChange, showIf */,
   'jquery.templateData' /* fillTemplateData */,
   'compiled/tinymce'
-], function($, wikiSidebar) {
+
+], function(I18n,$, wikiSidebar) {
 
   // private variables & methods
   function initEditViewSecondary(){
@@ -139,5 +141,17 @@ define([
     });
   });
 
+    $(".delete_comment_link").click(function(event) {
+        event.preventDefault();
+        $(this).parents(".comment").confirmDelete({
+            url: $(this).attr('href'),
+            message: I18n.t('confirm_delete_message', "Are you sure you want to delete this message?"),
+            success: function(data) {
+                $(this).slideUp(function() {
+                    $(this).remove();
+                });
+            }
+        });
+    });
   return wikiPage;
 });
