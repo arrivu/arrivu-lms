@@ -1,16 +1,16 @@
 define [
-  'Backbone'
-  'underscore'
   'jquery'
   'str/htmlEscape'
-  'jst/rewards/CollectionView'
+  'jst/rewards/RewardsCollectionView'
   'compiled/views/Rewards/RewardListView'
-  'compiled/models/Reward'
-], (Backbone, _, $, htmlEscape, template, RewardListView, Reward) ->
+  'compiled/views/PaginatedCollectionView'
+  'i18n!rewards'
+], ($, htmlEscape, template, RewardListView, PaginatedCollectionView, I18n) ->
 
-  class RewardsCollectionView extends Backbone.View
+  class RewardsCollectionView extends PaginatedCollectionView
 
     template: template
+    itemView: RewardListView
 
-    initialize: ->
+
 

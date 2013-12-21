@@ -1,8 +1,12 @@
 define [
+  'jquery'
   'jst/rewards/AddRewardView'
   'compiled/views/ValidatedFormView'
   'compiled/jquery/fixDialogButtons'
-], (template, ValidatedFormView) ->
+  'jquery.instructure_date_and_time'
+  'compiled/tinymce'
+  'tinymce.editor_box'
+], ($, template, ValidatedFormView) ->
 
   class AddRewardView extends ValidatedFormView
     template: template
@@ -15,7 +19,7 @@ define [
       super
       @$el.dialog
         title: 'Add Reward'
-        width: 520
+        width: 920
         height: "auto"
         resizable: true
         close: => @$el.remove()
@@ -25,7 +29,10 @@ define [
           'data-text-while-loading': 'Saving...'
           click: => @submit()
         ]
-
+      timeField = @$el.find(".date_field")
+      timeField.date_field()
+      editor = @$el.find(".rich_editor")
+      editor.editorBox()
       @$el.submit (e) =>
         @submit()
         return false
