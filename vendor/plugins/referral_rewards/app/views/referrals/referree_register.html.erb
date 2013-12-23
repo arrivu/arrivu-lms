@@ -1,0 +1,73 @@
+<%
+   jammit_css :login
+   js_bundle :registration_confirmation
+   @headers = false
+   @body_classes << "modal"
+   content_for :page_title, "Referral Registration"
+%>
+
+<div id="modal-box">
+  <h2>Welcome</h2>
+  <% if @reward.nil? %>
+  <center>Sorry, There is no reward program at this moment.</center>
+  <% else  %>
+      <center><h3><%= @reward.description %> </h3></center>
+      <% form_for (@referree || Referree.new), :url => referree_registration_url, :html => {:id => "referree_registration_form", :class => 'form-horizontal bootstrap-form' } do |form| %>
+          <%= form.error_messages %>
+          <p class="instructions"> Register here and get your reward </p>
+          <div class="control-group">
+            <%= form.blabel :name,:en => "Name", :class => 'control-label' %>
+            <div class="controls" style="padding-top: 5px">
+              <%= form.text_field :name, :required=>true%>
+            </div>
+          </div>
+          <div class="control-group">
+            <%= form.blabel :email, :en => "Email",:class => 'control-label'  %>
+            <div class="controls">
+              <%= form.text_field :email, :required => true ,:value => @reference_email %>
+            </div>
+          </div>
+          <div class="control-group">
+            <%= blabel :phone, :phone,:en => "Phone Number", :class => 'control-label' %>
+            <div class="controls">
+              <%= form.text_field :phone%>
+            </div>
+          </div>
+        <%= form.hidden_field :reference_id ,:value=> @reference.id %>
+
+          <div class="control-group">
+            <div class="controls">
+              <button type="submit" class="btn btn-primary btn-large"><%= t 'buttons.register', "Register" %></button>
+            </div>
+          </div>
+      <% end %>
+
+<% end %>
+</div>
+<% js_block do %>
+    <script type="text/javascript">
+        require([
+            'jquery' /* $ */
+        ], function($) {
+
+            function validateEmail() {
+                var emailText = document.getElementById('referree_email').value;
+                var pattern = /^[a-zA-Z0-9\-_]+(\.[a-zA-Z0-9\-_]+)*@[a-z0-9]+(\-[a-z0-9]+)*(\.[a-z0-9]+(\-[a-z0-9]+)*)*\.[a-z]{2,4}$/;
+                if (pattern.test(emailText)) {
+                    return true;
+                } else {
+                    $('#error-box').remove();
+                    $('.instructions').after('<div id="error-box" class="alert alert-error content-box">Invalid email format</div>');
+                    return false;
+                }
+            }
+
+            window.onload = function() {
+                document.getElementById('referree_registration_form').onsubmit = validateEmail;
+            }
+
+        });
+    </script>
+    <%end  %>
+
+

@@ -13,7 +13,8 @@ css_compressor: 'sass'
 <%= plugin_assets.bundle_yml %>
 
 javascripts:
-
+  referral_rewards:
+    - public/javascripts/plugins/referral_rewards/javascripts/compiled/bundles/rewards.js
 stylesheets:
   content_migrations: 
     - public/stylesheets/compiled/content_migrations.css

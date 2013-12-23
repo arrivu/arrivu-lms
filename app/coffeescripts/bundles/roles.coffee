@@ -9,7 +9,7 @@ require [
   'compiled/views/roles/CourseRolesView'
   'compiled/views/roles/ManageRolesView'
   'compiled/views/roles/NewRoleView'
-], ($, _, Role, Account, RolesCollection, RolesOverrideIndexView, AccountRolesView, CourseRolesView, ManageRolesView, NewRoleView) -> 
+], ($, _, Role, Account, RolesCollection, RolesOverrideIndexView, AccountRolesView, CourseRolesView, ManageRolesView, NewRoleView) ->
   account_roles = new RolesCollection ENV.ACCOUNT_ROLES
   course_roles = new RolesCollection ENV.COURSE_ROLES
 

@@ -1,0 +1,10 @@
+<div class="btn-group" {{#if addDefaultTitle }}title="Default"{{/if}}>
+  <a class="btn btn-small dropdown-toggle " href="#" data-module_id="{{module_id}}"  data-user_id="{{user_id}}" data-key="{{user_enrolled}}" data-toggle="dropdown">
+
+      {{#if user_enrolled}}
+          <i class="icon-check" title="Enrolled"></i>
+       {{else}}
+      <i class="icon-x" title="Not enrolled"></i>
+      {{/if}}
+  </a>
+</div>

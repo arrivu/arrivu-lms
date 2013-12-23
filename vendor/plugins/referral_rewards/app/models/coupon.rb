@@ -1,7 +1,12 @@
 require 'coupon_errors'
 
 class Coupon < ActiveRecord::Base
+
   has_many :redemptions
+
+  attr_accessible :name, :description,:expiration,:how_many,:category_one,:category_two,:amount_one,
+                  :percentage_one,:amount_two,:percentage_two,:alpha_mask,:digit_mask,:metadata,
+                  :digit_code,:alpha_code
 
   validates_presence_of :name
   validates_presence_of :description
@@ -33,12 +38,12 @@ class Coupon < ActiveRecord::Base
 
 
   validates_presence_of :alpha_mask, :presence => true, :format => {:with => /^[a-zA-Z]+(-[a-zA-Z]+)*$/}
-  validates_presence_of :digit_mask, :presence => true, :format => {:with => /^\d+(-\d+)*$/}
+  #validates_presence_of :digit_mask, :presence => true, :format => {:with => /^\d+(-\d+)*$/}
 
-  before_create do
-    self.digit_code = generate_digit_code
-    self.alpha_code = generate_alpha_code
-  end
+  #before_create do
+  #  digit_code = Coupon.generate_digit_code(digit_mask)
+  #  alpha_code = Coupon.generate_alpha_code(alpha_mask)
+  #end
 
   scope :not_expired, lambda {
     where(["expiration >= ?", Time.now])
@@ -122,7 +127,29 @@ class Coupon < ActiveRecord::Base
     coupon.redemptions.create!(:transaction_id => tx_id, :user_id => user_id, :metadata => metadata)
   end
 
-  private
+  def self.generate_alpha_code(alpha_mask)
+    string_pool =  [('A'..'Z')].map{|i| i.to_a}.flatten
+    string  =  (1..alpha_mask.gsub(/-/,'').size).map{ string_pool[rand(string_pool.length)]  }.join
+
+    while Coupon.find_by_alpha_code(string)
+      string = (1..alpha_mask.gsub(/-/,'').size).map{ string_pool[rand(string_pool.length)]  }.join
+    end
+
+    return string
+  end
+
+  def self.generate_digit_code(digit_mask)
+    digit_pool = [(0..9)].map{|i| i.to_a}.flatten
+    digit = (1..digit_mask.gsub(/-/,'').size).map{ digit_pool[rand(digit_pool.length)]  }.join
+
+    while Coupon.find_by_digit_code(digit)
+      digit = (1..digit_mask.gsub(/-/,'').size).map{ digit_pool[rand(digit_pool.length)]  }.join
+    end
+
+    return digit
+  end
+
+private
 
   # find the coupon, or raise an exception if that coupon is not valid
   def self.find_coupon(coupon_code, user_id = nil)
@@ -134,28 +161,6 @@ class Coupon < ActiveRecord::Base
     raise CouponRanOut if coupon.redemptions_count >= coupon.how_many
     raise CouponExpired if coupon.expiration < Time.now.to_date
     return coupon
-  end
-
-  def generate_alpha_code
-    string_pool =  [('A'..'Z')].map{|i| i.to_a}.flatten
-    string  =  (1..alpha_mask.gsub(/-/,'').size).map{ string_pool[rand(string_pool.length)]  }.join
-
-    while Coupon.find_by_alpha_code(string)
-      string = (1..alpha_mask.gsub(/-/,'').size).map{ string_pool[rand(string_pool.length)]  }.join
-    end
-
-    return string
-  end
-
-  def generate_digit_code
-    digit_pool = [(0..9)].map{|i| i.to_a}.flatten
-    digit = (1..digit_mask.gsub(/-/,'').size).map{ digit_pool[rand(digit_pool.length)]  }.join
-
-    while Coupon.find_by_digit_code(digit)
-      digit = (1..digit_mask.gsub(/-/,'').size).map{ digit_pool[rand(digit_pool.length)]  }.join
-    end
-
-    return digit
   end
 
   def self.round_values(hash)

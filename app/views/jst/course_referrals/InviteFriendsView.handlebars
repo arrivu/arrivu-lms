@@ -1,3 +1,4 @@
+{{#if referral}}
 <div id="invite_friends_error_box"></div>
 <div class="loader"></div>
 <div class="container">
@@ -27,7 +28,7 @@
                 <div id="right-side" style="margin: 0 0 0; width: 227px;">
 
 
-<a href="http://www.facebook.com/sharer/sharer.php?s=100&p[url]= {{domain_url}}{{fb_reference}} &p[title]= {{email_subject}} &p[summary]= {{email_text}} " onclick="javascript:window.open(this.href,
+<a href="http://www.facebook.com/sharer/sharer.php?s=100&p[url]= {{domain_url}}{{fb_reference}} &p[title]={{email_subject}}&p[summary]={{email_text}}" onclick="javascript:window.open(this.href,
                     '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=550,width=500');return false;"class="btn button-sidebar-wide"><i class="icon-facebook-boxed"></i> Share on Facebook</a>
 
  <a href="http://www.linkedin.com/shareArticle?mini=true&url={{domain_url}}{{li_reference}} &title= {{email_subject}} &summary= {{email_text}} "onclick="javascript:window.open(this.href,
@@ -43,3 +44,10 @@
           </div>
         </div>
      </div>
+{{else}}
+    <div style="border-width: 1px; border-style: dashed; text-align: center;">
+        <p>
+            Sorry, There is no reward for this course at this moment.
+        </p>
+    </div>
+{{/if}}

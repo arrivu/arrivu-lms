@@ -2,7 +2,7 @@ class CreateReferrerCoupon < ActiveRecord::Migration
   tag :predeploy
 
   def self.up
-    create_table :referrer_coupon do |t|
+    create_table :referrer_coupons do |t|
       t.references :referral, :limit => 8
       t.references :coupon, :limit => 8
       t.references :referree, :limit => 8
@@ -14,6 +14,6 @@ class CreateReferrerCoupon < ActiveRecord::Migration
   end
 
   def self.down
-    drop_table :referrer_coupon
+    drop_table :referrer_coupons
   end
 end

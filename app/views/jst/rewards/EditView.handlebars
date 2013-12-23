@@ -1,0 +1,70 @@
+<fieldset>
+    <div class="control-group">
+    <label class="control-label" for="offer_name">Reward Name</label>
+    <div class="controls">
+      <input type="text" id="name" value="{{name}}" name="name">
+    </div>
+  </div>
+    <div class="control-group ">
+      <label class="control-label" for="reward_description">
+        {{#t "reward_description"}}Reward Description{{/t}}
+      </label>
+      <div class="controls">
+        <textarea
+          id="reward_description"
+          name="description"
+        >{{description}}</textarea>
+      </div>
+    </div>
+  <div class="control-group">
+    <label class="control-label" for="how_many">How Many</label>
+    <div class="controls">
+      <input type="text" id="how_many" value="{{how_many}}" name="how_many">
+      {{#if id}}
+        <p class="help-block">{{#t "shared_secret_note"}}Enter a new value
+        to change{{/t}}</p>
+      {{/if}}
+    </div>
+  </div>
+   <div class="control-group">
+       <label class="control-label" for="referrar_amount">Referrer Amount</label>
+       <div class="controls">
+         <input type="text" id="referrar_amount" value="{{referrer_amount}}" name="referrar_amount">
+       </div>
+    </div>
+   <div class="control-group">
+          <label class="control-label" for="referrar_percentage">Referrer Percentage</label>
+          <div class="controls">
+            <input type="text" id="referrar_percentage" value="{{referrer_percentage}}" name="referrar_percentage">
+          </div>
+    </div>
+   <div class="control-group">
+          <label class="control-label" for="referree_amount">Referree Amount</label>
+          <div class="controls">
+            <input type="text" id="referree_amount" value="{{referree_amount}}" name="referree_amount">
+          </div>
+       </div>
+    <div class="control-group">
+             <label class="control-label" for="referree_percentage">Referree Percentage</label>
+             <div class="controls">
+               <input type="text" id="referree_percentage" value="{{referree_percentage}}" name="referree_percentage">
+             </div>
+     </div>
+      <div class="control-group">
+        <label class="control-label" for="email_subject">Email Subject</label>
+        <div class="controls">
+          <input type="text" id="email_subject" value="{{email_subject}}" name="email_subject">
+        </div>
+      </div>
+        <div class="control-group ">
+          <label class="control-label" for="email_text">
+            {{#t "email_text"}}Email Text{{/t}}
+          </label>
+          <div class="controls">
+            <textarea
+              id="email_text"
+              name="email_text"
+            >{{email_template_text}}</textarea>
+          </div>
+        </div>
+</fieldset>

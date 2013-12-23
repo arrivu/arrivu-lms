@@ -863,7 +863,7 @@ class Course < ActiveRecord::Base
     return 'unpublished' if workflow_state == 'created' || workflow_state == 'claimed'
     workflow_state
   end
-  
+
   alias_method :destroy!, :destroy
   def destroy
     self.workflow_state = 'deleted'

@@ -23,7 +23,7 @@ class CreateRewards < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :rewards, [:metadata, :metadata_type, :status], :unique => true, :name => 'metadata_metadata_type_status'
+    add_index :rewards, [:metadata, :metadata_type, :status], :unique => false, :name => 'metadata_metadata_type_status'
   end
 
   def self.down

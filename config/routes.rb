@@ -159,6 +159,8 @@ FakeRails3Routes.draw do
 
     type_regexp = Regexp.new([:wiki, :faq, :career].join("|"))
     resources :wiki_pages, path: ':type', constraints: { type: type_regexp } do
+    match 'comments_create' => 'wiki_pages#comments_create' ,:as => :comments_create, :via => :post
+    match 'comment_destroy/:id'=> 'wiki_pages#comment_destroy', :as => :comment_destroy,:only => [:destroy]
     #resources :wiki_pages, :path => :wiki do
       match 'revisions/latest' => 'wiki_page_revisions#latest_version_number', :as => :latest_version_number
       resources :wiki_page_revisions, :path => :revisions
@@ -186,10 +188,6 @@ FakeRails3Routes.draw do
   end
 
   concern :reward_system do
-    resources :rewards do
-
-    end
-
     resources :referrals do
       match 'my-rewards' => 'referrals#my_rewards',  :as => :my_rewards
     end
@@ -213,6 +211,7 @@ FakeRails3Routes.draw do
     match 'enrollment_invitation' => 'courses#enrollment_invitation', :as => :enrollment_invitation
     # this needs to come before the users concern, or users/:id will preempt it
     match 'users/prior' => 'context#prior_users', :as => :prior_users
+    resources :rewards
     concerns :users
     match 'statistics' => 'courses#statistics', :as => :statistics
     match 'unenroll/:id' => 'courses#unenroll_user', :as => :unenroll, :via => :delete
@@ -310,7 +309,7 @@ FakeRails3Routes.draw do
         get :homework_submissions
       end
     end
-
+    resources :rewards
     resources :submissions
     resources :calendar_events
 
@@ -417,6 +416,7 @@ FakeRails3Routes.draw do
     match 'student_view' => 'courses#leave_student_view', :as => :student_view, :via => :delete
     match 'test_student' => 'courses#reset_test_student', :as => :test_student, :via => :delete
     match 'content_migrations' => 'content_migrations#index', :as => :content_migrations, :via => :get
+    resources :user_module_enrollments,:path => :permissions
   end
 
   match 'quiz_statistics/:quiz_statistics_id/files/:file_id/download' => 'files#show', :as => :quiz_statistics_download, :download => '1'
@@ -529,6 +529,7 @@ FakeRails3Routes.draw do
     match 'statistics/over_time/:attribute' => 'accounts#statistics_graph', :as => :statistics_graph
     match 'statistics/over_time/:attribute.:format' => 'accounts#statistics_graph', :as => :formatted_statistics_graph
     match 'turnitin_confirmation' => 'accounts#turnitin_confirmation', :as => :turnitin_confirmation
+    resources :rewards
     resources :permissions, :controller => :role_overrides, :only => [:index, :create] do
       collection do
         post :add_role
@@ -1008,6 +1009,17 @@ FakeRails3Routes.draw do
       et_routes("account")
     end
 
+    scope(:controller => :rewards) do
+      def et_routes(context)
+        get "#{context}s/:#{context}_id/rewards", :action => :index, :path_name => "#{context}_rewards"
+        post "#{context}s/:#{context}_id/rewards", :action => :create, :path_name => "#{context}_rewards_create"
+        put "#{context}s/:#{context}_id/rewards/:reward_id", :action => :update, :path_name => "#{context}_rewards_update"
+        delete "#{context}s/:#{context}_id/rewards/:reward_id", :action => :destroy, :path_name => "#{context}_rewards_delete"
+      end
+      et_routes("course")
+      et_routes("account")
+    end
+
     scope(:controller => :external_feeds) do
       def ef_routes(context)
         get "#{context}s/:#{context}_id/external_feeds", :action => :index, :path_name => "#{context}_external_feeds"
@@ -1387,6 +1399,9 @@ FakeRails3Routes.draw do
   match '/auth/:provider/callback' => 'authentication#create'
   get '/auth/failure' => 'authentication#auth_failure'
   match '/discussion_topic_tags' => 'tags#discussion_topic_tags'
-  match '/rr/:short_url_code' => 'referrals#referree_register',  :via => :get
-  match 'update_referree'  => 'referrals#update_referree', :via => :post
+  get '/list_collections' =>'videos#list_collections'
+  get '/get_collection/:collection_id' =>'videos#get_collection'
+  match '/rr/:short_url_code' => 'referrals#referree_register',:as => :rr
+  match '/update_referree'  => 'referrals#update_referree',:path_name => "reward", :as => :referree_registration, :via => :post
+
 end

@@ -9,17 +9,27 @@ class RewardsController < ApplicationController
   end
 
   def create
-    @reward = Reward.new(params[:reward])
+    oldrewards =  Reward.where(status: Reward::STATUS_ACTIVE , metadata_type: @context.class.name, metadata: @context.id.to_s)
+    oldrewards.each do |oldreward|
+      oldreward.update_attributes(status: Reward::STATUS_INACTIVE)
+    end
+
+    @reward = Reward.new(name:params['name'],description:params['description'],expiry_date:params['expiry_date'],how_many:params['how_many'],referrer_amount:params['referrer_amount'],referrer_percentage:params['referrer_percentage'],
+                         referrer_expiry_date:params['referrer_expiry_date'],referree_amount:params['referree_amount'],referree_percentage:params['referree_percentage'],referree_expiry_date:params['referree_expiry_date'],email_subject:params['email_subject'],email_template_txt:params['email_template_txt'],
+                         alpha_mask:params['alpha_mask'],status:params['status'])
     @reward.account_id = @domain_root_account.id
     @reward.pseudonym_id = @current_pseudonym.id
     @reward.metadata = @context.id
     @reward.metadata_type = @context.class.name
     @reward.status = "active"
-    if @reward.save!
-      redirect_to course_rewards_path
+    respond_to do |format|
+      if @reward.save
+         format.json {render :json => @reward.to_json}
+      else
+         format.json { render :json => @reward.errors.to_json, :status => :bad_request }
+      end
     end
   end
-
   def edit
     @reward = Reward.find(params[:id])
   end
@@ -27,13 +37,19 @@ class RewardsController < ApplicationController
 
   def update
     @reward = Reward.find(params[:id])
-    @reward.account_id=@domain_root_account.id
 
-    if @reward.update_attributes(params[:reward])
-      #flash[:success] ="Successfully Updated Category."
-      redirect_to course_rewards_path
-    end
+      respond_to do |format|
+        @reward = @reward.update_attributes(name:params['name'],description:params['description'],expiry_date:params['expiry_date'],how_many:params['how_many'],referrer_amount:params['referrer_amount'],referrer_percentage:params['referrer_percentage'],
+                                            referrer_expiry_date:params['referrer_expiry_date'],referree_amount:params['referree_amount'],referree_percentage:params['referree_percentage'],referree_expiry_date:params['referree_expiry_date'],email_subject:params['email_subject'],email_template_txt:params['email_template_txt'],
+                                            alpha_mask:params['alpha_mask'],status:params['status'])
+        if @reward
 
+            format.json { render :json => @reward }
+
+        else
+          format.json { render :json => @reward.errors.to_json, :status => :bad_request }
+        end
+      end
   end
 
   def show
@@ -41,13 +57,25 @@ class RewardsController < ApplicationController
   end
   def destroy
     @reward = Reward.find(params[:id])
-    @reward.destroy
-    #flash[:success] = "Successfully Destroyed Category."
-    redirect_to course_rewards_path
+
+    respond_to do |format|
+
+      if @reward.destroy
+
+        format.json { render :json => @reward }
+
+      else
+        format.json { render :json => @reward.errors.to_json, :status => :bad_request }
+      end
+    end
   end
 
   def index
-    @rewards = Reward.find_by_metadata(@context.id.to_s)
+
+    respond_to do |format|
+      @rewards = Reward.where(metadata: @context.id.to_s, metadata_type: @context.class.name)
+      format.json {render :json => @rewards.map(&:attributes).to_json}
+    end
   end
 end
 

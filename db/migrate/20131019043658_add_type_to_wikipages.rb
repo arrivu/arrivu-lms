@@ -7,4 +7,5 @@ class AddTypeToWikipages < ActiveRecord::Migration
   def self.down
     remove_column :wiki_pages, :wiki_type
   end
+
 end

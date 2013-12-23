@@ -3,13 +3,10 @@ class CreateReferences < ActiveRecord::Migration
   def self.up
     create_table :references do |t|
       t.references :referral, :limit => 8
-      t.references :referral_provider, :limit => 8
-      #t.numeric :referral_id, :limit => 8
-      #t.numeric :provider_id, :limit => 8
-      t.integer :visit_count
       t.text :short_url_code,  :unique => true
       t.text :provider
-      t.text :status
+      t.text :status , :default => "Invitation sent"
+      t.integer :visit_count
       t.timestamps
     end
     add_index :references, :short_url_code, :unique => true
