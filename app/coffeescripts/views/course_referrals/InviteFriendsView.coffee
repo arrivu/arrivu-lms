@@ -5,6 +5,8 @@ define [
   'jst/course_referrals/InviteFriendsView'
   'compiled/views/course_referrals/InviteFriendsErrorView'
   'compiled/views/course_referrals/MyReferencesView'
+  'compiled/tinymce'
+  'tinymce.editor_box'
 ], ($, _, Backbone, template, InviteFriendsErrorView, MyReferencesView) ->
   class InviteFriendsView extends Backbone.View
     template: template
@@ -12,6 +14,11 @@ define [
 
     events:
       "click #referral_submit": "sendInvites"
+
+
+    afterRender: ->
+      editor = @$el.find("#referral_email_text")
+      editor.editorBox()
 
     sendInvites: ->
       @.$el.find('#invite_friends_error_box').empty() # Clear error box every time
