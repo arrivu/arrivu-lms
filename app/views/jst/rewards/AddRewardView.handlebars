@@ -1,21 +1,11 @@
 <fieldset>
-  <div class="control-group">
-    <label class="control-label" for="offer_name">Offer Name</label>
+ <table><tr><td> <div class="control-group">
+    <label class="control-label" for="offer_name">Reward Name</label>
     <div class="controls">
       <input type="text" id="offer_name" value="{{name}}" name="name">
     </div>
   </div>
-    <div class="control-group ">
-      <label class="control-label" for="reward_description">
-        {{#t "reward_description"}}Reward Description{{/t}}
-      </label>
-      <div class="controls">
-        <textarea
-          id="reward_description"
-          name="description"
-        >{{description}}</textarea>
-      </div>
-    </div>
+
   <div class="control-group">
     <label class="control-label" for="how_many">How Many</label>
     <div class="controls">
@@ -38,34 +28,54 @@
             <input type="text" id="referrar_percentage" value="{{referrer_percentage}}" name="referrer_percentage">
           </div>
     </div>
-   <div class="control-group">
-          <label class="control-label" for="referree_amount">Referree Amount</label>
-          <div class="controls">
-            <input type="text" id="referree_amount" value="{{referree_amount}}" name="referree_amount">
-          </div>
-       </div>
+         <div class="control-group">
+                     <label class="control-label" for="referrer_expiry_date"> Referrer Expiry Date</label>
+                     <div class="controls">
+                       <input type="text" class="date_field" id="referrer_expiry_date" value="{{referrer_expiry_date}}" name="referrer_expiry_date">
+                     </div>
+                   </div>
+           <div class="control-group">
+                 <label class="control-label" for="email_subject">Email Subject</label>
+                 <div class="controls">
+                   <input type="text" id="email_subject" value="{{email_subject}}" name="email_subject">
+                 </div>
+               </div>
+        </td>
+             <td>
+           <div class="control-group ">
+                <label class="control-label" for="reward_description">
+                  {{#t "reward_description"}}Reward Description{{/t}}
+                </label>
+                <div class="controls">
+                  <textarea
+                    id="reward_description"
+                    name="description"
+                  >{{description}}</textarea>
+                </div>
+              </div>
+               <div class="control-group">
+                                  <label class="control-label" for="expiry_date">Reward Expiry Date </label>
+                                  <div class="controls">
+                                    <input type="text" class="date_field" id="expiry_date" value="{{expiry_date}}" name="expiry_date">
+                                  </div>
+                                </div>
+              <div class="control-group">
+                       <label class="control-label" for="referree_amount">Referree Amount</label>
+                       <div class="controls">
+                         <input type="text" id="referree_amount" value="{{referree_amount}}" name="referree_amount">
+                       </div>
+                    </div>
     <div class="control-group">
              <label class="control-label" for="referree_percentage">Referree Percentage</label>
              <div class="controls">
                <input type="text" id="referree_percentage" value="{{referree_percentage}}" name="referree_percentage">
              </div>
      </div>
-      <div class="control-group">
-        <label class="control-label" for="email_subject">Email Subject</label>
-        <div class="controls">
-          <input type="text" id="email_subject" value="{{email_subject}}" name="email_subject">
-        </div>
-      </div>
-      <div class="control-group">
-              <label class="control-label" for="referrer_expiry_date"> referrer_expiry_date</label>
-              <div class="controls">
-                <input type="text" id="referrer_expiry_date" value="{{referrer_expiry_date}}" name="referrer_expiry_date">
-              </div>
-            </div>
+
             <div class="control-group">
-                    <label class="control-label" for="referree_expiry_date">referree_expiry_date</label>
+                    <label class="control-label" for="referree_expiry_date">Referree Expiry Date</label>
                     <div class="controls">
-                      <input type="text" id="referree_expiry_date" value="{{referree_expiry_date}}" name="referree_expiry_date">
+                      <input type="text" class="date_field" id="referree_expiry_date" value="{{referree_expiry_date}}" name="referree_expiry_date">
                     </div>
                   </div>
                   <div class="control-group">
@@ -74,21 +84,22 @@
                             <input type="text" id="alpha_mask" value="{{alpha_mask}}" name="alpha_mask">
                           </div>
                         </div>
-            <div class="control-group">
-                    <label class="control-label" for="expiry_date">expiry_date </label>
-                    <div class="controls">
-                      <input type="text" id="expiry_date" value="{{expiry_date}}" name="expiry_date">
-                    </div>
+
+
+        </td>
+        </tr>
+        </table>
+         <div class="control-group ">
+                  <label class="control-label" for="email_template_txt">
+                    {{#t "email_text"}}Email Text{{/t}}
+                  </label>
+                  <div class="controls">
+                    <textarea rows="10" cols="240"
+                      id="email_text"
+                      class="rich_editor"
+                      name="email_template_txt"
+                      style="width: 601px;"
+                    >{{email_template_txt}}</textarea>
                   </div>
-        <div class="control-group ">
-          <label class="control-label" for="email_template_txt">
-            {{#t "email_text"}}Email Text{{/t}}
-          </label>
-          <div class="controls">
-            <textarea
-              id="email_text"
-              name="email_template_txt"
-            >{{email_template_txt}}</textarea>
-          </div>
-        </div>
+                </div>
 </fieldset>

@@ -1,11 +1,24 @@
-<td>{{reward_name}}</td>
+<td nowrap="nowrap"
+      class="reward" data-id="{{id}}">{{name}}</td>
 <td>{{alpha_mask}}</td>
-<td>{{referrar_percentage}}</td>
+<td>{{referrer_percentage}}</td>
 <td>{{referree_percentage}}</td>
 <td>{{expiry_date}}</td>
 <td>{{referrer_expiry_date}}</td>
 <td>{{referree_expiry_date}}</td>
 <td>{{how_many}}</td>
-<td></td>
+<td class="links text-right" nowrap="nowrap">
+  <a href="#"
+     class="edit_reward_link"
+     title="Edit Tool"
+     data-edit-reward={{id}}
+      ><i class="icon-edit btn"></i></a>
+  <a href="#"
+     class="delete_reward_link"
+     title="Delete Reward"
+     data-delete-reward={{id}}
+      ><i class="icon-trash btn"></i></a>
+</td>
+
 
 

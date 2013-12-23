@@ -1,8 +1,8 @@
 define [
   'Backbone'
   'underscore'
-], (Backbone, _) ->
-  class Reward extends Backbone.Model
+], ({Model}, _) ->
+  class Reward extends Model
 
    resourceName: "rewards"
 

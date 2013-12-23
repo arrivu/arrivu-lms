@@ -13,7 +13,7 @@ define [
     afterRender: ->
       super
       @$el.dialog
-        title: 'Add Reward'
+        title: 'Edit Reward'
         width: 520
         height: "auto"
         resizable: true
