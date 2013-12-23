@@ -11,7 +11,8 @@ class Reward < ActiveRecord::Base
   has_many :referrals
 
   validates_presence_of :name,  :description, :how_many, :referrer_expiry_date, :referree_expiry_date, :email_subject,
-                        :email_template_txt, :alpha_mask, :expiry_date
+                        :email_template_txt, :alpha_mask, :expiry_date,:referrer_amount, :referrer_percentage,
+                        :referree_amount, :referree_percentage
 
   STATUS_ACTIVE ='active'
   STATUS_INACTIVE ='inactive'

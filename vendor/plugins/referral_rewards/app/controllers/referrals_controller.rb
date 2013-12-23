@@ -89,9 +89,9 @@ class ReferralsController < ApplicationController
                                                                                 provider: Reference::SELF)
       end
     end
-   social_providers = [Reference::FACEBOOK,Reference::GOOGLE,Reference::TWITTER,Reference::LINKEDIN,Reference::ACCOUNT,Reference::SELF]
-    unless social_providers.include?(@reference.provider)
-      @reference_email = @reference.provider
+   social_providers = [Reference::FACEBOOK,Reference::GOOGLE,Reference::TWITTER,Reference::LINKEDIN,Reference::ACCOUNT,Reference::SELF,Reference::GLOBAL]
+    unless social_providers.include?(@reference.try(:provider))
+      @reference_email = @reference.try(:provider)
     end
   end
 

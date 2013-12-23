@@ -4,7 +4,6 @@ class CreateReferrees < ActiveRecord::Migration
     create_table :referrees do |t|
       t.text :email
       t.text :name
-      t.bigint :phone
       t.references :reference, :limit => 8
       t.references :coupon, :limit => 8
       t.text :status
