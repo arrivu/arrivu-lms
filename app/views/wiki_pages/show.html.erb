@@ -37,5 +37,9 @@
      <%end %>
 </div>
 <% elsif !@page.allow_comments && @page_comments.count > 0%>
+    <h2 style=""><%= t 'headings.page_comments', 'Comments' %></h2>
     <%= render :partial => "wiki_pages/page_comment",:collection =>  @page_comments %>
+    <div id="pagination"  style ="margin-top: 1em;text-align: center;">
+      <%= will_paginate(@page_comments) %>
+    </div>
 <%end %>
