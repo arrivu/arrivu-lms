@@ -17,7 +17,7 @@
 
 <%if @page.allow_comments %>
 <div id="page_comments_holder" style="margin-top: 50px;">
-  <h2 style=""><%= t 'headings.page_comments', 'Page Comments' %></h2>
+  <h2 style=""><%= t 'headings.page_comments', 'Comments' %></h2>
   <% if  @page_comments %>
     <div id="page_comments" style="padding: 5px 20px;">
       <%= t(:no_comments, "No Comments") if @page.allow_comments && @page_comments.count == 0 %>
