@@ -20,8 +20,8 @@ class PageComment < ActiveRecord::Base
   belongs_to :page, :polymorphic => true
   belongs_to :user
   validates_length_of :message, :maximum => maximum_text_length, :allow_nil => true, :allow_blank => true
-  attr_accessible :message
-  
+  attr_accessible :message,:page_id,:page_type,:user_id
+  belongs_to :wiki_pages
   scope :for_user, lambda { |user| where(:user_id => user) }
 
   def user_name

@@ -39,7 +39,7 @@ else
   config.logger = RAILS_DEFAULT_LOGGER = CanvasLogger.new(log_path, log_level, opts)
 end
 
-## RailsLTS configuration (doesn't apply to rails 3)
+# RailsLTS configuration (doesn't apply to rails 3)
 if Rails.version < "3.0"
   config.rails_lts_options = {
     disable_xml_parsing: true,
