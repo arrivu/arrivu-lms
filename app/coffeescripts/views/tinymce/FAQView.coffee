@@ -36,7 +36,7 @@ define [
 
     generateAccordionHtml:  =>
       if this.$("#txtQuestion").val() is "" and this.$("#txtAnswer").val() is ""
-        alert('textboxes are emty')
+        alert('textboxes are empty')
 
       else
         htmlview  = '<div class="accordion">'
@@ -46,7 +46,7 @@ define [
 
     AccordionHtmlWithoutMainDiv:  =>
       if this.$("#txtQuestion").val() is "" and this.$("#txtAnswer").val() is ""
-        alert('textboxes are emty')
+        alert('textboxes are empty')
 
       else
         $(tinymce.activeEditor.getBody()).find('.accordion').append("<h3>" + @editor.dom.createHTML("a",{href: '#'},

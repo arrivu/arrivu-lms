@@ -71,14 +71,16 @@ define [
       if @hashed_id
         @editor.selection.moveToBookmark(@prevSelection)
         @$editor.editorBox 'insert_code', @generateImageHtml(event)
+        @editor.focus()
+        close()
       else
         if @flag is true
           @editor.selection.moveToBookmark(@prevSelection)
           @$editor.editorBox 'insert_code', @generateImageHtml(event)
         else
           alert('video not selected')
-      @editor.focus()
-      @close()
+          @editor.focus()
+
 
     generateImageHtml: (event) =>
       if @hashed_id

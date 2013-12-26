@@ -226,18 +226,22 @@ class WikiPagesController < ApplicationController
   def comments_create
      @page_details = WikiPage.find(@page.id)
           @comment = @page_details.page_comments.build(message:params[:page_comment][:message],page_id:@page.id,page_type:params[:type],user_id:@current_user.id)
-          respond_to do |format|
-            if @comment.save
-               format.html { redirect_to   course_wiki_page_url(@context,@page.wiki_type,@page.title) }
-               #format.json { render :json => @comment.to_json }
-            else
-              flash[:error] = t('errors.create_failed', "Comment creation failed")
-              format.html { redirect_to   course_wiki_page_url(@context,@page.wiki_type,@page.title) }
-               #format.json { render :json => @comment.errors.to_json, :status => :bad_request }
-            end
-          end
+            respond_to do |format|
+              if @comment.save
+                format.html { redirect_to   course_wiki_page_url(@context,@page.wiki_type,@page.title) }
+                #format.json { render :json => @comment.to_json }
+              elsif params[:page_comment][:message] == ""
+                flash[:warning] =" Enter Comments"
+                format.html { redirect_to   course_wiki_page_url(@context,@page.wiki_type,@page.title) }
+              else
+                flash[:error] = t('errors.create_failed', "Comment creation failed")
+                format.html { redirect_to   course_wiki_page_url(@context,@page.wiki_type,@page.title) }
+                #format.json { render :json => @comment.errors.to_json, :status => :bad_request }
+              end
 
+              end
   end
+
 
   def comment_destroy
     @page_details = WikiPage.find(@page.id)
