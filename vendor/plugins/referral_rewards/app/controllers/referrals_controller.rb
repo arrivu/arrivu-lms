@@ -32,8 +32,8 @@ class ReferralsController < ApplicationController
     @email_references = []
     @reward = Reward.find_by_metadata_and_metadata_type_and_status(@context.id.to_s, @context.class.name, Reward::STATUS_ACTIVE)
     @referral = Referral.find(params[:id])
-    @referral.email_subject = params[:email_subject]
-    @referral.email_text = params[:email_text]
+    @referral.email_subject = params[:mail_subject]
+    @referral.email_text = params[:mail_text]
     referral_emails = params[:valid_emails]
     referral_emails.each do |email|
       @email_references << @referral.references.build(provider: email)

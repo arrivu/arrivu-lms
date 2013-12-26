@@ -35,7 +35,7 @@ define [
       if errored_users.length > 0
         @renderErrorView(errored_users)
       else
-        @$el.disableWhileLoading @model.save valid_emails: valid_emails,
+        @$el.disableWhileLoading @model.save(valid_emails: valid_emails,mail_subject:  $('#referral_email_subject').val() ,mail_text: tinyMCE.activeEditor.getContent() ),
           wait: true
           success: (model, response) ->
             response.map (reference) =>
