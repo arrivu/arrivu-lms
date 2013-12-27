@@ -52,6 +52,8 @@ define [
       wistiaMediaURL = "#{location.origin}/get_collection/#{event.target.value}"
       @$('.findWistiaMediaView').show().disableWhileLoading @request = $.getJSON wistiaMediaURL, (data) =>
         @renderResults(data.collections.medias)
+        if ((data.collections.medias).length is 0)
+           @$('.findWistiaMediaView').append("<div>No Videos are Available for this Particular Project</div>")
 
     renderResults: (medias) ->
       html = _.map medias, (media) ->
@@ -59,8 +61,8 @@ define [
           thumb:    "#{media.thumbnail.url}"
           title:    media.name
           hashed_id:    media.hashed_id
-
-      @$('.findWistiaMediaView').showIf(!!medias.length).html html.join('')
+      if ($('#combo_field').prop("selectedIndex") > 0)
+        @$('.findWistiaMediaView').showIf(!!medias.length).html html.join('')
 
 
     onThumbLinkDblclick: (event) =>
@@ -69,17 +71,15 @@ define [
       @flag = true
 
     update: (event) =>
-      if @hashed_id
+      if @hashed_id or @flag is true
         @editor.selection.moveToBookmark(@prevSelection)
         @$editor.editorBox 'insert_code', @generateImageHtml(event)
+        @editor.focus()
+        @close()
       else
-        if @flag is true
-          @editor.selection.moveToBookmark(@prevSelection)
-          @$editor.editorBox 'insert_code', @generateImageHtml(event)
-        else
-          alert('video not selected')
-      @editor.focus()
-      @close()
+        alert('video not selected')
+        @editor.focus()
+
 
     generateImageHtml: (event) =>
       if @hashed_id
