@@ -67,20 +67,19 @@ define [
       # click event is handled on the first click
       @update(event)
       @flag = true
+
     update: (event) =>
       if @hashed_id
         @editor.selection.moveToBookmark(@prevSelection)
         @$editor.editorBox 'insert_code', @generateImageHtml(event)
-        @editor.focus()
-        close()
       else
         if @flag is true
           @editor.selection.moveToBookmark(@prevSelection)
           @$editor.editorBox 'insert_code', @generateImageHtml(event)
         else
           alert('video not selected')
-          @editor.focus()
-
+      @editor.focus()
+      @close()
 
     generateImageHtml: (event) =>
       if @hashed_id
@@ -101,6 +100,3 @@ define [
       $a.parent().attr('aria-selected', true)
       @hashed_id = $a.attr('video_id')
 
-    htmlGenerate: (event) ->
-      video_id = @hashed_id
-      img_tag = @editor.dom.createHTML("iframe",{src: "https://fast.wistia.net/embed/medias/#{video_id}?playerColor=ff0000&amp;fullscreenButton=true"},{width: 600} ,{height: 450})
