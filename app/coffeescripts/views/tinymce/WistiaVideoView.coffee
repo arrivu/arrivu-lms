@@ -52,8 +52,9 @@ define [
       wistiaMediaURL = "#{location.origin}/get_collection/#{event.target.value}"
       @$('.findWistiaMediaView').show().disableWhileLoading @request = $.getJSON wistiaMediaURL, (data) =>
         @renderResults(data.collections.medias)
-        if ((data.collections.medias).length is 0)
-           @$('.findWistiaMediaView').append("<div>No Videos are Available for this Particular Project</div>")
+        if ($('#combo_field').prop("selectedIndex") > 0)
+          if ((data.collections.medias).length is 0)
+            @$('.findWistiaMediaView').append("<div style='text-align: center'>No Videos are Available</div>")
 
     renderResults: (medias) ->
       html = _.map medias, (media) ->
