@@ -43,7 +43,6 @@ class WikiPagesController < ApplicationController
 
   def show
     @page_comments = PageComment.where(page_id: @page.id,page_type: @page.wiki_type).paginate(:page => params[:page], :per_page => 15)
-
     if @context.draft_state_enabled?
       redirect_to polymorphic_url([@context, :named_page], :wiki_page_id => @page)
       return
