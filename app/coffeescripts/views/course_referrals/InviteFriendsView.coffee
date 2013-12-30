@@ -16,10 +16,6 @@ define [
       "click #referral_submit": "sendInvites"
 
 
-    afterRender: ->
-      editor = @$el.find("#referral_email_text")
-      editor.editorBox()
-
     sendInvites: ->
       @.$el.find('#invite_friends_error_box').empty() # Clear error box every time
       errored_users = []
@@ -84,6 +80,7 @@ define [
       json['li_reference'] = @li_reference
       json['go_reference'] = @go_reference
       json['gl_reference'] = @gl_reference
+      json['reward_description'] = $.parseJSON(ENV.COURSE_REWARD).reward.description
 
       json
 
