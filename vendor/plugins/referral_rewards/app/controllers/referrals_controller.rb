@@ -163,5 +163,13 @@ class ReferralsController < ApplicationController
 
   end
 
+  def get_referrees
+
+  end
+
+  def update_referrees
+
+  end
+
  end
 
