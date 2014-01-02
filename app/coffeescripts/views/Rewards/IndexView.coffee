@@ -15,6 +15,8 @@ define [
 
     events:
       'click .add_tool_link': 'addReward'
+      'click .add_manage_tool_link': 'manageReward'
+      'click #tab-rewards-link': 'tabReward'
       'click [data-edit-reward]': 'editReward'
       'click [data-delete-reward]': 'deleteReward'
 
@@ -30,6 +32,10 @@ define [
       newReward = new Reward
       newReward.on 'sync', @onRewardSync
       @addRewardView = new AddRewardView(model: newReward).render()
+    manageReward: ->
+      $("#reward_add").hide()
+    tabReward: ->
+      alert("hii")
 
     editReward: (event) ->
       view = @$(event.currentTarget).closest('.reward_item').data('view')
