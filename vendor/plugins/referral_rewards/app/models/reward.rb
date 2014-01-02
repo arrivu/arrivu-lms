@@ -19,7 +19,7 @@ class Reward < ActiveRecord::Base
   METADATA_COURSE = 'Course'
   METADATA_ACCOUNT = 'Account'
   REFERER = 'Referrer'
-  REFEREE = 'referee'
+  REFEREE = 'Referee'
 
 end
 
