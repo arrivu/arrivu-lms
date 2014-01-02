@@ -164,11 +164,54 @@ class ReferralsController < ApplicationController
   end
 
   def get_referrees
+    @referral_rewards = []
+    if @context.class.name == @domain_root_account.class.name
+      @rewards = @domain_root_account.rewards
+      @rewards.each do |reward|
+        @referrals = reward.referrals
+          @referrals.each do |referral|
+           @references = referral.references
+            @references.each do |reference|
+              @referrees = reference.referrees
+                @referrees.each do |referree|
+                  @referral_reward = {type: Reward::REFEREE ,name: referree.name,email: referree.email,
+                                      provider: referree.referral_email,context_name: reward.metadata_type,
+                                      reward_name: reward.name,reward_description: reward.description,
+                                      expiry_date: referree.expiry_date ,coupon_code: referree.coupon_code}
+                  @referral_rewards << (@referral_reward)
+                  end
+                @referrer_coupons =  reference.referrer_coupons
+                  @referrer_coupons.each do |referrer_coupon|
+                    @referral_reward = {type: Reward::REFERER ,name: referral.pseudonym.user.name,email: referral.pseudonym.unique_id,
+                                        provider: reference.provider,context_name: reward.metadata_type,
+                                        reward_name: reward.name,reward_description: reward.description,
+                                        expiry_date: referrer_coupon.expiry_date ,coupon_code: referrer_coupon.coupon_code}
+                    @referral_rewards << (@referral_reward)
+                  end
+            end
+          end
+      end
 
-  end
+    end
+    #js_env(REFERRAL_REWARDS: @referral_rewards.to_json)
+
+    respond_to do |format|
+
+
+        format.json { render :json => @referral_rewards }
+
+
+      end
+end
+
 
   def update_referrees
+    coupon = Coupon.redeem(coupon_code, user_id, tx_id, metadata)
+    respond_to do |format|
 
+      format.json { render :json => coupon }
+
+    end
   end
 
  end
