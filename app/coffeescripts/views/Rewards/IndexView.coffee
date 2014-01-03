@@ -5,7 +5,10 @@ define [
   'jst/rewards/IndexView'
   'compiled/views/Rewards/AddRewardView'
   'compiled/models/Reward'
-], ($, I18n, htmlEscape, template, AddRewardView, Reward) ->
+  'compiled/collections/ManageReferralsCollection'
+  'compiled/views/Rewards/ManageReferralsCollectionView'
+  'compiled/views/Rewards/ManageReferralsIndexView',
+], ($, I18n, htmlEscape, template, AddRewardView, Reward,ManageReferralsCollection,ManageReferralsCollectionView,ManageReferralsIndexView) ->
 
   class IndexView extends Backbone.View
 
@@ -16,7 +19,7 @@ define [
     events:
       'click .add_tool_link': 'addReward'
       'click .add_manage_tool_link': 'manageReward'
-      'click #tab-rewards-link': 'tabReward'
+      'click .add_show_tool_link': 'showReward'
       'click [data-edit-reward]': 'editReward'
       'click [data-delete-reward]': 'deleteReward'
 
@@ -34,8 +37,17 @@ define [
       @addRewardView = new AddRewardView(model: newReward).render()
     manageReward: ->
       $("#reward_add").hide()
-    tabReward: ->
-      alert("hii")
+      $(".add_show_tool_link").css "display", "block"
+      manageReferralsCollection = new ManageReferralsCollection
+      manageReferralsCollectionView = new ManageReferralsCollectionView
+        collection: manageReferralsCollection
+      @manageReferralsIndexView = new ManageReferralsIndexView
+        manageReferralsCollectionView: manageReferralsCollectionView
+        el: '#redeemRewards'
+      @manageReferralsIndexView.render()
+      manageReferralsCollection.fetch()
+    showReward: ->
+      $("#reward_add").show()
 
     editReward: (event) ->
       view = @$(event.currentTarget).closest('.reward_item').data('view')
