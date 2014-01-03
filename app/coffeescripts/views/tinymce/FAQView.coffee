@@ -48,7 +48,7 @@ define [
 
     AccordionHtmlWithoutMainDiv:  =>
       if this.$("#txtQuestion").val() is "" and this.$("#txtAnswer").val() is ""
-        alert('textboxes are empty')
+        alert('Please enter a question and answer')
         @editor.focus()
       else
         $(tinymce.activeEditor.getBody()).find('.accordion').append("<h3>" + @editor.dom.createHTML("a",{href: '#'},this.$('input[name=question]').val()) + "</h3>" + '<div>' + '<p>' + this.$('textarea[name=answer]').val() + '</p>' + '</div>')
