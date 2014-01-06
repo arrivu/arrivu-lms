@@ -10,6 +10,6 @@ define [
     className: 'referrees_item'
 
     afterRender: ->
-      @$el.attr('id', 'referrees_' + @model.get('id'))
+      @$el.attr('id', 'referrees_' + @model.get('coupon_code'))
       this
 

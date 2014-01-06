@@ -35,8 +35,10 @@ define [
       newReward = new Reward
       newReward.on 'sync', @onRewardSync
       @addRewardView = new AddRewardView(model: newReward).render()
+
     manageReward: ->
       $("#reward_add").hide()
+      $("#reward_manage").show()
       $(".add_show_tool_link").css "display", "block"
       manageReferralsCollection = new ManageReferralsCollection
       manageReferralsCollectionView = new ManageReferralsCollectionView
@@ -48,6 +50,7 @@ define [
       manageReferralsCollection.fetch()
     showReward: ->
       $("#reward_add").show()
+      $("#reward_manage").hide()
 
     editReward: (event) ->
       view = @$(event.currentTarget).closest('.reward_item').data('view')
