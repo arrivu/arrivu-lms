@@ -177,7 +177,7 @@ class ReferralsController < ApplicationController
                   @referral_reward = {type: Reward::REFEREE ,name: referree.name,email: referree.email,
                                       provider: referree.referral_email,context_name: reward.metadata_type,
                                       reward_name: reward.name,reward_description: reward.description,
-                                      expiry_date: referree.expiry_date ,coupon_code: referree.coupon_code}
+                                      expiry_date: referree.expiry_date ,coupon_code: referree.coupon_code,status: referree.status}
                   @referral_rewards << (@referral_reward)
                   end
                 @referrer_coupons =  reference.referrer_coupons
@@ -185,7 +185,7 @@ class ReferralsController < ApplicationController
                     @referral_reward = {type: Reward::REFERER ,name: referral.pseudonym.user.name,email: referral.pseudonym.unique_id,
                                         provider: reference.provider,context_name: reward.metadata_type,
                                         reward_name: reward.name,reward_description: reward.description,
-                                        expiry_date: referrer_coupon.expiry_date ,coupon_code: referrer_coupon.coupon_code}
+                                        expiry_date: referrer_coupon.expiry_date ,coupon_code: referrer_coupon.coupon_code,status: referrer_coupon.status}
                     @referral_rewards << (@referral_reward)
                   end
             end
@@ -206,12 +206,17 @@ end
 
 
   def update_referrees
-    coupon = Coupon.redeem(coupon_code, user_id, tx_id, metadata)
-    respond_to do |format|
+   if params[:type] == "Referee"
+     @coupon_context = Referree.find_by_coupon_code(params[:coupon_code])
+   elsif params[:type] == "Referrer"
+     @coupon_context =ReferrerCoupon.find_by_coupon_code(params[:coupon_code])
+   end
+   @coupon_context.update_attributes(status: params[:status])
+      respond_to do |format|
 
-      format.json { render :json => coupon }
+        format.json { render :json => @coupon_context }
 
-    end
+      end
   end
 
  end

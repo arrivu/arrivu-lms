@@ -13,3 +13,11 @@ define [
       @$el.attr('id', 'referrees_' + @model.get('coupon_code'))
       this
 
+    toJSON: ->
+      json = super
+      if @model.get('status') is "used"
+        json['status_check'] = "true"
+      else
+        json['status_check'] = ""
+
+      json

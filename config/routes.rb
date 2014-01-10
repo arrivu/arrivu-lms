@@ -1023,7 +1023,7 @@ FakeRails3Routes.draw do
     scope(:controller => :referrals) do
       def et_routes(context)
         get "#{context}s/:#{context}_id/referrees", :action => :get_referrees, :path_name => "#{context}_referrees"
-        get "#{context}s/:#{context}_id/referrees", :action => :update_referrees, :path_name => "#{context}_update_referrees"
+        post "#{context}s/:#{context}_id/referrees", :action => :update_referrees, :path_name => "#{context}_update_referrees"
       end
       et_routes("course")
       et_routes("account")

@@ -12,8 +12,13 @@
     <a href="#"
        class="coupon_reward_link"
        title="Redeem a Coupon"
-       data-coupon-reward={{coupon_code}}
-            >Redeem a Coupon</a>
+       data-coupon-reward={{coupon_code}}>
+        {{#if status_check}}
+            Recover
+        {{else}}
+            Redeem
+        {{/if}}
+        </a>
 </td>
 
 

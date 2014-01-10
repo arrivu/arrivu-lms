@@ -48,6 +48,7 @@ define [
         el: '#redeemRewards'
       @manageReferralsIndexView.render()
       manageReferralsCollection.fetch()
+
     showReward: ->
       $("#reward_add").show()
       $("#reward_manage").hide()

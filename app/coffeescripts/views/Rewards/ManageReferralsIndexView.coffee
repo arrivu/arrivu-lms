@@ -18,16 +18,11 @@ define [
 
     showRewardsView: =>
       @manageReferralsCollectionView.collection.fetch()
+      @model_url = @manageReferralsCollectionView.collection.url()
       @manageReferralsCollectionView.show()
+
     couponReward: (event) ->
       view = @$(event.currentTarget).closest('.referrees_item').data('view')
-      reward = view.model
-      reward.on 'sync', @onRewardSync
-    onRewardSync: (model) =>
-      model.save {coupon_code: "code",status:"active"},
-        failure: ->
-          alert 'coupon code was not be saved!'
-
-
-
-
+      referree = view.model
+      referree.url = @model_url
+      referree.save(coupon_code: referree.attributes.coupon_code,status:"used")
