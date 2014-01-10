@@ -1020,6 +1020,15 @@ FakeRails3Routes.draw do
       et_routes("account")
     end
 
+    scope(:controller => :referrals) do
+      def et_routes(context)
+        get "#{context}s/:#{context}_id/referrees", :action => :get_referrees, :path_name => "#{context}_referrees"
+        get "#{context}s/:#{context}_id/referrees", :action => :update_referrees, :path_name => "#{context}_update_referrees"
+      end
+      et_routes("course")
+      et_routes("account")
+    end
+
     scope(:controller => :external_feeds) do
       def ef_routes(context)
         get "#{context}s/:#{context}_id/external_feeds", :action => :index, :path_name => "#{context}_external_feeds"

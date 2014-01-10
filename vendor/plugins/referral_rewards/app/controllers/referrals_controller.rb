@@ -1,4 +1,5 @@
 class ReferralsController < ApplicationController
+  include ReferralsHelper
   before_filter :require_user, :except => [:referree_register,:update_referree]
   before_filter :require_context, :except => [:referree_register,:update_referree]
 
@@ -162,6 +163,20 @@ class ReferralsController < ApplicationController
     @reference_go = @referral.references.build( provider: Reference::GOOGLE)
     @reference_gl = @referral.references.build(provider: Reference::GLOBAL)
 
+  end
+
+  def get_referrees
+    list_rewards
+  end
+
+
+  def update_referrees
+    coupon = Coupon.redeem(coupon_code, user_id, tx_id, metadata)
+    respond_to do |format|
+
+      format.json { render :json => coupon }
+
+    end
   end
 
  end
