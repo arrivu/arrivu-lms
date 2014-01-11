@@ -211,11 +211,12 @@ end
    elsif params[:type] == "Referrer"
      @coupon_context =ReferrerCoupon.find_by_coupon_code(params[:coupon_code])
    end
-   @coupon_context.update_attributes(status: params[:status])
       respond_to do |format|
-
-        format.json { render :json => @coupon_context }
-
+        if @coupon_context.update_attributes(status: params[:status])
+          format.json { render :json => @coupon_context }
+        else
+          format.json { render :json => @coupon_context.errors.to_json ,:status => :bad_request}
+        end
       end
   end
 
