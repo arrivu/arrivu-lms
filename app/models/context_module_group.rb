@@ -1,6 +1,6 @@
 class ContextModuleGroup < ActiveRecord::Base
   include Workflow
-  attr_accessible :context, :name
+  attr_accessible :context_id, :context_type ,:position ,:name,:workflow_state
   belongs_to :context, :polymorphic => true
   has_many :context_module_group_associations
   acts_as_list :scope => :context
@@ -43,7 +43,7 @@ class ContextModuleGroup < ActiveRecord::Base
 
   scope :active, where(:workflow_state => 'active')
   scope :unpublished, where(:workflow_state => 'unpublished')
-  scope :not_deleted, where("context_modules.workflow_state<>'deleted'")
+  scope :not_deleted, where("context_module_groups.workflow_state<>'deleted'")
 
 
 end

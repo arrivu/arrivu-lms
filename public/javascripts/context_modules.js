@@ -244,6 +244,48 @@ define([
           $(this).text(content_tag.title);
         });
       },
+
+//   module group
+        editModuleGroup: function($module,event) {
+          var $form = $("#add_context_module_group_form");
+          $form.data('current_module', $module);
+          var data = $module.getTemplateData({textValues: ['name']});
+          $form.fillFormData(data, {object_name: 'context_module_group'});
+          var isNew = false;
+          if($module.attr('id') == 'context_module_new') {
+              isNew = true;
+              $form.attr('action', $form.find(".add_context_module_group_url").attr('href'));
+              $form.attr('method', 'POST');
+               $form.find(".submit_button").text(I18n.t('buttons.add', "Add Module Group"));
+          } else {
+              $form.attr('action', event.target.href);
+              $form.attr('method', 'PUT');
+              $form.find(".submit_button").text(I18n.t('buttons.update', "Update Module Group"));
+              console.log($form.attr('action'));
+          }
+
+          $module.fadeIn('fast', function() {
+          });
+          $module.addClass('dont_remove');
+          $form.find(".module_group_name").toggleClass('lonely_entry', isNew);
+          $form.dialog({
+              autoOpen: false,
+              modal: true,
+              width: 400,
+              close: function() {
+                  modules.hideEditModuleGroup(true);
+              }
+          }).fixDialogButtons().dialog('option', {title: (isNew ? I18n.t('titles.add', "Add Module Group") : I18n.t('titles.edit', "Edit Module Group")), width: (324)}).dialog('open'); //show();
+          $module.removeClass('dont_remove');
+          $form.find(":text:visible:first").focus().select();
+      },
+    hideEditModuleGroup: function(remove) {
+        $("#add_context_module_group_form").dialog('close');
+    },
+
+//   module group end
+
+
       editModule: function($module) {
         var $form = $("#add_context_module_form");
         $form.data('current_module', $module);
@@ -463,7 +505,7 @@ define([
       }
     };
   })();
-  
+
 
   modules.initModuleManagement = function() {
     // Create the context modules backbone view to manage the publish button. 
@@ -702,6 +744,19 @@ define([
         }
       });
     });
+      $(".delete_module_group_link").live('click', function(event) {
+          event.preventDefault();
+          $(this).parents(".context_module_group").confirmDelete({
+              url: $(this).attr('href'),
+              message: I18n.t('confirm.delete', "Are you sure you want to delete this module group?"),
+              success: function(data) {
+                  $(this).remove();
+                  $(this).slideUp(function() {
+                      $(this).remove();
+                  });
+              }
+          });
+      });
     $(".outdent_item_link,.indent_item_link").live('click', function(event) {
       event.preventDefault();
       var do_indent = $(this).hasClass('indent_item_link');
@@ -788,7 +843,22 @@ define([
       modules.editModule($module);
     });
 
-    $(".add_module_item_link").live('click', function(event) {
+    $(".edit_module_group_link").live('click', function(event) {
+        current_event = event
+      event.preventDefault();
+      modules.editModuleGroup($(this).parents(".context_module_group"),current_event);
+    });
+
+
+    $(".add_module_group_link").live('click', function(event) {
+      event.preventDefault();
+      var $module = $(".context_module_group_blank").clone(true).attr('id', 'context_module_new');
+      $("#context_modules_sortable_container").prepend($module);
+      modules.editModuleGroup($module);
+    });
+
+
+      $(".add_module_item_link").live('click', function(event) {
       event.preventDefault();
       var $module = $(this).closest(".context_module");
       if($module.hasClass('collapsed_module')) {
@@ -919,6 +989,10 @@ define([
       modules.refreshModuleList();
       modules.refreshed = true;
     }, 1000);
+  $("#add_context_module_group_form .cancel_button").click(function(event) {
+      modules.hideEditModuleGroup(true);
+  });
+
   }
 
   $(document).ready(function() {
@@ -1011,11 +1085,11 @@ define([
     if($("#context_modules").hasClass('editable')) {
       setTimeout(modules.initModuleManagement, 1000);
     }
-    
+
     modules.updateProgressions();
     modules.refreshProgressions();
     modules.updateAssignmentData();
-    
+
     $(".context_module").find(".expand_module_link,.collapse_module_link").bind('click', function(event, goSlow) {
       event.preventDefault();
       var expandCallback = null;
@@ -1113,7 +1187,7 @@ define([
         var $module = $(this);
         var moduleData = $module.find(".header").getTemplateData({textValues: ['id', 'name']});
         var $row = $("#student_progression_dialog .module_" + moduleData.id);
-        
+
         moduleData.progress = $studentWithProgressions.find(".progression_" + moduleData.id + ":first").getTemplateData({textValues: ['workflow_state']}).workflow_state;
         moduleData.progress = moduleData.progress || "no information";
         var type = "nothing";
@@ -1196,12 +1270,12 @@ define([
         var $module = $(this);
         var moduleData = $module.find(".header").getTemplateData({textValues: ['id', 'name']});
         var $template = $dialog.find(".module.blank:first").clone(true).removeClass('blank');
-        
+
         $template.addClass('module_' + moduleData.id);
         $template.fillTemplateData({data: moduleData});
         $dialog.find(".side_tabs_content tbody").append($template.show());
       });
-  
+
       $("#student_progression_dialog").dialog({
         width: 800,
         open: function() {
@@ -1248,7 +1322,7 @@ define([
       $("#context_module_" + collapsedModules[idx]).addClass('collapsed_module');
     }
     var foundModules = [];
-    var $contextModules = $("#context_modules .context_module");
+    var $contextModules = $("#context_modules");
     if (!$contextModules.length) {
       $('#no_context_modules_message').show();
     }

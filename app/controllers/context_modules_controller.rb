@@ -23,7 +23,8 @@ class ContextModulesController < ApplicationController
 
   def index
     if authorized_action(@context, @current_user, :read)
-      @modules = @context.modules_visible_to(@current_user)
+      #@modules = @context.modules_visible_to(@current_user)
+      @module_groups = ContextModuleGroup.where(:context_id => @context.id,:context_type => @context.class.name,:workflow_state => "active")
 
       @collapsed_modules = ContextModuleProgression.for_user(@current_user).for_modules(@modules).select([:context_module_id, :collapsed]).select{|p| p.collapsed? }.map(&:context_module_id)
       if @context.grants_right?(@current_user, session, :participate_as_student)
