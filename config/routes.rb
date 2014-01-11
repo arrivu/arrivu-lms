@@ -667,7 +667,11 @@ FakeRails3Routes.draw do
       resources :rubric_assessments, :path => :assessments
     end
 
-    resources :pseudonyms, :except => ["index"]
+    resources :pseudonyms, :except => ["index"] do
+      member do
+        put :update_favourite_course
+      end
+    end
     resources :question_banks, :only => [:index]
     match 'assignments_needing_grading' => 'users#assignments_needing_grading', :as => :assignments_needing_grading
     match 'assignments_needing_submitting' => 'users#assignments_needing_submitting', :as => :assignments_needing_submitting
