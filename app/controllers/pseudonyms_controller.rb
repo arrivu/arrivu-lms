@@ -342,7 +342,6 @@ class PseudonymsController < ApplicationController
    end
  end
 
-
   protected
   def context_is_root_account?
     if @context.root_account?

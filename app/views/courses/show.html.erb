@@ -204,6 +204,7 @@ $(document).ready(function() {
         <option value="modules" <%= 'selected' if @context.default_view == 'modules' %>><%= t('options.modules', %{the Course Modules/Sections}) %></option>
         <option value="assignments" <%= 'selected' if @context.default_view == 'assignments' %>><%= t('options.assignments', %{the Assignment List}) %></option>
         <option value="syllabus" <%= 'selected' if @context.default_view == 'syllabus' %>><%= t('options.syllabus', %{the Assignments with Syllabus}) %></option>
+        <option value="announcements_discussion" <%= 'selected' if @context.default_view == 'announcements' %>><%= t('options.announcement_with_discussiond', %{the Announcement with Discussion}) %></option>
       </select>
     </p>
     <div class="select_details ui-state-highlight ui-corner-all" style="display: none; padding: 1em; font-size: 12px;">
@@ -224,6 +225,9 @@ This layout is probably best for courses that aren't based on a specific schedul
       </div>
       <div class="syllabus_details options_details">
         <%= mt 'details.syllabus', "The **syllabus view** lets you write up a description of course expectations or introduce the course with links, images, etc. and then also shows a calendar view of all assignments and course events." %>
+      </div>
+      <div class="announcements_discussion_details options_details">
+        <%= mt 'details.announcements_discussion', "The **announcements_discussion** lets participants see the most recent annoucements and discussion of this particular course" %>
       </div>
     </div>
     <div class="button-container">
@@ -257,6 +261,8 @@ This layout is probably best for courses that aren't based on a specific schedul
     <%= render :partial => 'assignments/assignments_list_content', :locals => {:course_home => true} %>
   <% elsif @course_home_view == 'syllabus' %>
     <%= render :partial => 'assignments/syllabus_content', :locals => {:course_home => true} %>
+  <% elsif @course_home_view == 'announcements_discussion' %>
+      <%= render :template => "discussion/index.html.erb", :locals => {:course_home => true} %>
   <% else %>
     <%= render :partial => 'shared/dashboard_messages' %>
     <%= render :partial => 'shared/recent_activity' %>
