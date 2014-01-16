@@ -33,9 +33,21 @@ module Canvas::AccountReports
       file = Canvas::AccountReports.generate_file(@account_report)
       CSV.open(file, "w") do |csv|
 
-        list_rewards(account,for_report=true)
+        condition = [""]
+        if start_at
+          condition.first << "created_at >= ?"
+          condition << start_at
+          @account_report.parameters["extra_text"] << " Start At: #{start_at};"
+        end
 
-        csv << ['type','name','email','provider',
+        if end_at
+          condition.first << "created_at <= ?"
+          condition << end_at
+          @account_report.parameters["extra_text"] << " End At: #{end_at};"
+        end
+
+        list_rewards(account,for_report=true,condition)
+              csv << ['type','name','email','provider',
                 'context_type','context_id', 'reward_name','reward_description',
                 'expiry_date', 'coupon_code']
         Shackles.activate(:slave) do

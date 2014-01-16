@@ -1,5 +1,5 @@
 module ReferralsHelper
-   def list_rewards(account=nil,for_report=nil)
+   def list_rewards(account=nil,for_report=nil,condition=nil)
      @domain_root_account ||=  account
      @referral_rewards = []
 
@@ -9,7 +9,8 @@ module ReferralsHelper
          @referrals.each do |referral|
            @references = referral.references
            @references.each do |reference|
-             @referrees = reference.referrees
+             @referrees = reference.referrees.find(:all,:conditions => condition)
+             #@referrees = Referree.find(:all,:conditions => condition)
              @referrees.each do |referree|
                @referral_reward = {type: Reward::REFEREE ,name: referree.name,email: referree.email,
                                    provider: referree.referral_email,context_type: reward.metadata_type,
@@ -18,7 +19,8 @@ module ReferralsHelper
                                    coupon_code: referree.coupon_code}
                @referral_rewards << (@referral_reward)
              end
-             @referrer_coupons =  reference.referrer_coupons
+             @referrer_coupons =  reference.referrer_coupons.find(:all,:conditions => condition)
+             #@referrer_coupons =  ReferrerCoupon.find(:all,:conditions => condition)
              @referrer_coupons.each do |referrer_coupon|
                @referral_reward = {type: Reward::REFERER ,name: referral.pseudonym.user.name,
                                    email: referral.pseudonym.unique_id,provider: reference.provider,
