@@ -58,14 +58,17 @@ TEXT
    {:key => t('keycodes.previous_module_item', 'Down'), :description => t('keycode_descriptions.previous_module_item', 'Select previous module or module item')},
    {:key => t('keycodes.toggle_module_dragging', 'Space'), :description => t('keycode_descriptions.toggle_module_dragging', 'Select item to begin dragging, or drop previously selected item')}
 ]) %>
+        <div id="context_modules_groups_sortable_container">
+         <div id="context_module_groups">
 
+            <% @module_groups.each do |context_module_group| %>
 
-    <% @module_groups.each do |context_module_group| %>
+                <%= render :partial => 'context_modules/context_module_groups', :object => nil, :locals => {:context_module_group => context_module_group } %>
 
-        <%= render :partial => 'context_modules/context_module_groups', :object => nil, :locals => {:context_module_group => context_module_group } %>
+            <% end %>
 
-    <% end %>
-
+         </div>
+        </div>
 <%= render :partial => 'context_modules/context_module_groups', :object => nil, :locals => {:context_module_group => nil } %>
 <%= render :partial => 'context_modules/context_module', :object => nil %>
 <%= render :partial => 'context_modules/module_item', :object => nil %>
@@ -93,7 +96,8 @@ TEXT
         </table>
     <% end %>
 
-  <% form_for :context_module, :url => context_url(@context, :context_context_modules_url), :html => {:id => "add_context_module_form", :style => "display: none;"} do |f| %>
+  <% form_for :context_module, :url => context_url(@context, :context_context_modules_url) , :html => {:id => "add_context_module_form", :style => "display: none;"} do |f| %>
+   <%= f.hidden_field :context_module_group_id %>
     <table class="formtable">
       <tr>
         <td colspan="2">
@@ -359,7 +363,7 @@ TEXT
   <%= image_tag "text_entry_dim.png", :id => "criterion_image_must_submit", :class => "image not_blank", :alt => t('images.alt.must_submit', "must submit"), :title => t('images.title.must_submit', "Students must submit this assignment before the module is considered complete") %>
   <%= image_tag "text_entry_dim.png", :id => "criterion_image_must_contribute", :class => "image not_blank", :alt => t('images.alt.must_contribute', "must contribute"), :title => t('images.title.must_contribute', "Students must contribute to this item before the module is considered complete") %>
   <%= image_tag "blank.png", :id => "criterion_image_blank", :class => "image", :alt => "" %>
-  <a href="<%= context_url(@context, :reorder_context_context_modules_url) %>" class="reorder_modules_url">&nbsp;</a>
+  <a href="<%= context_url(@context, :reorder_context_context_module_groups_url) %>" class="reorder_module_groups_url">&nbsp;</a>
 </div>
 <div id="current_user_progression_list" class="user_<%= @current_user && @current_user.id %>" style="display: none;">
   <div class="progression progression_blank">

@@ -17,6 +17,7 @@
 #
 
 class ContextModule < ActiveRecord::Base
+  cattr_accessor :context_module_group_id
   include Workflow
   include SearchTermHelper
   attr_accessible :context, :name, :unlock_at, :require_sequential_progress, :completion_requirements, :prerequisites
@@ -25,6 +26,7 @@ class ContextModule < ActiveRecord::Base
   has_many :context_module_progressions, :dependent => :destroy
   has_many :content_tags, :dependent => :destroy, :order => 'content_tags.position, content_tags.title'
   has_many :user_module_enrollments , :dependent => :destroy
+  has_many :context_module_group_association
   acts_as_list :scope => :context
   
   serialize :prerequisites

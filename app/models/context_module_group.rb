@@ -2,7 +2,7 @@ class ContextModuleGroup < ActiveRecord::Base
   include Workflow
   attr_accessible :context_id, :context_type ,:position ,:name,:workflow_state
   belongs_to :context, :polymorphic => true
-  has_many :context_module_group_associations
+  has_many :context_module_group_associations, :dependent => :destroy, :order => 'context_module_group_associations.position'
   acts_as_list :scope => :context
   before_save :infer_position
   validates_presence_of :workflow_state, :context_id, :context_type

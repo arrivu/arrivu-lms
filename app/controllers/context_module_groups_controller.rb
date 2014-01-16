@@ -1,9 +1,37 @@
 class ContextModuleGroupsController < ApplicationController
   before_filter :require_context
 
-  def new
 
+
+  def reorder_items
+
+    if authorized_action(@context.context_modules.new, @current_user, :update)
+      #update context module group associations (case: dragged in different module group)
+      @module_group = @context.context_module_groups.not_deleted.find(params[:context_module_group_id])
+      orders = params[:order].split(",")
+      ids =[]
+      orders.each do |id|
+        ids << id.to_i
+      end
+      cmga_ids = @module_group.context_module_group_association_ids
+
+      affected_ids = ids - cmga_ids
+      affected_ids.map do |affected_id|
+        module_group_association = ContextModuleGroupAssociation.find(affected_id)
+        module_group_association.update_attributes(context_module_group_id: params[:context_module_group_id])
+      end
+      #update order
+      cmga=@module_group.context_module_group_associations.first
+      cmga.update_order(params[:order].split(","))
+      @module_groups = @module_group.context_module_group_associations
+      @module_groups.each{|mg| mg.save_without_touching_context }
+
+      respond_to do |format|
+        format.json { render :json => @modules.to_json(:include => :content_tags, :methods => :workflow_state) }
+      end
+    end
   end
+
 
   def create
     if authorized_action(@context.context_modules.new, @current_user, :create)
@@ -41,5 +69,21 @@ class ContextModuleGroupsController < ApplicationController
       end
     end
   end
+
+  def reorder
+    if authorized_action(@context.context_modules.new, @current_user, :update)
+      mg = @context.context_module_groups.not_deleted.first
+
+      mg.update_order(params[:order].split(","))
+      # Need to invalidate the ordering cache used by context_module.rb
+      @context.touch
+
+      respond_to do |format|
+        format.json { render :json => @module_groups.to_json}
+      end
+    end
+  end
+
+
 
 end
