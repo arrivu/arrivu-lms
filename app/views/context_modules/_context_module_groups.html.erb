@@ -50,7 +50,7 @@
             <% if context_module_group_association.context_module.workflow_state == 'active'%>
                 <%= render :partial => 'context_modules/context_module', :object => context_module_group_association.context_module, :locals => {:editable => editable } %>
 
-            <% elsif  @context.grants_right?(user, :manage_content) %>
+            <% elsif  @context.grants_right?(@curren_user, :manage_content) %>
                 <%= render :partial => 'context_modules/context_module', :object => context_module_group_association.context_module, :locals => {:editable => editable } %>
             <%end  %>
 

@@ -379,28 +379,6 @@ define([
         }).fixDialogButtons().dialog('option', {title: (isNew ? I18n.t('titles.add', "Add Module") : I18n.t('titles.edit', "Edit Module Settings")), width: (isNew ? 'auto' : 600)}).dialog('open'); //show();
         $module.removeClass('dont_remove');
         $form.find(":text:visible:first").focus().select();
-//
-          var $module_items = [];
-          $("#context_modules .context_module_group_items").each(function() {
-              $module_items.push($(this));
-          });
-
-
-          var add_sortable_module_next = function() {
-              if($module_items.length > 0) {
-                  var $module_item = $module_items.shift();
-                  var module_opts = modules.sortable_module_group_options;
-                  module_opts['update'] = modules.updateModulePositions;
-                  $module_item.sortable(module_opts);
-                  setTimeout(add_sortable_module_next, 10);
-              }
-          };
-
-          add_sortable_module_next();
-
-//
-
-
       },
       hideEditModule: function(remove) {
         var $module = $("#add_context_module_form").data('current_module'); //.parents(".context_module");
@@ -891,13 +869,9 @@ define([
       event.preventDefault();
       var $module_group_id = $(this).closest(".context_module_group").data("id");
       var $module = $("#context_module_blank").clone(true).attr('id', 'context_module_new');
-        $(this).closest("#context_modules").append($module);
+        $(this).closest("#context_modules").find('.context_module_group_items').append($module);
         var opts = modules.sortable_module_options;
         opts['update'] = modules.updateModuleItemPositions;
-        var module_options = modules.sortable_module_group_options;
-        module_options['update'] = modules.updateModulePositions;
-        $module.sortable(module_options);
-
         $module.find(".context_module_items").sortable(opts);
         $("#context_modules.ui-sortable").sortable('refresh');
         $("#context_module_groups.ui-sortable").sortable('refresh');
@@ -1419,7 +1393,7 @@ define([
     }
     var foundModules = [];
     var $contextModules = $("#context_modules");
-    if (!$contextModules.length) {
+    if (!$("#context_modules_sortable_container").is(":visible")) {
       $('#no_context_modules_message').show();
     }
     $contextModules.each(function() {

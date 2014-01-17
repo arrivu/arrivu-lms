@@ -35,8 +35,9 @@ class ContextModuleGroupsController < ApplicationController
 
   def create
     if authorized_action(@context.context_modules.new, @current_user, :create)
-     @context_module_group = ContextModuleGroup.create!(:context_id=> @context.id, :context_type => @context.class.name,
-                                                        :position => 1,:name => params[:context_module_group][:name],:workflow_state=> 'active')
+     @context_module_group = ContextModuleGroup.new(:context_id=> @context.id, :context_type => @context.class.name,
+                                                        :name => params[:context_module_group][:name],:workflow_state=> 'active')
+     @context_module_group.save!
       redirect_to course_context_modules_path(@context)
    end
   end
