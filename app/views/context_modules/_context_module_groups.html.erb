@@ -12,7 +12,7 @@
         <div class="context-module-left-toolbar">
           <span class="reorder_module_group_link" title="<%= t('reorder_modules', %{Drag to reorder modules}) %>" style="cursor: move; <%= hidden unless @module_groups.length > 1 && editable %>"><%= image_tag "move.png", :alt => t('reorder_modules', 'Drag to reorder modules') %></span>
           <a href="<%= context_url(@context, :context_url) %>/module_groups/<%= context_module_group ? context_module_group.id : "{{ id }}" %>/reorder" rel="nofollow" class="reorder_module_group_items_url" style="display: none;">&nbsp;</a>
-          <span class="name"> <%= context_module_group.try_rescue(:name) || nbsp %></span>
+          <span class="name">&nbsp; <%= context_module_group.try_rescue(:name) || nbsp %></span>
 
         </div>
 

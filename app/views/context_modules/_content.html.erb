@@ -23,7 +23,7 @@
     <div class="context-modules-main-toolbar">
       <button class="btn btn-small module_progressions_link"><%= t('links.student_progress', 'View Progress') %></button>
       <button class="btn btn-small btn-primary add_module_group_link"><%= t('#context_modules.buttons.add_module', 'Create a Module Group') %></button>
-      <%= link_to "Module Permissions" ,course_user_module_enrollments_path(@context) ,:class => "btn btn-small btn-primary" %>
+      <%= link_to "Module Permissions" ,course_user_module_group_enrollments_path(@context) ,:class => "btn btn-small btn-primary" %>
     </div>
   <% end %>
 </div>
