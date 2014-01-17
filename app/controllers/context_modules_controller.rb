@@ -98,7 +98,7 @@ class ContextModulesController < ApplicationController
       @module.attributes = params[:context_module]
       respond_to do |format|
         if @module.save
-          context_module_association = @module.context_module_group_association.build(context_module_group_id: context_module_group_id)
+          context_module_association = @module.build_context_module_group_association(context_module_group_id: context_module_group_id)
           context_module_association.position = ContextModuleGroupAssociation.infer_position(context_module_association)
           context_module_association.save!
           format.html { redirect_to named_context_url(@context, :context_context_modules_url) }
