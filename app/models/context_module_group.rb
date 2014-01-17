@@ -9,6 +9,10 @@ class ContextModuleGroup < ActiveRecord::Base
   after_save :touch_context
 
 
+  scope :active, where(:workflow_state => 'active')
+  scope :unpublished, where(:workflow_state => 'unpublished')
+  scope :not_deleted, where("context_module_groups.workflow_state<>'deleted'")
+
   def self.module_group_positions(context)
     # Keep a cached hash of all module groups for a given context and their
 
@@ -41,9 +45,7 @@ class ContextModuleGroup < ActiveRecord::Base
     state :deleted
   end
 
-  scope :active, where(:workflow_state => 'active')
-  scope :unpublished, where(:workflow_state => 'unpublished')
-  scope :not_deleted, where("context_module_groups.workflow_state<>'deleted'")
+
 
 
 end
