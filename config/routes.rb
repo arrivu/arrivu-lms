@@ -416,7 +416,13 @@ FakeRails3Routes.draw do
     match 'student_view' => 'courses#leave_student_view', :as => :student_view, :via => :delete
     match 'test_student' => 'courses#reset_test_student', :as => :test_student, :via => :delete
     match 'content_migrations' => 'content_migrations#index', :as => :content_migrations, :via => :get
-    resources :user_module_enrollments,:path => :permissions
+    resources :user_module_group_enrollments,:path => :permissions
+    resources :context_module_groups,:path => :module_groups do
+      match 'reorder' => 'context_module_groups#reorder_items', :as => :reorder, :via => :post
+      collection do
+        post :reorder
+      end
+    end
   end
 
   match 'quiz_statistics/:quiz_statistics_id/files/:file_id/download' => 'files#show', :as => :quiz_statistics_download, :download => '1'
