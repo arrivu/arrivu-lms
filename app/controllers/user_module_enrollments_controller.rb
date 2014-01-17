@@ -26,17 +26,6 @@ class UserModuleEnrollmentsController < ApplicationController
     end
   end
 
-  def new
-
-  end
-
-  def create
-
-  end
-
-  def destroy
-
-  end
 
   def update
     if authorized_action(@context.context_modules.new, @current_user, :update)

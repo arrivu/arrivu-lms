@@ -283,11 +283,11 @@ define([
               isNew = true;
               $form.attr('action', $form.find(".add_context_module_group_url").attr('href'));
               $form.attr('method', 'POST');
-               $form.find(".submit_button").text(I18n.t('buttons.add', "Add Module Group"));
+               $form.find(".submit_button").text("Add Module Group");
           } else {
               $form.attr('action', event.target.href);
               $form.attr('method', 'PUT');
-              $form.find(".submit_button").text(I18n.t('buttons.update', "Update Module Group"));
+              $form.find(".submit_button").text("Update Module Group");
           }
 
           $module.fadeIn('fast', function() {
@@ -301,7 +301,7 @@ define([
               close: function() {
                   modules.hideEditModuleGroup(true);
               }
-          }).fixDialogButtons().dialog('option', {title: (isNew ? I18n.t('titles.add', "Add Module Group") : I18n.t('titles.edit', "Edit Module Group")), width: (324)}).dialog('open'); //show();
+          }).fixDialogButtons().dialog('option', {title: (isNew ? "Add Module Group" :  "Edit Module Group"), width: (324)}).dialog('open'); //show();
           $module.removeClass('dont_remove');
           $form.find(":text:visible:first").focus().select();
       },
@@ -785,7 +785,7 @@ define([
           event.preventDefault();
           $(this).parents(".context_module_group").confirmDelete({
               url: $(this).attr('href'),
-              message: I18n.t('confirm.delete', "Are you sure you want to delete this module group?"),
+              message:  "Are you sure you want to delete this module group?",
               success: function(data) {
                   $(this).remove();
                   $(this).slideUp(function() {
