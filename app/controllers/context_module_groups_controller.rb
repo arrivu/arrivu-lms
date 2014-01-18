@@ -17,7 +17,7 @@ class ContextModuleGroupsController < ApplicationController
 
       affected_ids = ids - cmga_ids
       affected_ids.map do |affected_id|
-        module_group_association = ContextModuleGroupAssociation.find(affected_id)
+        module_group_association = ContextModuleGroupAssociation.find_by_context_module_id(affected_id)
         module_group_association.update_attributes(context_module_group_id: params[:context_module_group_id])
       end
       #update order

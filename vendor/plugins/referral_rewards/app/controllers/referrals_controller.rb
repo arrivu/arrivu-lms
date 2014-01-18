@@ -103,8 +103,7 @@ class ReferralsController < ApplicationController
       @referral = @reference.referral
       @reward = @referral.reward
       @reference.update_attributes(status: Reference::STATUS_REGISTER)
-      @referree = Referree.find_by_reference_id_and_name_and_email(@reference.id,params[:referree][:name],
-                                                                             params[:referree][:email])
+      @referree = Referree.find_by_reward_id_and_email(@reward.id,params[:referree][:email])
       if @referree.nil?
           @coupon = generate_coupon(@reward,@reference.id.to_s)
           @referree = Referree.find_or_create_by_reference_id_and_name_and_email(@reference.id,params[:referree][:name],
@@ -114,7 +113,8 @@ class ReferralsController < ApplicationController
                                                                      status: ReferrerCoupon::STATUS_WAIT_FOR_ENROLL,
                                                                      coupon_id: @coupon.id,
                                                                      coupon_code: @coupon.alpha_code,
-                                                                     expiry_date: @reward.referree_expiry_date)
+                                                                     expiry_date: @reward.referree_expiry_date,
+                                                                     reward_id: @reward.id)
 
           @coupon2 = generate_coupon(@reward,@reference.id.to_s) #referrer coupon
 
@@ -166,8 +166,7 @@ class ReferralsController < ApplicationController
 
   def get_referrees
     @referral_rewards = []
-    if @context.class.name == @domain_root_account.class.name
-      @rewards = @domain_root_account.rewards
+      @rewards = Reward.where(metadata_type: @context.class.name,metadata: @context.id.to_s,status: Reward::STATUS_ACTIVE)
       @rewards.each do |reward|
         @referrals = reward.referrals
           @referrals.each do |referral|
@@ -192,17 +191,10 @@ class ReferralsController < ApplicationController
             end
           end
       end
-
-    end
     #js_env(REFERRAL_REWARDS: @referral_rewards.to_json)
-
     respond_to do |format|
-
-
         format.json { render :json => @referral_rewards }
-
-
-      end
+    end
 end
 
 
@@ -214,6 +206,14 @@ end
    end
       respond_to do |format|
         if @coupon_context.update_attributes(status: params[:status])
+          if params[:type] == "Referee"
+            if params[:status] == Referree::STATUS_USED
+              @coupon_context.referrer_coupon.update_attributes(status: ReferrerCoupon::STATUS_ACTIVE )
+            else
+              @coupon_context.referrer_coupon.update_attributes(status: ReferrerCoupon::STATUS_WAIT_FOR_ENROLL )
+            end
+          end
+
           format.json { render :json => @coupon_context }
         else
           format.json { render :json => @coupon_context.errors.to_json ,:status => :bad_request}
