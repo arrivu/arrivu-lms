@@ -38,12 +38,22 @@ module Canvas::AccountReports
           condition.first << "created_at >= ?"
           condition << start_at
           @account_report.parameters["extra_text"] << " Start At: #{start_at};"
+        else
+          condition.first << "created_at >= ?"
+          start = Time.now.beginning_of_month
+          condition << start
+          @account_report.parameters["extra_text"] << " Start At: #{start};"
         end
 
         if end_at
-          condition.first << "created_at <= ?"
+          condition.first << "And created_at <= ?"
           condition << end_at
           @account_report.parameters["extra_text"] << " End At: #{end_at};"
+        else
+          condition.first << "And created_at <= ?"
+          en = Time.now.end_of_month
+          condition << en
+          @account_report.parameters["extra_text"] << " End At: #{en};"
         end
 
         list_rewards(account,for_report=true,condition)

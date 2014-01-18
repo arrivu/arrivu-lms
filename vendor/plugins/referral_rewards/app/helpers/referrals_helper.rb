@@ -1,5 +1,5 @@
 module ReferralsHelper
-   def list_rewards(account=nil,for_report=nil,condition=nil)
+   def list_rewards(account=nil,for_report=nil,condition)
      @domain_root_account ||=  account
      @referral_rewards = []
 
@@ -44,6 +44,7 @@ module ReferralsHelper
 
      end
       end
-     end
+   end
+
 
 end
