@@ -60,7 +60,7 @@ TEXT
 ]) %>
         <div id="context_modules_groups_sortable_container">
          <div id="context_module_groups">
-
+            <% @module_groups ||= @context.context_module_groups  %>
             <% @module_groups.each do |context_module_group| %>
 
                 <%= render :partial => 'context_modules/context_module_groups', :object => nil, :locals => {:context_module_group => context_module_group } %>
