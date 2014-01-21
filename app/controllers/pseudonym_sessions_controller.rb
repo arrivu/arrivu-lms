@@ -564,9 +564,10 @@ class PseudonymSessionsController < ApplicationController
         # assumed that if that URL is found rather than using the default,
         # they must have cookies enabled and we don't need to worry about
         # adding the :login_success param to it.
-        format.html { redirect_back_or_default(dashboard_url(:login_success => '1')) }
-      end
-      format.json { render :json => pseudonym.to_json(:methods => :user_code), :status => :ok }
+        #format.html { redirect_back_or_default(dashboard_url(:login_success => '1')) }
+        format.html {favourite_course_url_path }
+    end
+       format.json { render :json => pseudonym.to_json(:methods => :user_code), :status => :ok }
     end
   end
 
@@ -683,5 +684,23 @@ class PseudonymSessionsController < ApplicationController
     end
 
     session.delete(:oauth2)
+  end
+
+  def favourite_course_url_path
+    @pseudonym = Pseudonym.find(@user)
+    if @user.enrollments.empty?
+      redirect_to root_url
+    else
+      @favourite_course_id = @pseudonym.settings
+      if @favourite_course_id.empty?
+        @context_id = @user.enrollments.first.course_id
+        @context = Course.active.find(@context_id)
+        redirect_to course_url(@context)
+      else
+        @context_id = @favourite_course_id[:favourite_course_id]
+        @context = Course.active.find(@context_id)
+        redirect_to course_url(@context)
+      end
+    end
   end
 end
