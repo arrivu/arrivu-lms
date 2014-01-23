@@ -390,6 +390,8 @@ FakeRails3Routes.draw do
       match 'items/last' => 'context_modules#module_redirect', :as => :last_redirect, :last => 1
       match 'items/first' => 'context_modules#module_redirect', :as => :first_redirect, :first => 1
       collection do
+        resources :user_module_group_enrollments,:path => :permissions
+        match 'permission_groups' => 'user_module_group_enrollments#permission_groups'
         post :reorder
         get :progressions
       end
@@ -416,7 +418,6 @@ FakeRails3Routes.draw do
     match 'student_view' => 'courses#leave_student_view', :as => :student_view, :via => :delete
     match 'test_student' => 'courses#reset_test_student', :as => :test_student, :via => :delete
     match 'content_migrations' => 'content_migrations#index', :as => :content_migrations, :via => :get
-    resources :user_module_group_enrollments,:path => :permissions
     resources :context_module_groups,:path => :module_groups do
       match 'reorder' => 'context_module_groups#reorder_items', :as => :reorder, :via => :post
       collection do
