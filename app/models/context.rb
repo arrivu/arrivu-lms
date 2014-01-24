@@ -159,6 +159,7 @@ module Context
       res[:outcomes] = self.respond_to?(:has_outcomes?) && self.has_outcomes?
       res[:faq] = self.respond_to?(:wiki) && self.wiki_id && !self.wiki.wiki_pages.faqs.active.empty?
       res[:career] = self.respond_to?(:wiki) && self.wiki_id && !self.wiki.wiki_pages.careers.active.empty?
+      res[:videos] = self.respond_to?(:wiki) && self.wiki_id && !self.wiki.wiki_pages.videos.active.emoty?
       res
     end
   end
