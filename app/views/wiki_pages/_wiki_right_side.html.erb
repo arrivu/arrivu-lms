@@ -39,6 +39,10 @@
     <% pages = @context.wiki.wiki_pages.faqs.not_deleted.select{|p| !p.new_record? }.sort_by{|p| p.title || ""} %>
     <% elsif @page.wiki_type == WikiPage::WIKI_TYPE_PAGES %>
     <% pages = @context.wiki.wiki_pages.pages.not_deleted.select{|p| !p.new_record? }.sort_by{|p| p.title || ""} %>
+    <% elsif @page.wiki_type == WikiPage::WIKI_TYPE_VIDEOS %>
+    <% pages = @context.wiki.wiki_pages.videos.not_deleted.select{|p| !p.new_record? }.sort_by{|p| p.title || ""} %>
+    <% elsif @page.wiki_type == WikiPage::WIKI_TYPE_OFFERS%>
+    <% pages = @context.wiki.wiki_pages.offers.not_deleted.select{|p| !p.new_record? }.sort_by{|p| p.title || ""} %>
     <% else @page.wiki_type == WikiPage::WIKI_TYPE_CAREERS%>
     <% pages = @context.wiki.wiki_pages.careers.not_deleted.select{|p| !p.new_record? }.sort_by{|p| p.title || ""} %>
     <% end %>

@@ -31,6 +31,12 @@
         <% if !only || only.include?(:external_tools) %>
         <option value="context_external_tool" class="context_module_content"><%= t :external_tool_item, "External Tool" %></option>
         <% end %>
+        <% if !only || only.include?(:videos) %>
+            <option value="context_video" class="context_module_content"><%= t :video_item, "Videos" %></option>
+        <% end %>
+        <% if !only || only.include?(:offers) %>
+            <option value="context_offer" class="context_module_content"><%= t :offer_item, "Offers" %></option>
+        <% end %>
       </select>
       <% }, :wrapper => '<span class="holder_name">\1</span>' %>
     </div>
@@ -112,6 +118,31 @@
         </table>
       </div>
       <% end %>
+        <!--for videos -->
+      <% if !only || only.include?(:videos) %>
+        <div id="context_videos_select" class="module_item_option" style="margin: 5px 20px;">
+          <div style="font-size: 0.8em;">
+            <i class="icon-video"></i>
+            <%= t :videos_notice, "select a video from below to associated with this Module", :wrapper => '<span class="holder_type">\1</span>' %>
+          </div>
+          <div style="margin-top: 5px;">
+            <select class="module_item_select" multiple>
+              <optgroup label="Select Videos">
+                <% @context.wiki.wiki_pages.videos.each do |video| %>
+                   <option value="<%= video.id %>"><%= video.title %></option>
+                <% end %>
+              </optgroup>
+              <option value="new"><%= t :new_video_option, "[ New Video ]" %></option>
+            </select>
+          </div>
+          <div class="new" style="margin-top: 5px;">
+            <%= before_label :video_name, "Video Name" %>
+            <input type="text" name="assignment[title]" class="item_title"/>
+            <a href="<%= context_url(@context, :context_assignments_url) %>" style="display: none;" class="add_item_url">&nbsp;</a>
+          </div>
+        </div>
+    <% end %>
+
       <% if !only || only.include?(:wiki_pages) %>
       <div id="wiki_pages_select" class="module_item_option" style="margin: 5px 20px;">
         <div style="font-size: 0.8em;">

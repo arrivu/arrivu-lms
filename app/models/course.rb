@@ -2701,6 +2701,8 @@ class Course < ActiveRecord::Base
   TAB_CAREERS = 18
   TAB_REFERRALS=19
   TAB_VIDEOS=20
+  TAB_OFFERS=21
+
   def self.default_tabs
     [
       { :id => TAB_HOME, :label => t('#tabs.home', "Home"), :css_class => 'home', :href => :course_path },
@@ -2721,8 +2723,9 @@ class Course < ActiveRecord::Base
       { :id => TAB_FAQS, :label =>t('#tabs.faq', "FAQ"), :css_class => 'faq',:href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_FAQS  },
       { :id => TAB_CAREERS, :label =>t('#tabs.career', "Career"), :css_class => 'career', :href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_CAREERS },
       { :id => TAB_REFERRALS, :label => t('#tabs.referrals', "Referrals"), :css_class => 'referrals', :href => :course_referrals_path},
-      { :id => TAB_SETTINGS, :label => t('#tabs.settings', "Settings"), :css_class => 'settings', :href => :course_settings_path },
-      { :id => TAB_VIDEOS, :label => t('#tabs.videos', "Videos"), :css_class => 'videos', :href => :course_wiki_pages_path }
+      { :id => TAB_VIDEOS, :label => t('#tabs.videos', "Videos"), :css_class => 'videos',:href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_VIDEOS },
+      { :id => TAB_OFFERS, :label => t('#tabs.offers', "Offers"), :css_class => 'offers',:href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_OFFERS },
+      { :id => TAB_SETTINGS, :label => t('#tabs.settings', "Settings"), :css_class => 'settings', :href => :course_settings_path }
 
     ]
   end
@@ -2800,6 +2803,7 @@ class Course < ActiveRecord::Base
         tab[:hidden_unused] = true if tab[:id] == TAB_FAQS && !active_record_types[:faq]
         tab[:hidden_unused] = true if tab[:id] == TAB_CAREERS && !active_record_types[:career]
         tab[:hidden_unused] = true if tab[:id] == TAB_VIDEOS && !active_record_types[:videos]
+        tab[:hidden_unused] = true if tab[:id] == TAB_OFFERS && !active_record_types[:offers]
       end
 
       # remove tabs that the user doesn't have access to
