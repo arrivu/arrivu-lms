@@ -1,0 +1,25 @@
+<% form_for :comments,  :url => edit_course_comment_path, :html => { :id => 'add_update_comments',:class => 'bootstrap-form form-horizontal', :action => 'update', :method => 'put',
+                                                                 :title => t('start_a_new_comment', 'Update comment'),:style => 'display:none;' } do |f| %>
+
+    <table class="formtable" style="width: 100%">
+      <tr>
+        <td><%= f.blabel :title, :en => "Title" %></td>
+        <td><%= f.text_field :title %></td>
+      </tr>
+
+      <tr>
+        <td><%= f.blabel :comment, :en => "Comment" %></td>
+        <td><%= f.text_area :comment, :style => "width: 400px; height: 75px;", :maxlength=>"250"%>
+        </td> </tr>
+
+
+      <tr>
+        <td class="button-container" colspan="2">
+          <button type="submit" class="btn btn-primary "><%= t 'buttons.add_comment', "Update Comment" %></button>
+        </td>
+      </tr>
+    </table>
+
+
+
+<% end %>

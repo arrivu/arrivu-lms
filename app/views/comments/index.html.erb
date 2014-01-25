@@ -1,0 +1,37 @@
+
+<% content_for :right_side do %>
+    <a href = new_course_comment_path, input type="button" class="btn btn-primary"><i class="icon-discussion"></i> Add Comment</a>
+<% end %>
+
+
+    <% form_for :comments,:url => url_for(:controller => 'comments',:action => 'review') do |f| %>
+        <% @comments.each do |comment| %>
+
+        <table>
+
+            <div class="comment" id="comment_<%= comment ? comment.id : "{{ blank }}" %>" style="<%= hidden unless comment %> border: 0px solid #aaa; margin-bottom: 10px;">
+              <div style="float: left;" class="user_name">
+
+                <%= image_tag(comment.user.avatar_image_url) rescue nbsp %>
+                <%= comment.user_name rescue nbsp %></div>
+                <%= comment.user.name  %>
+            <br>
+              <%= comment.comment  %>
+
+              <div style="float: right;">
+                <span class="created_at" style="color: #888; font-size: 0.8em;">
+                  <%= datetime_string(comment.created_at) rescue nbsp %></span>
+                <% owner_id = (comment.user_id) rescue nbsp %>
+                <% if owner_id == @current_user.id %>
+                    <a href="<%= course_comments_path(@context,comment ? comment.id : "{{ id }}") %>" class="delete_comment_link no-hover"><i class="icon-trash standalone-icon"></i></a>
+                    <a href="<%= edit_course_comment_path(@context,comment ? comment.id : "{{ id }}") %>" class="edit_comment_link no-hover"><i class="icon-edit standalone-icon"></i></a>
+                <%end %>
+              </div>
+
+              <div class="clear" style="border-top: 1px solid #ccc;"></div>
+              <!--<div class="message message-eportfolios"><%= comment.message rescue nbsp %></div>-->
+            </div>
+
+          </table>
+    <%end %>
+<%end %>
