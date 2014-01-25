@@ -1635,7 +1635,7 @@ class ApplicationController < ActionController::Base
     elsif @wiki_type == WikiPage::WIKI_TYPE_VIDEOS
       @context.wiki.wiki_pages.videos.count == 0
     elsif @wiki_type == WikiPage::WIKI_TYPE_OFFERS
-      @context.wiki.wiki_pages.videos.count == 0
+      @context.wiki.wiki_pages.offers.count == 0
     else
        @context.wiki.wiki_pages.pages.count == 0
     end

@@ -209,7 +209,7 @@ class WikiPage < ActiveRecord::Base
   scope :pages, where(:wiki_type => 'wiki')
   scope :faqs, where(:wiki_type => 'faq')
   scope :careers, where(:wiki_type => 'career')
-  scope :videos, where(:wiki_type => 'video')
+  scope :videos, where(:wiki_type => 'videos')
   scope :offers, where(:wiki_type => 'offer')
 
   # needed for ensure_unique_url
@@ -591,7 +591,7 @@ class WikiPage < ActiveRecord::Base
   WIKI_TYPE_FAQS ='faq'
   WIKI_TYPE_CAREERS ='career'
   WIKI_TYPE_PAGES ='wiki'
-  WIKI_TYPE_VIDEOS ='video'
+  WIKI_TYPE_VIDEOS ='videos'
   WIKI_TYPE_OFFERS ='offer'
 
   DEFAULT_FAQ_FRONT_PAGE_URL = 'faq-front-page'

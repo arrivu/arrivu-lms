@@ -2723,8 +2723,8 @@ class Course < ActiveRecord::Base
       { :id => TAB_FAQS, :label =>t('#tabs.faq', "FAQ"), :css_class => 'faq',:href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_FAQS  },
       { :id => TAB_CAREERS, :label =>t('#tabs.career', "Career"), :css_class => 'career', :href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_CAREERS },
       { :id => TAB_REFERRALS, :label => t('#tabs.referrals', "Referrals"), :css_class => 'referrals', :href => :course_referrals_path},
-      { :id => TAB_VIDEOS, :label => t('#tabs.videos', "Videos"), :css_class => 'videos',:href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_VIDEOS },
-      { :id => TAB_OFFERS, :label => t('#tabs.offers', "Offers"), :css_class => 'offers',:href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_OFFERS },
+      { :id => TAB_VIDEOS, :label => t('#tabs.videos', "Video"), :css_class => 'videos',:href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_VIDEOS },
+      { :id => TAB_OFFERS, :label => t('#tabs.offers', "Offer"), :css_class => 'offer',:href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_OFFERS },
       { :id => TAB_SETTINGS, :label => t('#tabs.settings', "Settings"), :css_class => 'settings', :href => :course_settings_path }
 
     ]

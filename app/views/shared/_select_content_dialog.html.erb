@@ -16,8 +16,8 @@
         <% if !only || only.include?(:attachments) %>
         <option value="attachment"><%= t :file_item, "File" %></option>
         <% end %>
-        <% if !only || only.include?(:wiki_pages) %>
-        <option value="wiki_page"><%= t :content_page_item, "Content Page" %></option>
+        <% if !only || only.include?(:wiki) %>
+        <option value="wiki"><%= t :content_page_item, " Pages" %></option>
         <% end %>
         <% if !only || only.include?(:discussion_topics) %>
         <option value="discussion_topic"><%= t :discussion_item, "Discussion" %></option>
@@ -32,10 +32,16 @@
         <option value="context_external_tool" class="context_module_content"><%= t :external_tool_item, "External Tool" %></option>
         <% end %>
         <% if !only || only.include?(:videos) %>
-            <option value="context_video" class="context_module_content"><%= t :video_item, "Videos" %></option>
+            <option value="video" class="context_module_content"><%= t :video_item, "Videos" %></option>
         <% end %>
         <% if !only || only.include?(:offers) %>
-            <option value="context_offer" class="context_module_content"><%= t :offer_item, "Offers" %></option>
+            <option value="offer" class="context_module_content"><%= t :offer_item, "Offers" %></option>
+        <% end %>
+        <% if !only || only.include?(:faq) %>
+            <option value="faq" class="context_module_content"><%= t :faq_item, "FAQ" %></option>
+        <% end %>
+        <% if !only || only.include?(:career) %>
+            <option value="career" class="context_module_content"><%= t :career_item, "Careers" %></option>
         <% end %>
       </select>
       <% }, :wrapper => '<span class="holder_name">\1</span>' %>
@@ -120,7 +126,7 @@
       <% end %>
         <!--for videos -->
       <% if !only || only.include?(:videos) %>
-        <div id="context_videos_select" class="module_item_option" style="margin: 5px 20px;">
+        <div id="videos_select" class="module_item_option" style="margin: 5px 20px;">
           <div style="font-size: 0.8em;">
             <i class="icon-video"></i>
             <%= t :videos_notice, "select a video from below to associated with this Module", :wrapper => '<span class="holder_type">\1</span>' %>
@@ -128,23 +134,100 @@
           <div style="margin-top: 5px;">
             <select class="module_item_select" multiple>
               <optgroup label="Select Videos">
-                <% @context.wiki.wiki_pages.videos.each do |video| %>
+                <% @context.wiki.wiki_pages.videos.active.each do |video| %>
                    <option value="<%= video.id %>"><%= video.title %></option>
                 <% end %>
               </optgroup>
-              <option value="new"><%= t :new_video_option, "[ New Video ]" %></option>
+              <option value="new"><%= t :new_video_option, "[ New Video WikiPage ]" %></option>
             </select>
           </div>
           <div class="new" style="margin-top: 5px;">
-            <%= before_label :video_name, "Video Name" %>
-            <input type="text" name="assignment[title]" class="item_title"/>
-            <a href="<%= context_url(@context, :context_assignments_url) %>" style="display: none;" class="add_item_url">&nbsp;</a>
+            <%= before_label :video_name, "Video Document Name" %>
+            <input type="text" name="wiki_page[title]" class="item_title"/>
+            <a href="<%=  context_url(@context, :context_wiki_pages_url,:type => "videos") %>" style="display: none;" class="add_item_url">&nbsp;</a>
           </div>
         </div>
     <% end %>
 
+      <!--for offers-->
+    <% if !only || only.include?(:videos) %>
+        <div id="offers_select" class="module_item_option" style="margin: 5px 20px;">
+          <div style="font-size: 0.8em;">
+            <i class="icon-document"></i>
+            <%= t :videos_notice, "select a offer document from below to associated with this Module", :wrapper => '<span class="holder_type">\1</span>' %>
+          </div>
+          <div style="margin-top: 5px;">
+            <select class="module_item_select" multiple>
+              <optgroup label="Select Offer Document">
+                <% @context.wiki.wiki_pages.offers.active.each do |offer| %>
+                    <option value="<%= offer.id %>"><%= offer.title %></option>
+                <% end %>
+              </optgroup>
+              <option value="new"><%= t :new_video_option, "[ New Offer WikiPage ]" %></option>
+            </select>
+          </div>
+          <div class="new" style="margin-top: 5px;">
+            <%= before_label :offer_name, "Offer Document Name" %>
+            <input type="text" name="wiki_page[title]" class="item_title"/>
+            <a href="<%=  context_url(@context, :context_wiki_pages_url,:type => "offer") %>" style="display: none;" class="add_item_url">&nbsp;</a>
+          </div>
+        </div>
+    <% end %>
+
+    <!--for faq-->
+
+    <% if !only || only.include?(:faq) %>
+        <div id="faqs_select" class="module_item_option" style="margin: 5px 20px;">
+          <div style="font-size: 0.8em;">
+            <i class="icon-document"></i>
+            <%= t :faq, "select a faq wiki page from below to associated with this Module", :wrapper => '<span class="holder_type">\1</span>' %>
+          </div>
+          <div style="margin-top: 5px;">
+            <select class="module_item_select" multiple>
+              <optgroup label="Select Offer Document">
+                <% @context.wiki.wiki_pages.faqs.active.each do |faq| %>
+                    <option value="<%= faq.id %>"><%= faq.title %></option>
+                <% end %>
+              </optgroup>
+              <option value="new"><%= t :new_faq_option, "[ New FAQ WikiPage ]" %></option>
+            </select>
+          </div>
+          <div class="new" style="margin-top: 5px;">
+            <%= before_label :faq, "New Faq WikiPage Name" %>
+            <input type="text" name="wiki_page[title]" class="item_title"/>
+            <a href="<%=  context_url(@context, :context_wiki_pages_url,:type => "faq") %>" style="display: none;" class="add_item_url">&nbsp;</a>
+          </div>
+        </div>
+    <% end %>
+
+      <!--for career-->
+    <% if !only || only.include?(:faq) %>
+        <div id="careers_select" class="module_item_option" style="margin: 5px 20px;">
+          <div style="font-size: 0.8em;">
+            <i class="icon-document"></i>
+            <%= t :faq, "select a career wiki page from below to associated with this Module", :wrapper => '<span class="holder_type">\1</span>' %>
+          </div>
+          <div style="margin-top: 5px;">
+            <select class="module_item_select" multiple>
+              <optgroup label="Select Offer Document">
+                <% @context.wiki.wiki_pages.careers.active.each do |career| %>
+                    <option value="<%= career.id %>"><%= career.title %></option>
+                <% end %>
+              </optgroup>
+              <option value="new"><%= t :new_faq_option, "[ New Career WikiPage ]" %></option>
+            </select>
+          </div>
+          <div class="new" style="margin-top: 5px;">
+            <%= before_label :career, "New Career WikiPage Name" %>
+            <input type="text" name="wiki_page[title]" class="item_title"/>
+            <a href="<%=  context_url(@context, :context_wiki_pages_url,:type => "career") %>" style="display: none;" class="add_item_url">&nbsp;</a>
+          </div>
+        </div>
+    <% end %>
+
+      <!--for wikis-->
       <% if !only || only.include?(:wiki_pages) %>
-      <div id="wiki_pages_select" class="module_item_option" style="margin: 5px 20px;">
+      <div id="wikis_select" class="module_item_option" style="margin: 5px 20px;">
         <div style="font-size: 0.8em;">
           <i class="icon-document"></i>
           <%= t :wiki_page_notice, 'Select the wiki page you want to associate with this *module*, or add a new page by selecting "New Page".', :wrapper => '<span class="holder_type">\1</span>' %>
@@ -153,7 +236,7 @@
         <select class="module_item_select" multiple>
           <%# cache on the context.wiki instead of just the context because even though it will require a db query, we will get a much better cache hit rate %>
           <% cache([@context.wiki, 'active_wiki_pages']) do  %>
-            <% @context.wiki.wiki_pages.active.select([:id, :title]).each do |page| %>
+            <% @context.wiki.wiki_pages.pages.active.select([:id, :title]).each do |page| %>
               <% if page && !page.new_record? %>
                 <option value="<%= page.id %>"><%= page.title %></option>
               <% end %>
@@ -165,7 +248,7 @@
         <div class="new" style="margin-top: 5px;">
           <%= before_label :page_name, "Page Name" %>
           <input type="text" name="wiki_page[title]" class="item_title"/>
-          <a href="<%= context_url(@context, :context_wiki_pages_url, @wiki_type) %>" style="display: none;" class="add_item_url">&nbsp;</a>
+          <a href="<%= context_url(@context, :context_wiki_pages_url, :type => "wiki") %>" style="display: none;" class="add_item_url">&nbsp;</a>
         </div>
       </div>
       <% end %>
