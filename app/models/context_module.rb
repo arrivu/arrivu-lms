@@ -257,10 +257,12 @@ class ContextModule < ActiveRecord::Base
     params[:type] = params[:type].underscore if params[:type]
     position = opts[:position] || (self.content_tags.active.map(&:position).compact.max || 0) + 1
     if params[:type] == "wiki"
+      item = opts[:wiki] || self.context.wiki.wiki_pages.pages.find_by_id(params[:id])
+    elsif params[:type] == "faq"
       item = opts[:faq] || self.context.wiki.wiki_pages.faqs.find_by_id(params[:id])
     elsif params[:type] == "career"
       item = opts[:career] || self.context.wiki.wiki_pages.careers.find_by_id(params[:id])
-    elsif params[:type] == "videos"
+    elsif params[:type] == "video"
       item = opts[:videos] || self.context.wiki.wiki_pages.videos.find_by_id(params[:id])
     elsif params[:type] == "offer"
       item = opts[:offers] || self.context.wiki.wiki_pages.offers.find_by_id(params[:id])

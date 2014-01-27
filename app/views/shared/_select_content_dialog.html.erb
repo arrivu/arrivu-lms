@@ -129,7 +129,7 @@
         <div id="videos_select" class="module_item_option" style="margin: 5px 20px;">
           <div style="font-size: 0.8em;">
             <i class="icon-video"></i>
-            <%= t :videos_notice, "select a video from below to associated with this Module", :wrapper => '<span class="holder_type">\1</span>' %>
+            <%= t :videos_notice, "select a video wiki page from below to associated with this Module", :wrapper => '<span class="holder_type">\1</span>' %>
           </div>
           <div style="margin-top: 5px;">
             <select class="module_item_select" multiple>
@@ -138,19 +138,18 @@
                    <option value="<%= video.id %>"><%= video.title %></option>
                 <% end %>
               </optgroup>
-              <option value="new"><%= t :new_video_option, "[ New Video WikiPage ]" %></option>
+              <option value="new"><%= t :new_video_option, "[ New Video ]" %></option>
             </select>
           </div>
           <div class="new" style="margin-top: 5px;">
-            <%= before_label :video_name, "Video Document Name" %>
+            <%= before_label :video_name, "Video Name" %>
             <input type="text" name="wiki_page[title]" class="item_title"/>
-            <a href="<%=  context_url(@context, :context_wiki_pages_url,:type => "videos") %>" style="display: none;" class="add_item_url">&nbsp;</a>
+            <a href="<%=  context_url(@context, :context_wiki_pages_url,:type => "video") %>" style="display: none;" class="add_item_url">&nbsp;</a>
           </div>
         </div>
     <% end %>
-
       <!--for offers-->
-    <% if !only || only.include?(:videos) %>
+    <% if !only || only.include?(:offers) %>
         <div id="offers_select" class="module_item_option" style="margin: 5px 20px;">
           <div style="font-size: 0.8em;">
             <i class="icon-document"></i>
@@ -163,19 +162,17 @@
                     <option value="<%= offer.id %>"><%= offer.title %></option>
                 <% end %>
               </optgroup>
-              <option value="new"><%= t :new_video_option, "[ New Offer WikiPage ]" %></option>
+              <option value="new"><%= t :new_video_option, "[ New Offer]" %></option>
             </select>
           </div>
           <div class="new" style="margin-top: 5px;">
-            <%= before_label :offer_name, "Offer Document Name" %>
+            <%= before_label :offer_name, "Offer Name" %>
             <input type="text" name="wiki_page[title]" class="item_title"/>
             <a href="<%=  context_url(@context, :context_wiki_pages_url,:type => "offer") %>" style="display: none;" class="add_item_url">&nbsp;</a>
           </div>
         </div>
     <% end %>
-
     <!--for faq-->
-
     <% if !only || only.include?(:faq) %>
         <div id="faqs_select" class="module_item_option" style="margin: 5px 20px;">
           <div style="font-size: 0.8em;">
@@ -189,7 +186,7 @@
                     <option value="<%= faq.id %>"><%= faq.title %></option>
                 <% end %>
               </optgroup>
-              <option value="new"><%= t :new_faq_option, "[ New FAQ WikiPage ]" %></option>
+              <option value="new"><%= t :new_faq_option, "[ New FAQ ]" %></option>
             </select>
           </div>
           <div class="new" style="margin-top: 5px;">
@@ -199,9 +196,8 @@
           </div>
         </div>
     <% end %>
-
       <!--for career-->
-    <% if !only || only.include?(:faq) %>
+    <% if !only || only.include?(:career) %>
         <div id="careers_select" class="module_item_option" style="margin: 5px 20px;">
           <div style="font-size: 0.8em;">
             <i class="icon-document"></i>
@@ -214,7 +210,7 @@
                     <option value="<%= career.id %>"><%= career.title %></option>
                 <% end %>
               </optgroup>
-              <option value="new"><%= t :new_faq_option, "[ New Career WikiPage ]" %></option>
+              <option value="new"><%= t :new_faq_option, "[ New Career ]" %></option>
             </select>
           </div>
           <div class="new" style="margin-top: 5px;">
@@ -224,7 +220,6 @@
           </div>
         </div>
     <% end %>
-
       <!--for wikis-->
       <% if !only || only.include?(:wiki_pages) %>
       <div id="wikis_select" class="module_item_option" style="margin: 5px 20px;">
