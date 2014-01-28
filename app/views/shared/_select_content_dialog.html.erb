@@ -133,7 +133,7 @@
           </div>
           <div style="margin-top: 5px;">
             <select class="module_item_select" multiple>
-              <optgroup label="Select Videos">
+              <optgroup label="Videos">
                 <% @context.wiki.wiki_pages.videos.active.each do |video| %>
                    <option value="<%= video.id %>"><%= video.title %></option>
                 <% end %>
@@ -157,9 +157,9 @@
           </div>
           <div style="margin-top: 5px;">
             <select class="module_item_select" multiple>
-              <optgroup label="Select Offer Document">
+              <optgroup label="Offers">
                 <% @context.wiki.wiki_pages.offers.active.each do |offer| %>
-                    <option value="<%= offer.id %>"><%= offer.title %></option>
+                   <option value="<%= offer.id %>"><%= offer.title %></option>
                 <% end %>
               </optgroup>
               <option value="new"><%= t :new_video_option, "[ New Offer]" %></option>
@@ -181,7 +181,7 @@
           </div>
           <div style="margin-top: 5px;">
             <select class="module_item_select" multiple>
-              <optgroup label="Select Offer Document">
+              <optgroup label="FAQs">
                 <% @context.wiki.wiki_pages.faqs.active.each do |faq| %>
                     <option value="<%= faq.id %>"><%= faq.title %></option>
                 <% end %>
@@ -205,7 +205,7 @@
           </div>
           <div style="margin-top: 5px;">
             <select class="module_item_select" multiple>
-              <optgroup label="Select Offer Document">
+              <optgroup label="Careers">
                 <% @context.wiki.wiki_pages.careers.active.each do |career| %>
                     <option value="<%= career.id %>"><%= career.title %></option>
                 <% end %>
@@ -231,11 +231,13 @@
         <select class="module_item_select" multiple>
           <%# cache on the context.wiki instead of just the context because even though it will require a db query, we will get a much better cache hit rate %>
           <% cache([@context.wiki, 'active_wiki_pages']) do  %>
-            <% @context.wiki.wiki_pages.pages.active.select([:id, :title]).each do |page| %>
-              <% if page && !page.new_record? %>
-                <option value="<%= page.id %>"><%= page.title %></option>
-              <% end %>
-            <% end %>
+            <optgroup label="Pages">
+             <% @context.wiki.wiki_pages.pages.active.select([:id, :title]).each do |page| %>
+               <% if page && !page.new_record? %>
+                 <option value="<%= page.id %>"><%= page.title %></option>
+               <% end %>
+             <% end %>
+            </optgroup>
           <% end %>
           <option value="new"><%= t :new_page_option, "[ New Page ]" %></option>
         </select>
