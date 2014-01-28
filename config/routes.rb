@@ -1404,7 +1404,7 @@ FakeRails3Routes.draw do
   match 'login/oauth2/auth' => 'pseudonym_sessions#oauth2_auth', :as => :oauth2_auth, :via => :get
   match 'login/oauth2/token' => 'pseudonym_sessions#oauth2_token', :as => :oauth2_token, :via => :post
   match 'login/oauth2/confirm' => 'pseudonym_sessions#oauth2_confirm', :as => :oauth2_auth_confirm, :via => :get
-  match 'login/oauth2/accept' => 'pseudonym_sessions#oauth2_accept', :as => :oauth2_auth_accept, :via => :post
+  match 'login/oauth2/accept' => 'pseudonym_sessions#oauth2_accept', :as => :oauth2_auth_accept, :via => [:post,:get]
   match 'login/oauth2/deny' => 'pseudonym_sessions#oauth2_deny', :as => :oauth2_auth_deny, :via => :get
   match 'login/oauth2/token' => 'pseudonym_sessions#oauth2_logout', :as => :oauth2_logout, :via => :delete
 
