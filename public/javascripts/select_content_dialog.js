@@ -98,7 +98,7 @@ $(document).ready(function() {
       }
     };
     var item_type = $("#add_module_item_select").val();
-    if(item_type == 'external_url') {
+     if(item_type == 'external_url') {
       var item_data = {
         'item[type]': $("#add_module_item_select").val(),
         'item[id]': $("#select_context_content_dialog .module_item_option:visible:first .module_item_select").val(),
@@ -152,7 +152,10 @@ $(document).ready(function() {
             // discussion_topics will come from real api v1 and so wont be nested behind a `discussion_topic` root object
             if (item_data['item[type]'] === 'discussion_topic') {
               obj = data;
-            } else {
+            }else if (item_data['item[type]'] === 'wiki' || item_data['item[type]'] === 'faq' ||  item_data['item[type]'] === 'career' ||  item_data['item[type]'] === 'video' ||  item_data['item[type]'] === 'offer' ){
+              obj = data['wiki_page']
+            }
+            else {
               obj = data[item_data['item[type]']]; // e.g. data['wiki_page'] for wiki pages
             }
 

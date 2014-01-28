@@ -255,8 +255,16 @@ class ContextModule < ActiveRecord::Base
   def add_item(params, added_item=nil, opts={})
     params[:type] = params[:type].underscore if params[:type]
     position = opts[:position] || (self.content_tags.active.map(&:position).compact.max || 0) + 1
-    if params[:type] == "wiki_page" || params[:type] == "page"
-      item = opts[:wiki_page] || self.context.wiki.wiki_pages.find_by_id(params[:id])
+    if params[:type] == "wiki"
+      item = opts[:wiki] || self.context.wiki.wiki_pages.pages.find_by_id(params[:id])
+    elsif params[:type] == "faq"
+      item = opts[:faq] || self.context.wiki.wiki_pages.faqs.find_by_id(params[:id])
+    elsif params[:type] == "career"
+      item = opts[:career] || self.context.wiki.wiki_pages.careers.find_by_id(params[:id])
+    elsif params[:type] == "video"
+      item = opts[:videos] || self.context.wiki.wiki_pages.videos.find_by_id(params[:id])
+    elsif params[:type] == "offer"
+      item = opts[:offers] || self.context.wiki.wiki_pages.offers.find_by_id(params[:id])
     elsif params[:type] == "attachment" || params[:type] == "file"
       item = opts[:attachment] || self.context.attachments.active.find_by_id(params[:id])
     elsif params[:type] == "assignment"

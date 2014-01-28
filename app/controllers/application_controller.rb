@@ -1020,6 +1020,8 @@ class ApplicationController < ActionController::Base
     page_name = params[:wiki_page_id] || params[:id] || (params[:wiki_page] && params[:wiki_page][:title])
     page_name ||= WikiPage::DEFAULT_FAQ_FRONT_PAGE_URL if (@wiki_type ==  WikiPage::WIKI_TYPE_FAQS)
     page_name ||= WikiPage::DEFAULT_CAREER_FRONT_PAGE_URL if (@wiki_type ==  WikiPage::WIKI_TYPE_CAREERS)
+    page_name ||= WikiPage::DEFAULT_VIDEO_FRONT_PAGE_URL if (@wiki_type == WikiPage::WIKI_TYPE_VIDEOS)
+    page_name ||= WikiPage::DEFAULT_OFFER_FRONT_PAGE_URL if (@wiki_type == WikiPage::WIKI_TYPE_OFFERS)
     page_name ||= (@wiki.get_front_page_url || Wiki::DEFAULT_FRONT_PAGE_URL) unless @context.draft_state_enabled?
     if(params[:format] && !['json', 'html'].include?(params[:format]))
       page_name += ".#{params[:format]}"
@@ -1631,6 +1633,10 @@ class ApplicationController < ActionController::Base
       @context.wiki.wiki_pages.faqs.count == 0
     elsif @wiki_type ==  WikiPage::WIKI_TYPE_CAREERS
         @context.wiki.wiki_pages.careers.count == 0
+    elsif @wiki_type == WikiPage::WIKI_TYPE_VIDEOS
+      @context.wiki.wiki_pages.videos.count == 0
+    elsif @wiki_type == WikiPage::WIKI_TYPE_OFFERS
+      @context.wiki.wiki_pages.offers.count == 0
     else
        @context.wiki.wiki_pages.pages.count == 0
     end
