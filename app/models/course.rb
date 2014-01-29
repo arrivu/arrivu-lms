@@ -23,7 +23,7 @@ class Course < ActiveRecord::Base
   include TextHelper
 
   acts_as_tagger
-
+  acts_as_commentable
   attr_accessible :name,
                   :section,
                   :account,
@@ -174,7 +174,7 @@ class Course < ActiveRecord::Base
   attr_accessor :import_source
   has_many :zip_file_imports, :as => :context
   has_many :content_participation_counts, :as => :context, :dependent => :destroy
-
+  has_many :comment
   include Profile::Association
 
   before_save :assign_uuid
@@ -2702,6 +2702,7 @@ class Course < ActiveRecord::Base
   TAB_REFERRALS=19
   TAB_VIDEOS=20
   TAB_OFFERS=21
+  TAB_COMMENTS=22
 
   def self.default_tabs
     [
@@ -2725,6 +2726,7 @@ class Course < ActiveRecord::Base
       { :id => TAB_REFERRALS, :label => t('#tabs.referrals', "Referrals"), :css_class => 'referrals', :href => :course_referrals_path},
       { :id => TAB_VIDEOS, :label => t('#tabs.videos', "Videos"), :css_class => 'videos',:href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_VIDEOS },
       { :id => TAB_OFFERS, :label => t('#tabs.offers', "Offers"), :css_class => 'offer',:href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_OFFERS },
+      {:id => TAB_COMMENTS, :label => t('#tabs.testimonial', "Testimonial"), :css_class => 'comments', :href => :course_comments_path},
       { :id => TAB_SETTINGS, :label => t('#tabs.settings', "Settings"), :css_class => 'settings', :href => :course_settings_path }
 
     ]
