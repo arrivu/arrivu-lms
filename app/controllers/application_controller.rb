@@ -1061,7 +1061,7 @@ class ApplicationController < ActionController::Base
 
     @page.editing_roles = (@context.default_wiki_editing_roles rescue nil) || @page.default_roles
 
-    if @page.is_front_page? or @wiki.wiki_pages.faqs.empty? or @wiki.wiki_pages.careers.empty?
+    if @page.is_front_page? or @wiki.wiki_pages.faqs.empty? or @wiki.wiki_pages.careers.empty? or @wiki.wiki_pages.videos.empty? or @wiki.wiki_pages.offers.empty?
       @page.body = t "#application.wiki_front_page_default_content_course", "Welcome to your new course #{@page.wiki_type}!" if @context.is_a?(Course)
       @page.body = t "#application.wiki_front_page_default_content_group", "Welcome to your new group #{@page.wiki_type}!" if @context.is_a?(Group)
     end
