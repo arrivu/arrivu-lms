@@ -382,7 +382,7 @@ FakeRails3Routes.draw do
       match 'reorder' => 'outcome_groups#reorder', :as => :reorder
     end
 
-    resources :context_modules, :path => :modules do
+    resources :context_modules, :path => :classes do
       match 'items' => 'context_modules#add_item', :as => :add_item, :via => :post
       match 'reorder' => 'context_modules#reorder_items', :as => :reorder, :via => :post
       match 'collapse' => 'context_modules#toggle_collapse', :as => :toggle_collapse

@@ -3,10 +3,11 @@
         <% unless @tool.nil? %>
         <% js_block do %>
             <script>
-                require(['tool_inline']);
+                require(['jquery','tool_inline'], function($) {
                 $(document).ready(function() {
                     $("#content").removeClass('padless');
                 });
+               });
             </script>
         <% end %>
 

@@ -283,11 +283,11 @@ define([
                     isNew = true;
                     $form.attr('action', $form.find(".add_context_module_group_url").attr('href'));
                     $form.attr('method', 'POST');
-                    $form.find(".submit_button").text("Add Module Group");
+                    $form.find(".submit_button").text("Add Class Group");
                 } else {
                     $form.attr('action', event.target.href);
                     $form.attr('method', 'PUT');
-                    $form.find(".submit_button").text("Update Module Group");
+                    $form.find(".submit_button").text("Update Class Group");
                 }
 
                 $module.fadeIn('fast', function() {
@@ -301,7 +301,7 @@ define([
                     close: function() {
                         modules.hideEditModuleGroup(true);
                     }
-                }).fixDialogButtons().dialog('option', {title: (isNew ? "Add Module Group" :  "Edit Module Group"), width: (324)}).dialog('open'); //show();
+                }).fixDialogButtons().dialog('option', {title: (isNew ? "Add Class Group" :  "Edit Class Group"), width: (324)}).dialog('open'); //show();
                 $module.removeClass('dont_remove');
                 $form.find(":text:visible:first").focus().select();
             },
@@ -901,7 +901,6 @@ define([
                 $(this).sortable('option', 'connectWith', '.context_module');
             });
             modules.editModuleGroup($module);
-            console.log("ok");
             $("#context_module_group").append($module);
         });
 

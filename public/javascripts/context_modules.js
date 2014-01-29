@@ -255,12 +255,12 @@ define([
                     $form.attr('action', $form.find(".add_context_module_url").attr('href'));
                     $form.find(".completion_entry").hide();
                     $form.attr('method', 'POST');
-                    $form.find(".submit_button").text(I18n.t('buttons.add', "Add Module"));
+                    $form.find(".submit_button").text("Add Class");
                 } else {
                     $form.attr('action', $module.find(".edit_module_link").attr('href'));
                     $form.find(".completion_entry").show();
                     $form.attr('method', 'PUT');
-                    $form.find(".submit_button").text(I18n.t('buttons.update', "Update Module"));
+                    $form.find(".submit_button").text("Update Class");
                 }
                 $form.find("#unlock_module_at").prop('checked', data.unlock_at);
                 $form.find("#require_sequential_progress").attr('checked', data.require_sequential_progress == "true" || data.require_sequential_progress == "1");
@@ -306,7 +306,7 @@ define([
                     close: function() {
                         modules.hideEditModule(true);
                     }
-                }).fixDialogButtons().dialog('option', {title: (isNew ? I18n.t('titles.add', "Add Module") : I18n.t('titles.edit', "Edit Module Settings")), width: (isNew ? 'auto' : 600)}).dialog('open'); //show();
+                }).fixDialogButtons().dialog('option', {title: (isNew ? "Add Class" : "Edit Class Settings"), width: (isNew ? 'auto' : 600)}).dialog('open'); //show();
                 $module.removeClass('dont_remove');
                 $form.find(":text:visible:first").focus().select();
             },
@@ -1226,7 +1226,7 @@ define([
                     .find("ul").show().append($("<li />").text(progressionData.name));
             });
             $("#module_progression_dialog").dialog({
-                title: I18n.t('titles.student_progress', "Student Progress for Module"),
+                title: "Student Progress for Class",
                 width: 500
             });
         });

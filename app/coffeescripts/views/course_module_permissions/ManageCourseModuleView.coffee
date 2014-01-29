@@ -93,7 +93,7 @@ define [
           return uid
 
     renderHeader: -> 
-      @$el.find('thead tr').html "<th>Module Groups</th><th class='permissionButtonView'></th>"
+      @$el.find('thead tr').html "<th>Class groupings</th><th class='permissionButtonView'></th>"
 
       @collection.each (module) =>
         moduleHeaderView = new ModuleHeaderView
@@ -167,7 +167,7 @@ define [
         if mid is module.id
           module.save {module_id: mid,user_id:sid,status:work_status},
             failure: ->
-              alert 'module was not be saved!'
+              alert 'Class was not be saved!'
 
     selectallmodule: (event) ->
       selected_module_id= $(event.currentTarget).attr("data-select_module_id")
@@ -192,4 +192,4 @@ define [
           if module_id is key_selected_module_id
             module.save {module_id: key_selected_module_id,user_id:enrolled_user.id,status:work_status},
               failure: ->
-                alert 'module was not be saved!'
+                alert 'Class was not be saved!'

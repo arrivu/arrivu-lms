@@ -1,7 +1,7 @@
 class UserModuleGroupEnrollmentsController < ApplicationController
   before_filter :require_user
   before_filter :require_context
-  add_crumb(proc { t('#crumbs.modules', "Modules") }) { |c| c.send :named_context_url, c.instance_variable_get("@context"), :context_context_modules_url }
+  add_crumb(proc { t('#crumbs.classes', "Classes") }) { |c| c.send :named_context_url, c.instance_variable_get("@context"), :context_context_modules_url }
   def index
     if authorized_action(@context, @current_user, :read)
       add_crumb(t('#crumbs.permissions', "Permissions"), course_user_module_group_enrollments_url(@context))
