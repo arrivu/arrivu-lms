@@ -212,7 +212,8 @@ FakeRails3Routes.draw do
     # this needs to come before the users concern, or users/:id will preempt it
     match 'users/prior' => 'context#prior_users', :as => :prior_users
     resources :rewards
-    resources :comments
+    resources :comments ,:path => :testimonial
+
     concerns :users
     match 'statistics' => 'courses#statistics', :as => :statistics
     match 'unenroll/:id' => 'courses#unenroll_user', :as => :unenroll, :via => :delete
@@ -311,7 +312,6 @@ FakeRails3Routes.draw do
       end
     end
     resources :rewards
-    resources :comments
     resources :submissions
     resources :calendar_events
 
@@ -1032,17 +1032,6 @@ FakeRails3Routes.draw do
       et_routes("account")
     end
 
-    scope(:controller => :comments) do
-      def et_routes(context)
-        get "#{context}s/:#{context}_id/comments", :action => :index, :path_name => "#{context}_comments"
-        post "#{context}s/:#{context}_id/comments", :action => :create, :path_name => "#{context}_comments_create"
-        put "#{context}s/:#{context}_id/comments/:comment_id", :action => :update, :path_name => "#{context}_comments_update"
-        delete "#{context}s/:#{context}_id/comments/:comment_id", :action => :destroy, :path_name => "#{context}_comments_delete"
-      end
-        et_routes("course")
-    end
-
-
     scope(:controller => :referrals) do
       def et_routes(context)
         get "#{context}s/:#{context}_id/referrees", :action => :get_referrees, :path_name => "#{context}_referrees"
@@ -1435,5 +1424,4 @@ FakeRails3Routes.draw do
   get '/get_collection/:collection_id' =>'videos#get_collection'
   match '/rr/:short_url_code' => 'referrals#referree_register',:as => :rr
   match '/update_referree'  => 'referrals#update_referree',:path_name => "reward", :as => :referree_registration, :via => :post
-  match 'review' => 'comments#review'
 end

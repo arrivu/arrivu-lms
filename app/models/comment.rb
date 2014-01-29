@@ -2,6 +2,7 @@ class Comment < ActiveRecord::Base
 
   include ActsAsCommentable::Comment
   attr_accessible :title, :comment
+  validates_presence_of  :comment
   belongs_to :commentable, :polymorphic => true
 
   default_scope :order => 'created_at ASC'
@@ -13,4 +14,5 @@ class Comment < ActiveRecord::Base
   # NOTE: Comments belong to a user
   belongs_to :user
   belongs_to :course
+
 end

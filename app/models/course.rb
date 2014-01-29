@@ -2722,7 +2722,7 @@ class Course < ActiveRecord::Base
       { :id => TAB_FAQS, :label =>t('#tabs.faq', "FAQ"), :css_class => 'faq',:href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_FAQS  },
       { :id => TAB_CAREERS, :label =>t('#tabs.career', "Career"), :css_class => 'career', :href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_CAREERS },
       { :id => TAB_REFERRALS, :label => t('#tabs.referrals', "Referrals"), :css_class => 'referrals', :href => :course_referrals_path},
-      {:id => TAB_COMMENTS, :label => t('#tabs.comments', "Comments"), :css_class => 'comments', :href => :new_course_comment_path},
+      {:id => TAB_COMMENTS, :label => t('#tabs.testimonial', "Testimonial"), :css_class => 'comments', :href => :course_comments_path},
       { :id => TAB_SETTINGS, :label => t('#tabs.settings', "Settings"), :css_class => 'settings', :href => :course_settings_path }
 
     ]
