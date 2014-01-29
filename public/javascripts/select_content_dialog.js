@@ -39,8 +39,8 @@ $(document).ready(function() {
   INST.selectContentDialog = function(options) {
     var for_modules = options.for_modules;
     var select_button_text = options.select_button_text || I18n.t('buttons.add_item', "Add Item");
-    var holder_name = options.holder_name || "module";
-    var dialog_title = options.dialog_title || I18n.t('titles.add_item_to_module', "Add Item to Module");
+    var holder_name = options.holder_name || "class";
+    var dialog_title = options.dialog_title || I18n.t('titles.add_item_to_class', "Add Item to Class");
     var allow_external_urls = for_modules;
     $dialog.data('submitted_function', options.submit);
     $dialog.find(".context_module_content").showIf(for_modules);

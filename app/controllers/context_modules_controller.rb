@@ -18,13 +18,12 @@
 
 class ContextModulesController < ApplicationController
   before_filter :require_context  
-  add_crumb(proc { t('#crumbs.modules', "Modules") }) { |c| c.send :named_context_url, c.instance_variable_get("@context"), :context_context_modules_url }
-  before_filter { |c| c.active_tab = "modules" }
+  add_crumb(proc { t('#crumbs.modules', "Classes") }) { |c| c.send :named_context_url, c.instance_variable_get("@context"), :context_context_modules_url }
+  before_filter { |c| c.active_tab = "classes" }
 
   def index
     if authorized_action(@context, @current_user, :read)
       @modules = @context.modules_visible_to(@current_user)
-      #@module_groups = @context.context_module_groups
 
       @collapsed_modules = ContextModuleProgression.for_user(@current_user).for_modules(@modules).select([:context_module_id, :collapsed]).select{|p| p.collapsed? }.map(&:context_module_id)
       if @context.grants_right?(@current_user, session, :participate_as_student)

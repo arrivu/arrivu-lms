@@ -16,7 +16,7 @@
 
     <div class="context-modules-main-header clearfix">
       <h2 class="context-modules-title">
-        <%= t('headings.course_modules', %{Course Modules}) %>
+        <%= t('headings.course_modules', %{Course Classes}) %>
       </h2>
 
       <% if can_do(@context, @current_user, :manage_content) %>
@@ -30,7 +30,7 @@
     <div id="no_context_modules_message" style="display:none; clear: both;">
       <% if can_do(@context.context_modules.new, @current_user, :create) %>
           <%= mt 'help.create', <<TEXT, :button => t('#context_modules.buttons.add_module_first', 'create a permission group')
-Permission groups are the way to  logically grouping the modules and you can make permissions to permission groups, click the "%{button}" button to the right.
+Permission groups are the way to  logically grouping the classes and you can make permissions to permission groups, click the "%{button}" button to the right.
 TEXT
 %>
       <% else %>
@@ -74,7 +74,7 @@ TEXT
               <tr>
                 <td colspan="2">
                   <div class="module_group_name">
-                    <%= f.text_field :name, :placeholder => t('module_name', %{Module Group Name}), :class => 'input-block-level' %>
+                    <%= f.text_field :name, :placeholder => t('module_name', %{Class Group Name}), :class => 'input-block-level' %>
                   </div>
                 </td>
               </tr>

@@ -8,7 +8,7 @@ class ContextModuleGroup < ActiveRecord::Base
   validates_presence_of :workflow_state, :context_id, :context_type
   after_save :touch_context
 
-  DEFAULT_MODULE_GROUP_NAME = "Default module group"
+  DEFAULT_MODULE_GROUP_NAME = "Default class group"
 
   scope :default, where(:is_default => true)
   scope :active, where(:workflow_state => 'active')
