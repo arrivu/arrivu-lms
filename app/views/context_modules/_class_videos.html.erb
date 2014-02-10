@@ -1,0 +1,30 @@
+<div class="class_preview_box">
+  <div class="classes_header" > <b class="classes_header_text">Pre Class Videos</b>
+      <div class="admin_link" >
+        <% if can_do(@context, @current_user, :manage_content) %>
+            <a href="#" rel="<%= context_url(@context, :context_url) %>/classes/<%= @module ? @module.id : "{{ id }}" %>/items" class="add_class_video_link icon-plus"><%= t('links.add_pre_class_video', %{Add Pre Class Video}) %></a>
+        <% end  %>
+        &nbsp; <a style="background-color: #7c7c7c;border: none;
+              border-radius: 4px;
+              padding: 3px;
+              color: #FFF;
+              width: 130PX;margin-top: -10px; " href="<%=course_context_modules_path(@context) %>" >&nbsp;&nbsp;Back&nbsp;&nbsp;</a>
+      </div>
+  </div>
+
+  <%@module.content_tags.active.each do |tag|  %>
+      <div style="margin: 10px 15px; font-size: 150%;
+              font-weight: bold;
+              color: #7f8c8d;
+              line-height: 1.5;">
+        <%= image_tag "play_icon.png" ,:width=> 30%> &nbsp;&nbsp;&nbsp;&nbsp;
+        <a class="title <%= '_explicit_external_link' if tag && tag.content_type == 'ExternalUrl' %>" href="<%= context_url(@context, :context_url) %>/modules/items/<%= tag ? tag.id : "{{ id }}" %>">
+        <%= tag.title %>
+        </a>
+      </div>
+      <hr/>
+
+<% end %>
+
+
+</div>

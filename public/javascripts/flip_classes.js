@@ -39,6 +39,7 @@ define([
     'vendor/jquery.scrollTo' /* /\.scrollTo/ */,
     'jqueryui/sortable' /* /\.sortable/ */
 ], function(INST, I18n, $, ContextModulesView, vddTooltip, vddTooltipView, Publishable, PublishButtonView) {
+
     // TODO: AMD don't export global, use as module
     window.modules = (function() {
         return {
@@ -786,32 +787,6 @@ define([
             });
             modules.editModule($module);
         });
-
-        $(".add_class_video_link").live('click', function(event) {
-            event.preventDefault();
-
-            if(INST) {
-                var options = {for_modules: true};
-                options.select_button_text = I18n.t('buttons.add_item', "Add Item");
-                options.dialog_title = I18n.t('titles.add_item', "Add Pre Class Video");
-                options.submit = function(item_data) {
-                    var $item = modules.addItemToModule($module, item_data);
-                    $module.find(".context_module_items.ui-sortable").sortable('refresh').sortable('disable');
-                    var url = $module.find(".add_module_item_link").attr('rel');
-                    $module.disableWhileLoading(
-                        $.ajaxJSON(url, 'POST', item_data, function(data) {
-                            $item.remove();
-                            data.content_tag.type = item_data['item[type]'];
-                            modules.addItemToModule($module, data.content_tag);
-                            $module.find(".context_module_items.ui-sortable").sortable('enable').sortable('refresh');
-                            modules.updateAssignmentData();
-                        })
-                    );
-                };
-                INST.selectContentDialog(options);
-            }
-        });
-
 
         $(".add_module_item_link").live('click', function(event) {
             event.preventDefault();

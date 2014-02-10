@@ -1,0 +1,101 @@
+<div class="class_preview_box">
+  <div class="classes_header" > <b class="classes_header_text">Useful Reading Materials</b>
+  <div class="admin_link" >
+    <!--add video link-->
+  </div>
+  </div>
+  <%@module.content_tags.active.each do |tag|  %>
+      <div style="margin: 10px 17px; font-size: 150%;
+              font-weight: bold;
+              color: #7f8c8d;
+              line-height: 1.5;background-color: #e4f1d5;border-radius:5px;">
+        <div style="width:auto;padding:10px;float:left;"><%= image_tag "practice_icon.png" ,:width=> 50, :style=> "padding:5px;border-radius: 35px;" %> &nbsp;&nbsp;&nbsp;&nbsp;</div>
+        <div style="width:95%;padding:10px;">
+          <span ><a class="title <%= '_explicit_external_link' if tag && tag.content_type == 'ExternalUrl' %>" href="<%= context_url(@context, :context_url) %>/modules/items/<%= tag ? tag.id : "{{ id }}" %>" style="color:#6d7d3f;"> class recording</a></span><br>
+
+          Format:MS Excel | <%= tag.title %>
+          <button style="background-color: #6d7d3f;border: none;
+                  border-radius: 4px;
+                  float: right;
+                  padding: 3px;
+                  color: #FFF;
+                  width: 130PX;margin-top: -10px; ">Download</button>
+        </div>
+      </div>
+
+
+  <% end %>
+  <%@module.content_tags.active.each do |tag|  %>
+      <div style="margin: 10px 17px; font-size: 150%;
+              font-weight: bold;
+              color: #7f8c8d;
+              line-height: 1.5;background-color: #e1f3fd;border-radius:5px;">
+        <div style="width:auto;padding:10px;float:left;"><%= image_tag "word_icon.png" ,:width=> 50, :style=> "padding:5px;border-radius: 35px;" %> &nbsp;&nbsp;&nbsp;&nbsp;</div>
+        <div style="width:95%;padding:10px;">
+          <span ><a class="title <%= '_explicit_external_link' if tag && tag.content_type == 'ExternalUrl' %>" href="<%= context_url(@context, :context_url) %>/modules/items/<%= tag ? tag.id : "{{ id }}" %>" style="color:#0092b9;"> class recording</a></span><br>
+
+          Format:MS Word | <%= tag.title %>
+
+          <button style="background-color: #0092b9;border: none;
+                  border-radius: 4px;
+                  float: right;
+                  padding: 3px;
+                  color: #FFF;
+                  width: 130PX;margin-top: -10px; ">Download</button>
+        </div>
+      </div>
+
+
+  <% end %>
+
+  <%@module.content_tags.active.each do |tag|  %>
+      <div style="margin: 10px 17px; font-size: 150%;
+              font-weight: bold;
+              color: #7f8c8d;
+              line-height: 1.5;background-color: #fee8dd;border-radius:5px;">
+        <div style="width:auto;padding:10px;float:left;"><%= image_tag "pdf_icon.png" ,:width=> 50, :style=> "padding:5px;border-radius:35px;" %> &nbsp;&nbsp;&nbsp;&nbsp;</div>
+        <div style="width:95%;padding:10px;">
+          <span ><a class="title <%= '_explicit_external_link' if tag && tag.content_type == 'ExternalUrl' %>" href="<%= context_url(@context, :context_url) %>/modules/items/<%= tag ? tag.id : "{{ id }}" %>" style="color:#c2401c;"> class recording</a></span><br>
+
+          Format:PDF | <%= tag.title %>
+
+          <button style="background-color: #c2401c;border: none;
+                  border-radius: 4px;
+                  float: right;
+                  padding: 3px;
+                  color: #FFF;
+                  width: 130PX;margin-top: -10px; ">Download</button>
+        </div>
+
+
+
+      </div>
+
+
+  <% end %>
+
+  <%@module.content_tags.active.each do |tag|  %>
+      <div style="margin: 10px 17px; font-size: 150%;
+              font-weight: bold;
+              color: #7f8c8d;
+              line-height: 1.5;background-color: #fcfbdf;border-radius:5px;">
+        <div style="width:auto;padding:10px;float:left;"><%= image_tag "external_link_icon.png" ,:width=> 50, :style=> "padding:5px;border-radius: 35px;" %> &nbsp;&nbsp;&nbsp;&nbsp;</div>
+        <div style="width:95%;padding:10px;">
+          <span ><a class="title <%= '_explicit_external_link' if tag && tag.content_type == 'ExternalUrl' %>" href="<%= context_url(@context, :context_url) %>/modules/items/<%= tag ? tag.id : "{{ id }}" %>" style="color:#d4811b;"> class recording</a></span><br>
+
+          Format:External Url | <%= tag.title %>
+
+          <button style="background-color: #d4811b;border: none;
+                  border-radius: 4px;
+                  float: right;
+                  padding: 3px;
+                  color: #FFF;
+                  width: 130PX;margin-top: -10px; ">Download</button>
+
+        </div>
+      </div>
+
+
+  <% end %>
+
+</div>
