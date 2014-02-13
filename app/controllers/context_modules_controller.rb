@@ -295,6 +295,8 @@ class ContextModulesController < ApplicationController
           affected_items << item
         end
       end
+      dragged_item = ContentTag.find(params['dragged_item_id'])
+      dragged_item.update_attributes(category: params['category'])
       ContentTag.touch_context_modules(affected_module_ids)
       ContentTag.update_could_be_locked(affected_items)
       @context.touch
@@ -353,6 +355,9 @@ class ContextModulesController < ApplicationController
     @module = @context.context_modules.not_deleted.find(params[:context_module_id])
     if authorized_action(@module, @current_user, :update)
       @tag = @module.add_item(params[:item])
+      if  params['category']
+        @tag.update_attributes(category: params['category'])
+      end
       render :json => @tag.to_json
     end
   end

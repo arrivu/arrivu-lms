@@ -11,5 +11,18 @@
   <% @modules.each_with_index do |m,i| %>
       <%= render :partial => 'context_modules/course_class', :object => m, :locals => {:index => i+1} %>
   <% end %>
+    <% unless @modules.any? %>
+      <div style="text-align: center;
+              margin: 20px;">
 
+     <b>No classes designed yet</b>
+        <br/>
+        <br/>
+        <% if can_do(@context, @current_user, :manage_content) %>
+            <%= link_to "Click here to Design classes" ,course_classes_path(@context), :class=> "btn" %>
+
+        <% end  %>
+      </div>
+      <br/>
+    <% end %>
 </div>

@@ -78,6 +78,9 @@ define([
 
             updateModuleItemPositions: function(event, ui) {
                 var $module = ui.item.parents(".context_module");
+                var $draggedItemId =  ui.item.data('id');
+                console.log(ui);
+                var $category = ui.item.closest("#category").attr('class');
                 var url = $module.find(".reorder_items_url").attr('href');
                 var items = [];
                 $module.find(".context_module_items .context_module_item").each(function() {
@@ -85,7 +88,7 @@ define([
                 });
                 $module.find(".context_module_items.ui-sortable").sortable('disable');
                 $module.disableWhileLoading(
-                    $.ajaxJSON(url, 'POST', {order: items.join(",")}, function(data) {
+                    $.ajaxJSON(url, 'POST', {order: items.join(","),category: $category,dragged_item_id: $draggedItemId}, function(data) {
                         if(data && data.context_module && data.context_module.content_tags) {
                             for(var idx in data.context_module.content_tags) {
                                 var tag = data.context_module.content_tags[idx].content_tag;
@@ -332,6 +335,7 @@ define([
                 $item.addClass(data.type + "_" + data.id);
                 $item.addClass(data.type);
                 $item.attr('aria-label', data.title);
+                $item.attr('data-id',data.id)
                 $item.fillTemplateData({
                     data: data,
                     id: 'context_module_item_' + data.id,
@@ -352,9 +356,27 @@ define([
                         }
                     }
                 });
-                if(!$before) {
-                    $module.find(".context_module_items").append($item.show());
-                } else {
+                if(!$before && (data.category == 'pre_class_video')) {
+                    console.log(data.category);
+                    $module.find(".pre_class_video .context_module_items").append($item.show());
+                }
+                else if (!$before && (data.category == 'pre_class_recording')){
+                    console.log(data.category);
+                    $module.find(".pre_class_recording .context_module_items").append($item.show());
+                }
+                else if (!$before && (data.category == 'pre_class_presentation')){
+                    console.log(data.category);
+                    $module.find(".pre_class_presentation .context_module_items").append($item.show());
+                }
+                else if (!$before && (data.category == 'pre_class_assignments')){
+                    console.log(data.category);
+                    $module.find(".pre_class_assignments .context_module_items").append($item.show());
+                }
+                else if (!$before && (data.category == 'pre_class_reading_materials')){
+                    console.log(data.category);
+                    $module.find(".pre_class_reading_materials .context_module_items").append($item.show());
+                }
+                else {
                     $before.before($item.show());
                 }
                 return $item;
@@ -562,10 +584,12 @@ define([
             success: function(data, $module) {
                 $module.loadingImage('remove');
                 $module.attr('id', 'context_module_' + data.context_module.id);
-
+                console.log("here");
                 // Set this module up with correct data attributes
-                $module.data('module-url', "/courses/" + data.context_module.context_id + "/modules/" + data.context_module.id);
-                $module.data('workflow-state', data.context_module.workflow_state);
+                $module.find('.add_module_item_link').attr('rel',"/courses/6/classes/"+data.context_module.id+"/items")
+                $module.attr('data-module-id',data.context_module.id);
+                $module.attr('data-module-url', "/courses/" + data.context_module.context_id + "/modules/" + data.context_module.id);
+                $module.attr('data-workflow-state', data.context_module.workflow_state);
                 if(data.context_module.workflow_state == "unpublished"){
                     $module.find('.workflow-state-action').text("Publish");
                     $module.find('.workflow-state-icon').addClass('publish-module-link')
@@ -789,22 +813,23 @@ define([
 
         $(".add_class_video_link").live('click', function(event) {
             event.preventDefault();
-
             if(INST) {
                 var options = {for_modules: true};
-                options.select_button_text = I18n.t('buttons.add_item', "Add Item");
+                options.context_content_dialog = "#select_context_content_video_dialog";
+                options.select_button_text = I18n.t('buttons.add_item', "Add Pre Class Video");
                 options.dialog_title = I18n.t('titles.add_item', "Add Pre Class Video");
                 options.submit = function(item_data) {
-                    var $item = modules.addItemToModule($module, item_data);
-                    $module.find(".context_module_items.ui-sortable").sortable('refresh').sortable('disable');
-                    var url = $module.find(".add_module_item_link").attr('rel');
-                    $module.disableWhileLoading(
+                    var url = $(".add_class_video_link").attr('rel');
+                    item_data.category = "pre_class_video";
+                    $("#pre_class_videos").disableWhileLoading(
                         $.ajaxJSON(url, 'POST', item_data, function(data) {
-                            $item.remove();
+                            console.log(item_data);
                             data.content_tag.type = item_data['item[type]'];
-                            modules.addItemToModule($module, data.content_tag);
-                            $module.find(".context_module_items.ui-sortable").sortable('enable').sortable('refresh');
-                            modules.updateAssignmentData();
+                            var $pre_class_video = $("#class_preview_blank").clone(true).attr('id', 'context_module_new');
+                            $pre_class_video.find('a').text(data.content_tag.title);
+                            $pre_class_video.find('a').attr('href', $(".add_pre_class_video_link").attr('href')+data.content_tag.id);
+                            $pre_class_video.show();
+                            $("#pre_class_videos").append($pre_class_video);
                         })
                     );
                 };
@@ -815,6 +840,7 @@ define([
 
         $(".add_module_item_link").live('click', function(event) {
             event.preventDefault();
+            var $module_item_category = $(this).data('category');
             var $module = $(this).closest(".context_module");
             if($module.hasClass('collapsed_module')) {
                 $module.find(".expand_module_link").triggerHandler('click', function() {
@@ -830,6 +856,7 @@ define([
                 options.dialog_title = I18n.t('titles.add_item', "Add Item to %{module}", {'module': module.name});
                 options.submit = function(item_data) {
                     var $module = $("#context_module_" + module.id);
+                    item_data.category = $module_item_category
                     var $item = modules.addItemToModule($module, item_data);
                     $module.find(".context_module_items.ui-sortable").sortable('refresh').sortable('disable');
                     var url = $module.find(".add_module_item_link").attr('rel');
