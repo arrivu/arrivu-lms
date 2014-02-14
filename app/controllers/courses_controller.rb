@@ -101,7 +101,7 @@ class CoursesController < ApplicationController
 
   before_filter :require_user, :only => [:index]
   before_filter :require_context, :only => [:roster, :locks, :switch_role, :create_file]
-  before_filter :get_context
+
   include Api::V1::Course
   include Api::V1::Progress
 
