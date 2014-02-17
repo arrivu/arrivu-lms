@@ -53,6 +53,7 @@ class ApplicationController < ActionController::Base
   after_filter :update_enrollment_last_activity_at
   before_filter :get_wiki_type
   before_filter :get_badges
+  before_filter :currently_logged_in_user_count
   include Tour
 
   add_crumb(proc {
@@ -1660,4 +1661,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def currently_logged_in_user_count
+    @user =User.currently_logged_in
+    @totalcount=0
+    @user.each do |student|
+      @enrollment_type=Enrollment.find_by_user_id(student.id)
+      if @enrollment_type.type == "StudentEnrollment"
+           @totalcount+=1
+      end
+    end
+  end
 end
