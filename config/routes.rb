@@ -642,6 +642,7 @@ FakeRails3Routes.draw do
   match 'all_menu_courses' => 'users#all_menu_courses', :as => :all_menu_courses
   match 'grades' => 'users#grades', :as => :grades
   match 'login' => 'pseudonym_sessions#new', :as => :login, :via => :get
+  match 'corp/login' => 'pseudonym_sessions#corp_login', :via => :get
   match 'login' => 'pseudonym_sessions#create', :via => :post
   match 'logout' => 'pseudonym_sessions#destroy', :as => :logout
   match 'login/cas' => 'pseudonym_sessions#new', :as => :cas_login, :via => :get
