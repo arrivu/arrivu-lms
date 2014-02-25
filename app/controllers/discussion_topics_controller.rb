@@ -219,6 +219,7 @@ class DiscussionTopicsController < ApplicationController
         locked_topics, open_topics = @topics.partition do |topic|
           topic.locked? || topic.locked_for?(@current_user)
         end
+
         hash = {USER_SETTINGS_URL: api_v1_user_settings_url(@current_user),
                 openTopics: open_topics,
                 lockedTopics: locked_topics,
@@ -230,7 +231,7 @@ class DiscussionTopicsController < ApplicationController
                 },
                 discussionTagLists: @context.owned_tags.map(&:attributes).to_json,
                 TagWithDiscussionIds: @tag_topic_ids,
-                home_page_announcement: params[:course_home_view] ,
+                home_page_announcement:  session["course_#{@context.id}_user_#{@current_user.id}_for_course_home"] != "visited",
                 change_home_link_url: context_url(@context, :context_url)}
         append_sis_data(hash)
 
