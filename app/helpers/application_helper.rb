@@ -920,8 +920,13 @@ module ApplicationHelper
         @context = @user.enrollments.first.course
         redirect_to course_url(@context)
       else
-        @context = Course.active.find(favourite_course_id)
-        redirect_to course_url(@context)
+        workflow_state = Course.find(favourite_course_id).workflow_state
+        if workflow_state == "available"
+          @context=Course.find(favourite_course_id)
+          redirect_to course_url(@context)
+        elsif
+          redirect_to root_url
+        end
       end
     end
   end
