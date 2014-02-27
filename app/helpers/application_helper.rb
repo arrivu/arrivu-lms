@@ -918,10 +918,19 @@ module ApplicationHelper
       favourite_course_id = @pseudonym.settings[:favourite_course_id]
       if favourite_course_id.nil? || favourite_course_id.empty?
         @context = @user.enrollments.first.course
-        redirect_to course_url(@context)
+        if Enrollment.find_by_course_id_and_user_id(@context.id,@user.id).workflow_state == "invited"
+           redirect_to course_url(@context)
+        else
+          redirect_to course_url(@context)
+        end
       else
-        @context = Course.active.find(favourite_course_id)
-        redirect_to course_url(@context)
+        workflow_state = Course.find(favourite_course_id).workflow_state
+        if workflow_state == "available"
+          @context=Course.find(favourite_course_id)
+          redirect_to course_url(@context)
+        elsif
+          redirect_to root_url
+        end
       end
     end
   end
