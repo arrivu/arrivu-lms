@@ -219,7 +219,6 @@ class DiscussionTopicsController < ApplicationController
         locked_topics, open_topics = @topics.partition do |topic|
           topic.locked? || topic.locked_for?(@current_user)
         end
-
         hash = {USER_SETTINGS_URL: api_v1_user_settings_url(@current_user),
                 openTopics: open_topics,
                 lockedTopics: locked_topics,
