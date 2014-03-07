@@ -32,6 +32,10 @@ class TermsAndConditionsController < ApplicationController
     @pseudonym.settings[:is_terms_and_conditions_accepted] = true
     if @pseudonym.save!
        @user.save!
+       cc= CommunicationChannel.find_by_user_id(@current_user.id)
+       unless cc.nil?
+        cc.workflow_state="active"
+       end
       redirect_to root_url
     end
   end

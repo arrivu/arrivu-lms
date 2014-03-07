@@ -38,7 +38,7 @@
           <%= f.label :information, :en => "I want to receive information, news and tips from Jigsaw Academy"%>
         </div>
         <div id="check_box" style="text-align: center;color: #131212;margin-right: 107px" class="<%= root_url %>">
-          <input type="checkbox"  id="enable_terms_and_conditions" value="1" class="<%= account_terms_and_condition_url(@domain_root_account,@terms) %>"   />
+          <input type="checkbox"  id="agree_terms_and_conditions" value="1" class="<%= account_terms_and_condition_url(@domain_root_account,@terms) %>"   />
           <%= f.label :enable_terms_and_conditions, :en => " I Agree to the Terms of Jigsaw Academy" %>
         </div>
         <div>
@@ -57,7 +57,11 @@
         ], function($) {
             $(".error_text").hide();
             $("#terms_accept_submit").click(function() {
-                if(!$('input[type=checkbox]:checked').length) {
+                if(!$('#enable_terms_and_conditions:checked').length) {
+                    $(".error_text").show();
+                    return false;
+                }
+                if(!$('#agree_terms_and_conditions:checked').length) {
                     $(".error_text").show();
                     return false;
                 }
