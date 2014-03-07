@@ -22,8 +22,13 @@ define [
       'click .add_live_class_link': 'addLiveClassLink'
       'click [data-edit-live-class-link]': 'editLiveClassLink'
       'click [data-delete-live-class-link]': 'deleteLiveClassLink'
+      'click .filter_live_class_links': 'filterLiveClassLinks'
 
-    afterRender: ->
+    filterLiveClassLinks: (event) ->
+      selected_context_module_id = $("#modules_for_filter option:selected" ).val()
+      selected_course_section_id= $("#live_class_sections_for_filter option:selected" ).val()
+      @liveClassLinksView.collection.fetch({ data:{search_term: true ,context_module_id: selected_context_module_id,course_section_id: selected_course_section_id}})
+
 
     showLiveClassLinkView: =>
       @liveClassLinksView.collection.fetch()

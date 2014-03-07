@@ -290,18 +290,17 @@ class ContextModulesController < ApplicationController
         @authorized_for_user =  ( enrollment and (enrollment.workflow_state == UserModuleGroupEnrollment::ACTIVE))
       end
 
-        @live_class_links = []
-        @sections = @context.sections_visible_to(@current_user)
-          @sections.map do |section|
-            LiveClassLink.find_all_by_context_module_id_and_course_section_id(@module.id,section.id).each do |live_class_link|
-               @live_class_links <<  live_class_link
-             end
-          end
-      #respond_to do |format|
-      #  format.html { redirect_to named_context_url(@context, :context_context_modules_url, :anchor => "module_#{params[:id]}") }
-      #  format.json { render :json => (@module.content_tags_visible_to(@current_user).to_json) }
-      #end
-    end
+      @live_class_links = []
+      @sections = @context.sections_visible_to(@current_user)
+        @sections.map do |section|
+          LiveClassLink.find_all_by_context_module_id_and_course_section_id(@module.id,section.id).each do |live_class_link|
+             @live_class_links <<  live_class_link
+           end
+        end
+        LiveClassLink.find_all_by_context_module_id_and_course_section_id(@module.id,0).each do |live_class_link|
+          @live_class_links <<  live_class_link
+        end
+      end
   end
   
   def reorder_items

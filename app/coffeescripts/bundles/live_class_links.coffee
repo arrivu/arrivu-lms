@@ -16,6 +16,8 @@ require [
 
     @app = new IndexView
       liveClassLinksView: liveClassLinksCollectionView
+      courseModules: ENV.course_modules
+      courseSections: ENV.course_sections
       el: '#content'
 
     @app.render()

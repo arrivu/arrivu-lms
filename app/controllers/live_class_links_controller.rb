@@ -8,7 +8,15 @@ class LiveClassLinksController < ApplicationController
       add_crumb("Live Class Links", course_live_class_links_url(@context))
       @live_class_links = @context.live_class_links
       if params[:search_term]
-        @live_class_links = ContextExternalTool.search_by_attribute(@live_class_links, :name, params[:search_term])
+        if params[:course_section_id].empty? and params[:context_module_id].empty?
+          @live_class_links = @context.live_class_links
+        elsif params[:context_module_id].empty?
+          @live_class_links = @context.live_class_links
+        elsif params[:course_section_id].empty?
+          @live_class_links = @context.live_class_links.find_all_by_context_module_id(params[:context_module_id])
+        else
+          @live_class_links = @context.live_class_links.find_all_by_context_module_id_and_course_section_id(params[:context_module_id],params[:course_section_id])
+        end
       end
       js_env(
           course_sections: @context.course_sections.active.map(&:attributes),

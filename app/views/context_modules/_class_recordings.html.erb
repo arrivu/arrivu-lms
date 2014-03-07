@@ -12,7 +12,7 @@
         <div style="width:auto;padding:17px;float:left;"><%= image_tag "class_recordings.png" , :style=> "padding:1px;line-height:20px;height:33px;margin-top:-8px" %> &nbsp;&nbsp;&nbsp;&nbsp;</div>
         <div style="width:85%;padding:5px;">
         <span ><a class="title "
-                  <% if @authorized_for_user  %>
+                  <% if is_managable or @authorized_for_user  %>
                   href="<%= live_class_link.link_url%>"
                   <% end  %>
                   style="color:#239bc0;"> class recording&nbsp;<%=sprintf '%02d',idx + 1 %></a></span><br>
@@ -31,7 +31,7 @@
         <div style="width:auto;padding:17px;float:left;"><%= image_tag "pdf_icon.png" , :style=> "padding:5px;border-radius:35px;margin-top:-8px;width:33px" %> &nbsp;&nbsp;&nbsp;&nbsp;</div>
         <div style="width:85%;padding:10px;">
           <span ><a class="title <%= '_explicit_external_link' if tag && tag.content_type == 'ExternalUrl' %>"
-                    <% if @authorized_for_user  %>
+                    <% if is_managable or @authorized_for_user  %>
                         href="<%= context_url(@context, :context_url) %>/modules/items/<%= tag ? tag.id : "{{ id }}" %>"
                     <% end %>
                     style="color:#c2401c;"> class  Presentation&nbsp;<%=sprintf '%02d',idx + 1%></a></span><br>
