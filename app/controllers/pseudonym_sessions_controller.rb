@@ -575,12 +575,12 @@ class PseudonymSessionsController < ApplicationController
         unless can_do(@domain_root_account, @current_user, :manage_account_settings)
           @check_terms = @current_pseudonym.settings[:is_terms_and_conditions_accepted]
           unless @check_terms.nil?
-            format.html {favourite_course}
+            favourite_course
           else
-            format.html {check_for_terms_and_conditions}
+            check_for_terms_and_conditions
           end
         else
-          format.html{favourites}
+          favourite_course(true)
         end
       end
       format.json { render :json => pseudonym.to_json(:methods => :user_code), :status => :ok }
