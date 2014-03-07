@@ -114,6 +114,7 @@ class UsersController < ApplicationController
   before_filter :reject_student_view_student, :only => [:delete_user_service,
     :create_user_service, :merge, :user_dashboard, :masquerade]
   before_filter :require_self_registration, :only => [:new, :create]
+  skip_before_filter :check_for_terms_and_conditions
 
   def grades
     @user = User.find_by_id(params[:user_id]) if params[:user_id].present?
@@ -367,6 +368,7 @@ class UsersController < ApplicationController
   end
 
   def user_dashboard
+    check_for_terms_and_conditions
     check_incomplete_registration
     get_context
 
