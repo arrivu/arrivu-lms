@@ -930,7 +930,7 @@ module ApplicationHelper
     end
   end
 
-def first_enrollment
+  def first_enrollment
     enrollment = @current_user.enrollments.active.first
     unless enrollment.nil?
       @context = Course.find_by_id(enrollment.course_id)
