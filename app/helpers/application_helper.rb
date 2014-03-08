@@ -939,9 +939,5 @@ def first_enrollment
       redirect_to  dashboard_url
     end
   end
-
-
-
-#arrivu changes
-
+  #arrivu changes
 end
