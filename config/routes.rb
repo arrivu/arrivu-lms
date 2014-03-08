@@ -157,7 +157,7 @@ FakeRails3Routes.draw do
     get 'pages/:wiki_page_id' => 'wiki_pages#show_page', :wiki_page_id => /[^\/]+/, :as => :named_page
     get 'pages/:wiki_page_id/edit' => 'wiki_pages#edit_page', :wiki_page_id => /[^\/]+/, :as => :edit_named_page
 
-    type_regexp = Regexp.new([:wiki, :faq, :career,:video,:offer,:bonus_video].join("|"))
+    type_regexp = Regexp.new([:wiki, :faq, :career,:video,:offer,:bonus_video, :lab].join("|"))
     resources :wiki_pages, path: ':type', constraints: { type: type_regexp } do
     match 'comments_create' => 'wiki_pages#comments_create' ,:as => :comments_create, :via => :post
     match 'comment_destroy/:id'=> 'wiki_pages#comment_destroy', :as => :comment_destroy,:only => [:destroy]

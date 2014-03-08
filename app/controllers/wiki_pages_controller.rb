@@ -87,6 +87,8 @@ class WikiPagesController < ApplicationController
         redirect_to named_context_url(@context, :context_wiki_page_url, @page.wiki_type, WikiPage::DEFAULT_VIDEO_FRONT_PAGE_URL)
       elsif @page.wiki_type == WikiPage::WIKI_TYPE_OFFERS
         redirect_to named_context_url(@context, :context_wiki_page_url, @page.wiki_type, WikiPage::DEFAULT_OFFER_FRONT_PAGE_URL)
+      elsif @page.wiki_type == WikiPage::WIKI_TYPE_LABS
+        redirect_to named_context_url(@context, :context_wiki_page_url, @page.wiki_type, WikiPage::DEFAULT_LAB_FRONT_PAGE_URL)
       else
         redirect_to named_context_url(@context, :context_wiki_page_url, @page.wiki_type, @context.wiki.get_front_page_url || Wiki::DEFAULT_FRONT_PAGE_URL)
        end
@@ -295,6 +297,8 @@ class WikiPagesController < ApplicationController
       @context.class::TAB_OFFERS
     elsif wiki_type == 'bonus_video'
       @context.class::TAB_BONUSVIDEOS
+    elsif wiki_type == 'lab'
+      @context.class::TAB_LABS
     else
        @context.class::TAB_PAGES
     end
