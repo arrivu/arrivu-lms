@@ -571,19 +571,10 @@ class PseudonymSessionsController < ApplicationController
         # they must have cookies enabled and we don't need to worry about
         # adding the :login_success param to it.
         #format.html { redirect_back_or_default(dashboard_url(:login_success => '1')) }
-        #format.html {favourite_course}
-        unless can_do(@domain_root_account, @current_user, :manage_account_settings)
-          @check_terms = @current_pseudonym.settings[:is_terms_and_conditions_accepted]
-          unless @check_terms.nil?
-            favourite_course
-          else
-            check_for_terms_and_conditions
-          end
-        else
-          favourite_course(true)
-        end
+        format.html {favourites}
+
       end
-      format.json { render :json => pseudonym.to_json(:methods => :user_code), :status => :ok }
+      #format.json { render :json => pseudonym.to_json(:methods => :user_code), :status => :ok }
     end
   end
 
