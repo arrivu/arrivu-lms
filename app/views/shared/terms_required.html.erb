@@ -8,7 +8,10 @@
 
 <% @terms = @domain_root_account.terms_and_condition %>
 <div id="login_box" style="width:50%" class="login-box" >
-  <h1 class="login_box_h1" style="background-size: 60%;"></h1>
+  <div style="height: 70px;
+          margin: 0 0 16px;
+          background-color: #efefef;
+          text-align: center;"><%= image_tag "jigsaw_logo.png" ,:style => "height: 67px;" %></div>
   <% form_for :terms_and_condition,:url=> account_terms_and_condition_url(@domain_root_account,@terms),:html=> {:method => :put} do |f|%>
 
       <div id="login_form" style="width:auto;margin-left: 28px">
@@ -57,10 +60,6 @@
         ], function($) {
             $(".error_text").hide();
             $("#terms_accept_submit").click(function() {
-                if(!$('#enable_terms_and_conditions:checked').length) {
-                    $(".error_text").show();
-                    return false;
-                }
                 if(!$('#agree_terms_and_conditions:checked').length) {
                     $(".error_text").show();
                     return false;
