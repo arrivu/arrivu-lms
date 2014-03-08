@@ -297,7 +297,7 @@ class WikiPagesController < ApplicationController
       @context.class::TAB_OFFERS
     elsif wiki_type == 'bonus_video'
       @context.class::TAB_BONUSVIDEOS
-    elsif wiki_type == 'lab'
+    elsif wiki_type == 'labs'
       @context.class::TAB_LABS
     else
        @context.class::TAB_PAGES

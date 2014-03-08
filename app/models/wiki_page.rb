@@ -212,7 +212,7 @@ class WikiPage < ActiveRecord::Base
   scope :videos, where(:wiki_type => 'video')
   scope :offers, where(:wiki_type => 'offer')
   scope :bonusvideos, where(:wiki_type => 'bonus_video')
-  scope :labs, where(:wiki_type => 'lab')
+  scope :labs, where(:wiki_type => 'labs')
 
   # needed for ensure_unique_url
   def not_deleted
@@ -596,7 +596,7 @@ class WikiPage < ActiveRecord::Base
   WIKI_TYPE_VIDEOS ='video'
   WIKI_TYPE_OFFERS ='offer'
   WIKI_TYPE_BONUS_VIDEOS = 'bonus_video'
-  WIKI_TYPE_LABS = 'lab'
+  WIKI_TYPE_LABS = 'labs'
 
   DEFAULT_FAQ_FRONT_PAGE_URL = 'faq-front-page'
   DEFAULT_CAREER_FRONT_PAGE_URL = 'career-front-page'
