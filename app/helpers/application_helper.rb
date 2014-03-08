@@ -912,42 +912,33 @@ module ApplicationHelper
   end
 
   #arrivu changes for favourite course redirect
-  def favourite_course(is_admin=nil)
-    @check_terms = (is_admin || @current_user.pseudonym.settings[:is_terms_and_conditions_accepted])
-    unless @check_terms.nil?
-      if @current_user.enrollments.active.nil? or @current_user.enrollments.active.empty?
-        redirect_to root_url
+  def favourites
+    if @current_user.enrollments.active.nil? or @current_user.enrollments.active.empty?
+      redirect_to root_url
+    else
+      favourite_course_id = @current_pseudonym.settings[:favourite_course_id]
+      if favourite_course_id.nil? || favourite_course_id.empty?
+        first_enrollment
       else
-        favourite_course_id = @pseudonym.settings[:favourite_course_id]
-        if favourite_course_id.nil? || favourite_course_id.empty?
-          @context = @current_user.enrollments.first.course
-          if Enrollment.find_by_course_id_and_user_id(@context.id,@current_user.id).workflow_state == "invited"
-            redirect_to course_url(@context)
-          else
-            redirect_to course_url(@context)
-          end
+        @context = Course.find(favourite_course_id)
+        if is_authorized_action?(@context, @current_user, :read)
+          redirect_to course_url(@context)
         else
-          workflow_state = Course.find(favourite_course_id).workflow_state
-          if workflow_state == "available"
-            @context = Course.find(favourite_course_id)
-            redirect_to course_url(@context)
-          elsif
-          redirect_to root_url
-          end
+          first_enrollment
         end
     end
     end
-end
-
-def first_enrollment
-  enrollment = @user.enrollments.active.first
-  unless enrollment.nil?
-    @context = Course.find_by_id(enrollment.course_id)
-    redirect_to course_url(@context)
-  else
-    redirect_to  dashboard_url
   end
-end
-#arrivu changes
+
+  def first_enrollment
+    enrollment = @current_user.enrollments.active.first
+    unless enrollment.nil?
+      @context = Course.find_by_id(enrollment.course_id)
+      redirect_to course_url(@context)
+    else
+      redirect_to  dashboard_url
+    end
+  end
+  #arrivu changes
 
 end

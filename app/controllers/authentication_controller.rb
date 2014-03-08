@@ -54,8 +54,7 @@ class AuthenticationController < ApplicationController
   def successful_login(pseudonym)
     @current_pseudonym = pseudonym
     flash[:notice] = "You are now logged in"
-    favourite_course
-    #redirect_to root_url
+    favourites
   end
 
   def un_successful_login
