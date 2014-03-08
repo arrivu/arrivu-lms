@@ -1684,7 +1684,7 @@ class ApplicationController < ActionController::Base
   end
 
   def check_for_terms_and_conditions
-   if @domain_root_account.terms_and_condition
+   if @domain_root_account.terms_and_condition and @current_user and @current_pseudonym
     unless can_do(@domain_root_account, @current_user, :manage_account_settings)
       @check_terms = @current_pseudonym.settings[:is_terms_and_conditions_accepted]
       if @check_terms.nil?

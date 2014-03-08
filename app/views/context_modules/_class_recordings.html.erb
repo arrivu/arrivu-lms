@@ -15,7 +15,7 @@
                   <% if is_managable or @authorized_for_user  %>
                   href="<%= live_class_link.link_url%>"
                   <% end  %>
-                  style="color:#239bc0;"> class recording&nbsp;<%=sprintf '%02d',idx + 1 %></a></span><br>
+                  style="color:#239bc0;"><%=live_class_link.course_section.name  if live_class_link.course_section%> class recording</a></span><br>
           <%= live_class_link.name %>
 
         </div>

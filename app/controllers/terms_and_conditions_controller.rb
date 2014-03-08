@@ -26,17 +26,15 @@ class TermsAndConditionsController < ApplicationController
   end
 
   def update
-    @pseudonym = Pseudonym.active.find(@current_pseudonym.id)
-    @user = User.find_by_id(@current_user.id)
-    @user.time_zone = params[:terms_and_condition][:time_zone]
-    @pseudonym.settings[:is_terms_and_conditions_accepted] = true
-    if @pseudonym.save!
-       @user.save!
+    @current_user.time_zone = params[:terms_and_condition][:time_zone]
+    @current_pseudonym.settings[:is_terms_and_conditions_accepted] = true
+    if @current_pseudonym.save!
+      @current_user.save!
        cc = CommunicationChannel.find_by_user_id(@current_user.id)
        unless cc.nil?
         cc.workflow_state = "active"
        end
-      redirect_to root_url
+      favourites
     end
   end
 end
