@@ -1,5 +1,7 @@
 class AuthenticationController < ApplicationController
   include ApplicationHelper
+  skip_before_filter :require_reacceptance_of_terms
+  skip_before_filter :check_for_terms_and_conditions
 
   def create
     auth = request.env["omniauth.auth"]
