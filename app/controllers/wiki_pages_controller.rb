@@ -22,7 +22,7 @@ class WikiPagesController < ApplicationController
   before_filter :get_wiki_page
   before_filter :set_js_rights, :only => [:pages_index, :show_page, :edit_page]
   before_filter :set_js_wiki_data, :only => [:pages_index, :show_page, :edit_page]
-  add_crumb(proc { t '#crumbs.wiki_pages', "Pages"}) do |c|
+  add_crumb(proc { t '#crumbs.wiki_pages', "Pages"}, :except => [:show]) do |c|
     url = nil
     context = c.instance_variable_get('@context')
     current_user = c.instance_variable_get('@current_user')
@@ -61,7 +61,8 @@ class WikiPagesController < ApplicationController
       return
     end
     if is_authorized_action?(@page, @current_user, :read)
-      add_crumb(@wiki_type)
+      add_class_view_crumbs
+      add_crumb(@page.title,context_wiki_page_url(@context))
       @page.increment_view_count(@current_user, @context)
       log_asset_access(@page, "wiki", @wiki)
       respond_to do |format|
@@ -72,6 +73,7 @@ class WikiPagesController < ApplicationController
       render_unauthorized_action(@page)
     end
   end
+
 
   def index
     return unless tab_enabled?(tab_type(@wiki_type))
