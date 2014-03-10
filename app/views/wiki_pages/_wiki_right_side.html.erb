@@ -32,7 +32,7 @@
               %>
               <% elsif @wiki_type == WikiPage::WIKI_TYPE_LABS %>
               <%= <<-EOT
-                                                                        Its a place you can put labs opportunities .
+                                                                        Its a place you can put lab contents .
                   EOT
               %>
               <% else  %>
@@ -93,7 +93,9 @@
     <% end %>
     <% if @wiki_type == "bonus_video" %>
         <h2><%= t 'headers.all_pages', "All Bonus Videos" %></h2>
-    <% else %>
+    <% elsif @wiki_type == "labs" %>
+        <h2><%= t 'headers.all_pages', "All Labs" %></h2>
+    <%else %>
        <h2><%= t 'headers.all_pages', "All #{@wiki_type}s" %></h2>
     <%end %>
     <div class="rs-margin-lr rs-margin-bottom">

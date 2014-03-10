@@ -235,11 +235,11 @@
         <div id="labss_select" class="module_item_option" style="margin: 5px 20px;">
           <div style="font-size: 0.8em;">
             <i class="icon-document"></i>
-            <%= t :labs, "select a career from below to associated with this Module", :wrapper => '<span class="holder_type">\1</span>' %>
+            <%= t :labs, "select a Lab from below to associated with this Module", :wrapper => '<span class="holder_type">\1</span>' %>
           </div>
           <div style="margin-top: 5px;">
             <select class="module_item_select" multiple>
-              <optgroup label="Careers">
+              <optgroup label="Labs">
                 <% @context.wiki.wiki_pages.labs.active.each do |lab| %>
                     <option value="<%= lab.id %>"><%= lab.title %></option>
                 <% end %>
