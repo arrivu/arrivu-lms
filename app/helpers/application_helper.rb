@@ -913,25 +913,27 @@ module ApplicationHelper
 
   #arrivu changes for favourite course redirect
   def favourites
-    if @current_user.enrollments.active.nil? or @current_user.enrollments.active.empty?
+    @user ||= @current_user
+    @pseudonym ||= @current_pseudonym
+    if @user.enrollments.active.nil? or @user.enrollments.active.empty?
       redirect_to root_url
     else
-      favourite_course_id = @current_pseudonym.settings[:favourite_course_id]
+      favourite_course_id = @pseudonym.settings[:favourite_course_id]
       if favourite_course_id.nil? || favourite_course_id.empty?
         first_enrollment
       else
         @context = Course.find(favourite_course_id)
-        if is_authorized_action?(@context, @current_user, :read)
+        if is_authorized_action?(@context, @user, :read)
           redirect_to course_url(@context)
         else
           first_enrollment
         end
-    end
+      end
     end
   end
 
   def first_enrollment
-    enrollment = @current_user.enrollments.active.first
+    enrollment = @user.enrollments.active.first
     unless enrollment.nil?
       @context = Course.find_by_id(enrollment.course_id)
       redirect_to course_url(@context)
