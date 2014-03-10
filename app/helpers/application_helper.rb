@@ -941,5 +941,36 @@ module ApplicationHelper
       redirect_to  dashboard_url
     end
   end
+
+  def add_class_view_crumbs
+    @skip_crumb = true
+    add_crumb("Classes",named_context_url(@context, :context_context_modules_url))
+    if @context.is_a?(Course) and params[:module_item_id].present?
+      content_tag = ContentTag.find(params[:module_item_id])
+      @context_module = content_tag.context_module
+      add_crumb(@context_module.name,course_context_module_url(@context,@context_module))
+      add_category_crumb(content_tag)
+    end
+  end
+
+  def add_category_crumb(content_tag)
+    @context_module ||= @module
+   if @context and @context_module
+      if content_tag.category == ContentTag::PRE_CLASS_VIDEO
+        add_crumb(ContentTag::PRE_CLASS_VIDEO_NAME,course_context_module_url(@context,@context_module))
+      elsif content_tag.category == ContentTag::PRE_CLASS_RECORDING
+        add_crumb(ContentTag::PRE_CLASS_RECORDING_NAME,course_context_module_url(@context,@context_module))
+      elsif content_tag.category == ContentTag::PRE_CLASS_PRESENTATION
+        add_crumb(ContentTag::PRE_CLASS_PRESENTATION_NAME,course_context_module_url(@context,@context_module))
+      elsif content_tag.category == ContentTag::PRE_CLASS_ASSIGNMENTS
+        add_crumb(ContentTag::PRE_CLASS_ASSIGNMENTS_NAME,course_context_module_url(@context,@context_module))
+      elsif content_tag.category == ContentTag::PRE_CLASS_READING_MATERIALS
+        add_crumb(ContentTag::PRE_CLASS_READING_MATERIALS_NAME,course_context_module_url(@context,@context_module))
+      else
+        add_crumb(ContentTag::SUPPLEMENTARY_NAME,course_context_module_url(@context,@context_module))
+      end
+  end
+  end
+
   #arrivu changes
 end

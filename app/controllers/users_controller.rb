@@ -386,6 +386,10 @@ class UsersController < ApplicationController
     @stream_items = @current_user.try(:cached_recent_stream_items) || []
   end
 
+  def logo_root
+    favourites
+  end
+
   def cached_upcoming_events(user)
     Rails.cache.fetch(['cached_user_upcoming_events', user].cache_key,
       :expires_in => 3.minutes) do

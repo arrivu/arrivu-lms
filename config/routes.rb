@@ -731,6 +731,7 @@ FakeRails3Routes.draw do
   match 'styleguide' => 'info#styleguide', :as => :styleguide, :via => :get
   match 'old_styleguide' => 'info#old_styleguide', :as => :old_styleguide, :via => :get
   root :to => 'users#user_dashboard', :as => :root, :via => :get
+  match 'logo_root' => 'users#logo_root',  :as => :logo_root ,:via => :get
   # backwards compatibility with the old /dashboard url
   match 'dashboard' => 'users#user_dashboard', :as => :dashboard_redirect, :via => :get
 
