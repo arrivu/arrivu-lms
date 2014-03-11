@@ -78,7 +78,7 @@ class AuthenticationController < ApplicationController
 
  def set_provider(auth)
    if auth['provider'] == "google_oauth2"
-     provider = "google"
+     provider = OmniauthAuthentication::PROVIDER_GOOGLE
    else
      provider = auth['provider']
    end
