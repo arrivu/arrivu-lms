@@ -55,14 +55,14 @@
            <td><%= user.name %></td>
            <td><%= user.pseudonyms.first.email unless user.pseudonyms.first.nil?%></td>
           <td width="150px">
-            <% if user.omniauth_authentication != nil %>
-              <% @provider = user.omniauth_authentication.provider %>
+            <% if OmniauthAuthentication.find_by_user_id(user.id)  != nil %>
+              <% @provider = OmniauthAuthentication.find_by_user_id(user.id).provider %>
             <% end %>
             <select id="provider_select" style="width: 140px"  name="<%= user.id %>">
               <option value="facebook" <%= 'selected' if @provider == "facebook"%>><%= "Facebook" %></option>
               <option value="google" <%= 'selected' if @provider == "google"%>><%= "Google" %></option>
               <option value="linkedin" <%= 'selected' if @provider == "linkedin"%>><%= "LinkedIN" %></option>
-              <option value="" <%= 'selected' if user.omniauth_authentication == nil %>><%= "Corporate Login" %></option>
+              <option value="" <%= 'selected' if OmniauthAuthentication.find_by_user_id(user.id) == nil %>><%= "Corporate Login" %></option>
             </select>
           </td>
                 <% form_for user,  :url => url_for(:controller => 'users', :action => 'activate_user')  ,
