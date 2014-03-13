@@ -915,7 +915,7 @@ module ApplicationHelper
   def favourites
     @user ||= @current_user
     @pseudonym ||= @current_pseudonym
-    if @user.enrollments.active.nil? or @user.enrollments.active.empty?
+    if @user.nil? or @pseudonym.nil? or @user.enrollments.active.nil? or @user.enrollments.active.empty?
       redirect_to root_url
     else
       favourite_course_id = @pseudonym.settings[:favourite_course_id]
