@@ -6804,6 +6804,7 @@ en-GB:
         assignments_recently_graded: "Recently graded"
         calendar: Calendar
         grades: Grades
+        leaderboard: LeaderBoard
       navigation: 
         main: "Main Navigation"
       open_source_learning_management_system: "Learning Management System"
