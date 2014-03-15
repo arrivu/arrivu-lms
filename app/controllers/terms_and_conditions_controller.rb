@@ -34,7 +34,7 @@ class TermsAndConditionsController < ApplicationController
        unless cc.nil?
         cc.workflow_state = "active"
        end
-      favourites
+      render :template => "shared/account_video", :layout => "application", :status => :authorized
     end
   end
 end
