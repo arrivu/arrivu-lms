@@ -1,7 +1,7 @@
 <% @headers = false
 %>
 <form id="test_dialog" style="display:none;width:400px" title="Jigsaw Academy Introduction Video" rel="<%= logo_root_url %>">
-   <%= @domain_root_account.settings[:account_video_url].html_safe %>
+  <iframe style="margin-left: 28px;" width="400" height="315" src="<%= @domain_root_account.settings[:account_video_url] %>" frameborder="0" allowfullscreen></iframe>
 </form>
 
 <% js_block do %>
