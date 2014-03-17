@@ -972,5 +972,10 @@ module ApplicationHelper
   end
   end
 
+  def calculate_percentage(score,possible)
+    (Float(score) / possible * 100).ceil
+  end
+
+
   #arrivu changes
 end

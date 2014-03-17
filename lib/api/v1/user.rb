@@ -72,11 +72,24 @@ module Api::V1::User
         end
         json[:last_login] = last_login.try(:iso8601)
       end
+
+      if includes.include?('user_progression')
+        json[:progression] = "#{calc_progression_percentage(user)}%"
+      end
+
     end
   end
 
   def users_json(users, current_user, session, includes = [], context = @context, enrollments = nil)
     users.map{ |user| user_json(user, current_user, session, includes, context, enrollments) }
+  end
+
+  def calc_progression_percentage(user)
+    context_modules = @context.context_modules.active
+    progressions = context_modules.map{|m| m.evaluate_for(user, true, true) }
+    possible = context_modules.size
+    score = progressions.select { |progression| progression.workflow_state == 'completed' }
+    calculate_percentage(score.size,possible)
   end
 
   # this mini-object is used for secondary user responses, when we just want to

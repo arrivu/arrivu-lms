@@ -18,6 +18,7 @@ require [
       leaderBoardsView: leaderBoardsCollectionView
       courseSections: ENV.course_sections
       course: ENV.course
+      manage_students: ENV.manage_students
       el: '#content'
 
     @app.render()
