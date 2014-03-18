@@ -500,7 +500,7 @@ Allowing Draft State here will allow teachers to enable it in their individual c
           <% f.fields_for :settings do |settings| %>
             <div>
               <td><%= settings.blabel :videolink, :en => "Video URL" %></td>
-              <td><%= settings.text_area :videolink, :rows => "10",:class => "VideoURL" %></td>
+              <td><%= settings.text_field :videolink, :rows => "8",:class => "VideoURL",:value => @account.settings[:account_video_url]%></td>
             </div>
           <% end %>
         </fieldset>
