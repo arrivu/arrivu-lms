@@ -36,7 +36,7 @@ class LeaderboardsController < ApplicationController
         @students = Api.paginate(@students, self, course_leaderboards_url)
         format.html
         format.json {
-          render :json => users_json(@students, @current_user, session, %w{avatar_url user_progression},
+          render :json => users_json(@students, @current_user, session, %w{avatar_url user_progression get_badges},
                                     @current_user.pseudonym.account) }
       end
     end

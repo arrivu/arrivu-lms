@@ -81,6 +81,9 @@ module Api::V1::User
   end
 
   def users_json(users, current_user, session, includes = [], context = @context, enrollments = nil)
+    if includes.include?('get_badges')
+     get_course_badges(users)
+    end
     users.map{ |user| user_json(user, current_user, session, includes, context, enrollments) }
   end
 
@@ -91,6 +94,13 @@ module Api::V1::User
     score = progressions.select { |progression| progression.workflow_state == 'completed' }
     calculate_percentage(score.size,possible)
   end
+
+  def get_course_badges(users)
+    get_badges
+    uri = URI("#{@tool.url}?custom_show_course_badges=1")
+    res = Net::HTTP.post_form(uri, @tool_settings)
+  end
+
 
   # this mini-object is used for secondary user responses, when we just want to
   # provide enough information to display a user.
