@@ -23,13 +23,16 @@ require([
         })
         );
     });
-    $('select#provider_select').change(function() {
+    $('select.provider_select').change(function(event) {
+        selected_user_id = event.target.name;
+        provider = $(this).val();
+        console.log(selected_user_id,provider);
         $("#content").disableWhileLoading( $.ajax({
             type: 'POST',
             url: 'update_user',
             data: {
-                'id': $("#provider_select").attr('name'),
-                'provider': $("#provider_select").val()
+                'id': selected_user_id,
+                'provider': provider
             },
             complete: function(msg){
                 $.flashMessage('Provider Updated!')

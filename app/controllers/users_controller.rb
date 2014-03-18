@@ -346,11 +346,11 @@ class UsersController < ApplicationController
         render(:json => @users)
       }
     else
-      @omniauth_user = OmniauthAuthentication.find_by_user_id(@user.id)
-      @omniauth_user.provider = params[:provider]
-      @omniauth_user.save!
+      @omniauth = OmniauthAuthentication.find_by_user_id(@user.id)
+      @omniauth.provider = params[:provider]
+      @omniauth.save!
       format.json {
-        render(:json => @omniauth_user)
+        render(:json => @omniauth)
       }
     end
     end

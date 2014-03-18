@@ -58,7 +58,7 @@
             <% if OmniauthAuthentication.find_by_user_id(user.id)  != nil %>
               <% @provider = OmniauthAuthentication.find_by_user_id(user.id).provider %>
             <% end %>
-            <select id="provider_select" style="width: 140px"  name="<%= user.id %>">
+            <select class="provider_select" style="width: 140px"  name="<%= user.id %>">
               <option value="facebook" <%= 'selected' if @provider == "facebook"%>><%= "Facebook" %></option>
               <option value="google" <%= 'selected' if @provider == "google"%>><%= "Google" %></option>
               <option value="linkedin" <%= 'selected' if @provider == "linkedin"%>><%= "LinkedIN" %></option>
