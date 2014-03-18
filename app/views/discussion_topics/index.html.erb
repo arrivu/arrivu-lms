@@ -1,7 +1,7 @@
 
 <% if params[:course_home_view] and session["course_#{@context.id}_user_#{@current_user.id}_for_course_home"] != "visited"%>
     <% session["course_#{@context.id}_user_#{@current_user.id}_for_course_home"] ||= "visited" %>
-    <%if !@context.announcements.empty? %>
+    <%if !@context.announcements.active.empty? %>
         <form id="announcements_dialog" data-turn-into-dialog='{"width":1000,"modal":true}' style="display:none" title="Announcements">
           <%= render :partial => 'announcements/content' %>
         </form>
