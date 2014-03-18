@@ -328,7 +328,7 @@ class UsersController < ApplicationController
   end
 
   def update_user
-    @user=User.find(params[:id])
+    @user = User.find(params[:id])
     respond_to do |format|
     if params[:state] == "checked"
       @user.workflow_state ="registered"
@@ -344,6 +344,13 @@ class UsersController < ApplicationController
       @user.save!
       format.json {
         render(:json => @users)
+      }
+    else
+      @omniauth_user = OmniauthAuthentication.find_by_user_id(@user.id)
+      @omniauth_user.provider = params[:provider]
+      @omniauth_user.save!
+      format.json {
+        render(:json => @omniauth_user)
       }
     end
     end
