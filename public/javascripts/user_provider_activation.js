@@ -26,7 +26,6 @@ require([
     $('select.provider_select').change(function(event) {
         selected_user_id = event.target.name;
         provider = $(this).val();
-        console.log(selected_user_id,provider);
         $("#content").disableWhileLoading( $.ajax({
             type: 'POST',
             url: 'update_user',
