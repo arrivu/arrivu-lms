@@ -34,7 +34,8 @@ class TermsAndConditionsController < ApplicationController
        unless cc.nil?
         cc.workflow_state = "active"
        end
-       if @domain_root_account.settings[:account_video_url].nil? ||  @domain_root_account.settings[:account_video_url].empty?
+       if @domain_root_account.settings[:account_video_url].nil? ||@domain_root_account.settings[:account_video_url].empty? ||
+           @domain_root_account.settings[:account_video_url] == ""
          favourites
        else
          render :template => "shared/account_video", :layout => "application", :status => :authorized
