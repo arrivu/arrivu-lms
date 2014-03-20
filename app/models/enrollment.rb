@@ -460,7 +460,7 @@ class Enrollment < ActiveRecord::Base
     if self.is_a?(TeacherEnrollment) || self.is_a?(TaEnrollment)
       self.limit_privileges_to_course_section = false if self.limit_privileges_to_course_section.nil?
     else
-      self.limit_privileges_to_course_section = false
+      self.limit_privileges_to_course_section = true
     end
     true
   end
