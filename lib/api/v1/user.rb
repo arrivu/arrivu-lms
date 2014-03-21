@@ -82,7 +82,7 @@ module Api::V1::User
 
   def users_json(users, current_user, session, includes = [], context = @context, enrollments = nil)
     if includes.include?('get_badges')
-     get_course_badges(users)
+     #get_course_badges(users)
     end
     users.map{ |user| user_json(user, current_user, session, includes, context, enrollments) }
   end
