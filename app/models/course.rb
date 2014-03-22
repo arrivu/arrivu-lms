@@ -2669,18 +2669,22 @@ class Course < ActiveRecord::Base
     # arrivu changes for course section privilege for students
     elsif (visibilities.present? && visibility_limited_to_course_sections?(user, visibilities)) && (user_has_been_student?(user) && self.settings[:section_privilege_to_students] ==true )
       :sections
-    elsif (user_has_been_student?(user) && self.settings[:section_privilege_to_students] ==true )
-      :sections
-    elsif  (user_has_been_student?(user) &&  self.settings[:section_privilege_to_students].nil?)
-      :sections
-    elsif  (user_has_been_student?(user) && self.settings[:section_privilege_to_students] == false)
-      :limited
-    # end of arrivu changes for course section privilege for students
+    elsif user_has_been_student?(user)
+      if !(visibilities.present? && visibility_limited_to_course_sections?(user, visibilities)) && (self.settings[:section_privilege_to_students] ==true || self.settings[:section_privilege_to_students].nil?)
+        :sections
+      elsif (visibilities.present? && visibility_limited_to_course_sections?(user, visibilities)) && (self.settings[:section_privilege_to_students] == false)
+        :sections
+      elsif (visibilities.present? && visibility_limited_to_course_sections?(user, visibilities))
+        :sections
+      else
+        :limited
+      end
     elsif granted_permissions.eql? [:read_roster]
       :limited
     else
       :full
     end
+    #end of arrivu changes for course section privilege for students
   end
 
   def unpublished?
