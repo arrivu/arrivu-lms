@@ -1005,6 +1005,7 @@ module ApplicationHelper
      res = (Float(score) / possible * 100).ceil
     rescue => e
       logger.error("Error While Calculating Percentage:#{e}")
+      res= 0
     end
   end
 

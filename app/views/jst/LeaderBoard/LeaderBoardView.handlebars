@@ -5,10 +5,19 @@
 <div id="progressbar" class="ui-progressbar ui-widget ui-widget-content ui-corner-all" role="progressbar"
      aria-valuemin="0" aria-valuemax="100" aria-valuenow="37" style="border-radius: 25px;padding: 5px;
 height: 20px; margin-top: 8px;background: #cccccc;">
-     <div style="z-index:1;position:absolute;color: #FFF">
-     <span style="width:10%;float:left;text-align:right;""> |</span>
+     <div style="z-index:-1;color:#8B8B8B;font-size:12px">
+        <span style="width:10%;float:left;text-align:right;">|</span>
+        <span style="width:10%;float:left;text-align:right;">|</span>
+        <span style="width:10%;float:left;text-align:right;"><span style="float:left;text-align:left;">20%</span>|</span>
+        <span style="width:10%;float:left;text-align:right;">|</span>
+        <span style="width:10%;float:left;text-align:right;"><span style="float:left;text-align:left;">40%</span>|</span>
+        <span style="width:10%;float:left;text-align:right;">|</span>
+        <span style="width:10%;float:left;text-align:right;"><span style="float:left;text-align:left;">60%</span>|</span>
+        <span style="width:10%;float:left;text-align:right;">|</span>
+        <span style="width:10%;float:left;text-align:right;"><span style="float:left;text-align:left;">80%</span>|</span>
+        <span style="width:10%;float:left;text-align:right;">|</span>
      </div>
-    <div class="ui-progressbar-value ui-widget-header ui-corner-left" style="width: {{progression}} ;border-radius: 25px;height: 20px;">
+    <div id="progress-bar-percentage" class="ui-progressbar-value ui-widget-header ui-corner-left" style="width: {{progression}} ;border-radius: 25px;height: 20px;z-index:2;position: relative;">
     </div>
 </div>
 </div>
