@@ -1669,7 +1669,7 @@ class ApplicationController < ActionController::Base
   end
 
   def check_for_terms_and_conditions
-   if @domain_root_account.terms_and_condition and @current_user and @current_pseudonym
+   if @domain_root_account.terms_and_condition and @current_user and @current_pseudonym and !api_request?
      if params[:action] == "masquerade"
        session[:masquearding] = "masquerading"
      end

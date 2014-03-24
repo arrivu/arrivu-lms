@@ -101,7 +101,8 @@ module Api::V1::User
       if includes.include?('get_badges') and @response_ok
         @badges_array.each do |key, value|
           if value['user_id'].to_i == user.id
-            badges << value['badge_url']
+            badges << {:badge_url => value['badge_url'],:badge_count => value['badge_count'],
+                                           :badge_description => value['badge_description']}
           end
         end
       end
