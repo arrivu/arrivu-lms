@@ -77,14 +77,36 @@ module Api::V1::User
         json[:progression] = "#{calc_progression_percentage(user)}%"
       end
 
+      if includes.include?('get_badges')
+        json[:badges] = badges
+      end
+
     end
   end
 
   def users_json(users, current_user, session, includes = [], context = @context, enrollments = nil)
     if includes.include?('get_badges')
-     #get_course_badges(users)
+      user_ids=[]
+      users.map do |user|
+        user_ids << user.id
+      end
+     response = get_course_badges(user_ids)
+     @response_ok = (!@error && (response.code == '200'|| '304'))
+       if @response_ok
+         @badges_array = JSON.parse(response.body)
+       end
     end
-    users.map{ |user| user_json(user, current_user, session, includes, context, enrollments) }
+    users.map do |user|
+      badges =[]
+      if includes.include?('get_badges') and @response_ok
+        @badges_array.each do |key, value|
+          if value['user_id'].to_i == user.id
+            badges << value['badge_url']
+          end
+        end
+      end
+      user_json(user, current_user, session, includes, context, enrollments,badges)
+    end
   end
 
   def calc_progression_percentage(user)
@@ -95,10 +117,18 @@ module Api::V1::User
     calculate_percentage(score.size,possible)
   end
 
-  def get_course_badges(users)
-    get_badges
-    uri = URI("#{@tool.url}?custom_show_course_badges=1")
-    res = Net::HTTP.post_form(uri, @tool_settings)
+  def get_course_badges(user_ids)
+    get_badges(true,user_ids)
+    base_url = URI(@tool.url)
+    uri = URI("#{base_url.scheme}://#{base_url.host}:#{base_url.port}/api/v1/courses/#{@tool_settings['custom_canvas_course_id']}/badges.json")
+    begin
+      res = Net::HTTP.post_form(uri, @tool_settings)
+    rescue => e
+      @error = true
+      logger.error("Error while getting badges:#{e}")
+    end
+
+
   end
 
 
