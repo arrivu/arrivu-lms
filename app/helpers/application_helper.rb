@@ -1001,7 +1001,11 @@ module ApplicationHelper
 
 
   def calculate_percentage(score,possible)
-    (Float(score) / possible * 100).ceil
+    begin
+     res = (Float(score) / possible * 100).ceil
+    rescue => e
+      logger.error("Error While Calculating Percentage:#{e}")
+    end
   end
 
 
