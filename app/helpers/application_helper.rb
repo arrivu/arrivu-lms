@@ -972,5 +972,43 @@ module ApplicationHelper
   end
   end
 
+  def get_badges(for_leader_board=nil,user_ids=[])
+    unless @current_user.nil?
+      context_external_tool = ContextExternalTool.find_by_tool_id_and_workflow_state('canvabadges',['anonymous','name_only','email_only','public']).try(:id)
+      unless context_external_tool.nil?
+        @tool = ContextExternalTool.find_for(context_external_tool, @domain_root_account, :main_navigation)
+        unless @tool.nil?
+          @resource_title = @tool.label_for(:main_navigation)
+          @resource_url_for_main_nav = @tool.main_navigation(:url)
+          @opaque_id = @current_user.opaque_identifier(:asset_string)
+          @resource_type = 'main_navigation'
+          @return_url = user_profile_url(@current_user, :include_host => true)
+          if for_leader_board
+            badge_context = @context
+          else
+            badge_context = @domain_root_account
+          end
+          @launch = BasicLTI::ToolLaunch.new(:url => @resource_url_for_main_nav, :tool => @tool, :user => @current_user, :context => badge_context, :link_code => @opaque_id, :return_url => @return_url, :resource_type => @resource_type)
+          unless user_ids.empty?
+            @tool_settings = @launch.generate(user_ids)
+          else
+            @tool_settings = @launch.generate
+         end
+        end
+      end
+    end
+  end
+
+
+  def calculate_percentage(score,possible)
+    begin
+     res = (Float(score) / possible * 100).ceil
+    rescue => e
+      logger.error("Error While Calculating Percentage:#{e}")
+      res= 0
+    end
+  end
+
+
   #arrivu changes
 end

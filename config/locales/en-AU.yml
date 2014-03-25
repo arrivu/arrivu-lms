@@ -6691,6 +6691,7 @@ en-AU:
         assignments_recently_graded: "Recently Graded"
         calendar: Calendar
         grades: Grades
+        leaderboard: LeaderBoard
       navigation: 
         main: "Main Navigation"
       open_source_learning_management_system: "Open Source LMS"

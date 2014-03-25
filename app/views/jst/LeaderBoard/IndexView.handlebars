@@ -1,0 +1,19 @@
+
+<div>
+<label >{{course.name}}</label>
+
+    <label style="margin-left: 27px;" >|</label>
+  <label  for="live_class_sections_for_filter" style="padding: 34px;margin-top: -25px;">Sections</label>
+    <select name="course_section_id" id="leader_board_sections_for_filter">
+    {{#if manage_students}}
+        <option value="0">All</option>
+    {{/if}}
+        {{#each courseSections}}
+            <option value="{{id}}" id={{id}} >{{name}}</option>
+        {{/each}}
+    </select>
+</div>
+
+
+<div data-view="LeaderBoard"></div>
+
