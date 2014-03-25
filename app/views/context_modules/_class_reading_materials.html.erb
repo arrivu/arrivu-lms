@@ -140,6 +140,34 @@
               <% end  %>
             </div>
           </div>
+      <% elsif  tag && tag.content_type == 'ContextExternalTool'%>
+          <div style="margin: 14px 10px 17px; font-size: 130%;
+                    font-weight: bold;
+                    color: #7f8c8d;
+                    line-height: 1.2;background-color: #fcfbdf;border-radius:5px;">
+            <div style="width:auto;padding : 6px 17px;float:left;"><%= image_tag "badges.png" , :style=> "padding:5px;border-radius: 35px;height: 38px" %> &nbsp;&nbsp;&nbsp;&nbsp;</div>
+            <div style="width:95%;padding:10px;">
+              <span ><a class="title"
+                        <% if is_managable or @authorized_for_user  %>
+                        href="<%= context_url(@context, :context_url) %>/modules/items/<%= tag ? tag.id : "{{ id }}" %>"
+                        <%  end  %>
+                        style="color:#d4811b;"> Badge</a></span><br>
+
+                Format:External Url | <%= truncate(tag.title, length: 53, omission: '..') %>
+                <% if is_managable or @authorized_for_user  %>
+                    <a class="title"
+                       href="<%= context_url(@context, :context_url) %>/modules/items/<%= tag ? tag.id : "{{ id }}" %>">
+                      <button style="background-color: #d4811b;border: none;
+                              border-radius: 4px;
+                              float: right;
+                              padding: 3px;
+                              color: #FFF;
+                              width: 130PX;margin-top: -10px; ">Download</button>
+                    </a>
+                <% end  %>
+
+            </div>
+          </div>
       <% else %>
           <div style="margin: 14px 10px 17px; font-size: 130%;
                   font-weight: bold;

@@ -24,15 +24,17 @@
         <% elsif tag.content_type == "ContextModuleSubHeader" %>
           <%= image_tag "context_icon.png", :style=>"line-height:20px;height:27px;margin-top:-3px;margin-left: 10px;" %> &nbsp;&nbsp;&nbsp;&nbsp;
         <% elsif tag.content_type == "ExternalUrl" %>
-           <%= image_tag "fancy_link_url.png", :style=>"line-height:20px;height:25px;margin-top:-3px;margin-left: 10px;" %> &nbsp;&nbsp;&nbsp;&nbsp;
+           <%= image_tag "fancy_link_url.png",:style=>"line-height:20px;height:28px;margin-top:-3px;margin-left: 10px;border-radius:20px;"%> &nbsp;&nbsp;&nbsp;&nbsp;
         <% elsif tag.content_type == "WikiPage" %>
             <% if tag.content.wiki_type == "video" %>
-                <%= image_tag "play_icon.png", :style=>"line-height:20px;height:39px;margin-top:-14px;margin-left: 3px;" %> &nbsp;&nbsp;&nbsp;&nbsp;
+              <%= image_tag "play_icon.png", :style=>"line-height:20px;height:34px;margin-top:-8px;margin-left: 3px;" %> &nbsp;&nbsp;&nbsp;&nbsp;
             <% else %>
               <%= image_tag "wiki_pages.png", :style=>"line-height:20px;height:26px;margin-top:-3px;margin-left: 10px;" %> &nbsp;&nbsp;&nbsp;&nbsp;
             <% end %>
         <% elsif tag.content_type == "ContextExternalTool" %>
-            <%= image_tag "badges.png", :style=>"line-height:20px;height:26px;margin-top:-3px;margin-left: 10px;" %> &nbsp;&nbsp;&nbsp;&nbsp;
+            <%= image_tag "badges.png", :style=>"line-height:28px;;height:26px;margin-top:-3px;margin-left: 10px;" %> &nbsp;&nbsp;&nbsp;&nbsp;
+        <% elsif tag.content_type == "Quiz" %>
+            <%= image_tag "class_quiz.jpg", :style=>"line-height:28px;height:29px;margin-top:-3px;margin-left:6px;" %> &nbsp;&nbsp;&nbsp;&nbsp;
         <% end %>
         <a class="title <%= '_explicit_external_link' if tag && tag.content_type == 'ExternalUrl' %>"
         <% if is_managable or @authorized_for_user  %>
