@@ -3,34 +3,16 @@
     <span style="float: right;word-wrap: break-word;width: 74%;margin-top: 16px;">{{short_name}}</span></div>
 <div style="width: 50%;float: left;">
 <div id="progressbar" class="ui-progressbar ui-widget ui-widget-content ui-corner-all" role="progressbar"
-     aria-valuemin="0" aria-valuemax="100" aria-valuenow="37" style="border-radius: 25px;padding: 5px;
-<<<<<<< HEAD
-height: 20px; margin-top: 8px;">
+     aria-valuemin="0" aria-valuemax="100" aria-valuenow="37" style="border-radius: 25px;padding: 8px 10px;
+height: 20px; margin-top: 8px;background-size: 100% 100%;background-image: url('../../images/Progress_bar_grey.png');">
     <div class="striped_progressbar" style="width: {{progression}} ;border-radius: 25px;height: 20px;"></div>
-=======
-height: 20px; margin-top: 8px;background: #cccccc;">
-     <div style="z-index:-1;color:#8B8B8B;font-size:12px">
-        <span style="width:10%;float:left;text-align:right;">|</span>
-        <span style="width:10%;float:left;text-align:right;">|</span>
-        <span style="width:10%;float:left;text-align:right;"><span style="float:left;text-align:left;">20%</span>|</span>
-        <span style="width:10%;float:left;text-align:right;">|</span>
-        <span style="width:10%;float:left;text-align:right;"><span style="float:left;text-align:left;">40%</span>|</span>
-        <span style="width:10%;float:left;text-align:right;">|</span>
-        <span style="width:10%;float:left;text-align:right;"><span style="float:left;text-align:left;">60%</span>|</span>
-        <span style="width:10%;float:left;text-align:right;">|</span>
-        <span style="width:10%;float:left;text-align:right;"><span style="float:left;text-align:left;">80%</span>|</span>
-        <span style="width:10%;float:left;text-align:right;">|</span>
-     </div>
-    <div id="progress-bar-percentage" class="ui-progressbar-value ui-widget-header ui-corner-left" style="width: {{progression}} ;border-radius: 25px;height: 20px;z-index:2;position: relative;">
-    </div>
->>>>>>> 9336afe8aa3a4cf8905e6183a2a366d3bf23896e
 </div>
 </div>
-<div style="width: 20%;float: left;margin: 0px 4%;">
+<div style="width: 20%;float: left;margin: 10px 4%;">
 {{#each badges}}
-<div style="width: 25%;float: left;">
+<div style="width: 25%;float: left;text-align: center">
     <img src="{{this.badge_url}}" width="34" height="34"  title="{{this.badge_description}}" data-tooltip>
-    <div style="position: absolute;color: #fff;font-weight:bolder;float:left;text-align:center;margin-top: -25px;margin-left: 14px;">{{this.badge_count}}</div>
+    <div style="color: #fff;font-weight:bolder;text-align:center;margin-top: -25px;">{{this.badge_count}}</div>
 </div>
 {{/each}}
 

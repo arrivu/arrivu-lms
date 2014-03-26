@@ -2,14 +2,13 @@
    @current_user_badges = get_user_badges_for_header
 %>
 <% if @current_user_badges and !@current_user_badges.empty?  %>
-    <div class="main_navigation_badges">
-      <div style="float: left;margin-top: 3px;padding: 10px 15px;border-right: 1.5px solid #DFDADA;width: 20%;"> Badges </div>
+    <div class="main_navigation_badges" style="background: #ffffff;">
+      <div style="float: left;margin-top: 3px;padding: 10px 15px;background-image: url('../../images/grey_divider.png');background-repeat: no-repeat;background-position: right;width: 20%;"> Badges </div>
       <div style="float: right;margin-top: 7px; text-align: center;">
                          <% @current_user_badges.each do |key, value| %>
-              <div style="float: left;">
+              <div style="float: left;margin-left: 5px;">
         <img src=<%= value['badge_url'] %>  width="34" height="34"  title="<%= value['badge_description']%>" data-tooltip>
-        <div style="position: absolute;color: #fff;font-weight:bolder;float:left;text-align:center;margin-top: -27px;
-                margin-left: 14px;"><%= value['badge_count'] %></div>
+        <div style="color: #fff;font-weight:bolder;text-align:center;margin-top: -25px;"><%= value['badge_count'] %></div>
                   </div>
     <% end %>
       </div>
