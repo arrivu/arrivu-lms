@@ -141,7 +141,7 @@
             </div>
           </div>
       <% elsif  tag && tag.content_type == 'ContextExternalTool'%>
-          <div style="margin: 14px 10px 17px; font-size: 130%;
+          <div style="margin: 14px 10px 17px; font-size: 100%;
                     font-weight: bold;
                     color: #7f8c8d;
                     line-height: 1.2;background-color: #fcfbdf;border-radius:5px;">
@@ -153,7 +153,7 @@
                         <%  end  %>
                         style="color:#d4811b;"> Badge</a></span><br>
 
-                Format:External Url | <%= truncate(tag.title, length: 53, omission: '..') %>
+                Format:<%= truncate(tag.title, length: 53, omission: '..') %>
                 <% if is_managable or @authorized_for_user  %>
                     <a class="title"
                        href="<%= context_url(@context, :context_url) %>/modules/items/<%= tag ? tag.id : "{{ id }}" %>">
