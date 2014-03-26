@@ -5,14 +5,14 @@
 <div id="progressbar" class="ui-progressbar ui-widget ui-widget-content ui-corner-all" role="progressbar"
      aria-valuemin="0" aria-valuemax="100" aria-valuenow="37" style="border-radius: 25px;padding: 5px;
 height: 20px; margin-top: 8px;">
-    <div class="ui-progressbar-value ui-widget-header ui-corner-left" style="width: {{progression}} ;border-radius: 25px;height: 20px;"></div>
+    <div class="striped_progressbar" style="width: {{progression}} ;border-radius: 25px;height: 20px;"></div>
 </div>
 </div>
 <div style="width: 20%;float: left;margin: 0px 4%;">
 {{#each badges}}
 <div style="width: 25%;float: left;">
-    <img src="{{this.badge_url}}" width="42" height="42"  title="{{this.badge_description}}" data-tooltip>
-    <div style="position: absolute;color: #fff;font-weight:bolder;float:left;text-align:center;margin-top: -30px;margin-left: 17px;">{{this.badge_count}}</div>
+    <img src="{{this.badge_url}}" width="34" height="34"  title="{{this.badge_description}}" data-tooltip>
+    <div style="position: absolute;color: #fff;font-weight:bolder;float:left;text-align:center;margin-top: -25px;margin-left: 14px;">{{this.badge_count}}</div>
 </div>
 {{/each}}
 

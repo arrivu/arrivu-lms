@@ -52,7 +52,6 @@ class ApplicationController < ActionController::Base
   after_filter :set_response_headers
   after_filter :update_enrollment_last_activity_at
   before_filter :get_wiki_type
-  before_filter :get_badges
   #before_filter :currently_logged_in_user_count
   before_filter :check_for_terms_and_conditions
 

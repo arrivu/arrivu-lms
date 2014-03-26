@@ -74,7 +74,7 @@ module Api::V1::User
       end
 
       if includes.include?('user_progression')
-        json[:progression] = "#{calc_progression_percentage(user)}%"
+        json[:progression] = "#{calc_progression_percentage(@context,user)}%"
       end
 
       if includes.include?('get_badges')
@@ -110,13 +110,6 @@ module Api::V1::User
     end
   end
 
-  def calc_progression_percentage(user)
-    context_modules = @context.context_modules.active
-    progressions = context_modules.map{|m| m.evaluate_for(user, true, true) }
-    possible = context_modules.size
-    score = progressions.select { |progression| progression.workflow_state == 'completed' }
-    calculate_percentage(score.size,possible)
-  end
 
   def get_course_badges(user_ids)
     get_badges(true,user_ids)

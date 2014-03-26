@@ -999,11 +999,45 @@ module ApplicationHelper
     end
   end
 
+  def get_user_badges
+      @current_user ||= @user
+      if @current_user
+        get_badges
+        base_url = URI(@tool.url)
+        uri = URI("#{base_url.scheme}://#{base_url.host}:#{base_url.port}/api/v1/#{@current_user.id}/badges.json")
+        begin
+          res = Net::HTTP.post_form(uri, @tool_settings)
+        rescue => e
+          @badge_error = true
+          logger.error("Error while getting badges for user #{@current_user.name}:#{e}")
+        end
+    end
+  end
 
-  def calculate_percentage(score,possible)
-    (Float(score) / possible * 100).ceil
+  def get_user_badges_for_header
+    response = get_user_badges
+    @response_ok = (!@badge_error && (response.code == '200'|| '304'))
+    if @response_ok
+      @badges_array = JSON.parse(response.body)
+    end
+  end
+
+  def calc_progression_percentage(context,user)
+    context_modules = context.context_modules.active
+    progressions = context_modules.map{|m| m.evaluate_for(user, true, true) }
+    possible = context_modules.size
+    score = progressions.select { |progression| progression.workflow_state == 'completed' }
+    calculate_percentage(score.size,possible)
   end
 
 
+  def calculate_percentage(score,possible)
+    begin
+      res = (Float(score) / possible * 100).ceil
+    rescue => e
+      logger.error("Error While Calculating Percentage:#{e}")
+      res= 0
+    end
+  end
   #arrivu changes
 end

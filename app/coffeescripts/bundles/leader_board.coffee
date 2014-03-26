@@ -19,6 +19,7 @@ require [
       courseSections: ENV.course_sections
       course: ENV.course
       manage_students: ENV.manage_students
+      section_name: ENV.course_sections[0].name if ENV.course_sections.length == 1
       el: '#content'
 
     @app.render()
