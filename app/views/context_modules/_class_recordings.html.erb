@@ -37,9 +37,9 @@
               color: #7f8c8d;
               line-height: 1.1;background-color: #fee8dd;border-radius:5px;">
         <% if tag.content_type == "ContextExternalTool" %>
-            <div style="width:auto;padding:17px;float:left;"><%= image_tag "badges.png" , :style=> "padding:5px;border-radius:35px;margin-top:-8px;width:33px" %> &nbsp;&nbsp;&nbsp;&nbsp;</div>
+            <div style="width:auto;padding:17px;float:left;"><%= image_tag "badges.png" , :style=> "padding:0px;border-radius:35px;margin-top:-8px;width:33px" %> &nbsp;&nbsp;&nbsp;&nbsp;</div>
         <%else %>
-          <div style="width:auto;padding:17px;float:left;"><%= image_tag "pdf_icon.png" , :style=> "padding:5px;border-radius:35px;margin-top:-8px;width:33px" %> &nbsp;&nbsp;&nbsp;&nbsp;</div>
+          <div style="width:auto;padding:17px;float:left;"><%= image_tag "pdf_icon.png" , :style=> "padding:0px;border-radius:35px;margin-top:-8px;width:33px" %> &nbsp;&nbsp;&nbsp;&nbsp;</div>
         <%end %>
 
         <div style="width:85%;padding:10px;">
@@ -50,7 +50,7 @@
                     <% if tag.content_type == "ContextExternalTool" %>
                       style="color:#c2401c;"> Badge </a></span><br>
                     <% else %>
-                      style="color:#c2401c;"> class  Presentation&nbsp;<%=sprintf '%02d',idx + 1%></a></span><br>
+                      style="color:#c2401c;"> Class  Presentation&nbsp;<%=sprintf '%02d',idx + 1%></a></span><br>
                     <%end %>
                    <%= truncate(tag.title, length: 53, omission: '..') %>
 
