@@ -113,19 +113,23 @@ module Api::V1::User
 
   def get_course_badges(user_ids)
     get_badges(true,user_ids)
-    base_url = URI(@tool.url)
-    uri = URI("#{base_url.scheme}://#{base_url.host}:#{base_url.port}/api/v1/courses/#{@tool_settings['custom_canvas_course_id']}/badges.json")
-    begin
-      res = Net::HTTP.post_form(uri, @tool_settings)
-    rescue => e
-      @error = true
-      logger.error("Error while getting badges:#{e}")
+    if @tool.nil?
+      print_badge_error
+     else
+      base_url = URI(@tool.url)
+      uri = URI("#{base_url.scheme}://#{base_url.host}:#{base_url.port}/api/v1/courses/#{@tool_settings['custom_canvas_course_id']}/badges.json")
+      begin
+        res = Net::HTTP.post_form(uri, @tool_settings)
+      rescue => e
+        print_badge_error(e)
+      end
     end
-
-
   end
 
-
+  def print_badge_error(error=nil)
+    @error = true
+    logger.error("Error while getting badges:#{error}")
+  end
   # this mini-object is used for secondary user responses, when we just want to
   # provide enough information to display a user.
   # for instance, discussion entries return this json as a sub-object.
