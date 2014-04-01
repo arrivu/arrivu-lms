@@ -1125,7 +1125,7 @@ class ApplicationController < ActionController::Base
         if @assignment
           @launch.for_assignment!(@tag.context, lti_grade_passback_api_url(@tool), blti_legacy_grade_passback_api_url(@tool))
         end
-        @tool_settings = @launch.generate
+        @tool_settings = @launch.generate([],@tag.context_module.id)
         render :template => 'external_tools/tool_show'
       end
     else
