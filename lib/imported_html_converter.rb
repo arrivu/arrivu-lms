@@ -18,6 +18,7 @@
 
 class ImportedHtmlConverter
   include TextHelper
+  include HtmlTextHelper
 
   CONTAINER_TYPES = ['div', 'p', 'body']
 
@@ -55,7 +56,7 @@ class ImportedHtmlConverter
               end
             end
           elsif val =~ %r{\$CANVAS_COURSE_REFERENCE\$/modules/items/(.*)}
-            if tag = context.context_module_tags.find_by_migration_id($1, :select => 'id')
+            if tag = context.context_module_tags.where(:migration_id => $1).select('id').first
               new_url = URI::escape "#{course_path}/modules/items/#{tag.id}"
             end
           elsif val =~ %r{(?:\$CANVAS_OBJECT_REFERENCE\$|\$WIKI_REFERENCE\$)/([^/]*)/(.*)}

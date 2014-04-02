@@ -40,8 +40,8 @@ describe ConversationMessage do
       add_message # need initial message for add_participants to not barf
     end
 
-    def add_message
-      @conversation.add_message("message")
+    def add_message(options = {})
+      @conversation.add_message("message", options)
     end
 
     def add_last_student
@@ -82,6 +82,16 @@ describe ConversationMessage do
       message.messages_sent["Conversation Message"].map(&:user_id).should be_include(@first_student.id)
     end
 
+    it "should limit notifications to message recipients, still excluding the author" do
+      message = add_message(only_users: [@teacher, @students.first])
+      message_user_ids = message.messages_sent["Conversation Message"].map(&:user_id)
+      message_user_ids.should_not include(@teacher.id)
+      message_user_ids.should include(@students.first.id)
+      @students[1..-1].each do |student|
+        message_user_ids.should_not include(student.id)
+      end
+    end
+
     it "should notify new participants" do
       event = add_last_student
       event.messages_sent["Added To Conversation"].map(&:user_id).should be_include(@last_student.id)
@@ -113,12 +123,11 @@ describe ConversationMessage do
       course_with_teacher
       student = student_in_course.user
       conversation = @teacher.initiate_conversation([student])
-      ConversationMessage.any_instance.stubs(:current_time_from_proper_timezone).returns(Time.at(0))
       conversation.add_message("reprimanded!", :generate_user_note => true)
       student.user_notes.size.should be(1)
       note = student.user_notes.first
       note.creator.should eql(@teacher)
-      note.title.should eql("Private message, Jan 1, 1970")
+      note.title.should eql("Private message")
       note.note.should eql("reprimanded!")
     end
 
@@ -270,6 +279,24 @@ describe ConversationMessage do
         :html => "body",
         :text => "body"
       }) }.should raise_error(IncomingMail::IncomingMessageProcessor::UnknownAddressError)
+    end
+
+    it "should reply only to the message author on conversations2 conversations" do
+      course_with_teacher
+      users = 3.times.map{ course_with_student(course: @course).user }
+      conversation = Conversation.initiate(users, false, :context_type => 'Course', :context_id => @course.id)
+      cm1 = conversation.add_message(users[0], "initial message", :root_account_id => Account.default.id)
+      cm2 = conversation.add_message(users[1], "subsequent message", :root_account_id => Account.default.id)
+      cm2.recipients.size.should == 2
+      cm3 = cm2.reply_from({
+        :purpose => 'general',
+        :user => users[2],
+        :subject => "an email reply",
+        :html => "body",
+        :text => "body"
+      })
+      cm3.conversation_message_participants.size.should == 1
+      cm3.conversation_message_participants[0].user.should == users[1]
     end
   end
 end

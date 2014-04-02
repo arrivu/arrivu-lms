@@ -4,9 +4,11 @@ define [
   'Backbone'
   'compiled/backbone-ext/DefaultUrlMixin'
   'compiled/models/TurnitinSettings'
+  'compiled/models/DateGroup'
   'compiled/collections/AssignmentOverrideCollection'
   'compiled/collections/DateGroupCollection'
-], ($, _, {Model}, DefaultUrlMixin, TurnitinSettings, AssignmentOverrideCollection, DateGroupCollection) ->
+  'i18n!assignments'
+], ($, _, {Model}, DefaultUrlMixin, TurnitinSettings, DateGroup, AssignmentOverrideCollection, DateGroupCollection, I18n) ->
 
   class Assignment extends Model
     @mixin DefaultUrlMixin
@@ -16,6 +18,8 @@ define [
 
     defaults:
       "publishable": true
+      "hidden": false
+      "unpublishable": true
 
     initialize: ->
       if (overrides = @get('assignment_overrides'))?
@@ -97,6 +101,18 @@ define [
       else if _.include submissionTypes, 'on_paper' then 'on_paper'
       else if _.include submissionTypes, 'external_tool' then 'external_tool'
       else 'online'
+
+    expectsSubmission: =>
+      submissionTypes = @_submissionTypes()
+      submissionTypes.length > 0 && !_.include(submissionTypes, "") && !_.include(submissionTypes, 'none') && !_.include(submissionTypes, 'not_graded') && !_.include(submissionTypes, 'on_paper') && !_.include(submissionTypes, 'external_tool')
+
+    allowedToSubmit: =>
+      submissionTypes = @_submissionTypes()
+      @expectsSubmission() && !@get('locked_for_user') && !_.include(submissionTypes, 'online_quiz') && !_.include(submissionTypes, 'attendance')
+
+    withoutGradedSubmission: =>
+      sub = @get('submission')
+      !sub? || sub.withoutGradedSubmission()
 
     acceptsOnlineUpload: =>
       !! _.include @_submissionTypes(), 'online_upload'
@@ -211,6 +227,12 @@ define [
     labelId: =>
       return @id
 
+    defaultDates: =>
+      group = new DateGroup
+        due_at:    @get("due_at")
+        unlock_at: @get("unlock_at")
+        lock_at:   @get("lock_at")
+
     multipleDueDates: =>
       dateGroups = @get("all_dates")
       dateGroups && dateGroups.length > 1
@@ -218,16 +240,16 @@ define [
     allDates: =>
       groups = @get("all_dates")
       models = (groups and groups.models) or []
+      result = _.map models, (group) -> group.toJSON()
 
-      result = _.map models, (group) ->
-        due    = group.get("due_at")
-        unlock = group.get("unlock_at")
-        lock   = group.get("lock_at")
-
-        dueAt:    if due then new Date(due) else null
-        dueFor:   group.get("title")
-        unlockAt: if unlock then new Date(unlock) else null
-        lockAt:   if lock then new Date(lock) else null
+    singleSectionDueDate: =>
+      if !@multipleDueDates() && !@dueAt()
+        allDates = @allDates()
+        for section in allDates
+          if section.dueAt
+            return section.dueAt.toISOString()
+      else
+        return @dueAt()
 
     toView: =>
       fields = [
@@ -243,7 +265,7 @@ define [
         'frozenAttributes', 'freezeOnCopy', 'canFreeze', 'isSimple',
         'gradingStandardId', 'isLetterGraded', 'assignmentGroupId', 'iconType',
         'published', 'htmlUrl', 'htmlEditUrl', 'labelId', 'position',
-        'multipleDueDates', 'allDates', 'isQuiz'
+        'multipleDueDates', 'allDates', 'isQuiz', 'singleSectionDueDate'
       ]
       hash = id: @get 'id'
       for field in fields
@@ -254,6 +276,17 @@ define [
       data = super
       data = @_filterFrozenAttributes(data)
       if @alreadyScoped then data else { assignment: data }
+
+    search: (regex) ->
+      if @get('name').match(regex)
+        @set 'hidden', false
+        return true
+      else
+        @set 'hidden', true
+        return false
+
+    endSearch: ->
+      @set 'hidden', false
 
     parse: (data) ->
       data = super data
@@ -312,3 +345,6 @@ define [
 
     publish: -> @save("published", true)
     unpublish: -> @save("published", false)
+
+    disabledMessage: ->
+      I18n.t('cant_unpublish_when_students_submit', "Can't unpublish if there are student submissions")

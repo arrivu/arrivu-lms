@@ -47,7 +47,7 @@ class Enrollment < ActiveRecord::Base
   after_save :update_cached_due_dates
 
   attr_accessor :already_enrolled
-  attr_accessible :user, :course, :workflow_state, :course_section, :limit_privileges_to_course_section, :already_enrolled
+  attr_accessible :user, :course, :workflow_state, :course_section, :limit_privileges_to_course_section, :already_enrolled, :start_at, :end_at
 
   def self.active_student_conditions(prefix = 'enrollments')
     "(#{prefix}.type IN ('StudentEnrollment', 'StudentViewEnrollment') AND #{prefix}.workflow_state = 'active')"
@@ -352,9 +352,7 @@ class Enrollment < ActiveRecord::Base
 
   def update_cached_due_dates
     if workflow_state_changed? && course
-      course.assignments.except(:order).select(:id).find_each do |assignment|
-        DueDateCacher.recompute(assignment)
-      end
+      DueDateCacher.recompute_course(course)
     end
   end
 
@@ -570,8 +568,8 @@ class Enrollment < ActiveRecord::Base
     return state unless global_start_at = ranges.map(&:compact).map(&:min).compact.min
     if global_start_at < now
       :completed
-    # Allow student view students to use the course before the term starts
-    elsif self.fake_student? || (state == :invited && !self.root_account.settings[:restrict_student_future_view])
+    # Allow admins and student view students to use the course before the term starts
+    elsif self.admin? || self.fake_student? || (state == :invited && !self.root_account.settings[:restrict_student_future_view])
       state
     else
       :inactive
@@ -779,7 +777,7 @@ class Enrollment < ActiveRecord::Base
   end
 
   def self.recompute_final_score_if_stale(course, user=nil)
-    Rails.cache.fetch(['recompute_final_scores', course.id, user].cache_key, :expires_in => Setting.get_cached('recompute_grades_window', 600).to_i.seconds) do
+    Rails.cache.fetch(['recompute_final_scores', course.id, user].cache_key, :expires_in => Setting.get('recompute_grades_window', 600).to_i.seconds) do
       recompute_final_score user ? user.id : course.student_enrollments.map(&:user_id), course.id
       yield if block_given?
       true
@@ -881,19 +879,10 @@ class Enrollment < ActiveRecord::Base
   scope :currently_online, joins(:pseudonyms).where("pseudonyms.last_request_at>?", 5.minutes.ago)
   # this returns enrollments for creation_pending users; should always be used in conjunction with the invited scope
   scope :for_email, lambda { |email|
-    if Rails.version < '3.0'
-      {
-        :joins => { :user => :communication_channels },
-        :conditions => ["users.workflow_state='creation_pending' AND communication_channels.workflow_state='unconfirmed' AND path_type='email' AND LOWER(path)=LOWER(?)", email],
-        :select => 'enrollments.*',
-        :readonly => false
-      }
-    else
-      joins(:user => :communication_channels).
-          where("users.workflow_state='creation_pending' AND communication_channels.workflow_state='unconfirmed' AND path_type='email' AND LOWER(path)=LOWER(?)", email).
-          select("enrollments.*").
-          readonly(false)
-    end
+    joins(:user => :communication_channels).
+        where("users.workflow_state='creation_pending' AND communication_channels.workflow_state='unconfirmed' AND path_type='email' AND LOWER(path)=LOWER(?)", email).
+        select("enrollments.*").
+        readonly(false)
   }
   def self.cached_temporary_invitations(email)
     if Enrollment.cross_shard_invitations?
@@ -914,14 +903,16 @@ class Enrollment < ActiveRecord::Base
   def self.order_by_sortable_name
     clause = User.sortable_name_order_by_clause('users')
     scope = self.order(clause)
-    if scope.scope(:find, :select)
+    if scope.select_values.present?
       scope = scope.select(clause)
+    elsif !CANVAS_RAILS2
+      scope = scope.select(self.arel_table[Arel.star])
     end
     scope
   end
 
   def self.top_enrollment_by(key, rank_order = :default)
-    raise "top_enrollment_by_user must be scoped" unless scoped?(:find, :conditions)
+    raise "top_enrollment_by_user must be scoped" unless scoped.where_values.present?
     key = key.to_s
     distinct_on(key, :order => "#{key}, #{type_rank_sql(rank_order)}")
   end
@@ -929,13 +920,13 @@ class Enrollment < ActiveRecord::Base
   def assign_uuid
     # DON'T use ||=, because that will cause an immediate save to the db if it
     # doesn't already exist
-    self.uuid = AutoHandle.generate_securish_uuid if !read_attribute(:uuid)
+    self.uuid = CanvasUuid::Uuid.generate_securish_uuid if !read_attribute(:uuid)
   end
   protected :assign_uuid
 
   def uuid
     if !read_attribute(:uuid)
-      self.update_attribute(:uuid, AutoHandle.generate_securish_uuid)
+      self.update_attribute(:uuid, CanvasUuid::Uuid.generate_securish_uuid)
     end
     read_attribute(:uuid)
   end
@@ -997,7 +988,7 @@ class Enrollment < ActiveRecord::Base
 
   # similar to above, but used on a scope or association (e.g. User#enrollments)
   def self.remove_duplicates!
-    raise "remove_duplicates! needs to be scoped" unless scoped?(:find, :conditions)
+    raise "remove_duplicates! needs to be scoped" unless scoped.where_values.present?
 
     where(["workflow_state NOT IN (?)", ['deleted', 'inactive', 'rejected']]).
       group_by{ |e| [e.user_id, e.course_id, e.course_section_id, e.associated_user_id] }.
@@ -1060,7 +1051,7 @@ class Enrollment < ActiveRecord::Base
   end
 
   def record_recent_activity_threshold
-    Setting.get_cached('enrollment_last_activity_at_threshold', 10.minutes).to_i
+    Setting.get('enrollment_last_activity_at_threshold', 10.minutes).to_i
   end
 
   def record_recent_activity_worthwhile?(as_of, threshold)

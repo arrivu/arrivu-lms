@@ -69,14 +69,12 @@ class InfoController < ApplicationController
     respond_to do |format|
       flash[:notice] = t('notices.error_reported', "Thanks for your help!  We'll get right on this")
       format.html { redirect_to root_url }
-      format.json { render :json => {:logged => true, :id => @report.try(:id) }.to_json }
+      format.json { render :json => {:logged => true, :id => @report.try(:id) } }
     end
   end
 
   def record_js_error
-    error = params[:error]
-    error[:backtrace] = error[:url]
-    ErrorReport.log_error('javascript', error)
+    ErrorReport.log_error('javascript', params[:error])
     # Render a 0x0 gif
     render  :content_type =>'image/gif', :text => "GIF89a\001\000\001\000\200\377\000\377\377\377\000\000\000,\000\000\000\000\001\000\001\000\000\002\002D\001\000;"
   end

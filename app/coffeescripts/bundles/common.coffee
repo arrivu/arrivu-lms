@@ -1,4 +1,6 @@
 require [
+  'jquery'
+
   # true modules that we manage in this file
   'Backbone'
   'compiled/widget/courseList'
@@ -20,6 +22,7 @@ require [
   'compiled/license_help'
   'compiled/behaviors/ujsLinks'
   'compiled/behaviors/admin-links'
+  'compiled/behaviors/activate'
   'compiled/behaviors/elementToggler'
   # uncomment these to turn on collection pinning and voting
   # 'compiled/behaviors/upvote-item'
@@ -46,7 +49,7 @@ require [
   'vendor/jquery.pageless'
   'vendor/jquery.scrollTo'
   'compiled/badge_counts'
-], (Backbone, courseList, helpDialog, tours) ->
+], ($, Backbone, courseList, helpDialog, tours) ->
   courseList.init()
   helpDialog.initTriggers()
   tours.init()

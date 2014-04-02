@@ -1,21 +1,24 @@
 define [
-  'Backbone'
+  'compiled/views/groups/manage/PopoverMenuView'
+  'compiled/models/GroupUser'
   'jst/groups/manage/assignToGroupMenu'
+  'jquery'
+  'underscore'
   'compiled/jquery/outerclick'
-], ({View}, template) ->
+], (PopoverMenuView, GroupUser, template, $, _) ->
 
-  class AssignToGroupMenu extends View
+  class AssignToGroupMenu extends PopoverMenuView
 
-    events:
-      'click': 'cancelHide'
+    defaults: _.extend {},
+      PopoverMenuView::defaults,
+      zIndex: 10
+
+    events: _.extend {},
+      PopoverMenuView::events,
       'click .set-group': 'setGroup'
-      'focusin': 'cancelHide'
-      'focusout': 'hide'
-      'outerclick': 'hide'
 
     attach: ->
       @collection.on 'change add remove reset', @render
-      @render()
 
     tagName: 'div'
 
@@ -23,33 +26,20 @@ define [
 
     template: template
 
-    showBy: ($target) ->
-      @cancelHide()
-      setTimeout => # IE needs this to happen async frd
-        @render()
-        @$el.insertAfter($target)
-        @$el.show()
-        @setElement @$el
-        @$el.zIndex(1)
-        @$el.position
-          my: 'left+6 top-47'
-          at: 'right center'
-          of: $target
-      , 20
-
-    cancelHide: =>
-      clearTimeout @hideTimeout
-
-    hide: =>
-      @hideTimeout = setTimeout =>
-        @$el.detach()
-      , 20
-
     setGroup: (e) ->
       e.preventDefault()
       e.stopPropagation()
-      @model.save 'groupId', $(e.currentTarget).data('group-id')
+      newGroupId = $(e.currentTarget).data('group-id')
+      @collection.category.reassignUser(@model, newGroupId)
       @hide()
 
     toJSON: ->
-      groups: @collection.toJSON()
+      hasGroups = @collection.length > 0
+      {
+        groups: @collection.toJSON()
+        noGroups: !hasGroups
+        allFull: hasGroups and @collection.models.every (g) -> g.isFull()
+      }
+
+    attachElement: ->
+      $('body').append(@$el)

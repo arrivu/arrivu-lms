@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/common')
 
 describe "eportfolios" do
-  it_should_behave_like "in-process server selenium tests"
+  include_examples "in-process server selenium tests"
 
   def create_eportfolio(is_public = false)
     get "/dashboard/eportfolios"
@@ -45,7 +45,7 @@ describe "eportfolios" do
       eportfolio_model({:user => @user, :name => "student content"})
     end
 
-    it "Should start the download of ePortfolio contents" do
+    it "should start the download of ePortfolio contents" do
       get "/eportfolios/#{@eportfolio.id}"
       f(".download_eportfolio_link").click
       keep_trying_until { f("#export_progress").should be_displayed }
@@ -211,7 +211,7 @@ describe "eportfolios" do
           add_html
           f(".edit_content_link").click
           hover_and_click("#page_section_1 .delete_page_section_link")
-          driver.switch_to.alert.accept
+          try_to_close_modal
           wait_for_ajaximations
           submit_form(".form_content")
           wait_for_ajaximations
@@ -232,7 +232,8 @@ describe "eportfolios" do
 
       it "should add a course submission" do
         f(".add_submission_link").click
-        f(".submission_list").should include_text(@assignment.title)
+        wait_for_ajaximations
+        keep_trying_until { f(".submission_list").should include_text(@assignment.title) }
         f(".select_submission_button").click
         submit_form(".form_content")
       end
@@ -264,7 +265,7 @@ describe "eportfolios" do
 end
 
 describe "eportfolios file upload" do
-  it_should_behave_like "in-process server selenium tests"
+  include_examples "in-process server selenium tests"
 
   before (:each) do
     @password = "asdfasdf"

@@ -36,15 +36,15 @@ class RubricAssociationsController < ApplicationController
       if params[:rubric] && @rubric.grants_rights?(@current_user, session, :update)[:update]
         @rubric.update_criteria(params[:rubric])
       end
-      params[:rubric_association][:association] = @association.association if @association
-      params[:rubric_association][:association] ||= @association_object
+      params[:rubric_association][:association_object] = @association.association_object if @association
+      params[:rubric_association][:association_object] ||= @association_object
       params[:rubric_association][:id] = @association.id if @association
       @association = RubricAssociation.generate(@current_user, @rubric, @context, params[:rubric_association])
       json_res = {
         :rubric => @rubric.as_json(:methods => :criteria, :include_root => false, :permissions => {:user => @current_user, :session => session}),
         :rubric_association => @association.as_json(:include_root => false, :include => [:rubric_assessments, :assessment_requests], :methods => :assessor_name, :permissions => {:user => @current_user, :session => session})
       }
-      render :json => json_res.to_json
+      render :json => json_res
     end
   end
   
@@ -60,7 +60,7 @@ class RubricAssociationsController < ApplicationController
       if !RubricAssociation.for_purpose('bookmark').find_by_rubric_id(@rubric.id) && association_count == 0
         @rubric.destroy_for(@context)
       end
-      render :json => @association.to_json
+      render :json => @association
     end
   end
 end

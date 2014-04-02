@@ -149,6 +149,48 @@ describe ContextModule do
       @tag3.should_not == @tag2
       @mod2.content_tags.should == [@tag3]
     end
+
+    it "should add a header as published" do
+      course_module
+      tag = @module.add_item(type: 'context_module_sub_header', title: 'published header')
+      tag.published?.should be_true
+    end
+
+    context "when draft state is enabled" do
+      before do
+        Course.any_instance.stubs(:feature_enabled?).with(:draft_state).returns(true)
+      end
+
+      it "adds external tools with a default workflow_state of anonymous" do
+        course_module
+        course_with_student(:active_all => true)
+        @external_tool = @course.context_external_tools.create!(
+          :url => "http://example.com/ims/lti",
+          :consumer_key => "asdf",
+          :shared_secret => "hjkl",
+          :name => "external tool",
+          :course_navigation => {
+            :text => "blah",
+            :url =>  "http://example.com/ims/lti",
+            :default => false
+          }
+        )
+        @tag = @module.add_item(:id => @external_tool.id, :type => "external_tool")
+        @tag.unpublished?.should be_true
+      end
+
+      it "adds external_url with a default workflow_state of unpublished" do
+        course_module
+        @tag = @module.add_item(:type => 'external_url', :url => 'http://example.com/lolcats', :title => 'pls view', :indent => 1)
+        @tag.unpublished?.should be_true
+      end
+
+      it "should add a header as unpublished" do
+        course_module
+        tag = @module.add_item(type: 'context_module_sub_header', title: 'unpublished header')
+        tag.unpublished?.should be_true
+      end
+    end
   end
   
   describe "completion_requirements=" do
@@ -285,12 +327,20 @@ describe ContextModule do
 
     it "should be satisfied if dependant on both a published and unpublished module" do
       @module3.prerequisites = "module_#{@module.id}"
-      @module3.prerequisites = [{:type=>"context_module", :id=>@module.id}, {:type=>"context_module", :id=>@module2.id}]
+      @module3.prerequisites = [{:type=>"context_module", :id=>@module.id, :name=>@module.name}, {:type=>"context_module", :id=>@module2.id, :name=>@module2.name}]
       @module3.save!
       @module3.reload
       @module3.prerequisites.count.should == 2
 
       @module3.prerequisites_satisfied?(@user, true).should == true
+    end
+
+    it "should skip incorrect prereq hashes" do
+      @module3.prerequisites = [{:type=>"context_module", :id=>@module.id},
+                                {:type=>"not_context_module", :id=>@module2.id, :name=>@module2.name}]
+      @module3.save!
+
+      @module3.prerequisites.count.should == 0
     end
 
     it "should update when publishing or unpublishing" do
@@ -309,6 +359,17 @@ describe ContextModule do
       @progression = @module.evaluate_for(@user, true)
       @progression.should_not be_nil
       @progression.should be_completed
+    end
+
+    it "should trigger completion events" do
+      course_module
+      @module.completion_events = [:publish_final_grade]
+      @module.context = @course
+      @module.save!
+      @user = User.create!(:name => "some name")
+      @course.enroll_student(@user)
+      @course.expects(:publish_final_grades).with(@user, @user.id).once
+      @progression = @module.evaluate_for(@user, true)
     end
 
     it "should create an unlocked progression for no prerequisites" do
@@ -713,6 +774,22 @@ describe ContextModule do
       @quiz.locked_for?(@user).should be_false
       @assignment.locked_for?(@user).should be_false
     end
+
+    it "should progress on pre-refactor quiz tags" do
+      course_module
+      student_in_course course: @course, active_all: true
+      @quiz = @course.quizzes.build(title: "some quiz")
+      @quiz.workflow_state = 'available'
+      @quiz.save!
+      @tag = @module.add_item({id: @quiz.id, type: 'quiz'})
+      ContentTag.where(id: @tag).update_all(content_type: 'Quiz')
+      @module.completion_requirements = {@tag.id => {type: 'must_submit'}}
+      @module.save!
+      @submission = @quiz.generate_submission(@student)
+      @submission.workflow_state = 'complete'
+      @submission.save!
+      @module.evaluate_for(@student).requirements_met.should be_include({id: @tag.id, type: 'must_submit'})
+    end
   end
 
   describe "after_save" do
@@ -735,100 +812,42 @@ describe ContextModule do
     end
   end
 
-  describe "clone_for" do
-    it "should clone a context module" do
-      course_module
-      @old_course = @course
-      @old_module = @module
-      course_model
-      @module = @old_module.clone_for(@course)
-      @module.should_not eql(@old_module)
-      @module.cloned_item_id.should eql(@old_module.cloned_item_id)
-      @module.name.should eql(@old_module.name)
-      @module.context.should eql(@course)
+  describe "#completion_events" do
+    it "should serialize correctly" do
+      cm = ContextModule.new
+      cm.completion_events = []
+      cm.completion_events.should == []
+
+      cm.completion_events = ['publish_final_grade']
+      cm.completion_events.should == [:publish_final_grade]
     end
-    
-    it "should clone all tags inside a context module and their associated content" do
-      course_module
-      @old_course = @course
-      @old_module = @module
-      @old_assignment = @course.assignments.create!(:title => "my assignment")
-      @old_tag = @old_module.add_item({:type => 'assignment', :id => @old_assignment.id})
-      ct = @old_module.add_item({ :title => 'Broken url example', :type => 'external_url', :url => 'http://example.com/with%20space' })
-      ContentTag.where(:id => ct).update_all(:url => "http://example.com/with space")
-      @old_module.reload
-      @old_module.content_tags.length.should eql(2)
-      course_model
-      @module = @old_module.clone_for(@course)
-      @module.should_not eql(@old_module)
-      @module.cloned_item_id.should eql(@old_module.cloned_item_id)
-      @module.name.should eql(@old_module.name)
-      @module.context.should eql(@course)
-      @module.reload
-      @course.reload
-      @old_tag.reload
-      
-      @module.content_tags.length.should eql(2)
-      @tag = @module.content_tags.first
-      @tag.should_not eql(@old_tag)
-      @tag.cloned_item_id.should eql(@old_tag.cloned_item_id)
-      @tag.content.should_not eql(@old_tag.content)
-      @tag.content.should eql(@course.assignments.first)
-      @tag.content.cloned_item_id.should eql(@old_tag.content.cloned_item_id)
-      ct2 = @module.content_tags[1]
-      ct2.url.should == 'http://example.com/with%20space'
+
+    it "should generate methods correctly" do
+      cm = ContextModule.new
+      cm.publish_final_grade?.should be_false
+      cm.publish_final_grade = true
+      cm.publish_final_grade?.should be_true
+      cm.publish_final_grade = false
+      cm.publish_final_grade?.should be_false
     end
-    
-    it "should update module requirements to reflect new tag id's" do
-      course_module
-      @old_course = @course
-      @old_module = @module
-      @old_assignment = @course.assignments.create!(:title => "my assignment")
-      @old_tag = @old_module.add_item({:type => 'assignment', :id => @old_assignment.id})
-      @old_module.reload
-      @old_module.content_tags.length.should eql(1)
-      reqs = {}
-      reqs[@old_tag.id.to_s] = {:type => "must_view"}
-      @old_module.completion_requirements = reqs
-      @old_module.completion_requirements.should_not be_nil
-      @old_module.completion_requirements.length.should eql(1)
-      course_model
-      @module = @old_module.clone_for(@course)
-      @module.save!
-      @module.should_not eql(@old_module)
-      @module.cloned_item_id.should eql(@old_module.cloned_item_id)
-      @module.name.should eql(@old_module.name)
-      @module.context.should eql(@course)
-      @module.reload
-      @course.reload
-      @old_tag.reload
-      @module.content_tags.length.should eql(1)
-      @tag = @module.content_tags.first
-      @tag.should_not eql(@old_tag)
-      @tag.cloned_item_id.should eql(@old_tag.cloned_item_id)
-      @tag.content.should_not eql(@old_tag.content)
-      @tag.content.should eql(@course.assignments.first)
-      @tag.content.cloned_item_id.should eql(@old_tag.content.cloned_item_id)
-      @module.completion_requirements.length.should eql(1)
-      @module.completion_requirements[0][:id].should eql(@tag.id)
+  end
+
+  describe "#find_or_create_progression" do
+    it "should not create progressions for non-enrolled users" do
+      course = Course.create!
+      cm = course.context_modules.create!
+      user = User.create!
+      cm.find_or_create_progression(user).should == nil
     end
-    it "should update module prerequisites to reflect new module id's" do
-      course_module
-      @old_course = @course
-      @old_module = @module
-      @old_module_2 = @course.context_modules.create!(:name => "another module")
-      @old_module_3 = @course.context_modules.create!(:name => "another module")
-      @old_module_3.prerequisites = [{:type => 'context_module', :id => @old_module.id}, {:type => 'context_module', :id => @old_module_2.id}]
-      @old_module_3.save!
-      course_module
-      @module = @old_module.clone_for(@course)
-      @module.save!
-      @course.reload
-      @course.context_modules.count.should eql(2)
-      @module_3 = @old_module_3.clone_for(@course)
-      @module_3.save!
-      @module_3.prerequisites.length.should eql(1)
-      @module_3.prerequisites[0][:id].should eql(@module.id)
+  end
+
+  describe "restore" do
+    it "should restore to unpublished state if draft_state is enabled" do
+      course(draft_state: true)
+      @module = @course.context_modules.create!
+      @module.destroy
+      @module.restore
+      @module.reload.should be_unpublished
     end
   end
 end

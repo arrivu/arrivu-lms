@@ -192,9 +192,9 @@ module Canvas::Migration::Helpers
                   scope = scope.select(:title)
                 end
 
-                if scope.respond_to?(:not_deleted)
+                if scope.klass.respond_to?(:not_deleted)
                   scope = scope.not_deleted
-                elsif scope.respond_to?(:active)
+                elsif scope.klass.respond_to?(:active)
                   scope = scope.active
                 end
 
@@ -217,9 +217,9 @@ module Canvas::Migration::Helpers
               count = source.discussion_topics.active.only_discussion_topics.count
             elsif source.respond_to?(type) && source.send(type).respond_to?(:count)
               scope = source.send(type).except(:includes)
-              if scope.respond_to?(:not_deleted)
+              if scope.klass.respond_to?(:not_deleted)
                 scope = scope.not_deleted
-              elsif scope.respond_to?(:active)
+              elsif scope.klass.respond_to?(:active)
                 scope = scope.active
               end
               count = scope.count
@@ -278,7 +278,7 @@ module Canvas::Migration::Helpers
           :message => I18n.t('linked_assignment_message', "linked with Assignment '%{title}'",
                               :title => item.assignment.title)
         }
-      elsif item.is_a?(Quiz) && item.assignment
+      elsif item.is_a?(Quizzes::Quiz) && item.assignment
         mig_id = CC::CCHelper.create_key(item.assignment)
         hash[:linked_resource] = {:type => 'assignments', :migration_id => mig_id,
           :message => I18n.t('linked_assignment_message', "linked with Assignment '%{title}'",
@@ -300,7 +300,7 @@ module Canvas::Migration::Helpers
     end
 
     def course_attachments_data(content_list, source_course)
-      source_course.folders.active.select('id, full_name, name').includes(:active_file_attachments).sort_by{|f| f.full_name}.each do |folder|
+      Canvas::ICU.collate_by(source_course.folders.active.select('id, full_name, name').includes(:active_file_attachments), &:full_name).each do |folder|
         next if folder.active_file_attachments.length == 0
 
         item = course_item_hash('folders', folder)

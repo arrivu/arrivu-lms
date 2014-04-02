@@ -31,11 +31,11 @@ class EventStream
   end
 
   def database
-    Canvas::Cassandra::Database.from_config(database_name)
+    Canvas::Cassandra::DatabaseBuilder.from_config(database_name)
   end
 
   def available?
-    Canvas::Cassandra::Database.configured?(database_name)
+    Canvas::Cassandra::DatabaseBuilder.configured?(database_name)
   end
 
   def on_insert(&callback)
@@ -79,13 +79,14 @@ class EventStream
 
     on_insert do |record|
       if entry = index.entry_proc.call(record)
-        key = index.key_proc ? index.key_proc.call(entry) : entry
+        key = index.key_proc ? index.key_proc.call(*entry) : entry
         index.insert(record, key)
       end
     end
 
-    singleton_class.send(:define_method, "for_#{name}") do |entry, options={}|
-      key = index.key_proc ? index.key_proc.call(entry) : entry
+    singleton_class.send(:define_method, "for_#{name}") do |*args|
+      options = args.extract_options!
+      key = index.key_proc ? index.key_proc.call(*args) : args
       index.for_key(key, options)
     end
 
@@ -113,10 +114,21 @@ class EventStream
   end
 
   def fetch_cql
-    "SELECT * FROM #{table} WHERE #{id_column} IN (?)"
+    "SELECT * FROM #{table} #{read_consistency_clause}WHERE #{id_column} IN (?)"
+  end
+
+  def read_consistency_clause
+    if read_consistency_level
+      "USING CONSISTENCY #{read_consistency_level} "
+    end
   end
 
   private
+
+  def read_consistency_level
+    Setting.get("event_stream.read_consistency.#{database_name}", nil) ||
+      Setting.get("event_stream.read_consistency", nil)
+  end
 
   def callbacks_for(operation)
     @callbacks ||= {}

@@ -1,10 +1,11 @@
 define [
   'i18n!calendar'
+  'jquery'
   'compiled/util/semanticDateRange'
   'compiled/calendar/CommonEvent'
   'jquery.instructure_date_and_time'
   'jquery.instructure_misc_helpers'
-], (I18n, semanticDateRange, CommonEvent) ->
+], (I18n, $, semanticDateRange, CommonEvent) ->
 
   deleteConfirmation = I18n.t('prompts.delete_event', "Are you sure you want to delete this event?")
 
@@ -21,7 +22,6 @@ define [
       @id = "calendar_event_#{data.id}" if data.id
       @title = data.title || "Untitled"
       @start = @parseStartDate()
-      @originalStartDate = new Date(@start) if @start
       @end = @parseEndDate()
       @originalEndDate = new Date(@end) if @end
       @allDay = data.all_day
@@ -41,7 +41,6 @@ define [
 
       super
 
-    startDate: () -> @originalStartDate
     endDate: () -> @originalEndDate
 
     parseStartDate: () ->
@@ -62,6 +61,9 @@ define [
           "<time datetime='#{date.toISOString()}'>#{$.dateString(date)}</time>"
         else
           semanticDateRange(@calendarEvent.start_at, @calendarEvent.end_at)
+
+    readableType: () ->
+      @readableTypes['event']
 
     saveDates: (success, error) =>
       @save {

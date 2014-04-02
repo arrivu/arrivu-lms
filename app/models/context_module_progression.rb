@@ -24,6 +24,7 @@ class ContextModuleProgression < ActiveRecord::Base
   
   before_save :infer_defaults
   after_save :touch_user
+  after_save :trigger_completion_events
   
   serialize :requirements_met
   
@@ -70,7 +71,7 @@ class ContextModuleProgression < ActiveRecord::Base
         end
         if obj.is_a?(Assignment)
           met << req if self.user.submitted_submission_for(obj.id)
-        elsif obj.is_a?(Quiz)
+        elsif obj.is_a?(Quizzes::Quiz)
           met << req if self.user.attempted_quiz_submission_for(obj.id)
         end
       elsif req[:type] == "max_score" || req[:type] == "min_score"
@@ -79,7 +80,7 @@ class ContextModuleProgression < ActiveRecord::Base
         if obj.is_a?(Assignment)
           sub = self.user.submitted_submission_for(obj.id)
           score = sub.try(:score)
-        elsif obj.is_a?(Quiz)
+        elsif obj.is_a?(Quizzes::Quiz)
           sub = self.user.attempted_quiz_submission_for(obj.id)
           score = sub.try(:kept_score)
         end
@@ -94,7 +95,15 @@ class ContextModuleProgression < ActiveRecord::Base
     self.requirements_met = met
     self.save if orig_reqs != new_reqs
   end
-  
+
+  def trigger_completion_events
+    if workflow_state_changed? && completed?
+      context_module.completion_event_callbacks.each do |event|
+        event.call(user)
+      end
+    end
+  end
+
   scope :for_user, lambda { |user| where(:user_id => user) }
   scope :for_modules, lambda { |mods| where(:context_module_id => mods) }
 

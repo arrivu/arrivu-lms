@@ -1,8 +1,10 @@
 define [
+  'i18n!instructure'
   'jquery'
+  'underscore'
   'Backbone'
   'jst/collectionView'
-], ($, Backbone, template) ->
+], (I18n, $, _, Backbone, template) ->
 
   ##
   # Renders a collection of items with an item view. Binds to a handful of
@@ -27,6 +29,10 @@ define [
 
     @optionProperty 'itemViewOptions'
 
+    @optionProperty 'emptyMessage'
+
+    @optionProperty 'listClassName'
+
     className: 'collectionView'
 
     els:
@@ -34,6 +40,7 @@ define [
 
     defaults:
       itemViewOptions: {}
+      emptyMessage: I18n.t("no_items", "No items.")
 
     ##
     # When using a different template ensure it contains an element with a
@@ -67,7 +74,22 @@ define [
     ##
     # @api public
 
-    toJSON: -> @options
+    toJSON: -> _.extend(@options, {@emptyMessage, @listClassName, ENV})
+
+    ##
+    # Reorder child views according to current collection ordering.
+    # Useful when your collection has a comparator and that field
+    # changes on a given model, e.g.
+    #
+    #   @on 'change:name', @reorder
+    #
+    # @api public
+
+    reorder: =>
+      @collection.sort()
+      @$list.children().detach()
+      children = (model.itemView.$el for model in @collection.models)
+      @$list.append children...
 
     ##
     # Attaches all the collection events
@@ -144,7 +166,9 @@ define [
     # like instantiate with child views, etc.
 
     createItemView: (model) ->
-      new @itemView $.extend {}, (@itemViewOptions || {}), {model}
+      view = new @itemView $.extend {}, (@itemViewOptions || {}), {model}
+      model.itemView = view
+      view
 
     ##
     # Inserts the item view with respect to the collection comparator.

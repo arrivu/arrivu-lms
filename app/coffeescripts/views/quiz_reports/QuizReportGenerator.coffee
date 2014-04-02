@@ -1,14 +1,16 @@
 define [
+  'jquery'
   'underscore'
   'Backbone'
   'jst/quiz_reports/quizReportGenerator'
   'compiled/models/QuizReport'
-], (_, {View}, quizReportGenerator, QuizReport) ->
+], ($, _, {View}, quizReportGenerator, QuizReport) ->
 
   class QuizReportGenerator extends View
     template: quizReportGenerator
 
     initialize: ->
+      super
       if progress = @model.get('progress')
         @model.progressModel.set progress
       @model.progressModel.on 'change', @render

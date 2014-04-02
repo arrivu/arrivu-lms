@@ -18,32 +18,35 @@
 require [
   'compiled/collections/AssignmentGroupCollection'
   'compiled/models/Course'
-  'compiled/views/InputFilterView'
   'compiled/views/assignments/AssignmentGroupListView'
   'compiled/views/assignments/CreateGroupView'
   'compiled/views/assignments/IndexView'
   'compiled/views/assignments/AssignmentSettingsView'
   'compiled/views/assignments/AssignmentGroupWeightsView'
   'compiled/views/assignments/ToggleShowByView'
-], (AssignmentGroupCollection, Course, InputFilterView,
-  AssignmentGroupListView, CreateGroupView, IndexView, AssignmentSettingsView,
-  AssignmentGroupWeightsView, ToggleShowByView) ->
+  'underscore'
+], (AssignmentGroupCollection, Course, AssignmentGroupListView,
+  CreateGroupView, IndexView, AssignmentSettingsView,
+  AssignmentGroupWeightsView, ToggleShowByView, _) ->
 
   course = new Course
   course.url = ENV.URLS.course_url
   course.fetch()
 
   includes = ["assignments"]
-  includes.push("all_dates") if ENV.PERMISSIONS.manage
+  if ENV.PERMISSIONS.manage
+    includes.push "all_dates"
+    includes.push "module_ids"
+  # observers
+  else if !_.include(ENV.current_user_roles, "student")
+    includes.push "all_dates"
 
   assignmentGroups = new AssignmentGroupCollection [],
     course: course
     params:
       include: includes
       override_assignment_dates: !ENV.PERMISSIONS.manage
-
-  inputFilterView = new InputFilterView
-    collection: assignmentGroups
+    courseSubmissionsURL: ENV.URLS.course_student_submissions_url
 
   assignmentGroupsView = new AssignmentGroupListView
     collection: assignmentGroups
@@ -69,14 +72,18 @@ require [
       course: course
       assignmentGroups: assignmentGroups
 
-  @app = new IndexView
+  app = new IndexView
     assignmentGroupsView: assignmentGroupsView
-    inputFilterView: inputFilterView
     assignmentSettingsView: assignmentSettingsView
     createGroupView: createGroupView
     showByView: showByView
+    collection: assignmentGroups
 
-  @app.render()
+  app.render()
 
   # kick it all off
-  assignmentGroups.fetch(reset: true)
+  assignmentGroups.fetch(reset: true).then ->
+    if ENV.PERMISSIONS.manage
+      assignmentGroups.loadModuleNames()
+    else
+      assignmentGroups.getGrades()

@@ -7,6 +7,8 @@ class AccessToken < ActiveRecord::Base
   serialize :scopes, Array
   validate :must_only_include_valid_scopes
 
+  has_many :communication_channels, dependent: :destroy
+
   # For user-generated tokens, purpose can be manually set.
   # For app-generated tokens, this should be generated based
   # on the scope defined in the auth process (scope has not
@@ -43,7 +45,7 @@ class AccessToken < ActiveRecord::Base
   end
 
   def record_last_used_threshold
-    Setting.get_cached('access_token_last_used_threshold', 10.minutes).to_i
+    Setting.get('access_token_last_used_threshold', 10.minutes).to_i
   end
 
   def used!
@@ -69,7 +71,7 @@ class AccessToken < ActiveRecord::Base
 
   def generate_token(overwrite=false)
     if overwrite || !self.crypted_token
-      self.token = AutoHandle.generate(nil, TOKEN_SIZE)
+      self.token = CanvasUuid::Uuid.generate(nil, TOKEN_SIZE)
     end
   end
 

@@ -22,7 +22,6 @@ require "socket"
 require "timeout"
 require 'coffee-script'
 require File.expand_path(File.dirname(__FILE__) + '/helpers/custom_selenium_rspec_matchers')
-require File.expand_path(File.dirname(__FILE__) + '/../../spec/selenium/servers/thin_server')
 include I18nUtilities
 
 SELENIUM_CONFIG = Setting.from_config("selenium") || {}
@@ -35,8 +34,9 @@ MAX_SERVER_START_TIME = 60
 #NEED BETTER variable handling
 THIS_ENV = ENV['TEST_ENV_NUMBER'].to_i
 THIS_ENV = 1 if ENV['TEST_ENV_NUMBER'].blank?
-WEBSERVER = 'thin' #set WEBSERVER ENV to webrick to change webserver
-
+PORT_NUM = (4440 + THIS_ENV)
+ENV['WEBSERVER'].nil? ? WEBSERVER = 'thin' : WEBSERVER = ENV['WEBSERVER']
+#set WEBSERVER ENV to webrick to change webserver
 
 
 $server_port = nil
@@ -68,13 +68,22 @@ module SeleniumTestsHelperMethods
         if SELENIUM_CONFIG[:firefox_profile].present?
           profile = Selenium::WebDriver::Firefox::Profile.from_name(SELENIUM_CONFIG[:firefox_profile])
         end
-        profile.native_events = native
+        profile.native_events = true
         options[:profile] = profile
       end
       if path = SELENIUM_CONFIG[:paths].try(:[], browser)
         Selenium::WebDriver.const_get(browser.to_s.capitalize).path = path
       end
-      driver = Selenium::WebDriver.for(browser, options)
+      begin
+        tries ||= 3
+        puts "Thread: provisioning selenium driver"
+        driver = nil
+        driver = Selenium::WebDriver.for(browser, options)
+      rescue Exception => e
+        puts "Thread #{THIS_ENV}\n try ##{tries}\nError attempting to start remote webdriver: #{e}"
+        sleep 2
+        retry unless (tries -= 1).zero?
+      end
     else
       caps = SELENIUM_CONFIG[:browser].try(:to_sym) || :firefox
       if caps == :firefox
@@ -86,29 +95,7 @@ module SeleniumTestsHelperMethods
         caps = Selenium::WebDriver::Remote::Capabilities.firefox(:firefox_profile => profile)
         caps.native_events = native
       end
-
-      driver = nil
-
-
-      (1..60).each do |times|
-        begin
-          #curbs race conditions on selenium grid nodes
-          stagger_threads
-
-          port_num = (4440 + THIS_ENV)
-          puts "Thread #{THIS_ENV} connecting to hub over port #{port_num}, try ##{times}"
-          driver = Selenium::WebDriver.for(
-              :remote,
-              :url => "http://127.0.0.1:#{port_num}/wd/hub",
-              :desired_capabilities => caps
-          )
-          break
-        rescue Exception => e
-          puts "Thread #{THIS_ENV}\n try ##{times}\nError attempting to start remote webdriver: #{e}"
-          sleep 10
-          raise e if times == 60
-        end
-      end
+      raise('error with how selenium is being setup')
     end
     driver.manage.timeouts.implicit_wait = 10
     driver
@@ -160,13 +147,6 @@ module SeleniumTestsHelperMethods
     I18n.t(*a, &b)
   end
 
-  def stagger_threads(step_time = 9)
-    wait_time = THIS_ENV * step_time
-    #thread 5 currently gets the most specs and lags behind the others this will decrease total build time by releasing it early
-    sleep(wait_time)
-  end
-
-
   def app_host
     "http://#{$app_host_and_port}"
   end
@@ -179,29 +159,19 @@ module SeleniumTestsHelperMethods
       return $server_port
     end
 
-    tried_ports = Set.new
-    while tried_ports.length < 60
-      port = rand(65535 - 1024) + 1024
-      next if tried_ports.include? port
-      tried_ports << port
+    # find an available socket
+    s = Socket.new(:INET, :STREAM)
+    s.setsockopt(:SOCKET, :REUSEADDR, true)
+    s.bind(Addrinfo.tcp(SERVER_IP, 0))
 
-      socket = Socket.new(Socket::AF_INET, Socket::SOCK_STREAM, 0)
-      socket.setsockopt(Socket::SOL_SOCKET, Socket::SO_REUSEADDR, true)
-      sockaddr = Socket.pack_sockaddr_in(port, '0.0.0.0')
-      begin
-        socket.bind(sockaddr)
-        socket.close
-        puts "found port #{port} after #{tried_ports.length} tries"
-        $server_port = port
-        $app_host_and_port = "#{SERVER_IP}:#{$server_port}"
+    $server_port = s.local_address.ip_port
+    $app_host_and_port = "#{s.local_address.ip_address}:#{s.local_address.ip_port}"
+    puts "found available port: #{$app_host_and_port}"
 
-        return $server_port
-      rescue Errno::EADDRINUSE => e
-        # pass
-      end
-    end
+    return $server_port
 
-    raise "couldn't find an available port after #{tried_ports.length} tries! ports tried: #{tried_ports.join ", "}"
+  ensure
+    s.close() if s
   end
 
   def self.start_webserver(webserver)
@@ -230,15 +200,20 @@ module SeleniumTestsHelperMethods
   def self.rack_app()
     app = Rack::Builder.new do
       use Rails::Rack::Debugger unless Rails.env.test?
-      map '/' do
-        use Rails::Rack::Static
-        run ActionController::Dispatcher.new
+      if CANVAS_RAILS2
+        map '/' do
+          use Rails::Rack::Static
+          run ActionController::Dispatcher.new
+        end
+      else
+        run CanvasRails::Application
       end
     end.to_app
     return app
   end
 
   def self.start_in_process_thin_server
+    require File.expand_path(File.dirname(__FILE__) + '/../../spec/selenium/servers/thin_server')
     server = SpecFriendlyThinServer
     app = self.rack_app
     server.run(app, :BindAddress => BIND_ADDRESS, :Port => $server_port, :AccessLog => [])
@@ -247,6 +222,7 @@ module SeleniumTestsHelperMethods
   end
 
   def self.start_in_process_webrick_server
+    require File.expand_path(File.dirname(__FILE__) + '/../../spec/selenium/servers/webrick_server')
     server = SpecFriendlyWEBrickServer
     app = self.rack_app
     server.run(app, :BindAddress => BIND_ADDRESS, :Port => $server_port, :AccessLog => [])
@@ -312,10 +288,14 @@ shared_examples_for "all selenium tests" do
   include CustomSeleniumRspecMatchers
 
   # set up so you can use rails urls helpers in your selenium tests
-  include ActionController::UrlWriter
+  if CANVAS_RAILS2
+    include ActionController::UrlWriter
+  else
+    include Rails.application.routes.url_helpers
+  end
 
   def selenium_driver;
-    $selenium_driver;
+    $selenium_driver
   end
 
   alias_method :driver, :selenium_driver
@@ -412,6 +392,7 @@ shared_examples_for "all selenium tests" do
   end
 
   def expect_new_page_load
+    make_full_screen
     driver.execute_script("INST.still_on_old_page = true;")
     yield
     keep_trying_until { driver.execute_script("return INST.still_on_old_page;") == nil }
@@ -495,6 +476,7 @@ shared_examples_for "all selenium tests" do
     if result == -2
       raise "Timed out waiting for ajax requests to finish. (This might mean there was a js error in an ajax callback.)"
     end
+    wait_for_js
     result
   end
 
@@ -530,6 +512,7 @@ shared_examples_for "all selenium tests" do
         }
       }
     JS
+    wait_for_js
   end
 
   def wait_for_ajaximations(wait_start = 0)
@@ -755,16 +738,18 @@ shared_examples_for "all selenium tests" do
 
   # you can pass an array to use the rails polymorphic_path helper, example:
   # get [@course, @announcement] => "http://10.0.101.75:65137/courses/1/announcements/1"
-  def get(link)
+  def get(link, waitforajaximations=true)
     link = polymorphic_path(link) if link.is_a? Array
     driver.get(app_host + link)
     #handles any modals prompted by navigating from the current page
     try_to_close_modal
+    wait_for_ajaximations if waitforajaximations
   end
 
   def try_to_close_modal
     begin
       driver.switch_to.alert.accept
+      driver.switch_to.alert.should be nil
       true
     rescue Exception => e
       return false
@@ -857,25 +842,26 @@ shared_examples_for "all selenium tests" do
     temp_file
   end
 
-  def assert_flash_notice_message(okay_message_regex)
-    keep_trying_until do
-      text = ff("#flash_message_holder .ui-state-success").map(&:text).join("\n") rescue ''
-      text =~ okay_message_regex
+  def flash_message_present?(type=:warning, message_regex=nil)
+    messages = ff("#flash_message_holder .ic-flash-#{type.to_s}")
+    return false if messages.length == 0
+    if message_regex
+      text = messages.map(&:text).join('\n')
+      return !!text.match(message_regex)
     end
+    return true
+  end
+
+  def assert_flash_notice_message(okay_message_regex)
+    keep_trying_until { flash_message_present?(:success, okay_message_regex) }
   end
 
   def assert_flash_warning_message(warn_message_regex)
-    keep_trying_until do
-      text = ff("#flash_message_holder .ui-state-warning").map(&:text).join("\n") rescue ''
-      text =~ warn_message_regex
-    end
+    keep_trying_until { flash_message_present?(:warning, warn_message_regex) }
   end
 
   def assert_flash_error_message(fail_message_regex)
-    keep_trying_until do
-      text = ff("#flash_message_holder .ui-state-error").map(&:text).join("\n") rescue ''
-      text =~ fail_message_regex
-    end
+    keep_trying_until { flash_message_present?(:error, fail_message_regex) }
   end
 
   def assert_error_box(selector)
@@ -903,6 +889,7 @@ shared_examples_for "all selenium tests" do
   def drag_with_js(selector, x, y)
     load_simulate_js
     driver.execute_script "$('#{selector}').simulate('drag', { dx: #{x}, dy: #{y} })"
+    wait_for_js
   end
 
 ##
@@ -924,6 +911,13 @@ shared_examples_for "all selenium tests" do
     drag_with_js source_selector, dx, dy
   end
 
+  ##
+  # drags the source element to the target element and waits for ajaximations
+  def drag_and_drop_element(source, target)
+    driver.action.drag_and_drop(source, target).perform
+    wait_for_ajaximations
+  end
+
 ##
 # returns true if a form validation error message is visible, false otherwise
   def error_displayed?
@@ -931,7 +925,7 @@ shared_examples_for "all selenium tests" do
     driver.execute_script("return $('.error_text:visible').filter(function(){ return $(this).offset().left >= 0 }).length > 0")
   end
 
-  append_after(:each) do
+  after(:each) do
     begin
       wait_for_ajax_requests
     rescue Selenium::WebDriver::Error::WebDriverError
@@ -940,11 +934,44 @@ shared_examples_for "all selenium tests" do
     truncate_all_tables unless self.use_transactional_fixtures
   end
 
+  unless CANVAS_RAILS2 || EncryptedCookieStore.respond_to?(:test_secret)
+    EncryptedCookieStore.class_eval do
+      cattr_accessor :test_secret
+
+      def call_with_test_secret(env)
+        @secret = self.class.test_secret
+        @encryption_key = unhex(@secret)
+        call_without_test_secret(env)
+      end
+      alias_method_chain :call, :test_secret
+    end
+  end
+
   append_before (:each) do
-    driver.manage.timeouts.implicit_wait = 3
-    driver.manage.timeouts.script_timeout = 60
-    EncryptedCookieStore.any_instance.stubs(:secret).returns(SecureRandom.hex(64))
-    enable_forgery_protection
+    #the driver sometimes gets in a hung state and this if almost always the first line of code to catch it
+    begin
+      tries ||= 3
+      driver.manage.timeouts.implicit_wait = 3
+      driver.manage.timeouts.script_timeout = 60
+      if CANVAS_RAILS2
+        EncryptedCookieStore.any_instance.stubs(:secret).returns(SecureRandom.hex(64))
+      else
+        EncryptedCookieStore.test_secret = SecureRandom.hex(64)
+      end
+
+      enable_forgery_protection
+    rescue
+      if ENV['PARALLEL_EXECS'] != nil
+        #cleans up and provisions a new driver
+        puts "ERROR: thread: #{THIS_ENV} selenium server hung, attempting to recover the node"
+        $selenium_driver = nil
+        $selenium_driver ||= setup_selenium
+        default_url_options[:host] = $app_host_and_port
+        retry unless (tries -= 1).zero?
+      else
+        raise('spec run time crashed')
+      end
+    end
   end
 
   append_before (:all) do
@@ -964,7 +991,7 @@ shared_examples_for "all selenium tests" do
     end
   end
 
-  append_after(:each) do
+  after(:each) do
     clear_timers!
   end
 
@@ -1066,7 +1093,7 @@ def find_css_in_string(string_of_html, css_selector)
 end
 
 shared_examples_for "in-process server selenium tests" do
-  it_should_behave_like "all selenium tests"
+  include_examples "all selenium tests"
   prepend_before (:all) do
     $in_proc_webserver_shutdown ||= SeleniumTestsHelperMethods.start_webserver(WEBSERVER)
   end
@@ -1083,16 +1110,18 @@ shared_examples_for "in-process server selenium tests" do
       @db_connection = ActiveRecord::Base.connection
       @dj_connection = Delayed::Backend::ActiveRecord::Job.connection
 
-      # synchronize the execute method for a modicum of thread safety
+      # synchronize db connection methods for a modicum of thread safety
+      methods_to_sync = CANVAS_RAILS2 ? %w{execute} : %w{execute exec_cache exec_no_cache query}
       [@db_connection, @dj_connection].each do |conn|
-        if !conn.respond_to?(:execute_without_synchronization)
-          conn.class.class_eval do
-            def execute_with_synchronization(*args)
-              @mutex ||= Mutex.new
-              @mutex.synchronize { execute_without_synchronization(*args) }
-            end
-
-            alias_method_chain :execute, :synchronization
+        methods_to_sync.each do |method_name|
+          if conn.respond_to?(method_name, true) && !conn.respond_to?("#{method_name}_with_synchronization", true)
+            conn.class.class_eval <<-RUBY
+              def #{method_name}_with_synchronization(*args)
+                @mutex ||= Mutex.new
+                @mutex.synchronize { #{method_name}_without_synchronization(*args) }
+              end
+              alias_method_chain :#{method_name}, :synchronization
+            RUBY
           end
         end
       end

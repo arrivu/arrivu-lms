@@ -65,6 +65,7 @@ define([
   //      encompassing the request(s) triggered by the submit action and 2. the
   //      formData being posted
   $.fn.formSubmit = function(options) {
+    $(this).markRequired(options);
     this.submit(function(event) {
       var $form = $(this); //this is to handle if bind to a template element, then it gets cloned the original this would not be the same as the this inside of here.
        // disableWhileLoading might need to wrap this, so we don't want to modify the original
@@ -311,8 +312,8 @@ define([
           (options.upload_error || options.error).call($this, data);
         }
         } finally {}
-        
-      }, function() { 
+
+      }, function() {
         return (options.upload_error || options.error).apply(this, arguments);
       });
     };
@@ -445,30 +446,30 @@ define([
           options.error.call(this, "aborted by the user", xhr, event);
         }
       }, false);
-      xhr.onreadystatechange = function(event) {
-        if(xhr.readyState == 4) {
-          var json = null;
-          try {
-            json = $.parseJSON(xhr.responseText);
-          } catch(e) { }
-          if($.httpSuccess(xhr)) {
-            if(json && !json.errors) {
-              if(options.success && $.isFunction(options.success)) {
-                options.success.call(this, json, xhr, event);
-              }
-            } else {
-              if(options.error && $.isFunction(options.error)) {
-                options.error.call(this, json || xhr.responseText, xhr, event);
-              }
+    }
+    xhr.onreadystatechange = function(event) {
+      if(xhr.readyState == 4) {
+        var json = null;
+        try {
+          json = $.parseJSON(xhr.responseText);
+        } catch(e) { }
+        if($.httpSuccess(xhr)) {
+          if(json && !json.errors) {
+            if(options.success && $.isFunction(options.success)) {
+              options.success.call(this, json, xhr, event);
             }
           } else {
             if(options.error && $.isFunction(options.error)) {
               options.error.call(this, json || xhr.responseText, xhr, event);
             }
           }
+        } else {
+          if(options.error && $.isFunction(options.error)) {
+            options.error.call(this, json || xhr.responseText, xhr, event);
+          }
         }
-      };
-    }
+      }
+    };
     xhr.open(method, url);
     xhr.setRequestHeader('Accept', 'application/json, text/javascript, */*');
     xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
@@ -834,7 +835,8 @@ define([
           if (!errors[name]) {
             errors[name] = [];
           }
-          errors[name].push(I18n.t('errors.field_is_required', "This field is required"));
+          var fieldPrompt = $form.getFieldLabelString(name);
+          errors[name].push(I18n.t('errors.required', "Required field")+(fieldPrompt ? ': '+fieldPrompt : ''));
         }
       });
     }
@@ -951,6 +953,7 @@ define([
     });
     var hasErrors = false;
     var highestTop = 0;
+    var lastField = null;
     var currentTop = $(document).scrollTop();
     var errorDetails = {};
     $('#aria_alerts').empty();
@@ -968,8 +971,10 @@ define([
       if (offset.top > highestTop) {
         highestTop = offset.top;
       }
+      lastField = $obj;
     });
-    for(var idx in elementErrors) {
+    if (lastField) {lastField.focus();}
+    for(var idx=0, l=elementErrors.length; idx < l; idx++) {
       var $obj = elementErrors[idx][0];
       var msg = elementErrors[idx][1];
       hasErrors = true;
@@ -1001,13 +1006,19 @@ define([
                           "<img src='/images/error_bottom.png' class='error_bottom'/>" +
                         "</div>").appendTo("body");
       }
-      var $box = $template.clone(true).attr('id', '').css('zIndex', $obj.zIndex() + 1).appendTo("body");
-      $box.find(".error_text").html(message);
       // it'd be more semantic to make the error_box have a role=alert but that doesn't work everywhere
       // http://blog.paciellogroup.com/2012/06/html5-accessibility-chops-aria-rolealert-browser-support/
       // we also have to add aria_alerts to the layout itself, since creating
       // it dynamically means VoiceOver won't read it
-      $('#aria_alerts').append($('<div/>').html(message));
+
+      // if there is no container for ARIA alerts, add the role to the template, so it at least works for some users.
+      if ($('#aria_alerts').length === 0) {
+        $template.find(".error_text").attr('role', 'alert');
+      } else {
+        $('#aria_alerts').append($('<div/>').html(message));
+      }
+      var $box = $template.clone(true).attr('id', '').css('zIndex', $obj.zIndex() + 1).appendTo("body");
+      $box.find(".error_text").html(message);
 
       var offset = $obj.offset();
       var height = $box.outerHeight();
@@ -1020,20 +1031,25 @@ define([
         left: offset.left + objLeftIndent
       }).fadeIn('fast');
 
+      var cleanup = function() {
+        $box.remove();
+        $obj.removeData('associated_error_box');
+        $obj.removeData('associated_error_object');
+      };
+
+      var fade = function() {
+        $box.stop(true,true).fadeOut('slow', cleanup);
+      };
+
       $obj.data({
         associated_error_box :$box,
         associated_error_object: $obj
-      }).focus(function() {
-        $box.fadeOut('slow', function() {
-          $box.remove();
-        });
-      });
+      }).click(fade).keypress(fade);
 
       $box.click(function() {
-        $(this).fadeOut('fast', function() {
-          $(this).remove();
-        });
+        $(this).fadeOut('fast', cleanup);
       });
+
       $.fn.errorBox.errorBoxes.push($obj);
       if(!$.fn.errorBox.isBeingAdjusted) {
         $.moveErrorBoxes();
@@ -1096,4 +1112,33 @@ define([
     return this;
   };
 
+  $.fn.markRequired = function(options) {
+    if (!options.required) {return;}
+    var required = options.required;
+    if (options.object_name) {
+      required = $._addObjectName(required, options.object_name);
+    }
+    $form = $(this);
+    $.each(required, function(i, name) {
+      var field = $form.find('[name="'+name+'"]');
+      if (!field.length) {return;}
+      field.attr({'aria-required': 'true'});
+      // TODO: enable this, maybe when Safari supports it
+      // field.attr({required: true});
+      field.each(function() {
+        if (!this.id) {return;}
+        label = $('label[for="'+this.id+'"]');
+        if (!label.length) {return;}
+        label.append($('<span />').text('*').attr('title', I18n.t('errors.field_is_required', "This field is required")));
+      });
+    });
+  };
+
+  $.fn.getFieldLabelString = function(name) {
+    var field = $(this).find('[name="'+name+'"]');
+    if (!field.length || !field[0].id) {return;}
+    label = $('label[for="'+field[0].id+'"]');
+    if (!label.length) {return;}
+    return label[0].firstChild.textContent;
+  };
 });

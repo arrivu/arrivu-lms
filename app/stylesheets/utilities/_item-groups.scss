@@ -33,10 +33,9 @@ is for items that are not draggable.
             <i class="icon-publish"></i><span class="publish-text">&nbsp;Published</span>
           </span>
 
-          <a class="al-trigger al-trigger-gray" role="button" aria-haspopup="true" aria-owns="content-1" href="#">
+          <a class="al-trigger al-trigger-gray" role="button" aria-haspopup="true" aria-owns="content-1" aria-label="Settings" href="#">
             <i class="icon-settings"></i>
             <i class="icon-mini-arrow-down"></i>
-            <span class="screenreader-only">Settings</span>
           </a>
 
           <ul id="content-1" class="al-options" role="menu" tabindex="0" aria-hidden="true" aria-expanded="false" aria-activedescendant="content-2">
@@ -66,10 +65,9 @@ is for items that are not draggable.
             <i class="icon-publish"></i><span class="publish-text">&nbsp;Published</span>
           </span>
 
-          <a class="al-trigger al-trigger-gray" role="button" aria-haspopup="true" aria-owns="content-1" href="#">
+          <a class="al-trigger al-trigger-gray" role="button" aria-haspopup="true" aria-owns="content-1" aria-label="Settings" href="#">
             <i class="icon-settings"></i>
             <i class="icon-mini-arrow-down"></i>
-            <span class="screenreader-only">Settings</span>
           </a>
 
           <ul id="content-1" class="al-options" role="menu" tabindex="0" aria-hidden="true" aria-expanded="false" aria-activedescendant="content-2">
@@ -105,10 +103,9 @@ is for items that are not draggable.
             <i class="icon-publish"></i><span class="publish-text">&nbsp;Published</span>
           </span>
 
-          <a class="al-trigger al-trigger-gray" role="button" aria-haspopup="true" aria-owns="content-1" href="#">
+          <a class="al-trigger al-trigger-gray" role="button" aria-haspopup="true" aria-owns="content-1" aria-label="Settings" href="#">
             <i class="icon-settings"></i>
             <i class="icon-mini-arrow-down"></i>
-            <span class="screenreader-only">Settings</span>
           </a>
 
           <ul id="content-1" class="al-options" role="menu" tabindex="0" aria-hidden="true" aria-expanded="false" aria-activedescendant="content-2">
@@ -180,14 +177,15 @@ is for items that are not draggable.
     line-height: 20px;
     margin: auto;
     display: inline-block;
-  }
 
-  i {
-    vertical-align: middle;
-  }
-  .icon-mini-arrow-right {
-    position: relative;
-    top: -1px;
+    .icon-mini-arrow-down {
+      vertical-align: middle;
+    }
+    .icon-mini-arrow-right {
+      position: relative;
+      top: -1px;
+      vertical-align: middle;
+    }
   }
 
   .btn {
@@ -232,13 +230,21 @@ is for items that are not draggable.
     background-color: #eef7ff;
   }
 
+  &:focus {
+    background-color: #eef7ff;
+  }
+
   &:before {
     position: relative;
     top: -2px;
   }
 
   &.ig-published .ig-title {
-    color: #34832b;
+    color: #33802a;
+  }
+
+  &.ig-published.student-view .ig-title {
+    color: #4d4d4d;
   }
 
   &.ig-row-empty {

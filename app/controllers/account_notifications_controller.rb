@@ -5,15 +5,21 @@ class AccountNotificationsController < ApplicationController
     @notification = AccountNotification.new(params[:account_notification])
     @notification.account = @account
     @notification.user = @current_user
+    unless params[:account_notification_roles].nil?
+      roles = params[:account_notification_roles].select do |r|
+        !r.nil? && ( r.to_s == "NilEnrollment" || RoleOverride.enrollment_types.any?{ |rt| rt[:name] == r.to_s } || @account.available_account_roles.include?(r.to_s))
+      end.map { |r| { :role_type => r.to_s } }
+      @notification.account_notification_roles.build(roles)
+    end
     respond_to do |format|
       if @notification.save
         flash[:notice] = t(:announcement_created_notice, "Announcement successfully created")
         format.html { redirect_to account_settings_path(@account, :anchor => 'tab-announcements') }
-        format.json { render :json => @notification.to_json }
+        format.json { render :json => @notification }
       else
         flash[:error] = t(:announcement_creation_failed_notice, "Announcement creation failed")
         format.html { redirect_to account_settings_path(@account, :anchor => 'tab-announcements') }
-        format.json { render :json => @notification.errors.to_json, :status => :bad_request }
+        format.json { render :json => @notification.errors, :status => :bad_request }
       end
     end
   end
@@ -24,7 +30,7 @@ class AccountNotificationsController < ApplicationController
     respond_to do |format|
       flash[:message] = t(:announcement_deleted_notice, "Announcement successfully deleted")
       format.html { redirect_to account_settings_path(@account, :anchor => 'tab-announcements') }
-      format.json { render :json => @notification.to_json }
+      format.json { render :json => @notification }
     end
   end
   

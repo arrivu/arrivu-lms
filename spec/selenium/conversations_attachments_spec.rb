@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/helpers/conversations_common')
 
 describe "conversations attachments local tests" do
-  it_should_behave_like "in-process server selenium tests"
+  include_examples "in-process server selenium tests"
 
   before do
     conversation_setup
@@ -23,11 +23,11 @@ describe "conversations attachments local tests" do
 
     add_attachment_link = f(".action_add_attachment")
     add_attachment_link.click
-    wait_for_animations
+    wait_for_ajaximations
     add_attachment_link.click
-    wait_for_animations
+    wait_for_ajaximations
     ffj(".attachment_list > .attachment:visible .remove_link")[1].click
-    wait_for_animations
+    wait_for_ajaximations
     ffj(".attachment_list > .attachment:visible").size.should == 1
     ffj(".attachment_list > .attachment:visible .remove_link")[0].click
     submit_message_form
@@ -101,7 +101,7 @@ describe "conversations attachments local tests" do
     wait_for_ajaximations
 
     get_messages(false).first.click
-    wait_for_animations
+    wait_for_ajaximations
     f('#action_forward').click
 
     add_recipient('student2', '#forward_recipients')
@@ -140,7 +140,7 @@ describe "conversations attachments local tests" do
 end
 
 describe "conversations attachments S3 tests" do
-  it_should_behave_like "in-process server selenium tests"
+  include_examples "in-process server selenium tests"
 
   before do
     conversation_setup
@@ -162,11 +162,11 @@ describe "conversations attachments S3 tests" do
 
     add_attachment_link = f(".action_add_attachment")
     add_attachment_link.click
-    wait_for_animations
+    wait_for_ajaximations
     add_attachment_link.click
-    wait_for_animations
+    wait_for_ajaximations
     ffj(".attachment_list > .attachment:visible .remove_link")[1].click
-    wait_for_animations
+    wait_for_ajaximations
     ffj(".attachment_list > .attachment:visible").size.should == 1
     ffj(".attachment_list > .attachment:visible .remove_link")[0].click
     submit_message_form
@@ -240,7 +240,7 @@ describe "conversations attachments S3 tests" do
     wait_for_ajaximations
 
     get_messages(false).first.click
-    wait_for_animations
+    wait_for_ajaximations
     f('#action_forward').click
 
     add_recipient('student2', '#forward_recipients')

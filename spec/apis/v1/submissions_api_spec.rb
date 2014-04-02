@@ -19,7 +19,11 @@
 require File.expand_path(File.dirname(__FILE__) + '/../api_spec_helper')
 require File.expand_path(File.dirname(__FILE__) + '/../file_uploads_spec_helper')
 
-describe 'Submissions API', :type => :integration do
+describe 'Submissions API', type: :request do
+
+  before {
+    HostUrl.stubs(:file_host_with_shard).returns(["www.example.com", Shard.default])
+  }
 
   def submit_homework(assignment, student, opts = {:body => "test!"})
     @submit_homework_time ||= Time.zone.at(0)
@@ -77,7 +81,7 @@ describe 'Submissions API', :type => :integration do
       @section = factory_with_protected_attributes(@course.course_sections, :sis_source_id => 'my-section-sis-id', :name => 'section2')
       @course.enroll_user(@student1, 'StudentEnrollment', :section => @section).accept!
 
-      quiz = Quiz.create!(:title => 'quiz1', :context => @course)
+      quiz = Quizzes::Quiz.create!(:title => 'quiz1', :context => @course)
       quiz.did_edit!
       quiz.offer!
       @a1 = quiz.assignment
@@ -105,12 +109,12 @@ describe 'Submissions API', :type => :integration do
       json.size.should == 1
       json.first['user_id'].should == @student1.id
 
-      json = api_call(:get,
+      api_call(:get,
             "/api/v1/sections/#{@default_section.id}/students/submissions",
             { :controller => 'submissions_api', :action => 'for_students',
               :format => 'json', :section_id => @default_section.id.to_s },
-              :student_ids => [@student1.id])
-      json.size.should == 0
+            { :student_ids => [@student1.id] },
+            {}, expected_status: 401)
 
       json = api_call(:get,
             "/api/v1/sections/sis_section_id:my-section-sis-id/students/submissions",
@@ -128,7 +132,7 @@ describe 'Submissions API', :type => :integration do
         :format => 'json', :section_id => @default_section.id.to_s,
         :assignment_id => @a1.id.to_s, :user_id => @student1.id.to_s },
         { :submission => { :posted_grade => '75%' } })
-      response.status.should == "404 Not Found"
+      assert_status(404)
 
       expect {
       json = api_call(:put,
@@ -221,7 +225,42 @@ describe 'Submissions API', :type => :integration do
             { :controller => 'submissions_api', :action => 'index',
               :format => 'json', :section_id => 'sis_section_id:section-2',
               :assignment_id => @a1.id.to_s })
-      response.status.should == "404 Not Found" # rather than 401 unauthorized
+      assert_status(404) # rather than 401 unauthorized
+    end
+
+    context 'submission comment attachments' do
+      before do
+        course_with_student_logged_in(active_all: true)
+        @assignment = @course.assignments.create! name: "blah",
+          submission_types: "online_upload"
+        @attachment = Attachment.create! context: @assignment,
+          user: @student,
+          filename: "cats.jpg",
+          uploaded_data: StringIO.new("meow?")
+      end
+
+      def put_comment_attachment
+        raw_api_call :put,
+          "/api/v1/courses/#{@course.id}/assignments/#{@assignment.id}/submissions/#{@student.id}/",
+          {controller: 'submissions_api', action: 'update', format: 'json',
+           course_id: @course.to_param, assignment_id: @assignment.to_param,
+           user_id: @student.to_param},
+          comment: {file_ids: [@attachment.id]}
+      end
+
+      it "doesn't let you attach files you don't have permission for" do
+        course_with_student_logged_in(course: @course, active_all: true)
+        put_comment_attachment
+        assert_status(401)
+      end
+
+      it 'works' do
+        put_comment_attachment
+        response.should be_success
+        @assignment.submission_for_student(@student)
+        .submission_comments.first
+        .attachment_ids.should == @attachment.id.to_s
+      end
     end
   end
 
@@ -341,7 +380,7 @@ describe 'Submissions API', :type => :integration do
     @student = user(:active_all => true)
     course_with_teacher(:active_all => true)
     @course.enroll_student(@student).accept!
-    @quiz = Quiz.create!(:title => 'quiz1', :context => @course)
+    @quiz = Quizzes::Quiz.create!(:title => 'quiz1', :context => @course)
     @quiz.did_edit!
     @quiz.offer!
     @assignment = @quiz.assignment
@@ -370,7 +409,7 @@ describe 'Submissions API', :type => :integration do
       "id" => @student.id,
       "display_name" => "User",
       "html_url" => "http://www.example.com/courses/#{@course.id}/users/#{@student.id}",
-      "avatar_image_url" => "http://www.example.com/images/messages/avatar-50.png"
+      "avatar_image_url" => User.avatar_fallback_url
     }
   end
 
@@ -395,7 +434,7 @@ describe 'Submissions API', :type => :integration do
     student1 = user(:active_all => true)
     course_with_teacher_logged_in(:active_all => true) # need to be logged in to view the preview url below
     @course.enroll_student(student1).accept!
-    quiz = Quiz.create!(:title => 'quiz1', :context => @course)
+    quiz = Quizzes::Quiz.create!(:title => 'quiz1', :context => @course)
     quiz.did_edit!
     quiz.offer!
     a1 = quiz.assignment
@@ -467,7 +506,7 @@ describe 'Submissions API', :type => :integration do
               "id" => @teacher.id,
               "display_name" => "User",
               "html_url" => "http://www.example.com/courses/#{@course.id}/users/#{@teacher.id}",
-              "avatar_image_url" => "http://www.example.com/images/messages/avatar-50.png"
+              "avatar_image_url" => User.avatar_fallback_url
            },
            "author_name"=>"User",
            "id" => comment.id,
@@ -484,7 +523,7 @@ describe 'Submissions API', :type => :integration do
                       :format => "json", :course_id => @course.id.to_s,
                       :assignment_id => a1.id.to_s, :user_id => student1.id.to_s },
                     { :include => %w(submission_comments) })
-    response.status.should =~ /401/
+    assert_status(401)
   end
 
   it "should return grading information for observers" do
@@ -728,7 +767,7 @@ describe 'Submissions API', :type => :integration do
              "id" => @teacher.id,
              "display_name" => "User",
              "html_url" => "http://www.example.com/courses/#{@course.id}/users/#{@teacher.id}",
-             "avatar_image_url" => "http://www.example.com/images/messages/avatar-50.png"
+             "avatar_image_url" => User.avatar_fallback_url
            },
            "author_name"=>"User",
            "id"=>comment.id,
@@ -1065,16 +1104,32 @@ describe 'Submissions API', :type => :integration do
       course_with_student :active_all => true
       @student1 = @student
       @student2 = student_in_course(:active_all => true).user
+      @student3 = student_in_course(:active_all => true).user
       @assignment1 = @course.assignments.create! :title => 'assignment1', :grading_type => 'points', :points_possible => 15
       @assignment2 = @course.assignments.create! :title => 'assignment2', :grading_type => 'points', :points_possible => 25
-      submit_homework @assignment1, @student1
-      submit_homework @assignment2, @student1
-      submit_homework @assignment1, @student2
-      submit_homework @assignment2, @student2
-      @assignment1.grade_student @student1, :grade => 15
-      @assignment1.grade_student @student2, :grade => 10
-      @assignment2.grade_student @student1, :grade => 25
-      @assignment2.grade_student @student2, :grade => 20
+      bare_submission_model @assignment1, @student1, grade: 15, score: 15
+      bare_submission_model @assignment2, @student1, grade: 25, score: 25
+      bare_submission_model @assignment1, @student2, grade: 10, score: 10
+      bare_submission_model @assignment2, @student2, grade: 20, score: 20
+      bare_submission_model @assignment1, @student3, grade: 20, score: 20
+    end
+
+    context "teacher" do
+      it "should show all submissions" do
+        @user = @teacher
+        json = api_call(:get,
+                        "/api/v1/courses/#{@course.id}/students/submissions",
+                        { :controller => 'submissions_api', :action => 'for_students',
+                          :format => 'json', :course_id => @course.to_param },
+                        { :student_ids => ['all'] })
+        json.map { |entry| entry.slice('user_id', 'assignment_id', 'score') }.sort_by { |entry| [entry['user_id'], entry['assignment_id']] }.should == [
+            { 'user_id' => @student1.id, 'assignment_id' => @assignment1.id, 'score' => 15 },
+            { 'user_id' => @student1.id, 'assignment_id' => @assignment2.id, 'score' => 25 },
+            { 'user_id' => @student2.id, 'assignment_id' => @assignment1.id, 'score' => 10 },
+            { 'user_id' => @student2.id, 'assignment_id' => @assignment2.id, 'score' => 20 },
+            { 'user_id' => @student3.id, 'assignment_id' => @assignment1.id, 'score' => 20 },
+        ]
+      end
     end
 
     context "students" do
@@ -1096,6 +1151,18 @@ describe 'Submissions API', :type => :integration do
                         "/api/v1/courses/#{@course.id}/students/submissions.json",
                         { :controller => 'submissions_api', :action => 'for_students',
                           :format => 'json', :course_id => @course.to_param } )
+        json.map { |entry| entry.slice('user_id', 'assignment_id', 'score') }.sort_by { |entry| entry['assignment_id'] }.should == [
+            { 'user_id' => @student2.id, 'assignment_id' => @assignment1.id, 'score' => 10 },
+            { 'user_id' => @student2.id, 'assignment_id' => @assignment2.id, 'score' => 20 } ]
+      end
+
+      it "should show all possible if student_ids is ['all']" do
+        @user = @student2
+        json = api_call(:get,
+                        "/api/v1/courses/#{@course.id}/students/submissions.json",
+                        { :controller => 'submissions_api', :action => 'for_students',
+                          :format => 'json', :course_id => @course.to_param },
+                        { :student_ids => ['all'] })
         json.map { |entry| entry.slice('user_id', 'assignment_id', 'score') }.sort_by { |entry| entry['assignment_id'] }.should == [
             { 'user_id' => @student2.id, 'assignment_id' => @assignment1.id, 'score' => 10 },
             { 'user_id' => @student2.id, 'assignment_id' => @assignment2.id, 'score' => 20 } ]
@@ -1123,6 +1190,16 @@ describe 'Submissions API', :type => :integration do
                    :student_ids => [@student1.to_param, @student2.to_param] },
                  {}, {}, :expected_status => 401)
       end
+
+      it "should error if too many students requested" do
+        Api.stubs(:max_per_page).returns(0)
+        @user = @student1
+        api_call(:get,
+                 "/api/v1/courses/#{@course.id}/students/submissions.json",
+                 { :controller => 'submissions_api', :action => 'for_students',
+                   :format => 'json', :course_id => @course.to_param },
+                 { :student_ids => [@student1.to_param] }, {}, expected_status: 400)
+      end
     end
 
     context "observers" do
@@ -1145,6 +1222,59 @@ describe 'Submissions API', :type => :integration do
             { 'user_id' => @student2.id, 'assignment_id' => @assignment1.id, 'score' => 10 },
             { 'user_id' => @student2.id, 'assignment_id' => @assignment2.id, 'score' => 20 }
         ]
+      end
+
+      it "should allow an observer to view all observed students' submissions via student_ids[]=all" do
+        @user = @observer
+        json = api_call(:get,
+                        "/api/v1/courses/#{@course.id}/students/submissions",
+                        { :controller => 'submissions_api', :action => 'for_students',
+                          :format => 'json', :course_id => @course.to_param },
+                        { :student_ids => ['all'] })
+        json.map { |entry| entry.slice('user_id', 'assignment_id', 'score') }.sort_by { |entry| [entry['user_id'], entry['assignment_id']] }.should == [
+            { 'user_id' => @student1.id, 'assignment_id' => @assignment1.id, 'score' => 15 },
+            { 'user_id' => @student1.id, 'assignment_id' => @assignment2.id, 'score' => 25 },
+            { 'user_id' => @student2.id, 'assignment_id' => @assignment1.id, 'score' => 10 },
+            { 'user_id' => @student2.id, 'assignment_id' => @assignment2.id, 'score' => 20 }
+        ]
+      end
+
+      context "observer that is a student" do
+        before do
+          @course.enroll_student(@observer, :allow_multiple_enrollments => true).accept!
+          submit_homework(@assignment1, @observer)
+          @assignment1.grade_student(@observer, grade: 5)
+        end
+
+        it "should allow an observer that is a student to view his own and his observees submissions" do
+          @user = @observer
+          json = api_call(:get,
+                          "/api/v1/courses/#{@course.id}/students/submissions",
+                          { :controller => 'submissions_api', :action => 'for_students',
+                            :format => 'json', :course_id => @course.to_param },
+                          { :student_ids => [@student1.id, @observer.id] })
+          json.map { |entry| entry.slice('user_id', 'assignment_id', 'score') }.sort_by { |entry| [entry['user_id'], entry['assignment_id']] }.should == [
+              { 'user_id' => @student1.id, 'assignment_id' => @assignment1.id, 'score' => 15 },
+              { 'user_id' => @student1.id, 'assignment_id' => @assignment2.id, 'score' => 25 },
+              { 'user_id' => @observer.id, 'assignment_id' => @assignment1.id, 'score' => 5 }
+          ]
+        end
+
+        it "should allow an observer that is a student to view his own and his observees submissions via student_ids[]=all" do
+          @user = @observer
+          json = api_call(:get,
+                          "/api/v1/courses/#{@course.id}/students/submissions",
+                          { :controller => 'submissions_api', :action => 'for_students',
+                            :format => 'json', :course_id => @course.to_param },
+                          { :student_ids => ['all'] })
+          json.map { |entry| entry.slice('user_id', 'assignment_id', 'score') }.sort_by { |entry| [entry['user_id'], entry['assignment_id']] }.should == [
+              { 'user_id' => @student1.id, 'assignment_id' => @assignment1.id, 'score' => 15 },
+              { 'user_id' => @student1.id, 'assignment_id' => @assignment2.id, 'score' => 25 },
+              { 'user_id' => @student2.id, 'assignment_id' => @assignment1.id, 'score' => 10 },
+              { 'user_id' => @student2.id, 'assignment_id' => @assignment2.id, 'score' => 20 },
+              { 'user_id' => @observer.id, 'assignment_id' => @assignment1.id, 'score' => 5 }
+          ]
+        end
       end
 
       it "should allow an observer to view observed students' submissions (grouped)" do
@@ -1263,7 +1393,7 @@ describe 'Submissions API', :type => :integration do
             :assignment_id => a1.id.to_s, :user_id => student.id.to_s },
           { :comment => { :text_comment => 'witty remark' },
             :submission => { :posted_grade => 'B' } })
-    response.status.should == '401 Unauthorized'
+    assert_status(401)
   end
 
   it "should not allow rubricking by a student" do
@@ -1281,7 +1411,7 @@ describe 'Submissions API', :type => :integration do
             :assignment_id => a1.id.to_s, :user_id => student.id.to_s },
           { :comment => { :text_comment => 'witty remark' },
             :rubric_assessment => { :criteria => { :points => 5 } } })
-    response.status.should == '401 Unauthorized'
+    assert_status(401)
   end
 
   it "should not return submissions for no-longer-enrolled students" do
@@ -1711,7 +1841,7 @@ describe 'Submissions API', :type => :integration do
           { :controller => 'submissions_api', :action => 'show',
             :format => 'json', :course_id => @course.id.to_s,
             :assignment_id => @assignment.id.to_s, :user_id => s2.user_id.to_s })
-    response.status.should == "404 Not Found"
+    assert_status(404)
 
     # try querying the other section directly
     raw_api_call(:get,
@@ -1719,22 +1849,22 @@ describe 'Submissions API', :type => :integration do
           { :controller => 'submissions_api', :action => 'show',
             :format => 'json', :section_id => section2.id.to_s,
             :assignment_id => @assignment.id.to_s, :user_id => s2.user_id.to_s })
-    response.status.should == "404 Not Found"
+    assert_status(404)
 
     json = api_call(:get,
           "/api/v1/courses/#{@course.id}/students/submissions",
           { :controller => 'submissions_api', :action => 'for_students',
             :format => 'json', :course_id => @course.id.to_s },
-          { :student_ids => [s1.user_id, s2.user_id], :grouped => 1 })
-    json.map { |u| u['user_id'] }.should == [s1.user_id]
+          { :student_ids => [s1.user_id, s2.user_id], :grouped => 1 },
+          {}, expected_status: 401)
 
     # try querying the other section directly
     json = api_call(:get,
           "/api/v1/sections/#{section2.id}/students/submissions",
           { :controller => 'submissions_api', :action => 'for_students',
             :format => 'json', :section_id => section2.id.to_s },
-          { :student_ids => [s1.user_id, s2.user_id], :grouped => 1 })
-    json.size.should == 0
+          { :student_ids => [s1.user_id, s2.user_id], :grouped => 1 },
+          {}, expected_status: 401)
 
     # grade the s1 submission, succeeds because the section is the same
     json = api_call(:put,
@@ -1754,7 +1884,7 @@ describe 'Submissions API', :type => :integration do
             :format => 'json', :course_id => @course.id.to_s,
             :assignment_id => @assignment.id.to_s, :user_id => s2.user_id.to_s },
           { :submission => { :posted_grade => '10' } })
-    response.status.should == "404 Not Found"
+    assert_status(404)
 
     # try querying the other section directly
     raw_api_call(:put,
@@ -1763,7 +1893,7 @@ describe 'Submissions API', :type => :integration do
             :format => 'json', :section_id => section2.id.to_s,
             :assignment_id => @assignment.id.to_s, :user_id => s2.user_id.to_s },
           { :submission => { :posted_grade => '10' } })
-    response.status.should == "404 Not Found"
+    assert_status(404)
   end
 
   context 'map_user_ids' do
@@ -1934,8 +2064,8 @@ describe 'Submissions API', :type => :integration do
         @always_scribd = true
       end
 
-      it_should_behave_like "file uploads api"
-      it_should_behave_like "file uploads api without quotas"
+      include_examples "file uploads api"
+      include_examples "file uploads api without quotas"
 
       def preflight(preflight_params)
         api_call(:post, "/api/v1/courses/#{@course.id}/assignments/#{@assignment.id}/submissions/#{@student1.id}/files",
@@ -2026,7 +2156,7 @@ describe 'Submissions API', :type => :integration do
                 :user_id => @student.id.to_s
               },
               opts)
-      response.status.should == "401 Unauthorized"
+      assert_status(401)
     end
   end
 

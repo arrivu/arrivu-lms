@@ -20,29 +20,64 @@
 #
 # API for accessing Assignment Group and Assignment information.
 #
-# @object AssignmentGroup
+# @model GradingRules
 #     {
-#       // the id of the Assignment Group
-#       "id": 1,
-#
-#       // the name of the Assignment Group
-#       "name": "group2",
-#
-#       // the position of the Assignment Group
-#       "position": 7,
-#
-#       // the weight of the Assignment Group
-#       "group_weight": 20,
-#
-#       // the assignments in this Assignment Group
-#       // (see the Assignment API for a detailed list of fields)
-#       "assignments": [],
-#
-#       // the grading rules that this Assignment Group has
-#       "rules": {
-#         "drop_lowest": 1,
-#         "drop_highest": 1,
-#         "never_drop": [33,17,24]
+#       "id": "GradingRules",
+#       "description": "",
+#       "properties": {
+#         "drop_lowest": {
+#           "description": "Number of lowest scores to be dropped for each user.",
+#           "example": 1,
+#           "type": "integer"
+#         },
+#         "drop_highest": {
+#           "description": "Number of highest scores to be dropped for each user.",
+#           "example": 1,
+#           "type": "integer"
+#         },
+#         "never_drop": {
+#           "description": "Assignment IDs that should never be dropped.",
+#           "example": "[33, 17, 24]",
+#           "type": "array",
+#           "items": {"type": "integer"}
+#         }
+#       }
+#     }
+# @model AssignmentGroup
+#     {
+#       "id": "AssignmentGroup",
+#       "description": "",
+#       "properties": {
+#         "id": {
+#           "description": "the id of the Assignment Group",
+#           "example": 1,
+#           "type": "integer"
+#         },
+#         "name": {
+#           "description": "the name of the Assignment Group",
+#           "example": "group2",
+#           "type": "string"
+#         },
+#         "position": {
+#           "description": "the position of the Assignment Group",
+#           "example": 7,
+#           "type": "integer"
+#         },
+#         "group_weight": {
+#           "description": "the weight of the Assignment Group",
+#           "example": 20,
+#           "type": "integer"
+#         },
+#         "assignments": {
+#           "description": "the assignments in this Assignment Group (see the Assignment API for a detailed list of fields)",
+#           "example": "[]",
+#           "type": "array",
+#           "items": {"type": "integer"}
+#         },
+#         "rules": {
+#           "description": "the grading rules that this Assignment Group has",
+#           "$ref": "GradingRules"
+#         }
 #       }
 #     }
 #
@@ -65,7 +100,7 @@ class AssignmentGroupsController < ApplicationController
   #
   # @returns [AssignmentGroup]
   def index
-    if authorized_action(@context.assignment_groups.new, @current_user, :read)
+    if authorized_action(@context.assignment_groups.scoped.new, @current_user, :read)
       @groups = @context.assignment_groups.active
 
       params[:include] = Array(params[:include])
@@ -73,6 +108,11 @@ class AssignmentGroupsController < ApplicationController
         assignment_includes = [:rubric, :quiz, :external_tool_tag]
         assignment_includes.concat(params[:include] & [:discussion_topic])
         assignment_includes.concat(params[:include] & [:all_dates])
+        if params[:include].include? "module_ids"
+          assignment_includes.concat [{:discussion_topic => :context_module_tags},
+                                      {:quiz => :context_module_tags},
+                                      :context_module_tags]
+        end
         @groups = @groups.includes(:active_assignments => assignment_includes)
 
         assignment_descriptions = @groups
@@ -100,6 +140,7 @@ class AssignmentGroupsController < ApplicationController
           json = @groups.map { |g|
             g.context = @context
             assignment_group_json(g, @current_user, session, params[:include],
+                                  stringify_json_ids: stringify_json_ids?,
                                   override_assignment_dates: override_dates,
                                   preloaded_user_content_attachments: user_content_attachments)
           }
@@ -110,20 +151,11 @@ class AssignmentGroupsController < ApplicationController
   end
 
   def reorder
-    if authorized_action(@context.assignment_groups.new, @current_user, :update)
+    if authorized_action(@context.assignment_groups.scoped.new, @current_user, :update)
       order = params[:order].split(',')
-      ids = []
-      order.each_index do |idx|
-        id = order[idx]
-        group = @context.assignment_groups.active.find_by_id(id) if id.present?
-        if group
-          group.move_to_bottom
-          ids << group.id
-        end
-      end
-      respond_to do |format|
-        format.json { render :json => {:reorder => true, :order => ids}, :status => :ok }
-      end
+      @context.assignment_groups.first.update_order(order)
+      new_order = @context.assignment_groups.pluck(:id)
+      render :json => {:reorder => true, :order => new_order}, :status => :ok
     end
   end
 
@@ -135,7 +167,7 @@ class AssignmentGroupsController < ApplicationController
       Assignment.where(:id => order, :context_id => @context, :context_type => @context.class.to_s).update_all(:assignment_group_id => @group)
       @group.assignments.first.update_order(order) unless @group.assignments.empty?
       AssignmentGroup.where(:id => group_ids).update_all(:updated_at => Time.now.utc)
-      ids = @group.assignments.map(&:id)
+      ids = @group.active_assignments.map(&:id)
       @context.recompute_student_scores rescue nil
       respond_to do |format|
         format.json { render :json => {:reorder => true, :order => ids}, :status => :ok }
@@ -155,22 +187,22 @@ class AssignmentGroupsController < ApplicationController
     if authorized_action(@assignment_group, @current_user, :read)
       respond_to do |format|
         format.html { redirect_to(named_context_url(@context, :context_assignments_url, @assignment_group.context_id)) }
-        format.json { render :json => @assignment_group.to_json(:permissions => {:user => @current_user, :session => session}) }
+        format.json { render :json => @assignment_group.as_json(:permissions => {:user => @current_user, :session => session}) }
       end
     end
   end
 
   def create
-    @assignment_group = @context.assignment_groups.new(params[:assignment_group])
+    @assignment_group = @context.assignment_groups.scoped.new(params[:assignment_group])
     if authorized_action(@assignment_group, @current_user, :create)
       respond_to do |format|
         if @assignment_group.save
           @assignment_group.insert_at(1)
           flash[:notice] = t 'notices.created', 'Assignment Group was successfully created.'
           format.html { redirect_to named_context_url(@context, :context_assignments_url) }
-          format.json { render :json => @assignment_group.to_json(:permissions => {:user => @current_user, :session => session}), :status => :created}
+          format.json { render :json => @assignment_group.as_json(:permissions => {:user => @current_user, :session => session}), :status => :created}
         else
-          format.json { render :json => @assignment_group.errors.to_json, :status => :bad_request }
+          format.json { render :json => @assignment_group.errors, :status => :bad_request }
         end
       end
     end
@@ -183,9 +215,9 @@ class AssignmentGroupsController < ApplicationController
         if @assignment_group.update_attributes(params[:assignment_group])
           flash[:notice] = t 'notices.updated', 'Assignment Group was successfully updated.'
           format.html { redirect_to named_context_url(@context, :context_assignments_url) }
-          format.json { render :json => @assignment_group.to_json(:permissions => {:user => @current_user, :session => session}), :status => :ok }
+          format.json { render :json => @assignment_group.as_json(:permissions => {:user => @current_user, :session => session}), :status => :ok }
         else
-          format.json { render :json => @assignment_group.errors.to_json, :status => :bad_request }
+          format.json { render :json => @assignment_group.errors, :status => :bad_request }
         end
       end
     end
@@ -198,7 +230,7 @@ class AssignmentGroupsController < ApplicationController
         @assignment_group.errors.add('workflow_state', t('errors.cannot_delete_group', "You can not delete a group with a locked assignment.", :att_name => 'workflow_state'))
         respond_to do |format|
           format.html { redirect_to named_context_url(@context, :context_assignments_url) }
-          format.json { render :json => @assignment_group.errors.to_json, :status => :bad_request }
+          format.json { render :json => @assignment_group.errors, :status => :bad_request }
         end
         return
       end
@@ -210,7 +242,10 @@ class AssignmentGroupsController < ApplicationController
 
       respond_to do |format|
         format.html { redirect_to(named_context_url(@context, :context_assignments_url)) }
-        format.json { render :json => {:assignment_group => @assignment_group, :new_assignment_group => @new_group}.to_json(:include_root => false, :include => :active_assignments) }
+        format.json { render :json => {
+          assignment_group: @assignment_group.as_json(include_root: false, include: :active_assignments),
+          new_assignment_group: @new_group.as_json(include_root: false, include: :active_assignments)
+        }}
       end
     end
   end

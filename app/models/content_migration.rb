@@ -284,7 +284,8 @@ class ContentMigration < ActiveRecord::Base
 
   def queue_migration
     reset_job_progress
-    check_quiz_id_prepender
+
+    set_default_settings
     plugin = Canvas::Plugin.find(migration_type)
     if plugin
       queue_opts = {:priority => Delayed::LOW_PRIORITY, :max_attempts => 1}
@@ -330,6 +331,13 @@ class ContentMigration < ActiveRecord::Base
   end
   alias_method :export_content, :queue_migration
 
+  def set_default_settings
+    if !migration_settings.has_key?(:overwrite_quizzes)
+      migration_settings[:overwrite_quizzes] = for_course_copy? || (self.migration_type && self.migration_type == 'canvas_cartridge_importer')
+    end
+    check_quiz_id_prepender
+  end
+
   def check_quiz_id_prepender
     if !migration_settings[:id_prepender] && (!migration_settings[:overwrite_questions] || !migration_settings[:overwrite_quizzes])
       # only prepend an id if the course already has some migrated questions/quizzes
@@ -368,7 +376,7 @@ class ContentMigration < ActiveRecord::Base
 
     begin
       @exported_data_zip = download_exported_data
-      @zip_file = Zip::ZipFile.open(@exported_data_zip.path)
+      @zip_file = Zip::File.open(@exported_data_zip.path)
       @exported_data_zip.close
       data = JSON.parse(@zip_file.read('course_export.json'), :max_nesting => 50)
       data = prepare_data(data)

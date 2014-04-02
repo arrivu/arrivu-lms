@@ -17,6 +17,7 @@
  */
 
 define([
+  'compiled/views/KeyboardNavDialog',
   'INST' /* INST */,
   'i18n!instructure',
   'jquery' /* $ */,
@@ -52,7 +53,7 @@ define([
   'compiled/badge_counts',
   'vendor/scribd.view' /* scribd */,
   'vendor/jquery.placeholder'
-], function(INST, I18n, $, _, userSettings, htmlEscape, wikiSidebar) {
+], function(KeyboardNavDialog, INST, I18n, $, _, userSettings, htmlEscape, wikiSidebar) {
 
   $.trackEvent('Route', location.pathname.replace(/\/$/, '').replace(/\d+/g, '--') || '/');
 
@@ -60,6 +61,14 @@ define([
   var CSRFProtection =  function(xhr) {
     if (ENV.AUTHENTICITY_TOKEN) xhr.setRequestHeader('X-CSRF-Token', ENV.AUTHENTICITY_TOKEN);
   }
+
+  // indicate we want stringified IDs for JSON responses
+  $.ajaxPrefilter("json", function( options, originalOptions, jqXHR ) {
+    if (options.accepts.json)
+      options.accepts.json = options.accepts.json + ', application/json+canvas-string-ids';
+    else
+      options.accepts.json = 'application/json+canvas-string-ids';
+  });
 
   $.ajaxPrefilter(function( options, originalOptions, jqXHR ) {
     if ( !options.crossDomain ) CSRFProtection(jqXHR);
@@ -119,7 +128,6 @@ define([
     function unhoverMenuItem(){
       $menu_items.filter(".hover-pending").removeClass('hover-pending');
       menuItemHoverTimeoutId = window.setTimeout(clearMenuHovers, 400);
-      return false;
     }
 
     function hoverMenuItem(event){
@@ -134,7 +142,6 @@ define([
         }
       }, 300);
       $.publish('menu/hovered', $elem);
-      return false;
     }
 
     $menu
@@ -202,33 +209,7 @@ define([
       }
     });
 
-    var activeElement;
-    $(document).keypress(function(e) {
-      var commaOrQuestionMark = e.which == '44' || e.which == '63';
-
-      if(commaOrQuestionMark && !$(e.target).is(":input")) {
-        if($("#keyboard_navigation").is(":visible")) {
-          $("#keyboard_navigation").dialog("close");
-          if(activeElement) { $(activeElement).focus(); }
-        }
-        else {
-          activeElement = document.activeElement;
-
-          $("#keyboard_navigation").dialog({
-            title: I18n.t('titles.keyboard_shortcuts', "Keyboard Shortcuts"),
-            width: 400,
-            height: "auto",
-            open: function() {
-              $(".navigation_list:first").focus();
-            },
-            close: function() {
-              $("li", this).attr("tabindex", ""); // prevents chrome bsod
-              if(activeElement) { $(activeElement).focus(); }
-            }
-          });
-        }        
-      }
-    });
+    KeyboardNavDialog.prototype.bindOpenKeys.call({$el: $('#keyboard_navigation')});
 
     $("#switched_role_type").ifExists(function(){
       var context_class = $(this).attr('class');
@@ -382,11 +363,11 @@ define([
             .attr('aria-label', htmlEscape(I18n.t('titles.external_link', 'Links to an external site.')))
             .append('<span class="ui-icon ui-icon-extlink ui-icon-inline" title="' + htmlEscape(I18n.t('titles.external_link', 'Links to an external site.')) + '"/>');
         }).end()
-        .find("a.instructure_file_link").each(function() {
-          var $link = $(this),
-              $span = $("<span class='instructure_file_link_holder link_holder'/>");
-          $link.removeClass('instructure_file_link').before($span).appendTo($span);
-          if($link.attr('target') != '_blank') {
+          .find("a.instructure_file_link").each(function() {
+              var $link = $(this),
+                  $span = $("<span class='instructure_file_link_holder link_holder'/>");
+              $link.removeClass('instructure_file_link').before($span).appendTo($span);
+              if($link.attr('target') != '_blank') {
             $span.append("<a href='" + $link.attr('href') + "' target='_blank' title='" + htmlEscape(I18n.t('titles.view_in_new_window', "View in a new window")) +
                 "' style='padding-left: 5px;'><img src='/images/popout.png' alt='" + htmlEscape(I18n.t('titles.view_in_new_window', "View in a new window")) + "'/></a>");
           }
@@ -396,16 +377,16 @@ define([
           var $link = $(this);
           if ( $.trim($link.text()) ) {
             var $span = $("<span class='instructure_scribd_file_holder link_holder'/>"),
-                $scribd_link = $("<a class='scribd_file_preview_link' href='" + $link.attr('href') + "' title='" + htmlEscape(I18n.t('titles.preview_document', "Preview the document")) +
-                    "' style='padding-left: 5px;'><img src='/images/preview.png' alt='" + htmlEscape(I18n.t('titles.preview_document', "Preview the document")) + "'/></a>");
-            $link.removeClass('instructure_scribd_file').before($span).appendTo($span);
-            $span.append($scribd_link);
-            if($link.hasClass('auto_open')) {
-              $scribd_link.click();
-            }
-          }
-        });
-      }
+                        $scribd_link = $("<a class='scribd_file_preview_link' aria-hidden='true' tabindex='-1' href='" + $link.attr('href') + "' title='" + htmlEscape(I18n.t('titles.preview_document', "Preview the document")) +
+                            "' style='padding-left: 5px;'><img src='/images/preview.png' alt='" + htmlEscape(I18n.t('titles.preview_document', "Preview the document")) + "'/></a>");
+                    $link.removeClass('instructure_scribd_file').before($span).appendTo($span);
+                    $span.append($scribd_link);
+                    if($link.hasClass('auto_open')) {
+                        $scribd_link.click();
+                    }
+                }
+            });
+        }
 
       $(".user_content.unenhanced a")
         .find("img.media_comment_thumbnail").each(function() {

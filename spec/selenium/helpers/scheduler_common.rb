@@ -26,7 +26,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../common')
     end
     date_field = edit_form.find_element(:css, '.date_field')
     date_field.click
-    wait_for_animations
+    wait_for_ajaximations
     fj('.ui-datepicker-trigger:visible').click
     datepicker_next
     replace_content(edit_form.find_element(:css, '.start_time'), '1')
@@ -57,7 +57,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../common')
   end
 
   def click_scheduler_link
-    f('.calendar_view_buttons .ui-button[for="scheduler"]').click
+    f('button#scheduler').click
     wait_for_ajaximations
   end
 

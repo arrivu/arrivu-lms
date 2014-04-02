@@ -29,7 +29,8 @@ describe EventStream::Index do
       :database => @database,
       :available? => true,
       :record_type => EventStream::Record,
-      :ttl_seconds => 1.year)
+      :ttl_seconds => 1.year,
+      :read_consistency_clause => nil)
   end
 
   context "setup block" do
@@ -215,6 +216,20 @@ describe EventStream::Index do
       it "should include the ttl" do
         @database.expects(:update).once.with(regexp_matches(/ USING TTL /), anything, anything, anything, @stream.ttl_seconds(@timestamp))
         @index.insert(@record, @key)
+      end
+    end
+
+    describe "create_key" do
+      before do
+        @bucket = @index.bucket_for_time(@newest)
+      end
+
+      it "should handle an array for key" do
+        @index.create_key(@bucket, [ '42', '21' ]).should == "42/21/#{@bucket}"
+      end
+
+      it "should handle a single object for key" do
+        @index.create_key(@bucket, '42').should == "42/#{@bucket}"
       end
     end
 

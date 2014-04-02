@@ -8,10 +8,6 @@ module AssignmentOverridesSeleniumHelper
     replace_content(f('#assignment_name'), title.to_s)
   end
 
-  def toggle_advanced_options
-    f('#assignment_toggle_advanced_options').click
-  end
-
   def fill_assignment_overrides
       f('.due-date-overrides [name="due_at"]').
         send_keys(due_at.strftime('%b %-d, %y'))
@@ -77,12 +73,12 @@ module AssignmentOverridesSeleniumHelper
 
   def select_last_override_section(section_name)
     click_option('.due-date-row:last select', section_name)
-    wait_for_animations
+    wait_for_ajaximations
   end
 
   def select_first_override_section(section_name)
     click_option('.due-date-row:first select', section_name)
-    wait_for_animations
+    wait_for_ajaximations
   end
 
   def add_due_date_override(assignment)

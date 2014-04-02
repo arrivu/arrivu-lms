@@ -1,7 +1,19 @@
 require File.expand_path(File.dirname(__FILE__) + '/helpers/quizzes_common')
 
 describe "quizzes" do
-  it_should_behave_like "quizzes selenium tests"
+  include_examples "quizzes selenium tests"
+
+  def prepare_quiz
+    @quiz = quiz_model({
+      :course => @course,
+      :time_limit => 5
+    })
+
+    @quiz.quiz_questions.create!(:question_data => multiple_choice_question_data)
+    @quiz.generate_quiz_data
+    @quiz.save
+    @quiz
+  end
 
   context "as a student" do
     before (:each) do
@@ -105,7 +117,7 @@ describe "quizzes" do
         # setup a quiz and start taking it
         quiz_with_new_questions(!:goto_edit)
         get "/courses/#{@course.id}/quizzes/#{@quiz.id}"
-        expect_new_page_load { driver.find_element(:link_text, 'Take the Quiz').click }
+        expect_new_page_load { f("#take_quiz_link").click }
         sleep 1 # sleep because display is updated on timer, not ajax callback
 
         # answer a question, and check that it is saved
@@ -135,6 +147,72 @@ describe "quizzes" do
         # we should be back at the quiz show page
         driver.find_element(:link_text, 'Resume Quiz').should be_present
       end
+    end
+  end
+
+  context "who closes the session without submitting" do
+    it "should automatically grade the submission when it becomes overdue" do
+      job_tag = 'Quizzes::QuizSubmission#grade_if_untaken'
+
+      course_with_student_logged_in
+      quiz = prepare_quiz
+
+      Delayed::Job.find_by_tag(job_tag).should == nil
+
+      take_and_answer_quiz(false)
+
+      driver.execute_script("window.close()")
+
+      quiz_sub = @quiz.quiz_submissions.find_by_user_id(@user.id)
+      quiz_sub.should be_present
+      quiz_sub.workflow_state.should == "untaken"
+
+      job = Delayed::Job.find_by_tag(job_tag)
+      job.should be_present
+
+      # okay, we will manually "run" the job because we can't afford to wait
+      # for it to be picked up by DJ in a spec:
+      auto_grader = YAML.parse(job.handler).transform
+      auto_grader.perform
+
+      quiz_sub.reload
+      quiz_sub.workflow_state.should == "complete"
+    end
+  end
+
+  context "correct answer visibility" do
+    before(:each) do
+      course_with_student_logged_in
+      prepare_quiz
+    end
+
+    it "should not highlight correct answers" do
+      @quiz.update_attributes(show_correct_answers: false)
+      @quiz.save!
+
+      take_and_answer_quiz
+
+      ff('.correct_answer').length.should == 0
+    end
+
+    it "should highlight correct answers" do
+      @quiz.update_attributes(show_correct_answers: true)
+      @quiz.save!
+
+      take_and_answer_quiz
+
+      ff('.correct_answer').length.should > 0
+    end
+
+    it "should always highlight incorrect answers" do
+      @quiz.update_attributes(show_correct_answers: false)
+      @quiz.save!
+
+      take_and_answer_quiz do |answers|
+        answers[1][:id] # don't answer
+      end
+
+      ff('.incorrect.answer_arrow').length.should > 0
     end
   end
 end

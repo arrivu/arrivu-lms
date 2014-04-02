@@ -45,6 +45,8 @@ class ExternalContentController < ApplicationController
       end
     end
     @headers = false
+    js_env(retrieved_data: (@retrieved_data || {}),
+           service: params[:service])
   end
 
   def normalize_deprecated_data!
@@ -89,7 +91,7 @@ class ExternalContentController < ApplicationController
         :message => t("#application.errors.invalid_oembed_url", "There was a problem retrieving this resource. The external tool provided invalid information about the resource.")
       }
     end
-    render :json => @retrieved_data.to_json
+    render :json => @retrieved_data
   end
 
   # this is a simple LTI link selection extension example
@@ -109,5 +111,6 @@ class ExternalContentController < ApplicationController
   
   def cancel
     @headers = false
+    js_env(service: params[:service])
   end
 end

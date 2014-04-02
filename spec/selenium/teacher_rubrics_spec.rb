@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/helpers/rubrics_common')
 
 
 describe "teacher shared rubric specs" do
-  it_should_behave_like "in-process server selenium tests"
+  include_examples "in-process server selenium tests"
   let(:rubric_url) { "/courses/#{@course.id}/rubrics" }
   let(:who_to_login) { 'teacher' }
 
@@ -36,7 +36,7 @@ describe "teacher shared rubric specs" do
 end
 
 describe "course rubrics" do
-  it_should_behave_like "in-process server selenium tests"
+  include_examples "in-process server selenium tests"
 
   context "as a teacher" do
 
@@ -117,34 +117,6 @@ describe "course rubrics" do
       f('.add_rubric_link').click
       fj('.rubric_grading:hidden').should_not be_nil
     end
-
-    context "importing" do
-
-      it "should create a allow immediate editing when adding an imported rubric to a new assignment" do
-        rubric_association_model(:user => @user, :context => @course, :purpose => "grading")
-
-        @old_course = @course
-        @course = nil
-        course_with_teacher(:user => @user, :active_all => true)
-
-        @course.merge_into_course(@old_course, :everything => true)
-        @assignment = @course.assignments.create!(assignment_valid_attributes.merge({:title => "New Course Assignment"}))
-
-        get "/courses/#{@course.id}/assignments/#{@assignment.id}"
-        f(".add_rubric_link").click
-        fj(".find_rubric_link:visible").click
-        wait_for_ajaximations
-        fj(".select_rubric_link:visible").click
-        wait_for_ajaximations
-        fj(".edit_rubric_link:visible").click
-        fj(".rubric_custom_rating:visible").click
-        fj(".save_button:visible").click
-        wait_for_ajax_requests
-
-        get "/courses/#{@course.id}/assignments/#{@assignment.id}"
-        ffj(".custom_ratings:visible").size.should == 1
-      end
-    end
   end
 
   it "should display free-form comments to the student" do
@@ -169,13 +141,13 @@ describe "course rubrics" do
 
     get "/courses/#{@course.id}/grades"
     f('.toggle_rubric_assessments_link').click
-    wait_for_animations
+    wait_for_ajaximations
     f('.rubric .criterion .custom_rating_comments').text.should == comment
     f('.rubric .criterion .custom_rating_comments a').should have_attribute('href', 'http://www.example.com/')
 
     get "/courses/#{@course.id}/assignments/#{@assignment.id}/submissions/#{@student.id}"
     f('.assess_submission_link').click
-    wait_for_animations
+    wait_for_ajaximations
     f('.rubric .criterion .custom_rating_comments').text.should == comment
     f('.rubric .criterion .custom_rating_comments a').should have_attribute('href', 'http://www.example.com/')
   end

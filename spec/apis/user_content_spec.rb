@@ -18,9 +18,9 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/api_spec_helper')
 
-describe UserContent, :type => :integration do
+describe UserContent, type: :request do
   it "should translate course file download links to directly-downloadable urls" do
-    course_with_teacher(:active_all => true)
+    course_with_teacher_logged_in(:active_all => true)
     attachment_model
     @assignment = @course.assignments.create!(:title => "first assignment", :description => <<-HTML)
     <p>
@@ -39,7 +39,7 @@ describe UserContent, :type => :integration do
   end
 
   it "should translate group file download links to directly-downloadable urls" do
-    course_with_teacher(:active_all => true)
+    course_with_teacher_logged_in(:active_all => true)
     @group = @course.groups.create!(:name => "course group")
     attachment_model(:context => @group)
     @group.add_user(@teacher)
@@ -60,7 +60,7 @@ describe UserContent, :type => :integration do
   end
 
   it "should translate file download links to directly-downloadable urls for deleted and replaced files" do
-    course_with_teacher(:active_all => true)
+    course_with_teacher_logged_in(:active_all => true)
     attachment_model
     @attachment.destroy
     attachment2 = Attachment.create!(:folder => @attachment.folder, :context => @attachment.context, :filename => @attachment.filename, :uploaded_data => StringIO.new("first"))
@@ -82,8 +82,25 @@ describe UserContent, :type => :integration do
     doc.at_css('img')['src'].should == "http://www.example.com/courses/#{@course.id}/files/#{attachment2.id}/download?verifier=#{attachment2.uuid}"
   end
 
+  it "should not corrupt absolute links" do
+    course_with_teacher_logged_in
+    attachment_model(:context => @course)
+    @topic = @course.discussion_topics.create!(:title => "course topic", :user => @teacher, :message => <<-HTML)
+    <p>
+      Hello, students.<br>
+      This will explain everything: <img src="http://www.example.com/courses/#{@course.id}/files/#{@attachment.id}/download" alt="important">
+    </p>
+    HTML
+    json = api_call(:get,
+      "/api/v1/courses/#{@course.id}/discussion_topics/#{@topic.id}",
+      { :controller => 'discussion_topics_api', :action => 'show',
+        :format => 'json', :course_id => @course.id.to_s, :topic_id => @topic.id.to_s })
+    doc = Nokogiri::HTML::DocumentFragment.parse(json['message'])
+    doc.at_css('img')['src'].should == "http://www.example.com/courses/#{@course.id}/files/#{@attachment.id}/download?verifier=#{@attachment.uuid}"
+  end
+
   it "should translate file preview links to directly-downloadable preview urls" do
-    course_with_teacher(:active_all => true)
+    course_with_teacher_logged_in(:active_all => true)
     attachment_model
     @assignment = @course.assignments.create!(:title => "first assignment", :description => <<-HTML)
     <p>
@@ -102,7 +119,7 @@ describe UserContent, :type => :integration do
   end
 
   it "should translate media comment links to embedded video tags" do
-    course_with_teacher(:active_all => true)
+    course_with_teacher_logged_in(:active_all => true)
     attachment_model
     @assignment = @course.assignments.create!(:title => "first assignment", :description => <<-HTML)
     <p>
@@ -132,7 +149,7 @@ describe UserContent, :type => :integration do
   end
 
   it "should translate media comment audio tags" do
-    course_with_teacher(:active_all => true)
+    course_with_teacher_logged_in(:active_all => true)
     attachment_model
     @assignment = @course.assignments.create!(:title => "first assignment", :description => <<-HTML)
     <p>
@@ -158,7 +175,7 @@ describe UserContent, :type => :integration do
   end
 
   it "should not translate links in content not viewable by user" do
-    course_with_teacher(:active_all => true)
+    course_with_teacher_logged_in(:active_all => true)
     attachment_model
     @assignment = @course.assignments.create!(:title => "first assignment", :description => <<-HTML)
     <p>
@@ -184,7 +201,7 @@ describe UserContent, :type => :integration do
   end
 
   it "should prepend the hostname to all absolute-path links" do
-    course_with_teacher(:active_all => true)
+    course_with_teacher_logged_in(:active_all => true)
     @assignment = @course.assignments.create!(:title => "first assignment", :description => <<-HTML)
     <p>
       Hello, students.<br>
@@ -212,7 +229,7 @@ describe UserContent, :type => :integration do
   end
 
   it "should not choke on funny email addresses" do
-    course_with_teacher(:active_all => true)
+    course_with_teacher_logged_in(:active_all => true)
     @wiki_page = @course.wiki.front_page
     @wiki_page.body = "<a href='mailto:djmankiewicz@homestarrunner,com'>e-nail</a>"
     @wiki_page.workflow_state = 'active'
@@ -225,7 +242,7 @@ describe UserContent, :type => :integration do
   context "data api endpoints" do
     context "course context" do
       it "should process links to each type of object" do
-        course_with_teacher(:active_all => true)
+        course_with_teacher_logged_in(:active_all => true)
         @wiki_page = @course.wiki.front_page
         @wiki_page.body = <<-HTML
         <p>
@@ -305,7 +322,7 @@ describe UserContent, :type => :integration do
 
     context "user context" do
       it "should process links to each type of object" do
-        course_with_teacher(:active_all => true)
+        course_with_teacher_logged_in(:active_all => true)
         @topic = @course.discussion_topics.create!(:message => <<-HTML)
             <a href='/users/#{@teacher.id}/files'>file index</a>
             <a href='/users/#{@teacher.id}/files/789/preview'>file</a>
@@ -392,7 +409,7 @@ describe UserContent, :type => :integration do
 
   describe ".api_bulk_load_user_content_attachments" do
     it "returns a hash of assignment_id => assignment" do
-      course_with_teacher(:active_all => true)
+      course_with_teacher_logged_in(:active_all => true)
       a1, a2, a3 = attachment_model, attachment_model, attachment_model
       html1, html2 = <<-HTML1, <<-HTML2
         <a href="/courses/#{@course.id}/files/#{a1.id}/download">uh...</a>

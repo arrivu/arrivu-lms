@@ -1,7 +1,8 @@
 define [
+  'jquery'
   'underscore'
   'vendor/jquery.ba-tinypubsub'
-], (_) -> 
+], ($, _) -> 
   # Handles rendering the correct view depending on the 
   # value selected. 
   class ConverterViewControl
@@ -55,6 +56,9 @@ define [
       @subscribed = false
       @registeredViews.length = 0 # clears the array
 
+    @getView: (key) =>
+      _.find @registeredViews, (regView) -> regView.key == key
+
     # Find the view for which the value we are looking for 
     # exists and render it in the parent view. This is tightly
     # coupled to a converter view being passed in. Maybe there
@@ -69,7 +73,7 @@ define [
       value = options.value
       migrationConverterView = options.migrationConverter
 
-      regView = _.find @registeredViews, (regView) -> regView.key == value
+      regView = @getView(value)
 
       if regView?.view?.validateBeforeSave
         migrationConverterView.validateBeforeSave = regView.view.validateBeforeSave

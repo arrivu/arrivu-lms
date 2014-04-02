@@ -23,6 +23,7 @@ class ContentImportsController < ApplicationController
   prepend_around_filter :load_pseudonym_from_policy, :only => :migrate_content_upload
   
   include Api::V1::Course
+  include ContentImportsHelper
 
   COPY_TYPES = %w{assignment_groups assignments context_modules learning_outcomes
                 quizzes assessment_question_banks folders attachments wiki_pages discussion_topics
@@ -39,6 +40,8 @@ class ContentImportsController < ApplicationController
   # current files UI uses this page for .zip uploads
   def files
     authorized_action(@context, @current_user, [:manage_content, :manage_files])
+    js_env(return_or_context_url: return_or_context_url,
+           return_to: params[:return_to])
   end
 
   # @API Get course copy status
@@ -105,7 +108,7 @@ class ContentImportsController < ApplicationController
         @source_course = api_find(Course, params[:source_course])
         copy_params = {:everything => false}
         if params[:only] && params[:except]
-          render :json => {"errors"=>t('errors.no_only_and_except', 'You can not use "only" and "except" options at the same time.')}.to_json, :status => :bad_request
+          render :json => {"errors"=>t('errors.no_only_and_except', 'You can not use "only" and "except" options at the same time.')}, :status => :bad_request
           return
         elsif params[:only]
           convert_to_table_name(params[:only]).each {|o| copy_params["all_#{o}".to_sym] = true}

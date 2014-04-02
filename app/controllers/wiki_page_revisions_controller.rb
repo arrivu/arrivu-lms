@@ -23,6 +23,11 @@ class WikiPageRevisionsController < ApplicationController
   before_filter { |c| c.active_tab = "pages" }
   
   def index
+    if @context.feature_enabled?(:draft_state)
+      redirect_to polymorphic_url([@context, :named_page_revisions], :wiki_page_id => @page)
+      return
+    end
+
     if authorized_action(@page, @current_user, :update_content)
       respond_to do |format|
         format.html {
@@ -30,7 +35,7 @@ class WikiPageRevisionsController < ApplicationController
           add_crumb(t("#crumbs.revisions", "Revisions"))
           log_asset_access(@page, "wiki", @wiki)
         }
-        format.json { render :json => @page.version_history.to_json(:methods => :version_number) }
+        format.json { render :json => @page.version_history.map{ |v| v.as_json(methods: :version_number) }}
       end
     end
   end
@@ -54,6 +59,11 @@ class WikiPageRevisionsController < ApplicationController
   end
   
   def show
+    if @context.feature_enabled?(:draft_state)
+      redirect_to polymorphic_url([@context, :named_page_revisions], :wiki_page_id => @page)
+      return
+    end
+
     if authorized_action(@page, @current_user, :update_content)
       if params[:id] == "latest"
         @revision = @page.versions[0]
@@ -66,7 +76,7 @@ class WikiPageRevisionsController < ApplicationController
           log_asset_access(@page, "wiki", @wiki)
         }
         @model = @revision.model rescue nil
-        format.json { render :json => @model.to_json(:methods => :version_number) }
+        format.json { render :json => @model.as_json(:methods => :version_number) }
       end
     end
   end

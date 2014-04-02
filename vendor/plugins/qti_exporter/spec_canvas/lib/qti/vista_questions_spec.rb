@@ -85,6 +85,13 @@ describe "Converting Blackboard Vista qti" do
     hash[:question_text].should =~ %r{\$CANVAS_OBJECT_REFERENCE\$/attachments/67320753001}
   end
 
+  it "should convert short answer questions with multiple required answers to fimb" do
+    hash = get_question_hash(vista_question_dir, 'short_to_fimb', delete_answer_ids=true, opts={})
+    hash[:question_type].should == "fill_in_multiple_blanks_question"
+    hash[:question_text].should include("[SA01]")
+    hash[:question_text].should include("[SA02]")        
+  end
+
   it "should convert true/false questions" do
     hash = get_question("ID_4609865577341")
     hash.should == VistaExpected::TRUE_FALSE
@@ -353,7 +360,7 @@ module VistaExpected
                        :question_bank_name=>"Export Test",
                        :points_possible=>100,
                        :question_name=>"Calculated Question 2",
-                       :question_text=>"What is 10 - ?<br>",
+                       :question_text=>"What is 10 - [x]?",
                        :incorrect_comments=>"",
                        :formulas=>[],
                        :neutral_comments=>"General Feedback.",
@@ -458,7 +465,7 @@ module VistaExpected
                         :question_name=>"Calculated Question ",
                         :formulas=>[],
                         :question_text=>
-                                "Based on her excellent performance as a district sales manager, Maria receives a sizable bonus at work. Since her generous salary is more than enough to provide for the needs of her family, she decides to use the bonus to buy a bond as an investment. The par value of the bond that Maria would like to purchase is $ thousand. The bond pays % interest, compounded semiannually (with payment on January 1 and July 1) and matures on July 1, 20. Maria wants a return of %, compounded semiannually. How much would she be willing to pay for the bond if she buys it  days after the July 2010 interest anniversary? Give your answer in the format of a quoted bond price, as a percentage of par to three decimal places -- like you would see in the Wall Street Journal. Use the formula discussed in class -- and from the book, NOT the HP 12c bond feature. (Write only the digits, to three decimal palces, e.g. 114.451 and no $, commas, formulas, etc.) <br>",
+                                "Based on her excellent performance as a district sales manager, Maria receives a sizable bonus at work. Since her generous salary is more than enough to provide for the needs of her family, she decides to use the bonus to buy a bond as an investment. The par value of the bond that Maria would like to purchase is $[F] thousand. The bond pays [r]% interest, compounded semiannually (with payment on January 1 and July 1) and matures on July 1, 20[Y]. Maria wants a return of [i]%, compounded semiannually. How much would she be willing to pay for the bond if she buys it [n] days after the July 2010 interest anniversary? Give your answer in the format of a quoted bond price, as a percentage of par to three decimal places -- like you would see in the Wall Street Journal. Use the formula discussed in class -- and from the book, NOT the HP 12c bond feature. (Write only the digits, to three decimal palces, e.g. 114.451 and no $, commas, formulas, etc.)",
                         :answer_tolerance=>0.1,
                         :incorrect_comments=>""}
 

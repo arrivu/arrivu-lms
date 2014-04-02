@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/helpers/quizzes_common')
 
 describe "equation editor" do
-  it_should_behave_like "quizzes selenium tests"
+  include_examples "quizzes selenium tests"
 
   it "should support multiple equation editors on the same page" do
     pending("193")
@@ -28,7 +28,7 @@ describe "equation editor" do
 
       equation_editor = keep_trying_until do
         question.find_element(:css, '.mce_instructure_equation').click
-        sleep 1
+        wait_for_ajaximations
         equation_editor = fj(".mathquill-editor:visible")
         equation_editor.should_not be_nil
         equation_editor

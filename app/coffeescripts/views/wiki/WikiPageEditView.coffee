@@ -69,6 +69,12 @@ define [
         COURSE_ROLES: json.contextName == "courses"
       json
 
+    onUnload: (ev) =>
+      if this && @checkUnsavedOnLeave && @hasUnsavedChanges()
+        warning = @unsavedWarning()
+        (ev || window.event).returnValue = warning
+        return warning
+
     # After the page loads, ensure the that wiki sidebar gets initialized
     # correctly.
     # @api custom backbone override
@@ -79,9 +85,7 @@ define [
 
       @checkUnsavedOnLeave = true
       view = this
-      $(window).on 'beforeunload', ->
-        if view && view.checkUnsavedOnLeave && view.hasUnsavedChanges()
-          return view.unsavedWarning()
+      window.addEventListener 'beforeunload', @onUnload
 
       unless @firstRender
         @firstRender = true
@@ -115,6 +119,9 @@ define [
     switchViews: (event) ->
       event?.preventDefault()
       @$wikiPageBody.editorBox('toggle')
+      # hide the clicked link, and show the other toggle link.
+      # todo: replace .andSelf with .addBack when JQuery is upgraded.
+      $(event.currentTarget).siblings('a').andSelf().toggle()
 
     # Validate they entered in a title.
     # @api ValidatedFormView override
@@ -133,14 +140,11 @@ define [
 
     hasUnsavedChanges: ->
       json = @toJSON()
-
-      formData = @getFormData()
-      oldBody = @model.get('body') || ''
-      newBody = formData.body || ''
+      dirty = @$wikiPageBody.editorBox('is_dirty')
       if json.CAN.EDIT_TITLE
-        oldTitle = @model.get('title') || ''
-        newTitle = formData.title || ''
-      return (oldBody != newBody) || (oldTitle != newTitle)
+        dirty ||= (@model.get('title') ? '') != (@getFormData().title ? '')
+
+      dirty
 
     unsavedWarning: ->
       I18n.t("warnings.unsaved_changes",

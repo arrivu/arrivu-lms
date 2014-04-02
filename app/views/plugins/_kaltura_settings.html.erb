@@ -1,4 +1,4 @@
-<% fields_for :settings, OpenObject.new(settings) do |f| %>
+<%= fields_for :settings, OpenObject.new(settings) do |f| %>
   <table style="width: 500px;" class="formtable">
     <tr>
       <td colspan="2"><%= mt(:description, <<-TEXT, :kaltura_url => 'http://www.kaltura.com', :notification_url => 'http://your_canvas_domain/media_objects/kaltura_notifications')
@@ -110,6 +110,12 @@ TEXT
       <td><%= f.label :do_analytics, :en => "Send analytics events" %></td>
       <td><%= f.check_box :do_analytics, {}, 'yes', 'no' %></td>
     </tr>
-    <tr><td colspan="2">(#{domain}/api_v3/index.php?service=stats&action=collect&...)</td></tr>
+    <tr>
+      <td colspan="2" style="font-size: 0.8em;"><%= t(:kaltura_path_example, "e.g.")%><code>(#{domain}/api_v3/index.php?service=stats&action=collect&...)</code></td>
+    </tr>
+    <tr>
+      <td><%= f.label :do_flash_var_test, :en => "Enable experimental flash settings" %></td>
+      <td><%= f.check_box :do_flash_var_test, {}, 'yes', 'no' %></td>
+    </tr>
   </table>
 <% end %>

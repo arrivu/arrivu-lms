@@ -19,18 +19,36 @@
 # @API Collaborations
 # API for accessing course and group collaboration information.
 #
-# @object Collaborator
-#   {
-#     // The unique user or group identifier for the collaborator.
-#     "id": 12345,
+# @model Collaborator
+#     {
+#       "id": "Collaborator",
+#       "description": "",
+#       "required": ["id"],
+#       "properties": {
+#         "id": {
+#           "description": "The unique user or group identifier for the collaborator.",
+#           "example": 12345,
+#           "type": "integer"
+#         },
+#         "type": {
+#           "description": "The type of collaborator (e.g. 'user' or 'group').",
+#           "example": "user",
+#           "type": "string",
+#           "allowableValues": {
+#             "values": [
+#               "user",
+#               "group"
+#             ]
+#           }
+#         },
+#         "name": {
+#           "description": "The name of the collaborator.",
+#           "example": "Don Draper",
+#           "type": "string"
+#         }
+#       }
+#     }
 #
-#     // The type of collaborator (e.g. "user" or "group").
-#     "type": "user",
-#
-#     // The name of the collaborator.
-#     "name": "Don Draper"
-#   }
-
 class CollaborationsController < ApplicationController
   before_filter :require_context, :except => [:members]
   before_filter :require_collaboration_and_context, :only => [:members]
@@ -47,7 +65,8 @@ class CollaborationsController < ApplicationController
     @collaborations = @context.collaborations.active
     log_asset_access("collaborations:#{@context.asset_string}", "collaborations", "other")
     @google_docs = google_docs_verify_access_token rescue false
-    js_env :TITLE_MAX_LEN => Collaboration::TITLE_MAX_LENGTH
+    js_env :TITLE_MAX_LEN => Collaboration::TITLE_MAX_LENGTH,
+           :collaboration_types => Collaboration.collaboration_types
   end
 
   def show
@@ -80,11 +99,11 @@ class CollaborationsController < ApplicationController
         # After saved, update the members
         @collaboration.update_members(users, group_ids)
         format.html { redirect_to @collaboration.url }
-        format.json { render :json => @collaboration.to_json(:methods => [:collaborator_ids], :permissions => {:user => @current_user, :session => session}) }
+        format.json { render :json => @collaboration.as_json(:methods => [:collaborator_ids], :permissions => {:user => @current_user, :session => session}) }
       else
         flash[:error] = t 'errors.create_failed', "Collaboration creation failed"
         format.html { redirect_to named_context_url(@context, :context_collaborations_url) }
-        format.json { render :json => @collaboration.errors.to_json, :status => :bad_request }
+        format.json { render :json => @collaboration.errors, :status => :bad_request }
       end
     end
   end
@@ -100,11 +119,11 @@ class CollaborationsController < ApplicationController
     respond_to do |format|
       if @collaboration.save
         format.html { redirect_to named_context_url(@context, :context_collaborations_url) }
-        format.json { render :json => @collaboration.to_json(:methods => [:collaborator_ids], :permissions => {:user => @current_user, :session => session}) }
+        format.json { render :json => @collaboration.as_json(:methods => [:collaborator_ids], :permissions => {:user => @current_user, :session => session}) }
       else
         flash[:error] = t 'errors.update_failed', "Collaboration update failed"
         format.html { redirect_to named_context_url(@context, :context_collaborations_url) }
-        format.json { render :json => @collaboration.errors.to_json, :status => :bad_request }
+        format.json { render :json => @collaboration.errors, :status => :bad_request }
       end
     end
   end
@@ -116,7 +135,7 @@ class CollaborationsController < ApplicationController
       @collaboration.destroy
       respond_to do |format|
         format.html { redirect_to named_context_url(@context, :collaborations_url) }
-        format.json { render :json => @collaboration.to_json }
+        format.json { render :json => @collaboration }
       end
     end
   end
@@ -125,7 +144,7 @@ class CollaborationsController < ApplicationController
   #
   # Examples
   #
-  #   curl http://<canvas>/api/v1/courses/1/collaborations/1/members
+  #   curl https://<canvas>/api/v1/courses/1/collaborations/1/members
   #
   # @returns [Collaborator]
   def members

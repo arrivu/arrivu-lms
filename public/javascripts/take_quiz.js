@@ -23,6 +23,7 @@ define([
   'quiz_timing',
   'compiled/behaviors/autoBlurActiveInput',
   'underscore',
+  'compiled/views/quizzes/LDBLoginPopup',
   'jquery.ajaxJSON' /* ajaxJSON */,
   'jquery.toJSON',
   'jquery.instructure_date_and_time' /* friendlyDatetime, friendlyDate */,
@@ -34,10 +35,10 @@ define([
   'tinymce.editor_box' /* editorBox */,
   'vendor/jquery.scrollTo' /* /\.scrollTo/ */,
   'compiled/behaviors/quiz_selectmenu'
-], function(FileUploadQuestionView, File, I18n, $, timing, autoBlurActiveInput, _) {
-
+], function(FileUploadQuestionView, File, I18n, $, timing, autoBlurActiveInput, _, LDBLoginPopup) {
   var lastAnswerSelected = null;
   var lastSuccessfulSubmissionData = null;
+  var showDeauthorizedDialog;
   var quizSubmission = (function() {
     var timeMod = 0,
         startedAt =  $(".started_at"),
@@ -65,12 +66,24 @@ define([
       endAt: endAt,
       startedAtText: startedAtText,
       timeLimit: parseInt($(".time_limit").text(), 10) || null,
+      hasTimeLimit: !!ENV.QUIZ.time_limit,
       timeLeft: parseInt($(".time_left").text()) * 1000,
       oneAtATime: $("#submit_quiz_form").hasClass("one_question_at_a_time"),
       cantGoBack: $("#submit_quiz_form").hasClass("cant_go_back"),
       finalSubmitButtonClicked: false,
       clockInterval: 500,
+      backupsDisabled: document.location.search.search(/backup=false/) > -1,
       updateSubmission: function(repeat, beforeLeave, autoInterval) {
+        /**
+         * Transient: CNVS-9844
+         * Disable auto-backups if backup=true was passed as a query parameter.
+         *
+         * This is required to test updating questions via the API.
+         */
+        if (quizSubmission.backupsDisabled) {
+          return;
+        }
+
         if(quizSubmission.submitting && !repeat) { return; }
         var now = new Date();
         if((now - quizSubmission.lastSubmissionUpdate) < 1000 && !autoInterval) {
@@ -99,6 +112,8 @@ define([
             async: false        // NOTE: Not asynchronous. Otherwise Firefox will cancel the request as navigating away from the page.
             // NOTE: No callbacks. Don't care about response. Just making effort to save the quiz
           });
+          // since this is sync, a callback never fires to reset this
+          quizSubmission.currentlyBackingUp = false;
         }
         else {
           (function(submissionData) {
@@ -152,28 +167,11 @@ define([
 
                 // has the user logged out?
                 // TODO: support this redirect in LDB, by getting out of high security mode.
-                if (!ENV.LOCKDOWN_BROWSER && (ec.status == 401 || resp['status'] == 'unauthorized')) {
-                  var $dialog = $("#deauthorized_dialog");
-                  if ($dialog.is(':data(dialog)')) {
-                    if (!$dialog.dialog("isOpen")) { $dialog.dialog("open"); }
-                  } else {
-                    $dialog.dialog({
-                      modal: true,
-                      buttons: [{
-                        text: I18n.t("#buttons.cancel", "Cancel"),
-                        'class': "dialog_closer",
-                        click: function() { $(this).dialog("close"); }
-                      }, {
-                        text: I18n.t("#buttons.login", "Login"),
-                        'class': "btn-primary relogin_button button_type_submit",
-                        click: function() {
-                          quizSubmission.navigatingToRelogin = true;
-                          $('#deauthorized_dialog').submit();
-                        }
-                      }]
-                    });
-                  }
-                } else {
+                if (ec.status === 401 || resp['status'] == 'unauthorized') {
+                  showDeauthorizedDialog();
+                }
+                else {
+                  // Connectivity lost?
                   $.ajaxJSON(
                       location.protocol + '//' + location.host + "/simple_response.json?user_id=" + current_user_id + "&rnd=" + Math.round(Math.random() * 9999999),
                       'GET', {},
@@ -206,9 +204,9 @@ define([
       },
 
       updateTime: function() {
-        var timeLeft = quizSubmission.timeLeft = quizSubmission.timeLeft - quizSubmission.clockInterval;
-
-        if(!timeLeft) {
+        if(quizSubmission.hasTimeLimit) {
+          var timeLeft = quizSubmission.timeLeft = quizSubmission.timeLeft - quizSubmission.clockInterval;
+        } else {
           return quizSubmission.updateCounter();
         }
 
@@ -308,15 +306,15 @@ define([
         var listSelector = "#list_" + questionId;
         var questionSelector = "#" + questionId;
         var combinedId = listSelector + ", " + questionSelector;
-        var $questionIcon = $(listSelector + "> i.placeholder");
+        var $questionIcon = $(listSelector + " i.placeholder");
         if(answer) {
           $(combinedId).addClass('answered');
           $questionIcon.addClass('icon-check').removeClass('icon-question');
-          $questionIcon.siblings('div.icon-text').text(I18n.t('question_answered',"Answered"))
+          $questionIcon.find('.icon-text').text(I18n.t('question_answered', "Answered"));
         } else {
           $(combinedId).removeClass('answered');
           $questionIcon.addClass('icon-question').removeClass('icon-check');
-          $questionIcon.siblings('div.icon-text').text(I18n.t('question_unanswered', "Haven't Answered Yet"))
+          $questionIcon.find('.icon-text').text(I18n.t('question_unanswered', "Haven't Answered Yet"));
         }
       },
 
@@ -348,6 +346,11 @@ define([
     lastAnswerSelected = $(event.target).parents(".answer")[0];
   }).keydown(function() {
     lastAnswerSelected = null;
+  });
+
+  // fix screenreader focus for links to href="#target"
+  $("a[href^='#']").not("a[href='#']").click(function() {
+    $($(this).attr('href')).attr('tabindex', -1).focus()
   });
 
   $(function() {
@@ -401,15 +404,7 @@ define([
       .find(".list_question").bind({
         mouseenter: function(event) {
           var $this = $(this),
-              data = $this.data(),
-              title = I18n.t('titles.not_answered', "Haven't Answered yet");
-
-          if ($this.hasClass('marked')) {
-            title = I18n.t('titles.come_back_later', "You marked this question to come back to later");
-          } else if ($this.hasClass('answered')) {
-            title = I18n.t('titles.answered', "Answered");
-          }
-          $this.attr('title', title);
+              data = $this.data();
 
           if(!quizSubmission.oneAtATime) {
             data.relatedQuestion || (data.relatedQuestion = $("#" + $this.attr('id').substring(5)));
@@ -453,18 +448,35 @@ define([
       })
       .delegate(".numerical_question_input", {
         keyup: function(event) {
-          var val = $(this).val();
-          if (val === '' || !isNaN(parseFloat(val))) {
-            $(this).triggerHandler('focus'); // makes the errorBox go away
-          } else{
-            $(this).errorBox(I18n.t('errors.only_numerical_values', "only numerical values are accepted"));
+          var $this = $(this);
+          var val = $this.val();
+          var $errorBox = $this.data('associated_error_box');
+
+          if (val.match(/^$|^-$/) || !isNaN(parseFloat(val))) {
+            if ($errorBox) {
+              $this.triggerHandler('click');
+            }
+          } else {
+            if (!$errorBox) {
+              $this.errorBox(I18n.t('errors.only_numerical_values', "only numerical values are accepted"));
+            }
           }
         }
       })
       .delegate(".flag_question", 'click', function() {
         var $question = $(this).parents(".question");
         $question.toggleClass('marked');
+        $(this).attr("aria-checked", $question.hasClass('marked'));
         $("#list_" + $question.attr('id')).toggleClass('marked');
+
+        var markedText;
+        if ($("#list_" + $question.attr('id')).hasClass('marked')) {
+          markedText = I18n.t('titles.come_back_later', 'You marked this question to come back to later');
+        } else {
+          markedText = "";
+        }
+        $("#list_" + $question.attr('id')).find(".marked-status").text(markedText);
+
         quizSubmission.updateSubmission();
       })
       .delegate(".question_input", 'change', function(event, update, changedMap) {
@@ -562,7 +574,7 @@ define([
           }
         }
         else {
-          unanswered = $("#question_list .list_question:not(.answered)").length;
+          unanswered = $("#question_list .list_question:not(.answered):not(.text_only)").length;
           if(unanswered > 0) {
             warningMessage = I18n.t('confirms.unanswered_questions',
               {'one': "You have 1 unanswered question (see the right sidebar for details).  Submit anyway?",
@@ -627,5 +639,37 @@ define([
     new FileUploadQuestionView({el: el, model: model}).render();
   });
 
+  showDeauthorizedDialog = function() {
+    $("#deauthorized_dialog").dialog({
+      modal: true,
+      buttons: [{
+        text: I18n.t("#buttons.cancel", "Cancel"),
+        'class': "dialog_closer",
+        click: function() { $(this).dialog("close"); }
+      }, {
+        text: I18n.t("#buttons.login", "Login"),
+        'class': "btn-primary relogin_button button_type_submit",
+        click: function() {
+          quizSubmission.navigatingToRelogin = true;
+          $('#deauthorized_dialog').submit();
+        }
+      }]
+    });
+  };
+
+  if (ENV.LOCKDOWN_BROWSER) {
+    var ldbLoginPopup;
+
+    ldbLoginPopup = new LDBLoginPopup();
+    ldbLoginPopup
+    .on('login_success.take_quiz', function() {
+      $.flashMessage(I18n.t('login_successful', 'Login successful.'));
+    })
+    .on('login_failure.take_quiz', function() {
+      $.flashError(I18n.t('login_failed', 'Login failed.'));
+    });
+
+    showDeauthorizedDialog = _.bind(ldbLoginPopup.exec, ldbLoginPopup);
+  }
 });
 

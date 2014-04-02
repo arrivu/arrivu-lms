@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/helpers/external_tools_common')
 
 describe "external tools" do
-  it_should_behave_like "external tools tests"
+  include_examples "external tools tests"
 
   describe "app center" do
     before (:each) do
@@ -26,6 +26,22 @@ describe "external tools" do
       fj('a.app_cancel').click
       wait_for_ajaximations
 
+      #App list should have apps
+      ff('.app').size.should > 0
+      fj('a[data-toggle-installed-state="installed"]').click
+      wait_for_ajaximations
+
+      #Installed app list should have no apps
+      ff('.app').size.should == 0
+      fj('a[data-toggle-installed-state="not_installed"]').click
+      wait_for_ajaximations
+
+      #Not installed app list should have apps
+      ff('.app').size.should > 0
+      fj('a[data-toggle-installed-state="all"]').click
+      wait_for_ajaximations
+
+      #Install an app
       ff('.app').size.should > 0
       ff('.app').first.click
       wait_for_ajaximations
@@ -34,6 +50,24 @@ describe "external tools" do
       fj('a.add_app').click
       wait_for_ajaximations
 
+      #It should auto install because it only requires a name
+      f("#add_app_form").should be_nil
+      fj('.view_app_center_link').click
+      wait_for_ajaximations
+
+      fj('a[data-toggle-installed-state="installed"]').click
+      wait_for_ajaximations
+
+      #Installed app list should have apps
+      ff('.app').size.should > 0
+      ff('.app').first.click
+      wait_for_ajaximations
+
+      #Install app again
+      fj('a.add_app').click
+      wait_for_ajaximations
+
+      #Add app form should be displayed because the app is already installed
       f("#add_app_form").should be_displayed
       replace_content(f("#canvas_app_name"), "New App")
       fj('button.btn-primary[role="button"]').click
@@ -63,7 +97,7 @@ describe "external tools" do
   end
 
   describe "editing external tools" do
-    it_should_behave_like "external tools tests"
+    include_examples "external tools tests"
 
     before (:each) do
       course_with_teacher_logged_in
@@ -133,7 +167,7 @@ describe "external tools" do
 
       keep_trying_until { driver.execute_script("return window.modules.refreshed == true") }
 
-      f("#context_module_#{@module.id} .admin-links .al-trigger").click
+      f("#context_module_#{@module.id} .admin-links.al-trigger").click
       f("#context_module_#{@module.id} .add_module_item_link").click
 
       f("#add_module_item_select option[value='context_external_tool']").click
@@ -167,7 +201,7 @@ describe "external tools" do
 
       keep_trying_until { driver.execute_script("return window.modules.refreshed == true") }
 
-      f("#context_module_#{@module.id} .admin-links .al-trigger").click
+      f("#context_module_#{@module.id} .admin-links.al-trigger").click
       f("#context_module_#{@module.id} .add_module_item_link").click
 
       f("#add_module_item_select option[value='context_external_tool']").click
@@ -188,7 +222,7 @@ describe "external tools" do
 
       keep_trying_until { driver.execute_script("return window.modules.refreshed == true") }
 
-      f("#context_module_#{@module.id} .admin-links .al-trigger").click
+      f("#context_module_#{@module.id} .admin-links.al-trigger").click
       f("#context_module_#{@module.id} .add_module_item_link").click
 
       f("#add_module_item_select option[value='context_external_tool']").click
@@ -210,7 +244,7 @@ describe "external tools" do
       @tag.url.should == @tool1.url
       @tag.content.should == @tool1
 
-      f("#context_module_#{@module.id} .admin-links .al-trigger").click
+      f("#context_module_#{@module.id} .admin-links.al-trigger").click
       f("#context_module_#{@module.id} .add_module_item_link").click
 
       f("#add_module_item_select option[value='context_external_tool']").click
@@ -243,7 +277,7 @@ describe "external tools" do
 
       keep_trying_until { driver.execute_script("return window.modules.refreshed == true") }
 
-      f("#context_module_#{@module.id} .admin-links .al-trigger").click
+      f("#context_module_#{@module.id} .admin-links.al-trigger").click
       f("#context_module_#{@module.id} .add_module_item_link").click
 
       f("#add_module_item_select option[value='context_external_tool']").click
@@ -286,7 +320,7 @@ describe "external tools" do
 
       keep_trying_until { driver.execute_script("return window.modules.refreshed == true") }
 
-      f("#context_module_#{@module.id} .admin-links .al-trigger").click
+      f("#context_module_#{@module.id} .admin-links.al-trigger").click
       f("#context_module_#{@module.id} .add_module_item_link").click
       f("#add_module_item_select option[value='context_external_tool']").click
       wait_for_ajax_requests
@@ -347,7 +381,7 @@ describe "external tools" do
 
       keep_trying_until { driver.execute_script("return window.modules.refreshed == true") }
 
-      f("#context_module_#{@module.id} .admin-links .al-trigger").click
+      f("#context_module_#{@module.id} .admin-links.al-trigger").click
       f("#context_module_#{@module.id} .add_module_item_link").click
       f("#add_module_item_select option[value='context_external_tool']").click
 
@@ -439,7 +473,6 @@ describe "external tools" do
                               })
       get "/courses/#{@course.id}/modules/items/#{@tag.id}"
 
-      ff("#tool_content").length.should == 0
       f("#tool_form").should be_displayed
       ff("#tool_form .load_tab").length.should == 1
     end
@@ -474,7 +507,7 @@ describe "external tools" do
 
       def select_submission_content(iframe_link_selector)
         f("#submit_from_external_tool_form .tools .tool").click
-        keep_trying_until { f("#homework_selection_dialog").displayed? }
+        keep_trying_until { f("#homework_selection_dialog").should be_displayed }
 
         in_frame('homework_selection_iframe') do
           keep_trying_until { ff(iframe_link_selector).length > 0 }
@@ -517,8 +550,8 @@ describe "external tools" do
         pick_submission_tool('#file_link')
 
         f("#external_tool_url").attribute('value').should match(/delete\.png/)
-        f("#external_tool_filename").attribute('value').should eql('delete.png')
-        f("#external_tool_submission_type").attribute('value').should eql('online_url_to_file')
+        f("#external_tool_filename").attribute('value').should ==('delete.png')
+        f("#external_tool_submission_type").attribute('value').should ==('online_url_to_file')
 
         expect do
           f("#submit_from_external_tool_form .btn-primary").click
@@ -527,7 +560,7 @@ describe "external tools" do
 
         Delayed::Job.last.invoke_job
         a = Attachment.last
-        keep_trying_until { puts a.file_state; a.file_state == 'available' }
+        keep_trying_until { a.file_state == 'available' }
         keep_trying_until { !f("#submit_assignment").displayed? }
         submission = @assignment.find_or_create_submission(@user)
         submission.submission_type.should == 'online_upload'
@@ -539,7 +572,7 @@ describe "external tools" do
         pick_submission_tool('#full_url_link')
 
         f("#external_tool_url").attribute('value').should match(/delete\.png/)
-        f("#external_tool_submission_type").attribute('value').should eql('online_url')
+        f("#external_tool_submission_type").attribute('value').should ==('online_url')
         f("#submit_from_external_tool_form .btn-primary").click
         keep_trying_until { !f("#submit_assignment").displayed? }
         submission = @assignment.find_or_create_submission(@user)
@@ -593,7 +626,7 @@ describe "external tools" do
         homework_submission_tool
         pick_submission_tool('#bad_file_link')
 
-        f("#external_tool_submission_type").attribute('value').should eql('online_url_to_file')
+        f("#external_tool_submission_type").attribute('value').should ==('online_url_to_file')
         f('#submit_from_external_tool_form .btn-primary').click
         wait_for_ajax_requests
         Delayed::Job.last.invoke_job
@@ -655,16 +688,17 @@ describe "external tools" do
        'meta' => { "next" => "https://www.example.com/api/v1/apps?offset=72"},
        'current_offset' => 0,
        'limit' => 72,
-       'objects' => [
+       'lti_apps' => [
            {
                'name' => 'First Tool',
-               'id' => 'first_tool',
-               'any_key' => true,
-               'config_url' => ""
+               'short_name' => 'first_tool',
+               'requires_secret' => false,
+               'config_xml_url' => ""
            },
            {
                'name' => 'Second Tool',
-               'id' => 'second_tool',
+               'short_name' => 'second_tool',
+               'requires_secret' => true,
            }
        ]
     })
@@ -673,15 +707,21 @@ describe "external tools" do
          'meta' => { "next" => "https://www.example.com/api/v1/apps/first_tool/reviews?offset=15"},
          'current_offset' => 0,
          'limit' => 15,
-         'objects' => [
+         'reviews' => [
              {
-                 'user_name' => 'Iron Man',
-                 'user_avatar_url' => 'http://www.example.com/rich.ico',
+                 'user' => {
+                     "name" => 'Iron Man',
+                     "avatar_url" => 'http://www.example.com/rich.ico',
+                     "url" => nil
+                 },
                  'comments' => 'This tool is so great',
              },
              {
-                 'user_name' => 'The Hulk',
-                 'user_avatar_url' => 'http://www.example.com/beefy.ico',
+                 'user' => {
+                     "name" => 'The Hulk',
+                     "avatar_url" => 'http://www.example.com/beefy.ico',
+                     "url" => nil
+                 },
                  'comments' => 'SMASH!',
              }
          ]

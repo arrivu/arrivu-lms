@@ -1,8 +1,8 @@
-<div id="assignment_group_{{id}}" data-id="{{id}}">
+<div id="assignment_group_{{id}}" data-id="{{id}}" class="assignment_group">
   <div class="ig-header" style="position:relative;">
     {{#if ENV.PERMISSIONS.manage}}
       <span class="sortable-handle">
-        <a href="#" class="icon-updown"></a>
+        <a href="#" class="icon-drag-handle"></a>
       </span>
     {{/if}}
     <h2
@@ -51,7 +51,7 @@
           <i class="icon-plus"></i>
         </a>
 
-        <a id="ag_{{id}}_manage_link" class="al-trigger btn" href="#">
+        <a id="ag_{{id}}_manage_link" class="al-trigger btn" href="#" tabindex="0">
           <span class="screenreader-only">{{#t "manage"}}Manage{{/t}}</span>
           <i class="icon-settings"></i><i class="icon-mini-arrow-down"></i>
         </a>
@@ -60,18 +60,30 @@
             <a
               href="#"
               class="edit_group icon-edit"
-              title='{{#t "title_edit"}}Edit Assignment Group{{/t}}'
+              aria-label="{{#t 'assignment_group_edit'}}Edit Assignment Group{{/t}}"
               data-focus-returns-to="ag_{{id}}_manage_link"
             >{{#t "edit"}}Edit{{/t}}</a>
           </li>
+          {{#unless hasFrozenAssignments}}
+            <li>
+              <a
+                href="#"
+                class="delete_group icon-trash"
+                aria-label='{{#t "assignment_group_delete"}}Delete Assignment Group{{/t}}'
+                data-focus-returns-to="ag_{{id}}_manage_link"
+              >{{#t "delete"}}Delete{{/t}}</a>
+            </li>
+          {{/unless}}
+          {{#if canMove}}
           <li>
             <a
               href="#"
-              class="delete_group icon-trash"
-              title='{{#t "title_delete"}}Delete Assignment Group?{{/t}}'
+              class="move_group icon-updown"
+              aria-label='{{#t "assignment_group_move"}}Move Assignment Group{{/t}}'
               data-focus-returns-to="ag_{{id}}_manage_link"
-            >{{#t "delete"}}Delete{{/t}}</a>
+            >{{#t "move"}}Move To&hellip;{{/t}}</a>
           </li>
+          {{/if}}
         </ul>
       {{/if}}
     </div>
@@ -86,5 +98,6 @@
     <form data-view="createAssignment" class="form-dialog"></form>
     <form data-view="editAssignmentGroup" class="form-dialog"></form>
     <form data-view="deleteAssignmentGroup" class="form-dialog"></form>
+    <form data-view="moveAssignmentGroup" class="form-dialog"></form>
   {{/if}}
 </div>

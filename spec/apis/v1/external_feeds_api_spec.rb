@@ -18,7 +18,7 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../api_spec_helper')
 
-describe 'ExternalFeedsController', :type => :integration do
+describe 'ExternalFeedsController', type: :request do
   shared_examples_for "Announcement External Feeds" do
     before do
       @url_params = { :controller => "external_feeds", :action => "index", :format => "json" }
@@ -101,7 +101,7 @@ describe 'ExternalFeedsController', :type => :integration do
   end
 
   describe "in a Course" do
-    it_should_behave_like "Announcement External Feeds"
+    include_examples "Announcement External Feeds"
     before do
       @allowed_user = teacher_in_course(:active_all => true).user
       @context = @course
@@ -112,12 +112,13 @@ describe 'ExternalFeedsController', :type => :integration do
   end
 
   describe "in a Group" do
-    it_should_behave_like "Announcement External Feeds"
+    include_examples "Announcement External Feeds"
     before do
       group_with_user(:moderator => true, :active_all => true)
       @allowed_user = @user
+      @allowed_user.pseudonyms.create!(:unique_id => 'user1', :account => Account.default)
       @context = @group
-      @denied_user = user(:active_all => true)
+      @denied_user = user_with_pseudonym(:active_all => true, :unique_id => 'user2')
       @url_base = "/api/v1/groups/#{@group.id}/external_feeds"
       @url_params.merge!({ :group_id => @group.to_param })
     end

@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../common')
 require File.expand_path(File.dirname(__FILE__) + '/../helpers/external_tools_common')
 
 describe "account admin question bank" do
-  it_should_behave_like "in-process server selenium tests"
+  include_examples "in-process server selenium tests"
 
   before(:each) do
     admin_logged_in
@@ -129,7 +129,7 @@ describe "account admin question bank" do
     wait_for_ajaximations
     @question_bank.reload
     @question_bank.bookmarked_for?(User.last).should be_true
-    f("#right-side .disabled").should include_text "Already Bookmarked"
+    f("#right-side .bookmark_bank_link").should include_text "Already Bookmarked"
   end
 
   it "should edit bank details" do

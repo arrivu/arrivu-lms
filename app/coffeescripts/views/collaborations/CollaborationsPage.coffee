@@ -17,17 +17,19 @@
 #
 
 define [
+  'jquery'
   'underscore'
   'Backbone'
   'compiled/views/collaborations/CollaborationView'
   'compiled/views/collaborations/CollaborationFormView'
-], ({each, reject}, {View}, CollaborationView, CollaborationFormView) ->
+], ($, {each, reject}, {View}, CollaborationView, CollaborationFormView) ->
 
   class CollaborationsPage extends View
     events:
       'click .add_collaboration_link': 'addCollaboration'
 
     initialize: ->
+      super
       @cacheElements()
       @createViews()
       @attachEvents()

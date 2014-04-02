@@ -137,14 +137,14 @@ namespace :db do
         # set the password later.
         pseudonym.password = pseudonym.password_confirmation = password
         unless pseudonym.save
-          raise pseudonym.errors.first.join " " if pseudonym.errors.size > 0
+          raise pseudonym.errors.full_messages.first if pseudonym.errors.size > 0
           raise "unknown error saving password"
         end
         Account.site_admin.add_user(user, 'AccountAdmin')
         Account.default.add_user(user, 'AccountAdmin')
         user
       rescue => e
-        STDERR.puts "Problem creating administrative account, please try again: " + e
+        STDERR.puts "Problem creating administrative account, please try again: #{e}"
         nil
       end
     end

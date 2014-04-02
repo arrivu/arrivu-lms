@@ -25,6 +25,22 @@ define([
   'jqueryui/sortable' /* /\.sortable/ */,
   'jqueryui/widget' /* /\.widget/ */
 ], function(I18n, $, htmlEscape) {
+  // Create a function to pass to setTimeout
+var speakMessage = function ($this, message) {
+  if ($this.data('accessible-message-timeout')) {
+    // Clear any previously scheduled message from this field.
+    clearTimeout($this.data('accessible-message-timeout'));
+    $this.removeData('accessible-message-timeout');
+  }
+  if (!message) {
+    // No message? Do nothing when the timeout expires.
+    return function () {};
+  }
+  return function () {
+    $('#aria_alerts').text(message);
+    $this.removeData('accessible-message-timeout');
+  };
+};
 
   $.parseDateTime = function(date, time) {
     var date = $.datepicker.parseDate('mm/dd/yy', date);
@@ -272,11 +288,42 @@ define([
     return I18n.l('#date.formats.medium', date);
   };
   $.fn.parseFromISO = $.parseFromISO;
-  
+
+  $.datetime = {};
+  $.datetime.shortFormat = "MMM d, yyyy";
+  $.datetime.defaultFormat = "MMM d, yyyy h:mmtt";
+  $.datetime.sortableFormat = "yyyy-MM-ddTHH:mm:ss";
+  $.datetime.parse = function(text, /* optional */ intermediate_format) {
+    return Date.parse((text || "").toString(intermediate_format).replace(/ (at|by)/, ""))
+  }
+  $.datetime.clean = function(text) {
+    var date = $.datetime.parse(text, $.datetime.sortableFormat) || text;
+    var result = "";
+    if(date) {
+      if(date.getHours() || date.getMinutes()) {
+        result = date.toString($.datetime.defaultFormat);
+      } else {
+        result = date.toString($.datetime.shortFormat);
+      }
+    }
+    return result;
+  };
+  $.datetime.process = function(text) {
+    var date = text;
+    if(typeof(text) == "string") {
+      date = $.datetime.parse(text);
+    }
+    var result = "";
+    if(date) {
+      result = date.toString($.datetime.sortableFormat);
+    }
+    return result;
+  };
+
   
   $.datepicker.oldParseDate = $.datepicker.parseDate;
   $.datepicker.parseDate = function(format, value, settings) {
-    return Date.parse((value || "").toString().replace(/ (at|by)/, "")) || $.datepicker.oldParseDate(format, value, settings);
+    return $.datetime.parse(value) || $.datepicker.oldParseDate(format, value, settings);
   };
   $.datepicker._generateDatepickerHTML = $.datepicker._generateHTML;
   $.datepicker._generateHTML = function(inst) {
@@ -418,17 +465,26 @@ define([
         $field.wrap('<div class="input-append" />');
         $thingToPutSuggestAfter = $field.parent('.input-append');
 
-        $field.datepicker({
+        var datepickerOptions = {
           timePicker: (!options.dateOnly),
           constrainInput: false,
           dateFormat: 'M d, yy',
           showOn: 'button',
           buttonText: '<i class="icon-calendar-month"></i>',
           buttonImageOnly: false
-        });
+        };
+        $field.datepicker($.extend(datepickerOptions, options.datepicker));
       }
 
       var $suggest = $('<div class="datetime_suggest" />').insertAfter($thingToPutSuggestAfter);
+
+      if (options.addHiddenInput) {
+        var $hiddenInput = $('<input type="hidden">').insertAfter($field);
+        $hiddenInput.attr('name', $field.attr('name'));
+        $hiddenInput.val($field.val());
+        $field.removeAttr('name');
+        $field.data('hiddenInput', $hiddenInput);
+      }
 
       $field.bind("change focus blur keyup", function() {
         var $this = $(this),
@@ -436,12 +492,15 @@ define([
         if (options.timeOnly && val && parseInt(val, 10) == val) {
           val += (val < 8) ? "pm" : "am";
         }
-        var d = Date.parse((val || "").toString().replace(/ (at|by)/, ""));
+        var d = $.datetime.parse(val);
         var parse_error_message = I18n.t('errors.not_a_date', "That's not a date!");
         var text = parse_error_message;
         if (!$this.val()) { text = ""; }
         if (d) {
           $this.data('date', d);
+          if ($this.data('hiddenInput')) {
+            $this.data('hiddenInput').val(d);
+          }
           if(!options.timeOnly && !options.dateOnly && (d.getHours() || d.getMinutes() || options.alwaysShowTime)) {
             text = d.toString('ddd MMM d, yyyy h:mmtt');
             $this
@@ -458,7 +517,16 @@ define([
         $suggest
           .toggleClass('invalid_datetime', text == parse_error_message)
           .text(text);
-
+        if (text == parse_error_message ) {
+          $this.data(
+            'accessible-message-timeout',
+            setTimeout(speakMessage($this, text), 2000)
+          );
+        } else if ($this.data('accessible-message-timeout')) {
+          // Error resolved, cancel the alert.
+          clearTimeout($this.data('accessible-message-timeout'));
+          $this.removeData('accessible-message-timeout');
+        }
       }).triggerHandler('change');
       // TEMPORARY FIX: Hide from aria screenreader until the jQuery UI datepicker is updated for accessibility.
       $field.next().attr('aria-hidden', 'true');
@@ -467,34 +535,6 @@ define([
     return this;
   };
 
-
-  $.datetime = {};
-  $.datetime.shortFormat = "MMM d, yyyy";
-  $.datetime.defaultFormat = "MMM d, yyyy h:mmtt";
-  $.datetime.sortableFormat = "yyyy-MM-ddTHH:mm:ss";
-  $.datetime.clean = function(text) {
-    var date = Date.parse((text || "").toString("yyyy-MM-ddTHH:mm:ss").replace(/ (at|by)/, "")) || text;
-    var result = "";
-    if(date) {
-      if(date.getHours() || date.getMinutes()) {
-        result = date.toString($.datetime.defaultFormat);
-      } else {
-        result = date.toString($.datetime.shortFormat);
-      }
-    }
-    return result;
-  };
-  $.datetime.process = function(text) {
-    var date = text;
-    if(typeof(text) == "string") {
-      date = Date.parse((text || "").toString().replace(/ (at|by)/, ""));
-    }
-    var result = "";
-    if(date) {
-      result = date.toString($.datetime.sortableFormat);
-    }
-    return result;
-  };
     /* Based loosely on:
     jQuery ui.timepickr - 0.6.5
     http://code.google.com/p/jquery-utils/

@@ -19,28 +19,89 @@
 # @API Files
 # @subtopic Folders
 #
-# @object Folder
+# @model Folder
 #     {
-#       "context_type": "Course",
-#       "context_id": 1401,
-#       "files_count": 0,
-#       "position": 3,
-#       "updated_at": "2012-07-06T14:58:50Z",
-#       "folders_url": "https://www.example.com/api/v1/folders/2937/folders",
-#       "files_url": "https://www.example.com/api/v1/folders/2937/files",
-#       "full_name": "course files/11folder",
-#       "lock_at": null,
-#       "id": 2937,
-#       "folders_count": 0,
-#       "name": "11folder",
-#       "parent_folder_id": 2934,
-#       "created_at": "2012-07-06T14:58:50Z",
-#       "unlock_at": null,
-#       "hidden": null,
-#       "hidden_for_user": false,
-#       "locked": true,
-#       "locked_for_user": false
+#       "id": "Folder",
+#       "description": "",
+#       "properties": {
+#         "context_type": {
+#           "example": "Course",
+#           "type": "string"
+#         },
+#         "context_id": {
+#           "example": 1401,
+#           "type": "integer"
+#         },
+#         "files_count": {
+#           "example": 0,
+#           "type": "integer"
+#         },
+#         "position": {
+#           "example": 3,
+#           "type": "integer"
+#         },
+#         "updated_at": {
+#           "example": "2012-07-06T14:58:50Z",
+#           "type": "datetime"
+#         },
+#         "folders_url": {
+#           "example": "https://www.example.com/api/v1/folders/2937/folders",
+#           "type": "string"
+#         },
+#         "files_url": {
+#           "example": "https://www.example.com/api/v1/folders/2937/files",
+#           "type": "string"
+#         },
+#         "full_name": {
+#           "example": "course files/11folder",
+#           "type": "string"
+#         },
+#         "lock_at": {
+#           "example": "2012-07-06T14:58:50Z",
+#           "type": "datetime"
+#         },
+#         "id": {
+#           "example": 2937,
+#           "type": "integer"
+#         },
+#         "folders_count": {
+#           "example": 0,
+#           "type": "integer"
+#         },
+#         "name": {
+#           "example": "11folder",
+#           "type": "string"
+#         },
+#         "parent_folder_id": {
+#           "example": 2934,
+#           "type": "integer"
+#         },
+#         "created_at": {
+#           "example": "2012-07-06T14:58:50Z",
+#           "type": "datetime"
+#         },
+#         "unlock_at": {
+#           "type": "datetime"
+#         },
+#         "hidden": {
+#           "example": false,
+#           "type": "boolean"
+#         },
+#         "hidden_for_user": {
+#           "example": false,
+#           "type": "boolean"
+#         },
+#         "locked": {
+#           "example": true,
+#           "type": "boolean"
+#         },
+#         "locked_for_user": {
+#           "example": false,
+#           "type": "boolean"
+#         }
+#       }
 #     }
+#
 class FoldersController < ApplicationController
   include Api::V1::Folders
   include Api::V1::Attachment
@@ -49,7 +110,7 @@ class FoldersController < ApplicationController
 
   def index
     if authorized_action(@context, @current_user, :read)
-      render :json => Folder.root_folders(@context).to_json(:permissions => {:user => @current_user, :session => session})
+      render :json => Folder.root_folders(@context).map{ |f| f.as_json(permissions: {user: @current_user, session: session}) }
     end
   end
 
@@ -78,7 +139,7 @@ class FoldersController < ApplicationController
       else
         scope = scope.by_name
       end
-      @folders = Api.paginate(scope, self, api_v1_list_folders_url(@context))
+      @folders = Api.paginate(scope, self, api_v1_list_folders_url(folder))
       render :json => folders_json(@folders, @current_user, session, :can_manage_files => can_manage_files)
     end
   end
@@ -175,7 +236,7 @@ class FoldersController < ApplicationController
         @attachment.context = @folder
         @attachment.save!
         ContentZipper.send_later_enqueue_args(:process_attachment, { :priority => Delayed::LOW_PRIORITY, :max_attempts => 1 }, @attachment, @current_user)
-        render :json => @attachment.to_json
+        render :json => @attachment
       else
         respond_to do |format|
           if @attachment.zipped?
@@ -187,12 +248,12 @@ class FoldersController < ApplicationController
               format.html { send_file(@attachment.full_filename, :type => @attachment.content_type_with_encoding, :disposition => 'inline') }
               format.zip { send_file(@attachment.full_filename, :type => @attachment.content_type_with_encoding, :disposition => 'inline') }
             end
-            format.json { render :json => @attachment.to_json(:methods => :readable_size) }
+            format.json { render :json => @attachment.as_json(:methods => :readable_size) }
           else
             flash[:notice] = t :file_zip_in_process, "File zipping still in process..."
             format.html { redirect_to named_context_url(@context, :context_folder_url, @folder.id) }
             format.zip { redirect_to named_context_url(@context, :context_folder_url, @folder.id) }
-            format.json { render :json => @attachment.to_json }
+            format.json { render :json => @attachment }
           end
         end
       end
@@ -261,11 +322,11 @@ class FoldersController < ApplicationController
           if api_request?
             format.json { render :json => folder_json(@folder, @current_user, session) }
           else
-            format.json { render :json => @folder.to_json(:methods => [:currently_locked], :permissions => {:user => @current_user, :session => session}), :status => :ok }
+            format.json { render :json => @folder.as_json(:methods => [:currently_locked], :permissions => {:user => @current_user, :session => session}), :status => :ok }
           end
         else
           format.html { render :action => "edit" }
-          format.json { render :json => @folder.errors.to_json, :status => :bad_request }
+          format.json { render :json => @folder.errors, :status => :bad_request }
         end
       end
     end
@@ -358,11 +419,11 @@ class FoldersController < ApplicationController
           if api_request?
             format.json { render :json => folder_json(@folder, @current_user, session) }
           else
-            format.json { render :json => @folder.to_json(:permissions => {:user => @current_user, :session => session}) }
+            format.json { render :json => @folder.as_json(:permissions => {:user => @current_user, :session => session}) }
           end
         else
           format.html { render :action => "new" }
-          format.json { render :json => @folder.errors.to_json }
+          format.json { render :json => @folder.errors }
         end
       end
     end
@@ -382,7 +443,7 @@ class FoldersController < ApplicationController
       @folder.destroy
       respond_to do |format|
         format.html { redirect_to named_context_url(@context, :context_files_url) }# show.rhtml
-        format.json { render :json => @folder.to_json }
+        format.json { render :json => @folder }
       end
     end
   end

@@ -14,8 +14,10 @@ class UserMerge
     return unless target_user
     return if target_user == from_user
     target_user.save if target_user.changed?
-    from_user.associated_shards.each do |shard|
-      target_user.associate_with_shard(shard)
+    [:strong, :weak, :shadow].each do |strength|
+      from_user.associated_shards(strength).each do |shard|
+        target_user.associate_with_shard(shard, strength)
+      end
     end
 
     max_position = target_user.communication_channels.last.try(:position) || 0
@@ -87,7 +89,9 @@ class UserMerge
       from_user.communication_channels.update_all(["user_id=?, position=position+?", target_user, max_position]) unless from_user.communication_channels.empty?
     end
 
-    Shard.with_each_shard(from_user.associated_shards) do
+    destroy_conflicting_module_progressions(@from_user, target_user)
+
+    Shard.with_each_shard(from_user.associated_shards + from_user.associated_shards(:weak) + from_user.associated_shards(:shadow)) do
       max_position = Pseudonym.where(:user_id => target_user).order(:position).last.try(:position) || 0
       Pseudonym.where(:user_id => from_user).update_all(["user_id=?, position=position+?", target_user, max_position])
 
@@ -172,8 +176,12 @@ class UserMerge
 
         to_delete_ids << to_delete.id if to_delete && !['deleted', 'inactive', 'rejected'].include?(to_delete.workflow_state)
       end
-      Enrollment.where(:id => to_delete_ids).update_all(:workflow_state => 'deleted') unless to_delete_ids.empty?
-
+      unless to_delete_ids.empty?
+        Enrollment.where(:id => to_delete_ids).update_all(:workflow_state => 'deleted')
+        target_user.communication_channels.email.unretired.each do |cc|
+          Rails.cache.delete([cc.path, 'invited_enrollments'].cache_key)
+        end
+      end
       [
         [:quiz_id, :quiz_submissions],
         [:assignment_id, :submissions]
@@ -183,12 +191,38 @@ class UserMerge
           # on the table, and if both the old user and the new user
           # have a submission for the same assignment there will be
           # a conflict.
-          already_there_ids = table.to_s.classify.constantize.where(:user_id => target_user).pluck(unique_id)
-          scope = table.to_s.classify.constantize.where(:user_id => from_user)
-          scope = scope.where("#{unique_id} NOT IN (?)", already_there_ids) unless already_there_ids.empty?
-          scope.update_all(:user_id => target_user)
+          model = table.to_s.classify.constantize
+          already_scope = model.where(:user_id => target_user)
+          scope = model.where(:user_id => from_user)
+          # empty submission objects from e.g. what_if grades will show up in the scope
+          # these records will not have associated quiz_submission records even if the assignment in question is a quiz,
+          # so we only need to fine-tune the scope for Submission
+          if model.name == "Submission"
+            # we prefer submissions that are not simply empty objects
+            # also we delete empty objects in cases of collision so that we don't end up with multiple submission records for a given assignment
+            # for the target user, we
+            # a) delete empty submissions where there is a non-empty submission in the from user
+            # b) don't delete otherwise
+            subscope = scope.having_submission.select(unique_id)
+            if %w{MySQL Mysql2}.include?(model.connection.adapter_name)
+              # handing the scope directly to from doesn't work until Rails 4, and I don't
+              # feel like backporting at the moment
+              subscope = Submission.from("(#{subscope.to_sql}) AS s").select(unique_id)
+            end
+            already_scope.where(unique_id => subscope).without_submission.delete_all
+          end
+          # for the from user
+          # a) we ignore the empty submissions in our update unless the target user has no submission
+          # b) move the empty submission over to the new user if there is no collision, as we don't mind persisting the what_if history in this case
+          # c) if there is an empty submission for each user for this assignment, prefer the target user
+          subscope = already_scope.select(unique_id)
+          if %w{MySQL Mysql2}.include?(model.connection.adapter_name)
+            # ditto
+            subscope = Submission.from("(#{subscope.to_sql}) AS s").select(unique_id)
+          end
+          scope.where("#{unique_id} NOT IN (?)", subscope).update_all(:user_id => target_user)
         rescue => e
-          logger.error "migrating #{table} column user_id failed: #{e.to_s}"
+          Rails.logger.error "migrating #{table} column user_id failed: #{e.to_s}"
         end
       end
       from_user.all_conversations.find_each{ |c| c.move_to_user(target_user) } unless Shard.current != target_user.shard
@@ -211,11 +245,18 @@ class UserMerge
         begin
           klass = table.classify.constantize
           if klass.new.respond_to?("#{column}=".to_sym)
-            klass.connection.execute("UPDATE #{table} SET #{column}=#{target_user.id} WHERE #{column}=#{from_user.id}")
+            klass.where(column => from_user).update_all(column => target_user.id)
           end
         rescue => e
-          logger.error "migrating #{table} column #{column} failed: #{e.to_s}"
+          Rails.logger.error "migrating #{table} column #{column} failed: #{e.to_s}"
         end
+      end
+
+      context_updates = ['calendar_events']
+      context_updates.each do |table|
+        klass = table.classify.constantize
+        klass.where(context_id: from_user, context_type: 'User').
+          update_all(context_id: target_user.id, context_code: target_user.asset_string)
       end
 
       unless Shard.current != target_user.shard
@@ -240,6 +281,30 @@ class UserMerge
     from_user.reload
     target_user.touch
     from_user.destroy
+  end
+
+  def destroy_conflicting_module_progressions(from_user, target_user)
+    # there is a unique index on the context_module_progressions table
+    # we need to delete all the conflicting context_module_progressions
+    # without impacting the users module progress and without having to
+    # recalculate the progressions.
+    # find all the modules progressions and delete the most restrictive
+    # context_module_progressions
+    ContextModuleProgression.
+      where("context_module_progressions.user_id = ?", from_user.id).
+      where("EXISTS (SELECT *
+                     FROM context_module_progressions cmp2
+                     WHERE context_module_progressions.context_module_id=cmp2.context_module_id
+                       AND cmp2.user_id = ?)", target_user.id).find_each do |cmp|
+
+      ContextModuleProgression.
+        where(context_module_id: cmp.context_module_id, user_id: [from_user, target_user]).
+        order("CASE WHEN workflow_state = 'Completed' THEN 0
+                    WHEN workflow_state = 'Started' THEN 1
+                    WHEN workflow_state = 'Unlocked' THEN 2
+                    WHEN workflow_state = 'Locked' THEN 3
+                END DESC").first.destroy
+    end
   end
 
 end

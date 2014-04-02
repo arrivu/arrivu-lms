@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/common')
 
 describe "Alerts" do
-  it_should_behave_like "in-process server selenium tests"
+  include_examples "in-process server selenium tests"
 
   before (:each) do
     @context = Account.default
@@ -33,7 +33,6 @@ describe "Alerts" do
 
     @alerts.first.criteria.length.should == 1
 
-    wait_for_animations
     (edit = alert.find_element(:css, '.edit_link')).click
     add_criterion.click
     wait_for_ajaximations

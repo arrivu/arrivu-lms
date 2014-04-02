@@ -1,4 +1,5 @@
 require [
+  'i18n!content_migrations'
   'jquery'
   'compiled/collections/ProgressingContentMigrationCollection'
   'compiled/models/ContentMigration'
@@ -25,7 +26,7 @@ require [
   'vendor/jquery.ba-tinypubsub'
   'jst/content_migrations/subviews/DaySubstitutionCollection'
   'compiled/views/content_migrations/subviews/OverwriteAssessmentContentView'
-], ($, ProgressingContentMigrationCollection, ContentMigrationModel, DaySubstitutionCollection, CollectionView, PaginatedCollectionView, ProgressingContentMigrationView, MigrationConverterView, CommonCartridgeView, ConverterViewControl, ZipFilesView, CopyCourseView, MoodleZipView, CanvasExportView, QTIZipView, ChooseMigrationFileView, FolderPickerView, SelectContentCheckboxView, QuestionBankView, CourseFindSelectView, DateShiftView, DaySubView, progressingMigrationCollectionTemplate, pubsub, daySubCollectionTemplate, OverwriteAssessmentContentView) ->
+], (I18n, $, ProgressingContentMigrationCollection, ContentMigrationModel, DaySubstitutionCollection, CollectionView, PaginatedCollectionView, ProgressingContentMigrationView, MigrationConverterView, CommonCartridgeView, ConverterViewControl, ZipFilesView, CopyCourseView, MoodleZipView, CanvasExportView, QTIZipView, ChooseMigrationFileView, FolderPickerView, SelectContentCheckboxView, QuestionBankView, CourseFindSelectView, DateShiftView, DaySubView, progressingMigrationCollectionTemplate, pubsub, daySubCollectionTemplate, OverwriteAssessmentContentView) ->
   ConverterViewControl.setModel new ContentMigrationModel 
                                  course_id: ENV.COURSE_ID
                                  daySubCollection: daySubCollection
@@ -33,7 +34,7 @@ require [
   daySubCollection          = new DaySubstitutionCollection
   daySubCollectionView      = new CollectionView
                                  collection: daySubCollection
-                                 emptyTemplate: -> "No Day Substitutions Added"
+                                 emptyMessage: -> I18n.t('no_day_substitutions', "No Day Substitutions Added")
                                  itemView: DaySubView
                                  template: daySubCollectionTemplate
 
@@ -44,8 +45,13 @@ require [
                                  el: '#progress'
                                  collection: progressingMigCollection
                                  template: progressingMigrationCollectionTemplate
-                                 emptyTemplate: -> "There are no migrations currently running"
+                                 emptyMessage: -> I18n.t('no_migrations_running', "There are no migrations currently running")
                                  itemView: ProgressingContentMigrationView
+
+  progressingCollectionView.getStatusView = (migProgress) ->
+    if getView = ConverterViewControl.getView(migProgress.get('migration_type'))?.view?.getStatusView
+      getView(migProgress)
+
   progressingCollectionView.render()
 
   migrationConverterView    = new MigrationConverterView
@@ -140,6 +146,7 @@ require [
                                    fileSizeLimit: ENV.UPLOAD_LIMIT
 
             selectContent:       new SelectContentCheckboxView(model: ConverterViewControl.getModel())
+            overwriteAssessmentContent: new OverwriteAssessmentContentView(model: ConverterViewControl.getModel())
 
             questionBank:        new QuestionBankView
                                    questionBanks: ENV.QUESTION_BANKS

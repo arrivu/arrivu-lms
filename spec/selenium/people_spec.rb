@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/common')
 
 describe "people" do
-  it_should_behave_like "in-process server selenium tests"
+  include_examples "in-process server selenium tests"
 
   def add_user(option_text, username, user_list_selector)
     click_option('#enrollment_type', option_text)
@@ -64,6 +64,8 @@ describe "people" do
 
       #add first student
       @student_1 = create_user('student@test.com')
+      Account.default.settings[:enable_manage_groups2] = false
+      Account.default.save!
 
       e1 = @course.enroll_student(@student_1)
       e1.workflow_state = 'active'
@@ -227,7 +229,7 @@ describe "people" do
 
       get "/courses/#{@course.id}/users/#{@obs.id}"
       f('.more_user_information_link').click
-      wait_for_animations
+      wait_for_ajaximations
       enrollments = ff(".enrollment")
       enrollments.length.should == 2
 

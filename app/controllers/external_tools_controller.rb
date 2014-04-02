@@ -105,17 +105,14 @@ class ExternalToolsController < ApplicationController
       end
       @resource_title = @tool.name
       @resource_url = params[:url]
-      @opaque_id = @context.opaque_identifier(:asset_string)
+      @opaque_id = @tool.opaque_identifier_for(@context)
       add_crumb(@context.name, named_context_url(@context, :context_url))
       @return_url = url_for(@context)
       @launch = BasicLTI::ToolLaunch.new(:url => @resource_url, :tool => @tool, :user => @current_user, :context => @context, :link_code => @opaque_id, :return_url => @return_url, :resource_type => @resource_type)
       @tool_settings = @launch.generate
 
-      if params[:borderless]
-        render :partial => 'external_tools/borderless_launch'
-      else
-        render :template => 'external_tools/tool_show'
-      end
+      @tool_launch_type = 'self' if params['borderless']
+      render :template => 'external_tools/tool_show'
     end
   end
 
@@ -144,7 +141,7 @@ class ExternalToolsController < ApplicationController
       # prerequisite checks
       unless Canvas.redis_enabled?
         @context.errors.add(:redis, 'Redis is not enabled, but is required for sessionless LTI launch')
-        render :json => @context.errors.to_json, :status => :service_unavailable
+        render :json => @context.errors, :status => :service_unavailable
         return
       end
 
@@ -156,14 +153,14 @@ class ExternalToolsController < ApplicationController
       if params[:launch_type] == 'assessment'
         unless params[:assignment_id]
           @context.errors.add(:assignment_id, 'An assignment id must be provided for assessment LTI launch')
-          render :json => @context.errors.to_json, :status => :bad_request
+          render :json => @context.errors, :status => :bad_request
           return
         end
 
         assignment = @context.assignments.find_by_id(params[:assignment_id])
         unless assignment
           @context.errors.add(:assignment_id, 'The assignment was not found in this course')
-          render :json => @context.errors.to_json, :status => :bad_request
+          render :json => @context.errors, :status => :bad_request
           return
         end
 
@@ -175,7 +172,7 @@ class ExternalToolsController < ApplicationController
       unless tool_id || launch_url
         @context.errors.add(:id, 'An id or a url must be provided')
         @context.errors.add(:url, 'An id or a url must be provided')
-        render :json => @context.errors.to_json, :status => :bad_request
+        render :json => @context.errors, :status => :bad_request
         return
       end
 
@@ -238,7 +235,8 @@ class ExternalToolsController < ApplicationController
     @resource_title = launch_settings['tool_name']
     @tool_settings = launch_settings['tool_settings']
 
-    render :partial => 'external_tools/borderless_launch'
+    @tool_launch_type = 'self'
+    render :template => 'external_tools/tool_show'
   end
 
   # @API Get a single external tool
@@ -291,6 +289,7 @@ class ExternalToolsController < ApplicationController
 
       find_tool(params[:id], selection_type)
       @active_tab = @tool.asset_string if @tool
+      @show_embedded_chat = false if @tool.try(:tool_id) == 'chat'
       render_tool(selection_type)
       add_crumb(@context.name, named_context_url(@context, :context_url))
     end
@@ -306,7 +305,7 @@ class ExternalToolsController < ApplicationController
 
     @return_url    = external_content_success_url('external_tool')
     @headers       = false
-    @self_target   = true
+    @tool_launch_type = 'self'
 
     find_tool(params[:external_tool_id], selection_type)
     render_tool(selection_type)
@@ -332,6 +331,7 @@ class ExternalToolsController < ApplicationController
       @assignment = @context.assignments.active.find(params[:assignment_id])
       @launch.for_homework_submission!(@assignment)
     end
+    @launch.has_selection_html!(params[:selection]) if params[:selection]
     @resource_url = @launch.url
     resource_uri = URI.parse @launch.url
     @tool_id = @tool.tool_id || resource_uri.host || 'unknown'
@@ -463,7 +463,7 @@ class ExternalToolsController < ApplicationController
   # @example_request
   #
   #   This would create a tool on this course with two custom fields and a course navigation tab
-  #   curl 'http://<canvas>/api/v1/courses/<course_id>/external_tools' \ 
+  #   curl 'https://<canvas>/api/v1/courses/<course_id>/external_tools' \
   #        -H "Authorization: Bearer <token>" \ 
   #        -F 'name=LTI Example' \ 
   #        -F 'consumer_key=asdfg' \ 
@@ -479,7 +479,7 @@ class ExternalToolsController < ApplicationController
   # @example_request
   #
   #   This would create a tool on the account with navigation for the user profile page
-  #   curl 'http://<canvas>/api/v1/accounts/<account_id>/external_tools' \ 
+  #   curl 'https://<canvas>/api/v1/accounts/<account_id>/external_tools' \
   #        -H "Authorization: Bearer <token>" \ 
   #        -F 'name=LTI Example' \ 
   #        -F 'consumer_key=asdfg' \ 
@@ -493,7 +493,7 @@ class ExternalToolsController < ApplicationController
   # @example_request
   #
   #   This would create a tool on the account with configuration pulled from an external URL
-  #   curl 'http://<canvas>/api/v1/accounts/<account_id>/external_tools' \ 
+  #   curl 'https://<canvas>/api/v1/accounts/<account_id>/external_tools' \
   #        -H "Authorization: Bearer <token>" \ 
   #        -F 'name=LTI Example' \ 
   #        -F 'consumer_key=asdfg' \ 
@@ -509,10 +509,10 @@ class ExternalToolsController < ApplicationController
           if api_request?
             format.json { render :json => external_tool_json(@tool, @context, @current_user, session) }
           else
-            format.json { render :json => @tool.to_json(:methods => [:readable_state, :custom_fields_string, :vendor_help_link], :include_root => false) }
+            format.json { render :json => @tool.as_json(:methods => [:readable_state, :custom_fields_string, :vendor_help_link], :include_root => false) }
           end
         else
-          format.json { render :json => @tool.errors.to_json, :status => :bad_request }
+          format.json { render :json => @tool.errors, :status => :bad_request }
         end
       end
     end
@@ -524,7 +524,7 @@ class ExternalToolsController < ApplicationController
   # @example_request
   #
   #   This would update the specified keys on this external tool
-  #   curl -X PUT 'http://<canvas>/api/v1/courses/<course_id>/external_tools/<external_tool_id>' \ 
+  #   curl -X PUT 'https://<canvas>/api/v1/courses/<course_id>/external_tools/<external_tool_id>' \
   #        -H "Authorization: Bearer <token>" \ 
   #        -F 'name=Public Example' \ 
   #        -F 'privacy_level=public'
@@ -537,10 +537,10 @@ class ExternalToolsController < ApplicationController
           if api_request?
             format.json { render :json => external_tool_json(@tool, @context, @current_user, session) }
           else
-            format.json { render :json => @tool.to_json(:methods => [:readable_state, :custom_fields_string], :include_root => false) }
+            format.json { render :json => @tool.as_json(:methods => [:readable_state, :custom_fields_string], :include_root => false) }
           end
         else
-          format.json { render :json => @tool.errors.to_json, :status => :bad_request }
+          format.json { render :json => @tool.errors, :status => :bad_request }
         end
       end
     end
@@ -552,7 +552,7 @@ class ExternalToolsController < ApplicationController
   # @example_request
   #
   #   This would delete the specified external tool
-  #   curl -X DELETE 'http://<canvas>/api/v1/courses/<course_id>/external_tools/<external_tool_id>' \ 
+  #   curl -X DELETE 'https://<canvas>/api/v1/courses/<course_id>/external_tools/<external_tool_id>' \
   #        -H "Authorization: Bearer <token>"
   def destroy
     @tool = @context.context_external_tools.active.find(params[:id] || params[:external_tool_id])
@@ -562,10 +562,10 @@ class ExternalToolsController < ApplicationController
           if api_request?
             format.json { render :json => external_tool_json(@tool, @context, @current_user, session) }
           else
-            format.json { render :json => @tool.to_json(:methods => [:readable_state, :custom_fields_string], :include_root => false) }
+            format.json { render :json => @tool.as_json(:methods => [:readable_state, :custom_fields_string], :include_root => false) }
           end
         else
-          format.json { render :json => @tool.errors.to_json, :status => :bad_request }
+          format.json { render :json => @tool.errors, :status => :bad_request }
         end
       end
     end

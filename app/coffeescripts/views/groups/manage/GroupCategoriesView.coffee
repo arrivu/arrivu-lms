@@ -1,13 +1,16 @@
 define [
   'i18n!groups'
+  'jquery'
   'underscore'
   'Backbone'
   'compiled/views/CollectionView'
   'compiled/views/groups/manage/GroupCategoryView'
+  'compiled/views/groups/manage/GroupCategoryCreateView'
+  'compiled/models/GroupCategory'
   'jst/groups/manage/groupCategories'
   'jst/groups/manage/groupCategoryTab'
   'jqueryui/tabs'
-], (I18n, _, {View}, CollectionView, GroupCategoryView, groupCategoriesTemplate, tabTemplate) ->
+], (I18n, $, _, {View}, CollectionView, GroupCategoryView, GroupCategoryCreateView, GroupCategory, groupCategoriesTemplate, tabTemplate) ->
 
   class GroupCategoriesView extends CollectionView
 
@@ -16,9 +19,10 @@ define [
     className: 'group_categories_area'
 
     els: _.extend {},
-      CollectionView::els,
+      CollectionView::els
       '#group_categories_tabs': '$tabs'
       '#add-group-set': '$addGroupSetButton'
+      '.empty-groupset-instructions': '$emptyInstructions'
 
     events:
       'click #add-group-set': 'addGroupSet'
@@ -26,42 +30,62 @@ define [
 
     itemView: View.extend
       tagName: 'li'
-      template: tabTemplate
-
-    setupTabs: ->
-      if !@$tabs.data("tabs")
-        @$tabs.tabs({cookie: {}}).show()
+      template: -> tabTemplate _.extend(@model.present(), id: @model.id ? @model.cid)
 
     refreshTabs: ->
+      # setup the tabs
       if @$tabs.data("tabs")
         @$tabs.tabs("refresh").show()
       else
-        @setupTabs()
+        @$tabs.tabs({cookie: {}}).show()
+
+      # hide/show the instruction text
+      if @collection.length > 0
+        @$emptyInstructions.hide()
+      else
+        @$emptyInstructions.show()
+        # hide the emtpy tab set which may have borders that would otherwise show
+        @$tabs.hide()
 
     createItemView: (model) ->
       # create and add tab panel
-      panelId = "tab-#{model.id}"
+      panelId = "tab-#{model.id ? model.cid}"
       $panel = $('<div/>').addClass('tab-panel').attr('id', panelId).data('loaded', false).data('model', model)
       @$tabs.append($panel)
       # If this is the first panel, load the contents
       if @$tabs.find('.tab-panel').length == 1
         @loadPanelView($panel, model)
       # create the <li> tab view
-      super
+      view = super
+      view.listenTo model, 'change', => # e.g. change name
+        view.render()
+        @reorder()
+        @refreshTabs()
+        @$tabs.tabs active: @collection.indexOf(model)
+      view
 
     renderItem: ->
       super
       @refreshTabs()
 
-    removeItem: (model)->
+    removeItem: (model) ->
       super
       # remove the linked panel and refresh the tabs
-      model.panelView.remove()
+      model.itemView.remove()
+      model.panelView?.remove()
       @refreshTabs()
 
-    addGroupSet: (e)->
+    addGroupSet: (e) ->
       e.preventDefault()
-      alert('will add a group set')
+      @createView ?= new GroupCategoryCreateView
+        collection: @collection
+        trigger: @$addGroupSetButton
+      cat = new GroupCategory
+      cat.once 'sync', =>
+        @collection.add(cat)
+        @$tabs.tabs active: @collection.indexOf(cat)
+      @createView.model = cat
+      @createView.open()
 
     activatedTab: (event, ui) ->
       $panel = ui.newPanel

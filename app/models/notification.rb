@@ -17,6 +17,10 @@
 #
 
 class Notification < ActiveRecord::Base
+  unless CANVAS_RAILS2
+    self.shard_category = :unsharded
+  end
+
   include Workflow
   include TextHelper
 
@@ -67,9 +71,16 @@ class Notification < ActiveRecord::Base
     by_name('Summaries')
   end
 
+  def self.notifications
+    @notifications ||= all.index_by(&:name)
+  end
+
+  def self.all
+    @all ||= super
+  end
+
   def self.by_name(name)
-    @notifications ||= Notification.all.inject({}){ |h, n| h[n.name] = n; h }
-    if notification = @notifications[name]
+    if notification = notifications[name]
       copy = notification.clone
       copy.id = notification.id
       copy.send(:remove_instance_variable, :@new_record)
@@ -78,6 +89,7 @@ class Notification < ActiveRecord::Base
   end
 
   def self.reset_cache!
+    @all = nil
     @notifications = nil
   end
 
@@ -162,7 +174,7 @@ class Notification < ActiveRecord::Base
         res << n if n.category && n.dashboard?
       end
     end
-    res.sort_by{|n| n.category == "Other" ? "zzzz" : n.category }
+    res.sort_by{|n| n.category == "Other" ? SortLast : n.category }
   end
 
   # Return a hash with information for a related user option if one exists.

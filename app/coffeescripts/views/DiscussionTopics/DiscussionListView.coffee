@@ -1,11 +1,12 @@
 define [
+  'jquery'
   'underscore'
   'compiled/views/CollectionView'
   'jst/DiscussionTopics/discussionList'
   'compiled/views/DiscussionTopics/DiscussionView'
   'jqueryui/draggable'
   'jqueryui/sortable'
-], (_, CollectionView, template, itemView) ->
+], ($, _, CollectionView, template, itemView) ->
 
   class DiscussionListView extends CollectionView
     # Public: Template function (discussionList)
@@ -94,7 +95,7 @@ define [
     #
     # Returns object.
     toJSON: ->
-      @options
+      _.extend({}, ENV, @options)
 
     # Internal: Attach events to this view's collection.
     #

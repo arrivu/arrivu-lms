@@ -41,7 +41,7 @@ describe IncomingMail::IncomingMessageProcessor do
 
   def check_new_message(bounce_type)
     Message.count.should == @previous_message_count + 1
-    @new_message = Message.order("created_at DESC").first
+    @new_message = Message.order("created_at DESC, id DESC").first
     @new_message.subject.should match(/Reply Failed/)
     @new_message.body.should match(case bounce_type
       when :unknown then /unknown mailbox/
@@ -172,6 +172,14 @@ describe IncomingMail::IncomingMessageProcessor do
       DiscussionTopic.incoming_replies.length.should == 1
       DiscussionTopic.incoming_replies[0][:text].should == 'This is plain text'
       DiscussionTopic.incoming_replies[0][:html].should == '<h1>This is HTML</h1>'
+    end
+
+    it "should not try to load messages with invalid IDs" do
+      account, message = [mock, mock]
+      account.expects(:address).returns('user@example.com')
+      message.expects(:to).returns(['user@example.com'])
+      result = IncomingMessageProcessor.find_matching_to_address(message, account)
+      result.should == [false, false]
     end
 
     describe "when data is not found" do
@@ -461,6 +469,47 @@ describe IncomingMail::IncomingMessageProcessor do
       usernames.count('bar').should eql 1
       usernames.count(nil).should eql 1
     end
+  end
 
+  describe "timeouts" do
+    class TimeoutMailbox
+      include IncomingMail::ConfigurableTimeout
+
+      def initialize(config)
+        @config = config
+      end
+    end
+
+    before do
+      IncomingMessageProcessor.stubs(:get_mailbox_class).returns(TimeoutMailbox)
+
+      [:connect, :each_message, :delete_message, :move_message, :disconnect].each do |f|
+        TimeoutMailbox.any_instance.stubs(f)
+      end
+    end
+
+    it "should abort processing on timeout, but continue with next account" do
+      IncomingMessageProcessor.configure({
+        'imap' => {
+          'accounts' => [
+            {'username' => 'first'},
+            {'username' => 'second'},
+          ]
+        }
+      })
+      processed_second = false
+
+      TimeoutMailbox.send(:define_method, :each_message) do
+        if @config[:username] == 'first'
+          raise Timeout::Error
+        else
+          processed_second = true
+        end
+      end
+
+      ErrorReport.expects(:log_exception)
+      IncomingMessageProcessor.process
+      processed_second.should be_true
+    end
   end
 end

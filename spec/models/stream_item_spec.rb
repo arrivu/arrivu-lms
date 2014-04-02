@@ -57,21 +57,6 @@ describe StreamItem do
   context "across shards" do
     specs_require_sharding
 
-    it "should create stream items on the user's shard" do
-      group_with_user
-      @user1 = @user
-      @user2 = @shard1.activate { user_model }
-      @coll = @group.collections.create!
-
-      UserFollow.create_follow(@user1, @coll)
-      UserFollow.create_follow(@user2, @coll)
-
-      @item = collection_item_model(:collection => @coll, :user => @user1)
-      @user2.reload.stream_item_instances.map { |i| i.stream_item.data }.should == [@item]
-      @user2.stream_item_instances.first.shard.should == @shard1
-      @user2.stream_item_instances.first.stream_item.shard.should == Shard.current
-    end
-
     it "should delete instances on all associated shards" do
       course_with_teacher(:active_all => 1)
       @user2 = @shard1.activate { user_model }
@@ -101,6 +86,29 @@ describe StreamItem do
       @user2.recent_stream_items(:context => @course).map(&:data).should == [@dt]
       @shard1.activate do
         @user2.recent_stream_items(:context => @course2).map(&:data).should == [@dt2]
+      end
+    end
+
+    it "should always cache stream items on the user's shard" do
+      course_with_teacher(:active_all => 1)
+      @user2 = @shard1.activate { user_model }
+      @course.enroll_student(@user2).accept!
+
+      dt = @course.discussion_topics.create!(:title => 'title')
+      enable_cache do
+        items = @user2.cached_recent_stream_items
+        items2 = @shard1.activate { @user2.cached_recent_stream_items }
+        items.should == [dt.stream_item]
+        items.should === items2 # same object, because same cache key
+
+        item = @user2.visible_stream_item_instances.last
+        item.update_attribute(:hidden, true)
+
+        # after dismissing an item, the old items should no longer be cached
+        items = @user2.cached_recent_stream_items
+        items2 = @shard1.activate { @user2.cached_recent_stream_items }
+        items.should be_empty
+        items2.should be_empty
       end
     end
   end

@@ -38,16 +38,17 @@ define([
   //'compiled/tinymce', // required, but the bundles that ACTUALLY use
                         // tiny can require it themselves or else we have
                         // build problems
+  'INST', // for IE detection; need to handle links in a special way
   'jqueryui/draggable' /* /\.draggable/ */,
   'jquery.instructure_misc_plugins' /* /\.indicate/ */,
   'vendor/jquery.scrollTo' /* /\.scrollTo/ */,
   'vendor/jquery.ba-tinypubsub',
   'vendor/scribd.view' /* scribd */
-], function(I18nObj, $, EditorAccessibility) {
+], function(I18nObj, $, EditorAccessibility, INST) {
 
-  var enableBookmarking = $("body").hasClass('ie');
+  var enableBookmarking = !!INST.browser.ie;
   $(document).ready(function() {
-    enableBookmarking = $("body").hasClass('ie');
+    enableBookmarking = !!INST.browser.ie;
   });
 
   function EditorBoxList() {
@@ -130,16 +131,16 @@ define([
     var equella_button = INST && INST.equellaEnabled ? ",instructure_equella" : "";
     instructure_buttons = instructure_buttons + equella_button;
 
-    var buttons1 = "bold,italic,underline,forecolor,backcolor,removeformat,justifyleft,justifycenter,justifyright,bullist,outdent,indent,numlist,table,instructure_links,unlink" + instructure_buttons + ",fontsizeselect,formatselect";
+    var buttons1 = "bold,italic,underline,forecolor,backcolor,removeformat,justifyleft,justifycenter,justifyright,bullist,outdent,indent,sup,sub,numlist,table,instructure_links,unlink" + instructure_buttons + ",fontsizeselect,formatselect";
     var buttons2 = "";
     var buttons3 = "";
 
     if (width < 359 && width > 0) {
       buttons1 = "bold,italic,underline,forecolor,backcolor,removeformat,justifyleft,justifycenter,justifyright";
-      buttons2 = "outdent,indent,bullist,numlist,table,instructure_links,unlink" + instructure_buttons;
+      buttons2 = "outdent,indent,sup,sub,bullist,numlist,table,instructure_links,unlink" + instructure_buttons;
       buttons3 = "fontsizeselect,formatselect";
     } else if (width < 600) {
-      buttons1 = "bold,italic,underline,forecolor,backcolor,removeformat,justifyleft,justifycenter,justifyright,outdent,indent,bullist,numlist";
+      buttons1 = "bold,italic,underline,forecolor,backcolor,removeformat,justifyleft,justifycenter,justifyright,outdent,indent,sup,sub,bullist,numlist";
       buttons2 = "table,instructure_links,unlink" + instructure_buttons + ",fontsizeselect,formatselect";
     }
 
@@ -169,6 +170,7 @@ define([
       extended_valid_elements : "iframe[src|width|height|name|align|style|class|sandbox]",
       content_css: "/stylesheets/compiled/instructure_style.css,/stylesheets/compiled/tinymce.editor_box.css",
       editor_css: editor_css,
+      auto_focus: options.focus ? id : null,
 
       onchange_callback: function(e) {
         $("#" + id).trigger('change');
@@ -180,8 +182,29 @@ define([
           $(document).triggerHandler('editor_box_focus', $editor);
           $.publish('editorBox/focus', $editor);
         };
+        
+        // Make shift+tab take the user to the previous focusable element in the DOM.
+        var focusPrevious = function (ed, event) {
+          if (event.keyCode == 9 && event.shiftKey) {
+            var $cur = $(ed.getContainer());
+            while (true) {
+              // When jQuery is upgraded to 1.8+, use .addBack(':tabbable') instead of andSelf().filter(...)
+              if ($cur.prevAll().find(':tabbable').andSelf().filter(':tabbable').last().focus().length) {
+                return false;
+              }
+              $cur = $cur.parent();
+              if (!$cur || !$cur.length || $cur.is(document)) {
+                return false;
+              }
+            }
+          } else {
+            return true;
+          }
+        };
+        
         ed.onClick.add(focus);
         ed.onKeyPress.add(focus);
+        ed.onKeyUp.add(focusPrevious);
         ed.onActivate.add(focus);
         ed.onEvent.add(function() {
           if(enableBookmarking && ed.selection) {
@@ -361,6 +384,8 @@ define([
         return $.fn._execCommand.apply(this, arr);
       } else if(options == "destroy") {
         this._removeEditor(more_options);
+      } else if(options == "is_dirty") {
+        return $instructureEditorBoxList._getEditor(id).isDirty();
       }
       return this;
     }
@@ -475,6 +500,10 @@ define([
     var id = this.attr('id');
     this._setContentCode(this._getContentCode());
     tinyMCE.execCommand('mceToggleEditor', false, id);
+    // Ensure that keyboard focus doesn't get trapped in the ether.
+    this.removeAttr('aria-hidden')
+      .filter('textarea:visible')
+      .focus();
   };
 
   $.fn._removeEditor = function() {
@@ -503,15 +532,11 @@ define([
     }
   };
 
-  $.fn._editorFocus = function(keepTrying) {
+  // you probably want to just pass focus: true in your initial options
+  $.fn._editorFocus = function() {
     var $element = this,
         id = $element.attr('id'),
         editor = $instructureEditorBoxList._getEditor(id);
-    if (keepTrying && (!editor || !editor.dom.doc.hasFocus())) {
-      setTimeout(function(){
-        $element.editorBox('focus', true);
-      }, 50);
-    }
     if(!editor ) {
       return false;
     }

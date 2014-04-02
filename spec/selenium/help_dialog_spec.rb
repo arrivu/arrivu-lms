@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/common')
 
 describe "help dialog" do
-  it_should_behave_like "in-process server selenium tests"
+  include_examples "in-process server selenium tests"
 
   context "no user logged in" do
     it "should work with no logged in user" do
@@ -18,7 +18,7 @@ describe "help dialog" do
       driver.execute_script("window.INST.browser = {ie: true, version: 8}")
       f('#footer .help_dialog_trigger').click
       wait_for_ajaximations
-      element_exists(".ui-state-error").should be_false
+      flash_message_present?(:error).should be_false
     end
   end
 

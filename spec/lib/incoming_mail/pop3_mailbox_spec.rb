@@ -21,7 +21,7 @@ require File.expand_path '../../../mocha_rspec_adapter', __FILE__
 require File.expand_path '../mailbox_spec_helper', __FILE__
 
 describe IncomingMail::Pop3Mailbox do
-  it_should_behave_like 'Mailbox'
+  include_examples 'Mailbox'
 
   def default_config
     {
@@ -34,9 +34,14 @@ describe IncomingMail::Pop3Mailbox do
   end
 
   def mock_net_pop
-    @pop_mock = mock
+    @pop_mock = Object.new
+    class <<@pop_mock
+      IncomingMail::Pop3Mailbox::UsedPopMethods.each do |method_name|
+        define_method(method_name) { |*args, &block| }
+      end
+    end
+
     Net::POP3.stubs(:new).returns(@pop_mock)
-    @pop_mock.stubs(:start)
   end
 
   describe "#initialize" do
@@ -59,7 +64,7 @@ describe IncomingMail::Pop3Mailbox do
 
   describe "#connect" do
     before do
-      @pop_mock = mock
+      mock_net_pop
     end
 
     it "should connect to the server" do
@@ -109,7 +114,7 @@ describe IncomingMail::Pop3Mailbox do
       foo = mock_pop_mail("foo body")
       bar = mock_pop_mail("bar body")
       baz = mock_pop_mail("baz body")
-      @pop_mock.expects(:each_mail).multiple_yields(foo, bar, baz)
+      @pop_mock.expects(:mails).returns([foo, bar, baz])
 
       yielded_values = []
       @mailbox.each_message do |message_id, body|
@@ -122,7 +127,7 @@ describe IncomingMail::Pop3Mailbox do
     context "with simple foo message" do
       before do
         @foo = mock_pop_mail("foo body")
-        @pop_mock.expects(:each_mail).yields(@foo)
+        @pop_mock.expects(:mails).returns([@foo])
       end
 
       it "should delete when asked" do
@@ -138,11 +143,7 @@ describe IncomingMail::Pop3Mailbox do
           @mailbox.move_message(message_id, "anything")
         end
       end
-
     end
-
   end
-
-
 
 end

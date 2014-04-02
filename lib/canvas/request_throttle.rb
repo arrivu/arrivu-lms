@@ -45,8 +45,8 @@ class RequestThrottle
 
     request = ActionController::Request.new(env)
     # workaround a rails bug where some ActionController::Request methods blow
-    # up when using certain servers until request_uri is called once to set env['REQUEST_URI']
-    request.request_uri
+    # up when using certain servers until fullpath is called once to set env['REQUEST_URI']
+    request.fullpath
 
     result = nil
     bucket = LeakyBucket.new(client_identifier(request))
@@ -84,9 +84,9 @@ class RequestThrottle
       return false
     else
       if bucket.full?
-        if Setting.get_cached("request_throttle.enabled", "true") == "true"
+        Canvas::Statsd.increment("request_throttling.throttled")
+        if Setting.get("request_throttle.enabled", "true") == "true"
           Rails.logger.info("blocking request due to throttling, client id: #{client_identifier(request)} bucket: #{bucket.to_json}")
-          Canvas::Statsd.increment("request_throttling.throttled")
           return false
         else
           Rails.logger.info("would block request due to throttling, client id: #{client_identifier(request)} bucket: #{bucket.to_json}")
@@ -99,7 +99,7 @@ class RequestThrottle
   def blacklisted?(request)
     client_id = client_identifier(request)
     (client_id && self.class.blacklist.include?(client_id)) ||
-      self.class.blacklist.include?(request.remote_ip)
+      self.class.blacklist.include?("ip:#{request.remote_ip}")
   end
 
   def whitelisted?(request)
@@ -113,10 +113,17 @@ class RequestThrottle
   # This is cached on the request, so a theoretical change to the request
   # object won't be caught.
   def client_identifier(request)
-    request.env['canvas.request_throttle.user_id'] ||=
-      (AuthenticationMethods.access_token(request, :GET) ||
-       AuthenticationMethods.user_id(request) ||
-       session_id(request)).to_s.presence
+    request.env['canvas.request_throttle.user_id'] ||= begin
+      if token_string = AuthenticationMethods.access_token(request, :GET).presence
+        identifier = AccessToken.hashed_token(token_string)
+        identifier = "token:#{identifier}"
+      elsif identifier = AuthenticationMethods.user_id(request).presence
+        identifier = "user:#{identifier}"
+      elsif identifier = session_id(request).presence
+        identifier = "session:#{identifier}"
+      end
+      identifier
+    end
   end
 
   def session_id(request)
@@ -205,7 +212,7 @@ class RequestThrottle
 
     SETTING_DEFAULTS.each do |(setting, default)|
       define_method(setting) do
-        Setting.get_cached("request_throttle.#{setting}", default).to_f
+        Setting.get("request_throttle.#{setting}", default).to_f
       end
     end
 
@@ -241,7 +248,7 @@ class RequestThrottle
       end
 
       current_time = current_time.to_f
-      Rails.logger.debug("request throttling increment: #{([amount, reserve_cost, current_time] + self.as_json).to_json}")
+      Rails.logger.debug("request throttling increment: #{([amount, reserve_cost, current_time] + self.as_json.to_a).to_json}")
       redis = self.redis
       count, last_touched = LeakyBucket.lua.run(:increment_bucket, [cache_key], [amount + reserve_cost, current_time, outflow, maximum], redis)
       self.count = count.to_f
