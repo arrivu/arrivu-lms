@@ -156,7 +156,11 @@ routes.draw do
     get 'pages/:wiki_page_id/edit' => 'wiki_pages#edit_page', :wiki_page_id => /[^\/]+/, :as => :edit_named_page
     get 'pages/:wiki_page_id/revisions' => 'wiki_pages#page_revisions', :wiki_page_id => /[^\/]+/, :as => :named_page_revisions
 
-    resources :wiki_pages, :path => :wiki do
+    type_regexp = Regexp.new([:wiki, :faq, :career,:video,:offer,:bonus_video, :labs].join("|"))
+    resources :wiki_pages, path: ':type', constraints: { type: type_regexp } do
+    match 'comments_create' => 'wiki_pages#comments_create' ,:as => :comments_create, :via => :post
+    match 'comment_destroy/:id'=> 'wiki_pages#comment_destroy', :as => :comment_destroy,:only => [:destroy]
+    #resources :wiki_pages, :path => :wiki do
       match 'revisions/latest' => 'wiki_page_revisions#latest_version_number', :as => :latest_version_number
       resources :wiki_page_revisions, :path => :revisions
     end
@@ -182,6 +186,12 @@ routes.draw do
     match 'imports/files' => 'content_imports#files', :as => :import_files
   end
 
+  concern :reward_system do
+    resources :referrals do
+      match 'my-rewards' => 'referrals#my_rewards',  :as => :my_rewards
+    end
+  end
+
   # There are a lot of resources that are all scoped to the course level
   # (assignments, files, wiki pages, user lists, forums, etc.).  Many of
   # these resources also apply to groups and individual users.  We call
@@ -200,6 +210,10 @@ routes.draw do
     match 'enrollment_invitation' => 'courses#enrollment_invitation', :as => :enrollment_invitation
     # this needs to come before the users concern, or users/:id will preempt it
     match 'users/prior' => 'context#prior_users', :as => :prior_users
+    resources :rewards
+    resources :comments ,:path => :testimonial
+    resources :live_class_links
+    resources :leaderboards ,:path => :leaderboard
     concerns :users
     match 'statistics' => 'courses#statistics', :as => :statistics
     match 'unenroll/:id' => 'courses#unenroll_user', :as => :unenroll, :via => :delete
@@ -298,7 +312,7 @@ routes.draw do
         get :homework_submissions
       end
     end
-
+    resources :rewards
     resources :submissions
     resources :calendar_events
 
@@ -307,6 +321,11 @@ routes.draw do
     concerns :wikis
     concerns :conferences
     concerns :question_banks
+    concerns :reward_system
+
+    match 'create_reference' => 'referrals#create_reference'
+    match 'create_email_referrals' => 'referrals#create_email_referrals'
+
 
     match 'quizzes/publish'   => 'quizzes/quizzes#publish',   :as => :quizzes_publish
     match 'quizzes/unpublish' => 'quizzes/quizzes#unpublish', :as => :quizzes_unpublish
@@ -372,8 +391,9 @@ routes.draw do
     resources :outcome_groups, :only => ["create", "update", "destroy"] do
       match 'reorder' => 'outcome_groups#reorder', :as => :reorder
     end
-
-    resources :context_modules, :path => :modules do
+    get 'flip_classes' => 'context_modules#flip_classes',:path => :classes, :via => :get
+    get 'classes' => 'context_modules#index',:path => :flip_classes, :via => :get
+    resources :context_modules, :path => :classes do
       match 'items' => 'context_modules#add_item', :as => :add_item, :via => :post
       match 'reorder' => 'context_modules#reorder_items', :as => :reorder, :via => :post
       match 'collapse' => 'context_modules#toggle_collapse', :as => :toggle_collapse
@@ -381,6 +401,8 @@ routes.draw do
       match 'items/last' => 'context_modules#module_redirect', :as => :last_redirect, :last => 1
       match 'items/first' => 'context_modules#module_redirect', :as => :first_redirect, :first => 1
       collection do
+        resources :user_module_group_enrollments,:path => :permissions
+        match 'permission_groups' => 'user_module_group_enrollments#permission_groups'
         post :reorder
         get :progressions
       end
@@ -407,6 +429,12 @@ routes.draw do
     match 'student_view' => 'courses#leave_student_view', :as => :student_view, :via => :delete
     match 'test_student' => 'courses#reset_test_student', :as => :test_student, :via => :delete
     match 'content_migrations' => 'content_migrations#index', :as => :content_migrations, :via => :get
+    resources :context_module_groups,:path => :module_groups do
+      match 'reorder' => 'context_module_groups#reorder_items', :as => :reorder, :via => :post
+      collection do
+        post :reorder
+      end
+    end
   end
 
   match 'quiz_statistics/:quiz_statistics_id/files/:file_id/download' => 'files#show', :as => :quiz_statistics_download, :download => '1'
@@ -518,6 +546,7 @@ routes.draw do
     match 'statistics/over_time/:attribute' => 'accounts#statistics_graph', :as => :statistics_graph
     match 'statistics/over_time/:attribute.:format' => 'accounts#statistics_graph', :as => :formatted_statistics_graph
     match 'turnitin_confirmation' => 'accounts#turnitin_confirmation', :as => :turnitin_confirmation
+    resources :rewards
     resources :permissions, :controller => :role_overrides, :only => [:index, :create] do
       collection do
         post :add_role
@@ -542,6 +571,8 @@ routes.draw do
     match 'users/:user_id/delete' => 'accounts#confirm_delete_user', :as => :confirm_delete_user
     match 'users/:user_id' => 'accounts#remove_user', :as => :delete_user, :via => :delete
     resources :users
+    match 'update_user',:to => 'users#update_user'
+    match 'activate_user' ,:to => 'users#activate_user'
     resources :account_notifications, :only => [:create, :destroy]
     concerns :announcements
     resources :assignments
@@ -585,6 +616,7 @@ routes.draw do
     concerns :files, :file_images, :relative_files, :folders
     concerns :media
     concerns :groups
+    #concerns :reward_system
 
     resources :outcomes
     match 'courses' => 'accounts#courses', :as => :courses
@@ -607,6 +639,7 @@ routes.draw do
     member do
       get :statistics
     end
+    resources :terms_and_conditions
   end
 
   match 'images/users/:user_id' => 'users#avatar_image', :as => :avatar_image, :via => :get
@@ -617,6 +650,7 @@ routes.draw do
   match 'all_menu_courses' => 'users#all_menu_courses', :as => :all_menu_courses
   match 'grades' => 'users#grades', :as => :grades
   match 'login' => 'pseudonym_sessions#new', :as => :login, :via => :get
+  match 'corp/login' => 'pseudonym_sessions#corp_login', :via => :get
   match 'login' => 'pseudonym_sessions#create', :via => :post
   match 'logout' => 'pseudonym_sessions#destroy', :as => :logout
   match 'login/cas' => 'pseudonym_sessions#new', :as => :cas_login, :via => :get
@@ -651,7 +685,11 @@ routes.draw do
       resources :rubric_assessments, :path => :assessments
     end
 
-    resources :pseudonyms, :except => ["index"]
+    resources :pseudonyms, :except => ["index"] do
+      member do
+        put :update_favourite_course
+      end
+    end
     resources :question_banks, :only => [:index]
     match 'assignments_needing_grading' => 'users#assignments_needing_grading', :as => :assignments_needing_grading
     match 'assignments_needing_submitting' => 'users#assignments_needing_submitting', :as => :assignments_needing_submitting
@@ -699,6 +737,7 @@ routes.draw do
   match 'styleguide' => 'info#styleguide', :as => :styleguide, :via => :get
   match 'old_styleguide' => 'info#old_styleguide', :as => :old_styleguide, :via => :get
   root :to => 'users#user_dashboard', :as => :root, :via => :get
+  match 'logo_root' => 'users#logo_root',  :as => :logo_root ,:via => :get
   # backwards compatibility with the old /dashboard url
   match 'dashboard' => 'users#user_dashboard', :as => :dashboard_redirect, :via => :get
 
@@ -1007,6 +1046,43 @@ routes.draw do
         post "#{context}s/:#{context}_id/external_tools", :action => :create, :path_name => "#{context}_external_tools_create"
         put "#{context}s/:#{context}_id/external_tools/:external_tool_id", :action => :update, :path_name => "#{context}_external_tools_update"
         delete "#{context}s/:#{context}_id/external_tools/:external_tool_id", :action => :destroy, :path_name => "#{context}_external_tools_delete"
+      end
+      et_routes("course")
+      et_routes("account")
+    end
+
+    scope(:controller => :rewards) do
+      def et_routes(context)
+        get "#{context}s/:#{context}_id/rewards", :action => :index, :path_name => "#{context}_rewards"
+        post "#{context}s/:#{context}_id/rewards", :action => :create, :path_name => "#{context}_rewards_create"
+        put "#{context}s/:#{context}_id/rewards/:reward_id", :action => :update, :path_name => "#{context}_rewards_update"
+        delete "#{context}s/:#{context}_id/rewards/:reward_id", :action => :destroy, :path_name => "#{context}_rewards_delete"
+      end
+      et_routes("course")
+      et_routes("account")
+    end
+
+    scope(:controller => :live_class_links) do
+      def et_routes(context)
+        get "#{context}s/:#{context}_id/live_class_links", :action => :index, :path_name => "#{context}_live_class_links"
+        post "#{context}s/:#{context}_id/live_class_links", :action => :create, :path_name => "#{context}_live_class_links_create"
+        put "#{context}s/:#{context}_id/live_class_links/:live_class_link_id", :action => :update, :path_name => "#{context}_live_class_links_update"
+        delete "#{context}s/:#{context}_id/live_class_links/:live_class_link_id", :action => :destroy, :path_name => "#{context}_live_class_links_delete"
+      end
+      et_routes("course")
+    end
+
+    scope(:controller => :leaderboards) do
+      def et_routes(context)
+        get "#{context}s/:#{context}_id/leaderboards", :action => :index, :path_name => "#{context}_leaderboard"
+      end
+      et_routes("course")
+    end
+
+    scope(:controller => :referrals) do
+      def et_routes(context)
+        get "#{context}s/:#{context}_id/referrees", :action => :get_referrees, :path_name => "#{context}_referrees"
+        post "#{context}s/:#{context}_id/referrees", :action => :update_referrees, :path_name => "#{context}_update_referrees"
       end
       et_routes("course")
       et_routes("account")
@@ -1484,7 +1560,7 @@ routes.draw do
   match 'login/oauth2/auth' => 'pseudonym_sessions#oauth2_auth', :as => :oauth2_auth, :via => :get
   match 'login/oauth2/token' => 'pseudonym_sessions#oauth2_token', :as => :oauth2_token, :via => :post
   match 'login/oauth2/confirm' => 'pseudonym_sessions#oauth2_confirm', :as => :oauth2_auth_confirm, :via => :get
-  match 'login/oauth2/accept' => 'pseudonym_sessions#oauth2_accept', :as => :oauth2_auth_accept, :via => :post
+  match 'login/oauth2/accept' => 'pseudonym_sessions#oauth2_accept', :as => :oauth2_auth_accept, :via => [:post,:get]
   match 'login/oauth2/deny' => 'pseudonym_sessions#oauth2_deny', :as => :oauth2_auth_deny, :via => :get
   match 'login/oauth2/token' => 'pseudonym_sessions#oauth2_logout', :as => :oauth2_logout, :via => :delete
 
@@ -1494,4 +1570,12 @@ routes.draw do
   end
 
   match '/assets/:package.:extension' => 'jammit#package', :as => :jammit if defined?(Jammit)
+  resources :omniauth_links
+  match '/auth/:provider/callback' => 'authentication#create'
+  get '/auth/failure' => 'authentication#auth_failure'
+  match '/discussion_topic_tags' => 'tags#discussion_topic_tags'
+  get '/list_collections' =>'videos#list_collections'
+  get '/get_collection/:collection_id' =>'videos#get_collection'
+  match '/rr/:short_url_code' => 'referrals#referree_register',:as => :rr
+  match '/update_referree'  => 'referrals#update_referree',:path_name => "reward", :as => :referree_registration, :via => :post
 end

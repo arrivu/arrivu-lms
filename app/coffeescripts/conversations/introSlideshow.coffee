@@ -11,7 +11,7 @@ define [
     introSlideshow.addSlide I18n.t('titles.slide1', 'Slide 1'), (slide) ->
       slide.addImage('/images/conversations/intro/icon.png', 'icon')
       slide.addParagraph(I18n.t('slide1.paragraph1', 'Take a look at your Inbox!'), 'large')
-      slide.addParagraph(I18n.t('slide1.paragraph2', 'Conversations—the new Canvas messaging system—has arrived!'), 'large')
+      slide.addParagraph(I18n.t('slide1.paragraph2', 'Conversations—the new Jigsaw Academy messaging system—has arrived!'), 'large')
       slide.addParagraph(I18n.t('slide1.paragraph3', 'Use Conversations to send a private message to a classmate or use Conversations to talk to an entire group of people.'), 'large_and_blue')
       slide.addParagraph(I18n.t('slide1.paragraph4', 'Ready for a short intro? Click the right arrow to get started.'), 'large')
 
@@ -47,12 +47,6 @@ define [
       slide.addImage('/images/conversations/intro/image8.png', 'screenshot')
       slide.addParagraph(I18n.t('slide8.paragraph1', 'You can select one or more messages by clicking the checkbox on the right hand side.'))
       slide.addParagraph(I18n.t('slide8.paragraph2', 'Once selected, you can forward them to someone else, or delete them.'))
-
-    introSlideshow.addSlide I18n.t('titles.slide9', 'Slide 9'), (slide) ->
-      slide.addImage('/images/conversations/intro/image9.png', 'screenshot', 'http://www.youtube.com/watch?v=NWqIaEyVWZM')
-      slide.addParagraph(I18n.t('slide9.paragraph1', 'We think you\'ll find Conversations simple and easy to use.'))
-      slide.addParagraph(I18n.t('slide9.paragraph2', 'Check out this short introduction video to see Conversations in action.'))
-      slide.addParagraph(I18n.t('slide9.paragraph3', 'Your old messages have been organized into Conversations for you. So what are you waiting for? Get started!'))
 
     introSlideshow.dom.bind 'dialogclose', ->
       $.ajaxJSON '/conversations/watched_intro', 'POST', {}

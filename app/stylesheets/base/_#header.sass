@@ -17,11 +17,11 @@
     z-index: 1
 // the #header.no-user #header-logo part here is so that it overrides the byuh logo
 #header-logo, #header.no-user #header-logo
-  +bg-image('canvas/header_canvas_logo', 'png', no-repeat, left, top, transparent, 110px, 26px)
-  width: 135px
-  height: 26px
-  left: 16px
-  bottom: 21px
+  +bg-image('canvas/jigsaw_logo', 'png', no-repeat, left, top, transparent, 110px, 26px)
+  width: 187px
+  height: 60px
+  background-size: 187px 60px
+  bottom: 5px
   position: absolute
   text-indent: -9999px
 
@@ -31,7 +31,7 @@
   bottom: 12px
 #header-logo-secondary
   display: none
-  +bg-image('canvas/header_canvas_logo', 'png', no-repeat, left, top, transparent, 110px, 26px)
+  +bg-image('canvas/jigsaw_logo', 'png', no-repeat, left, top, transparent, 110px, 26px)
   width: 135px
   height: 26px
   right: 26px
@@ -46,7 +46,8 @@
 #header
   position: relative
   z-index: 11 /* IE7 needs this o so the menu-item-drops get stuck above #main */
-  +bg-image('canvas/header_bg', 'png', repeat-x, left, bottom, transparent, 28px, 70px)
+  background-color: #F4F4F4
+  border-bottom: 1px solid
   &.no-user
     background-position: 0 -25px
     min-height: 45px
@@ -55,6 +56,7 @@
       left: 6px
     #header-logo-secondary
       display: none
+
 
 #topbar
   position: absolute
@@ -116,8 +118,8 @@
   float: left
   position: relative
   .menu-item-title, .menu-item-no-drop
-    text-shadow: 0px 0px 1px #000 /*this gives it the effect of looking thinner*/
-    color: #fff
+    //text-shadow: 0px 0px 1px #000 /*this gives it the effect of looking thinner*/
+    color: black
     font-size: 16px
     border: 1px solid transparent
     border-bottom: 0 none

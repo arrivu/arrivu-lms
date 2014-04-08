@@ -14,6 +14,8 @@ define [
   'tinymce/jscripts/tiny_mce/plugins/instructure_external_tools/editor_plugin'
   'tinymce/jscripts/tiny_mce/plugins/instructure_links/editor_plugin'
   'tinymce/jscripts/tiny_mce/plugins/instructure_record/editor_plugin'
+  'tinymce/jscripts/tiny_mce/plugins/wistia/editor_plugin'
+  'tinymce/jscripts/tiny_mce/plugins/faq/editor_plugin'
 ], (markScriptsLoaded, tinymce) ->
 
   # mark everything we just loaded as done
@@ -26,6 +28,8 @@ define [
     'plugins/instructure_external_tools/editor_plugin'
     'plugins/instructure_links/editor_plugin'
     'plugins/instructure_record/editor_plugin'
+    'plugins/wistia/editor_plugin'
+    'plugins/faq/editor_plugin'
   ]
 
   tinymce

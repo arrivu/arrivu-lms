@@ -48,3 +48,4 @@ Delayed::Worker.lifecycle.around(:perform) do |worker, job, &block|
     Rails.logger.info "[STAT] #{starting_mem} #{ending_mem} #{ending_mem - starting_mem} #{user_cpu} #{system_cpu}"
   end
 end
+

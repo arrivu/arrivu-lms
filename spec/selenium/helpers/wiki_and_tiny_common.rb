@@ -106,6 +106,8 @@ require File.expand_path(File.dirname(__FILE__) + '/../common')
     wait_for_ajaximations
     f('.ui-dialog-buttonset .btn-primary', dialog).click
     wait_for_ajaximations
+
+
   end
 
   def add_url_image(el, url, alt_text)

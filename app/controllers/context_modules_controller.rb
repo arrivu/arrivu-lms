@@ -18,10 +18,24 @@
 
 class ContextModulesController < ApplicationController
   before_filter :require_context  
-  add_crumb(proc { t('#crumbs.modules', "Modules") }) { |c| c.send :named_context_url, c.instance_variable_get("@context"), :context_context_modules_url }
-  before_filter { |c| c.active_tab = "modules" }
+  add_crumb(proc { t('#crumbs.modules', "Classes") }) { |c| c.send :named_context_url, c.instance_variable_get("@context"), :context_context_modules_url }
+  before_filter { |c| c.active_tab = "classes" }
 
   def index
+    if authorized_action(@context, @current_user, :read)
+      @modules = @context.modules_visible_to(@current_user)
+
+      @collapsed_modules = ContextModuleProgression.for_user(@current_user).for_modules(@modules).select([:context_module_id, :collapsed]).select{|p| p.collapsed? }.map(&:context_module_id)
+      if @context.grants_right?(@current_user, session, :participate_as_student)
+        return unless tab_enabled?(@context.class::TAB_MODULES)
+        ContextModule.send(:preload_associations, @modules, [:content_tags])
+        @modules.each{|m| m.evaluate_for(@current_user) }
+        session[:module_progressions_initialized] = true
+      end
+    end
+  end
+
+  def flip_classes
     if authorized_action(@context, @current_user, :read)
       @modules = @context.modules_visible_to(@current_user)
 
@@ -95,6 +109,7 @@ class ContextModulesController < ApplicationController
       @module.attributes = params[:context_module]
       respond_to do |format|
         if @module.save
+          create_module_group_and_association
           format.html { redirect_to named_context_url(@context, :context_context_modules_url) }
           format.json { render :json => @module.as_json(:include => :content_tags, :methods => :workflow_state, :permissions => {:user => @current_user, :session => session}) }
         else
@@ -104,12 +119,23 @@ class ContextModulesController < ApplicationController
       end
     end
   end
+
+  def create_module_group_and_association
+    context_module_group = ContextModuleGroup.find_or_create_by_context_id_and_context_type_and_is_default(@context.id,
+                                                                                      @context.class.name,true,name: ContextModuleGroup::DEFAULT_MODULE_GROUP_NAME )
+    context_module_association = @module.build_context_module_group_association(context_module_group_id: context_module_group.id)
+    context_module_association.position = ContextModuleGroupAssociation.infer_position(context_module_association)
+    context_module_association.save!
+
+  end
   
   def reorder
     if authorized_action(@context.context_modules.scoped.new, @current_user, :update)
       m = @context.context_modules.not_deleted.first
       
       m.update_order(params[:order].split(","))
+      #cmga=ContextModuleGroupAssociation.find_by_context_module_id(m.id)
+      #cmga.update_order(params[:order].split(","))
       # Need to invalidate the ordering cache used by context_module.rb
       @context.touch
 
@@ -243,11 +269,44 @@ class ContextModulesController < ApplicationController
   end
   
   def show
-    @module = @context.modules_visible_to(@current_user).find(params[:id])
-    respond_to do |format|
-      format.html { redirect_to named_context_url(@context, :context_context_modules_url, :anchor => "module_#{params[:id]}") }
-      format.json { render :json => @module.content_tags_visible_to(@current_user) }
-    end
+
+    #@module = @context.modules_visible_to(@current_user).find(params[:id])
+    #respond_to do |format|
+    #  format.html { redirect_to named_context_url(@context, :context_context_modules_url, :anchor => "module_#{params[:id]}") }
+    #  format.json { render :json => @module.content_tags_visible_to(@current_user) }
+    #end
+
+    if authorized_action(@context, @current_user, :read)
+      @module = @context.modules_visible_to(@current_user).find(params[:id])
+      add_crumb("#{@module.name}", course_context_module_url(@context,@module))
+      #Try to find the default module group first
+      default_module_group = @context.context_module_groups.default.first
+      default_module_association = ContextModuleGroupAssociation.find_by_context_module_group_id_and_context_module_id(default_module_group.id, @module.id)
+      if default_module_association
+        default_enrollment = UserModuleGroupEnrollment.find_by_context_module_group_id_and_user_id(default_module_group.id,@current_user.id)
+        if  default_enrollment
+          if default_enrollment.workflow_state == UserModuleGroupEnrollment::ACTIVE
+           @authorized_for_user = true
+          end
+         else
+           @authorized_for_user = true
+        end
+      else
+        enrollment = UserModuleGroupEnrollment.find_by_context_module_group_id_and_user_id(@module.context_module_group_association.try(:context_module_group_id),@current_user.id)
+        @authorized_for_user =  ( enrollment and (enrollment.workflow_state == UserModuleGroupEnrollment::ACTIVE))
+      end
+
+      @live_class_links = []
+      @sections = @context.sections_visible_to(@current_user)
+        @sections.map do |section|
+          LiveClassLink.find_all_by_context_module_id_and_course_section_id(@module.id,section.id).each do |live_class_link|
+             @live_class_links <<  live_class_link
+           end
+        end
+        LiveClassLink.find_all_by_context_module_id_and_course_section_id(@module.id,0).each do |live_class_link|
+          @live_class_links <<  live_class_link
+        end
+      end
   end
   
   def reorder_items
@@ -267,6 +326,8 @@ class ContextModulesController < ApplicationController
           affected_items << item
         end
       end
+      dragged_item = ContentTag.find(params['dragged_item_id'])
+      dragged_item.update_attributes(category: params['category'])
       ContentTag.touch_context_modules(affected_module_ids)
       ContentTag.update_could_be_locked(affected_items)
       @context.touch
@@ -324,14 +385,18 @@ class ContextModulesController < ApplicationController
 
   include ContextModulesHelper
   def add_item
-    @module = @context.context_modules.not_deleted.find(params[:context_module_id])
+    @module = ContextModule.not_deleted.find(params[:context_module_id])
     if authorized_action(@module, @current_user, :update)
       @tag = @module.add_item(params[:item])
       @tag[:publishable] = module_item_publishable?(@tag)
       @tag[:published] = module_item_published?(@tag)
       @tag[:publishable_id] = module_item_publishable_id(@tag)
       @tag[:unpublishable] = module_item_unpublishable?(@tag)
-      render :json => @tag
+      if  params['category']
+        @tag.update_attributes(category: params['category'])
+      end
+      render :json => @tag.to_json
+
     end
   end
   

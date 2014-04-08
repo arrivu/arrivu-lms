@@ -53,12 +53,14 @@
     <% if can_do(@context, @current_user, :manage_account_settings) %>
       <li><a href="#tab-tools" id="tab-tools-link"><%= t(:tab_external_tools, "Apps") %></a></li>
     <% end %>
+    <li><a href="#tab-rewards" id="tab-rewards-link"><%= t(:tab_rewards, "Rewards") %></a></li>
     <% if @context.root_account.settings[:enable_alerts] && can_do(@context, @current_user, :manage_interaction_alerts) %>
       <li><a href="#tab-alerts" id="tab-alerts-link"><%= t(:tab_alerts, "Alerts") %></a></li>
     <% end %>
     <% if can_do(@context, @current_user, :manage_feature_flags) %>
       <li><a href="#tab-features" id="tab-features-link"><%= t(:feature_options, "Feature Options") %></a></li>
     <% end %>
+    <li id="terms_tab"><a href="#tab-terms"><%= t('tabs.terms',%{Terms and Conditions}) %></a></li>
   </ul>
   <% if can_do(@context, @current_user, :manage_account_settings) %>
     <div id="tab-settings">
@@ -91,10 +93,6 @@
                 <% no_language = t(:no_language_preference, "Not set (defaults to %{language})", :language => available_locales[infer_locale(:context => @context.parent_account)]) %>
                 <%= f.select :default_locale, [[no_language, nil]] + available_locales.invert.sort, {:selected => @context.default_locale}, {:class => 'locale'} %>
                 <%= render :partial => 'shared/locale_warning' %>
-                <p class="unbreakable"><%= mt :transifex_message, <<-TEXT, :transifex_url => "https://www.transifex.com/projects/p/canvas-lms/"
-Join the [Canvas Translation Community](%{transifex_url})
-TEXT
-                %>
                 </p>
                 <p style="font-size: 0.9em;"><%= t(:default_language_description, "This will override any browser/OS language settings. Preferred languages can still be set at the course/user level.") %></p>
               </td>
@@ -239,6 +237,22 @@ TEXT
                     <%= settings.check_box :enable_alerts, :checked => @account.settings[:enable_alerts] %>
                     <%= settings.label :enable_alerts, :en => "Alerts (beta)" %>
                   </div>
+                  <div id='allow_draft'>
+                    <%= settings.check_box :allow_draft, :checked => @account.settings[:allow_draft] %>
+                    <label for="account_settings_allow_draft"><%= t('allow_draft', 'Allow Draft State (beta)') %>
+                      <a href="#" class="allow_draft_help_link no-hover" title="<%= t(:allow_draft_help_tooltip, "What is draft state?") %>"><i class="icon-question standalone-icon"></i></a>
+                    </label>
+                  </div>
+                  <div id="allow_draft_help_dialog" style="display: none;">
+                    <%= mt(:allow_draft_help_message, <<-DRAFT )
+Draft state is a *beta* feature that allows course content to be published and unpublished.
+Unpublished content won't be visible to students and won't affect grades.
+It also includes a redesign of some course areas to make them more consistent in look and functionality.
+
+Allowing Draft State here will allow teachers to enable it in their individual courses.
+                    DRAFT
+                    %>
+                  </div>
                 <% end %>
                 <div>
                   <%= settings.check_box :global_includes, :checked => @account.settings[:global_includes] %>
@@ -259,7 +273,7 @@ TEXT
                 <% if @account.account_authorization_config %>
                   <div>
                     <%= settings.check_box :canvas_authentication, :checked => @account.canvas_authentication? %>
-                    <%= settings.label :canvas_authentication, :en => "Canvas Authentication" %>
+                    <%= settings.label :canvas_authentication, :en => "Jigsaw LMS Authentication" %>
                   </div>
                 <% end %>
               <% end %>
@@ -292,7 +306,7 @@ TEXT
                     <div id="open_registration_delegated_warning_dialog" style="display: none;">
                         <%= t(:open_registration_delegated_warning_message,
                         "An external identity provider is enabled, and users created via open registration may not be able to log in unless
-                        the external identity provider's login form has a link back to %{url}.", :url => login_url(:canvas_login => 1)) %>
+                        the external identity provider's login form has a link back to %{url}.", :url => login_url(:lms_login => 1)) %>
                     </div>
                   <% end %>
                 </div>
@@ -302,21 +316,21 @@ TEXT
                 <%= settings.label :users_can_edit_name, :en => "Users can edit display name" %>
               </div>
 
-              <div>
-                <%= settings.check_box :edit_institution_email, :checked => @account.edit_institution_email? %>
-                <%= settings.label     :edit_institution_email, :en => "Users can delete their institution-assigned email address" %>
-              </div>
+              <!--<div>-->
+                <!--<%#= settings.check_box :edit_institution_email, :checked => @account.edit_institution_email? %>-->
+                <!--<%#= settings.label     :edit_institution_email, :en => "Users can delete their institution-assigned email address" %>-->
+              <!--</div>-->
             <% end %>
-            <% unless @account.site_admin? %>
-              <div>
-                <input type="checkbox" id="enable_equella" <%= 'checked' if !@account.settings[:equella_endpoint].blank? %> />
-                <label for="enable_equella"><%= t 'labels.equella', 'Equella' %></label>
-              </div>
-              <div>
-                <input type="checkbox" name="turnitin" id="turnitin" <%= 'checked' unless @account.turnitin_account_id.blank? %> />
-                <label for="turnitin"><%= t 'labels.turnitin', 'Turnitin' %></label>
-              </div>
-             <% end %>
+            <%# unless @account.site_admin? %>
+              <!--<div>-->
+                <!--<input type="checkbox" id="enable_equella" <%#= 'checked' if !@account.settings[:equella_endpoint].blank? %> />-->
+                <!--<label for="enable_equella"><%#= t 'labels.equella', 'Equella' %></label>-->
+              <!--</div>-->
+              <!--<div>-->
+                <!--<input type="checkbox" name="turnitin" id="turnitin" <%#= 'checked' unless @account.turnitin_account_id.blank? %> />-->
+                <!--<label for="turnitin"><%#= t 'labels.turnitin', 'Turnitin' %></label>-->
+              <!--</div>-->
+             <%# end %>
           <% end %>
           <%= f.fields_for :services do |services| %>
             <% Account.services_exposed_to_ui_hash(:setting, @current_user, @account).sort_by { |k,h| Canvas::ICU.collation_key(h[:name]) }.each do |key, service| %>
@@ -464,9 +478,12 @@ TEXT
             <%= f.fields_for :services do |services| %>
               <% exposed_services.sort_by { |k,h| Canvas::ICU.collation_key(h[:name]) }.each do |key, service| %>
                 <div>
+                  <% unless (key == :delicious) || (key == :diigo)%>
                   <%= services.check_box key, :checked => @account.service_enabled?(key) %>
                   <%= services.label key, service[:name] + " " %>
+                  <% end  %>
                 </div>
+
               <% end %>
             <% end %>
             <div style="display:none;">
@@ -477,7 +494,7 @@ TEXT
                   "In order to make it easier for users, rather than forcing them to download " +
                   "things like Word docs, PDFs, Excel spreadsheets, and open office documents " +
                   "(In addition to requiring that those programs be installed on their on their " +
-                  "computer), in many areas throughout Canvas, it will allow you an inline " +
+                  "computer), in many areas throughout Jigsaw LMS, it will allow you an inline " +
                   "preview of the document.\n\n" +
 
                   "If Scribd has been enabled for this account, it will try to use it to show the preview. " +
@@ -511,7 +528,15 @@ TEXT
             <% end %>
           </fieldset>
         <% end %>
-
+        <fieldset>
+          <legend><%= t(:videolink, "Video Link") %></legend>
+          <% f.fields_for :settings do |settings| %>
+            <div>
+              <td><%= settings.blabel :videolink, :en => "Video URL" %></td>
+              <td><%= settings.text_field :videolink, :rows => "8",:class => "VideoURL",:value => @account.settings[:account_video_url]%></td>
+            </div>
+          <% end %>
+        </fieldset>
         <div class="button-container">
           <button type="submit" class="btn btn-primary"><%= t(:update_settings_button, "Update Settings") %></button>
         </div>
@@ -529,13 +554,13 @@ TEXT
 
         <% if @account.root_account? && !@account.site_admin? %>
           <h2><%= t(:email_notification_from_settings, 'E-mail Notification "From" Settings') %></h2>
-          <p><%= t(:email_notification_from_description, "This setting allows the Admin to brand or label the 'From' text on all notifications sent from Canvas for this Account.") %></p>
-          <%= f.fields_for :settings do |settings| %>
+          <p><%= t(:email_notification_from_description, "This setting allows the Admin to brand or label the 'From' text on all notifications sent from Arrivu LMS for this Account.") %></p>
+          <% f.fields_for :settings do |settings| %>
             <div>
               <%= settings.radio_button :outgoing_email_default_name_option, 'default',
                                         :checked => @account.settings[:outgoing_email_default_name].blank?,
                                         :class => 'notification_from_name_option' %>
-              <%= settings.label :outgoing_email_default_name_option_default, :en => "Default Canvas Setting" %>
+              <%= settings.label :outgoing_email_default_name_option_default, :en => "Default Jigsaw LMS Setting" %>
             </div>
             <div style='padding-left: 2em;'>
               <strong><%= t 'notifications.example', 'Example:' %></strong>
@@ -543,7 +568,7 @@ TEXT
                 <table class="formtable" style='margin-left: 1.5em;'>
                 <tr>
                   <td><%= t 'notifications.from', 'From' %></td>
-                  <td><%= HostUrl.outgoing_email_default_name %> <%= '<notifications@instructure.com>' %></td>
+                  <td><%= HostUrl.outgoing_email_default_name %> <%= '<notifications@jigsawacademy.com>' %></td>
                 </tr>
                 <tr>
                   <td><%= t 'notifications.subject', 'Subject' %></td>
@@ -555,11 +580,11 @@ TEXT
                 </tr>
                 <tr>
                   <td><%= t 'notifications.email_to', 'To' %></td>
-                  <td><%= 'recipient@instructure.com' %></td>
+                  <td><%= 'recipient@jigsawacademy.com' %></td>
                 </tr>
                 <tr>
                   <td><%= t 'notifications.email_reply_to', 'Reply-To' %></td>
-                  <td><%= 'notifications+e79df3ljk09s3jkl09ssljk3lkj2l-10191633@instructure.com' %></td>
+                  <td><%= 'notifications+e79df3ljk09s3jkl09ssljk3lkj2l-10191633@jigsawacademy.com' %></td>
                 </tr>
               </table>
               </blockquote>
@@ -572,7 +597,7 @@ TEXT
             </div>
             <div style='padding-left: 2em;'>
               <p>
-                <%= t('notifications.custom_name_description', 'If selected, this will replace all other branding sent in Canvas notifications.') %>
+                <%= t('notifications.custom_name_description', 'If selected, this will replace all other branding sent in Jigsaw LMS notifications.') %>
                 <br/>
                 <%= text_field_tag 'account[settings][outgoing_email_default_name]', @account.settings[:outgoing_email_default_name] %>
               </p>
@@ -583,7 +608,7 @@ TEXT
               <table class="formtable" style='margin-left: 1.5em;'>
                 <tr>
                   <td><%= t 'notifications.from', 'From' %></td>
-                  <td><strong id='custom_default_name_display'></strong> <%= '<notifications@instructure.com>' %></td>
+                  <td><strong id='custom_default_name_display'></strong> <%= '<notifications@jigsawacademy.com>' %></td>
                 </tr>
                 <tr>
                   <td><%= t 'notifications.subject', 'Subject' %></td>
@@ -595,11 +620,11 @@ TEXT
                 </tr>
                 <tr>
                   <td><%= t 'notifications.email_to', 'To' %></td>
-                  <td><%= 'recipient@instructure.com' %></td>
+                  <td><%= 'recipient@jigsawacademy.com' %></td>
                 </tr>
                 <tr>
                   <td><%= t 'notifications.email_reply_to', 'Reply-To' %></td>
-                  <td><%= 'notifications+e79df3ljk09s3jkl09ssljk3lkj2l-10191633@instructure.com' %></td>
+                  <td><%= 'notifications+e79df3ljk09s3jkl09ssljk3lkj2l-10191633@jigsawacademy.com' %></td>
                 </tr>
               </table>
               </blockquote>
@@ -620,7 +645,7 @@ TEXT
               <tr>
                 <td>
                   <b><%= t('notifications.external_services_warning_label', 'Pop-up Message Content:') %></b>
-                  <blockquote><%= t('notifications.external_services_warning', 'Notice: Some notifications may contain confidential information. Selecting to receive notifications at an email other than your institution provided address may result in sending sensitive Canvas course and group information outside of the institutional system.')%></blockquote>
+                  <blockquote><%= t('notifications.external_services_warning', 'Notice: Some notifications may contain confidential information. Selecting to receive notifications at an email other than your institution provided address may result in sending sensitive Jigsaw LMS course and group information outside of the institutional system.')%></blockquote>
                 </td>
               </tr>
             </table>
@@ -634,7 +659,14 @@ TEXT
       <% end %>
     </div>
   <% end %>
+  <div id="tab-rewards">
 
+    <%= render :partial => 'rewards/rewards', :object => @context.context_external_tools.active %>
+
+    <% form_for :course_section, :url => "", :html => {:id => "edit_section_form", :method => :put, :style => "display: none;"} do |f| %>
+        <%= f.text_field :name %>
+    <% end %>
+  </div>
   <div id="tab-users">
     <h2><%= t(:account_admins_title, "Account Admins") %></h2>
     <ul class="admins_list user_list list admins">
@@ -758,7 +790,7 @@ TEXT
             </tr>
             <% if @account.site_admin? %>
               <tr id="confirm_global_announcement_field">
-                <td colspan=2><input type="checkbox" id="confirm_global_announcement" name="confirm_global_announcement"> <%= label_tag :confirm_global_announcement, t(:confirm_global_announcement, "This announcement will be shown to *all* Canvas users. Confirm that you want to create it.", :wrapper => '<b>\1</b>') %></td>
+                <td colspan=2><input type="checkbox" id="confirm_global_announcement" name="confirm_global_announcement"> <%= label_tag :confirm_global_announcement, t(:confirm_global_announcement, "This announcement will be shown to *all* Jigsaw LMS users. Confirm that you want to create it.", :wrapper => '<b>\1</b>') %></td>
               </tr>
               <tr>
                 <td colspan=2>
@@ -843,6 +875,7 @@ TEXT
           <th class="reports"></th>
         </tr>
         <% @available_reports.each do |report, details|
+          if report != "last_user_course_access_csv"
            title = details[:title] || details
            description = details[:description]
            description_partial = details[:description_partial]
@@ -854,7 +887,9 @@ TEXT
            in_progress = last_report && last_report.in_progress?
            #the extra text is added so that you can give more than the date for the last run report
            extra_text = last_complete.try(:parameters).try(:[], "extra_text")
+          end
         %>
+         <% if report != "last_user_course_access_csv" %>
           <tr id="<%= report %>" class="reports">
             <td class="title reports">
               <span class="title"><%= title %></span>
@@ -907,6 +942,7 @@ TEXT
             </td>
           </tr>
         <% end %>
+        <% end %>
       </table>
     </div>
   <% end %>
@@ -924,4 +960,7 @@ TEXT
   <% if can_do(@context, @current_user, :manage_feature_flags) %>
     <div id="tab-features"></div>
   <% end %>
+  <div id="tab-terms">
+    <%= render :partial =>'accounts/terms_and_conditions' %>
+  </div>
 </div>

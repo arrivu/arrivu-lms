@@ -87,7 +87,7 @@ class Wiki < ActiveRecord::Base
 
     # return an implicitly created page if a page could not be found
     unless page
-      page = self.wiki_pages.scoped.new(:title => url.titleize, :url => url)
+      page = self.wiki_pages.new(:title => url.titleize, :url => url, :wiki_type => WikiPage::WIKI_TYPE_PAGES)
       page.wiki = self
     end
     page
@@ -173,6 +173,7 @@ class Wiki < ActiveRecord::Base
     end
   end
 
+
   def build_wiki_page(user, opts={})
     if (opts.include?(:url) || opts.include?(:title)) && (!opts.include?(:url) || !opts.include?(:title))
       opts[:title] = opts[:url].to_s.titleize if opts.include?(:url)
@@ -183,5 +184,17 @@ class Wiki < ActiveRecord::Base
     page.wiki = self
     page.initialize_wiki_page(user)
     page
+  end
+
+  def make_sure_wiki_has_front_page
+    if  self.has_no_front_page
+      url = DEFAULT_FRONT_PAGE_URL
+      self.has_no_front_page = !self.wiki_pages.not_deleted.where(:url => url).exists?
+      self.front_page_url = url unless self.has_no_front_page
+      self.save
+      page = front_page
+      page.set_as_front_page!
+      self.has_no_front_page = false
+    end
   end
 end

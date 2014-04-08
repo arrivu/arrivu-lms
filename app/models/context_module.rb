@@ -17,12 +17,16 @@
 #
 
 class ContextModule < ActiveRecord::Base
+  cattr_accessor :context_module_group_id
   include Workflow
   include SearchTermHelper
   attr_accessible :context, :name, :unlock_at, :require_sequential_progress, :completion_requirements, :prerequisites, :publish_final_grade
   belongs_to :context, :polymorphic => true
   has_many :context_module_progressions, :dependent => :destroy
   has_many :content_tags, :dependent => :destroy, :order => 'content_tags.position, content_tags.title'
+  has_many :user_module_group_enrollments , :dependent => :destroy
+  has_many :live_class_links
+  has_one :context_module_group_association
   acts_as_list scope: { context: self, workflow_state: ['active', 'unpublished'] }
   
   serialize :prerequisites
@@ -147,7 +151,7 @@ class ContextModule < ActiveRecord::Base
   end
   
   def available_for?(user, opts={})
-    return true if self.active? && !self.to_be_unlocked && self.prerequisites.blank? && !self.require_sequential_progress
+    return true if self.active? && !self.to_be_unlocked && self.prerequisites.blank? && !self.require_sequential_progress && check_for_user_module_group_enrollment(user)
     if self.grants_right?(user, nil, :update)
      return true
     elsif !self.active?
@@ -250,8 +254,18 @@ class ContextModule < ActiveRecord::Base
   def add_item(params, added_item=nil, opts={})
     params[:type] = params[:type].underscore if params[:type]
     position = opts[:position] || (self.content_tags.not_deleted.maximum(:position) || 0) + 1
-    if params[:type] == "wiki_page" || params[:type] == "page"
-      item = opts[:wiki_page] || self.context.wiki.wiki_pages.find_by_id(params[:id])
+      if params[:type] == "wiki_page" || params[:type] == "page"
+        item = opts[:wiki_page] || self.context.wiki.wiki_pages.find_by_id(params[:id])
+    elsif params[:type] == "faq"
+      item = opts[:faq] || self.context.wiki.wiki_pages.faqs.find_by_id(params[:id])
+    elsif params[:type] == "career"
+      item = opts[:career] || self.context.wiki.wiki_pages.careers.find_by_id(params[:id])
+    elsif params[:type] == "video"
+      item = opts[:videos] || self.context.wiki.wiki_pages.videos.find_by_id(params[:id])
+    elsif params[:type] == "offer"
+      item = opts[:offers] || self.context.wiki.wiki_pages.offers.find_by_id(params[:id])
+    elsif params[:type] == "labs"
+      item = opts[:labs] || self.context.wiki.wiki_pages.labs.find_by_id(params[:id])
     elsif params[:type] == "attachment" || params[:type] == "file"
       item = opts[:attachment] || self.context.attachments.active.find_by_id(params[:id])
     elsif params[:type] == "assignment"
@@ -260,6 +274,7 @@ class ContextModule < ActiveRecord::Base
       item = opts[:discussion_topic] || self.context.discussion_topics.active.find_by_id(params[:id])
     elsif params[:type] == "quiz"
       item = opts[:quiz] || self.context.quizzes.active.find_by_id(params[:id])
+
     end
     workflow_state = ContentTag.asset_workflow_state(item) if item
     workflow_state ||= 'active'
@@ -367,8 +382,17 @@ class ContextModule < ActiveRecord::Base
       t('requirements.must_view', "must view the page")
     when 'must_contribute'
       t('requirements.must_contribute', "must contribute to the page")
-    when 'must_submit'
-      t('requirements.must_submit', "must submit the assignment")
+      when 'must_submit'
+      content_tag = ContentTag.find(req[:id])
+      if content_tag.try(:content_type) == "Quiz"
+        if content_tag.content.survey?
+          t('requirements.must_submit_survey', "must submit the survey")
+        else
+          t('requirements.must_submit', "must submit the assignment")
+        end
+      else
+        t('requirements.must_submit', "must submit the assignment")
+      end
     when 'min_score'
       t('requirements.min_score', "must score at least a %{score}", :score => req[:min_score])
     when 'max_score'
@@ -602,7 +626,39 @@ class ContextModule < ActiveRecord::Base
     Shackles.activate(:master) do
       progression.save if progression.workflow_state_changed? || requirements_met_changed
     end
+    check_for_user_enrollment(user,progression)
+  end
+
+  def check_for_user_enrollment(user,progression)
+   enrollment = UserModuleGroupEnrollment.find_by_context_module_group_id_and_user_id(self.context_module_group_association.try(:context_module_group_id),user.id)
+   if enrollment and (enrollment.workflow_state == UserModuleGroupEnrollment::ACTIVE)
+     progression
+    elsif !enrollment
+      default_context_module_group = self.context.context_module_groups.default.first
+      association = ContextModuleGroupAssociation.find_by_context_module_id_and_context_module_group_id(self.id,default_context_module_group.try(:id))
+       if association
+         progression
+       end
+    else
+      lock_progression(progression)
+   end
+  end
+
+  def lock_progression(progression)
+    progression.workflow_state = "locked"
+    progression.save!
     progression
+  end
+
+  def check_for_user_module_group_enrollment(user)
+    enrollment = UserModuleGroupEnrollment.find_by_context_module_group_id_and_user_id(self.context_module_group_association.try(:context_module_group_id),user.id)
+    if enrollment and (enrollment.workflow_state == UserModuleGroupEnrollment::ACTIVE)
+      true
+    elsif !enrollment
+      default_context_module_group = self.context.context_module_groups.default.active.first
+      ContextModuleGroupAssociation.find_by_context_module_id_and_context_module_group_id(self.id,default_context_module_group.try(:id))
+    end
+
   end
 
   def to_be_unlocked

@@ -45,6 +45,7 @@ class Message < ActiveRecord::Base
   belongs_to :context, :polymorphic => true
   belongs_to :notification
   belongs_to :user
+  belongs_to :referral
   has_many   :attachments, :as => :context
 
   attr_accessible :to, :from, :subject, :body, :delay_for, :context, :path_type,
@@ -424,7 +425,7 @@ class Message < ActiveRecord::Base
       populate_body(message_body_template, path_type, binding)
 
       # Set the subject and url
-      self.subject = @message_content_subject || t('#message.default_subject', 'Canvas Alert')
+      self.subject = @message_content_subject || t('#message.default_subject', 'Jigsaw LMS Alert')
       self.url     = @message_content_link || nil
     else
       # Message doesn't exist so we flag the message as an error
@@ -681,5 +682,9 @@ class Message < ActiveRecord::Base
   # Returns nothing.
   def deliver_via_sms
     deliver_via_email
+  end
+
+  def share_user_referral
+
   end
 end

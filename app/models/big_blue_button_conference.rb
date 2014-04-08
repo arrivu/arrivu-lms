@@ -45,7 +45,7 @@ class BigBlueButtonConference < WebConference
       :voiceBridge => "%020d" % self.global_id,
       :attendeePW => settings[:user_key],
       :moderatorPW => settings[:admin_key],
-      :logoutURL => (settings[:default_return_url] || "http://www.instructure.com"),
+      :logoutURL => (settings[:default_return_url] || "http://jigsawacademy.com/"),
       :record => settings[:record] ? "true" : "false",
       :welcome => settings[:record] ? t(:conference_is_recorded, "This conference is being recorded.") : ""
     }) or return nil
@@ -62,11 +62,11 @@ class BigBlueButtonConference < WebConference
     end
   end
 
-  def admin_join_url(user, return_to = "http://www.instructure.com")
+  def admin_join_url(user, return_to = "http://jigsawacademy.com/")
     join_url(user, :admin)
   end
 
-  def participant_join_url(user, return_to = "http://www.instructure.com")
+  def participant_join_url(user, return_to = "http://jigsawacademy.com/")
     join_url(user)
   end
 

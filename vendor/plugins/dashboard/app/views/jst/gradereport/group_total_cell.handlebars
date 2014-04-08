@@ -1,0 +1,35 @@
+<div class="gradebook-cell">
+  <div class="gradebook-tooltip {{#if lastColumn}}gradebook-tooltip-last{{/if}}">
+    {{#if warning}}
+      {{warning}}
+    {{else}}
+      {{#unless showPointsNotPercent}}
+        {{score}} / {{possible}}
+      {{else}}
+        {{#if possible}}
+          {{percentage}}%
+        {{else}}
+          -
+        {{/if}}
+      {{/unless}}
+    {{/if}}
+  </div>
+  <span class="percentage">
+    {{#if warning}}
+      <i class="icon-warning final-warning"></i>
+    {{/if}}
+
+    {{#if showPointsNotPercent}}
+      {{score}}
+    {{else}}
+      {{#if possible}}
+        {{percentage}}%
+      {{else}}
+        -
+      {{/if}}
+    {{/if}}
+  </span>
+   {{#if letterGrade}}
+    <span class='letter-grade-points'>{{letterGrade}}</span>
+  {{/if}}
+</div>

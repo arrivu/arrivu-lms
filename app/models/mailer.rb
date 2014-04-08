@@ -115,4 +115,24 @@ class Mailer < ActionMailer::Base
       format.html{ render text: m.html_body } if m.html_body
     end
   end
-end
+
+  def user_activation_mail(user)
+    @user= user
+    recipients  user.pseudonyms.first.email
+    from "#{HostUrl.outgoing_email_default_name} "+ "<" + HostUrl.outgoing_email_address + ">"
+    subject "Account Activation"
+    sent_on       Time.now
+  end
+
+  def send_referral_email(m)
+    recipients m.to
+    bcc m.bcc if m.bcc
+    cc m.cc if m.cc
+    from ("#{m.from_name || HostUrl.outgoing_email_default_name} <" + HostUrl.outgoing_email_address + ">")
+    reply_to ReplyToAddress.new(m).address
+    subject m.subject
+    @inner_html = m.html_body
+    @url = m.body
+    content_type 'multipart/alternative'
+  end
+ end

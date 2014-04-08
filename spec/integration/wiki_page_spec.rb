@@ -25,17 +25,18 @@ describe WikiPagesController do
 
   it "should not render wiki page body at all if it was deleted" do
     @wiki_page = @course.wiki.wiki_pages.create :title => "Some random wiki page",
-                                                :body => "this is the content of the wikipage body asdfasdf"
+                                                :body => "this is the content of the wikipage body asdfasdf",
+                                                :wiki_type => "wiki"
     @wiki_page.destroy
-    get course_wiki_page_url(@course, @wiki_page)
-    response.body.should_not include(@wiki_page.body)
+    get course_wiki_page_url(@course, @wiki_page.wiki_type,@wiki_page.url)
+    response.body.should_not have_text @wiki_page.body
   end
 
   it "should link correctly in the breadcrumbs for group wikis" do
     course_with_teacher_logged_in(:active_all => true, :user => user_with_pseudonym)
     group_category = @course.group_categories.build(:name => "mygroup")
     @group = Group.create!(:name => "group1", :group_category => group_category, :context => @course)
-    @wiki_page = @group.wiki.wiki_pages.create :title => 'hello', :body => 'This is a wiki page.'
+    @wiki_page = @group.wiki.wiki_pages.create :title => 'hello', :body => 'This is a wiki page.', :wiki_type => 'wiki'
 
     def test_page(url)
       get url
@@ -56,19 +57,21 @@ describe WikiPagesController do
   it "should permit the student to view the page history if they have permissions" do
     @wiki_page = @course.wiki.wiki_pages.create :title => "Some random wiki page",
                                                 :body => "this is the content of the wikipage body asdfasdf",
-                                                :editing_roles => "teachers,students"
+                                                :editing_roles => "teachers,students",
+                                                #:hide_from_students => false,
+                                                :wiki_type => 'wiki'
     student = user()
     enrollment = @course.enroll_student(student)
     enrollment.accept!
     @course.reload
     user_session(student)
-    get course_wiki_page_url(@course, @wiki_page)
+    get course_wiki_page_url(@course, @wiki_page.wiki_type,@wiki_page.url)
     html = Nokogiri::HTML(response.body)
     html.css("#page_history").should_not be_empty
 
     @wiki_page.editing_roles = "teachers"
     @wiki_page.save
-    get course_wiki_page_url(@course, @wiki_page)
+    get course_wiki_page_url(@course, @wiki_page.wiki_type,@wiki_page.url)
     html = Nokogiri::HTML(response.body)
     html.css("#page_history").should be_empty
   end
@@ -76,9 +79,9 @@ describe WikiPagesController do
   it "should cache the user_content call on the wiki_page body and clear on wiki_page update" do
     enable_cache do
       course_with_teacher_logged_in(:active_all => true)
-      @wiki_page = @course.wiki.wiki_pages.create :title => 'hello', :body => 'This is a wiki page.'
+      @wiki_page = @course.wiki.wiki_pages.create :title => 'hello', :body => 'This is a wiki page.' ,:wiki_type => 'wiki'
 
-      get course_wiki_page_url(@course, @wiki_page)
+      get course_wiki_page_url(@course,@wiki_page.wiki_type, @wiki_page.url)
 
       data = Rails.cache.read("views/#{["wiki_page_body_render", @wiki_page].cache_key}/en")
       data.should_not be_nil
@@ -87,7 +90,7 @@ describe WikiPagesController do
       @wiki_page.body = new_body
       @wiki_page.save!
 
-      get course_wiki_page_url(@course, @wiki_page)
+      get course_wiki_page_url(@course,@wiki_page.wiki_type, @wiki_page.url)
       response.body.should include(new_body)
     end
   end
@@ -95,8 +98,8 @@ describe WikiPagesController do
   context "draft state forwarding" do
     before do
       @front = @course.wiki.front_page
-      @wiki_page = @course.wiki.wiki_pages.create :title => "a-page", :body => "body"
-      @base_url = "/courses/#{@course.id}/"
+      @wiki_page = @course.wiki.wiki_pages.create :title => "a-page", :body => "body",:wiki_type => 'wiki'
+      @base_url = "/courses/#{@course.id}/wiki/"
       @course.reload
     end
 
@@ -106,7 +109,7 @@ describe WikiPagesController do
       end
 
       it "should forward /wiki to /pages index if no front page" do
-        @course.wiki.has_no_front_page = true
+        @course.wiki.has_no_front_page = false
         @course.wiki.save!
         get @base_url + "wiki"
         response.should redirect_to(course_pages_url(@course))

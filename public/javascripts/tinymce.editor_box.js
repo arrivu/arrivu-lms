@@ -125,6 +125,20 @@ define([
         instructure_buttons = instructure_buttons + ",instructure_external_button_clump";
       }
     }
+    if (!ENV.Wistia_Plugin_disable)
+    {
+    INST.allowWistia = true
+    if(INST && INST.allowWistia) {
+        instructure_buttons = instructure_buttons + ",wistia";
+    }
+    }
+    if (ENV.FAQ_button_disable)
+    {
+    INST.allowfaq = true
+    if(INST && INST.allowfaq) {
+        instructure_buttons = instructure_buttons + ",faq";
+    }
+    }
     if(INST && INST.allowMediaComments) {
       instructure_buttons = instructure_buttons + ",instructure_record";
     }
@@ -152,7 +166,7 @@ define([
       theme : "advanced",
       plugins: "autolink,instructure_external_tools,instructure_contextmenu,instructure_links," +
                "instructure_embed,instructure_image,instructure_equation,instructure_record,instructure_equella," +
-               "media,paste,table,inlinepopups",
+               "media,paste,table,wistia,faq,inlinepopups",
       dialog_type: 'modal',
       language_load: false,
       relative_urls: false,

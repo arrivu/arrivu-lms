@@ -808,6 +808,7 @@ class CoursesController < ApplicationController
   #   }
   def settings
     get_context
+    last_user_access_course_report
     if authorized_action(@context, @current_user, :read_as_admin)
       if api_request?
         render :json => course_settings_json(@context)
@@ -1273,6 +1274,8 @@ class CoursesController < ApplicationController
         @events.concat @context.assignments.active.to_a
         @undated_events = @events.select {|e| e.start_at == nil}
         @dates = (@events.select {|e| e.start_at != nil}).map {|e| e.start_at.to_date}.uniq.sort.sort
+        when 'announcements_discussion'
+          redirect_to course_discussion_topics_url(@context,:course_home_view => true)
       else
         @active_tab = "home"
         if @context.grants_right?(@current_user, session, :manage_groups)
@@ -1850,4 +1853,16 @@ class CoursesController < ApplicationController
     changes
   end
 
-end
+  def  last_user_access_course_report
+    @available_reports = AccountReport.available_reports(@domain_root_account) if @context.grants_right?(@current_user, @session, :read_reports)
+    if @available_reports
+      @last_complete_reports = {}
+      @last_reports = {}
+      @available_reports.keys.each do |report|
+          @last_complete_reports[report] = @domain_root_account.account_reports.last_complete_of_type(report).first
+          @last_reports[report] = @domain_root_account.account_reports.last_of_type(report).first
+      end
+    end
+  end
+ end
+

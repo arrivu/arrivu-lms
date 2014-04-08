@@ -45,14 +45,14 @@ class RoleOverride < ActiveRecord::Base
   end
 
   ENROLLMENT_TYPES =
-    [
-      # StudentViewEnrollment permissions will mirror StudentPermissions
-      {:base_role_name => 'StudentEnrollment', :name => 'StudentEnrollment', :label => lambda { t('roles.student', 'Student') }, :plural_label => lambda { t('roles.students', 'Students') } },
-      {:base_role_name => 'TeacherEnrollment', :name => 'TeacherEnrollment', :label => lambda { t('roles.teacher', 'Teacher') }, :plural_label => lambda { t('roles.teachers', 'Teachers') } },
-      {:base_role_name => 'TaEnrollment', :name => 'TaEnrollment', :label => lambda { t('roles.ta', 'TA') }, :plural_label => lambda { t('roles.tas', 'TAs') } },
-      {:base_role_name => 'DesignerEnrollment', :name => 'DesignerEnrollment', :label => lambda { t('roles.designer', 'Designer') }, :plural_label => lambda { t('roles.designers', 'Designers') } },
-      {:base_role_name => 'ObserverEnrollment', :name => 'ObserverEnrollment', :label => lambda { t('roles.observer', 'Observer') }, :plural_label => lambda { t('roles.observers', 'Observers') } }
-    ].freeze
+      [
+          # StudentViewEnrollment permissions will mirror StudentPermissions
+          {:base_role_name => 'StudentEnrollment', :name => 'StudentEnrollment', :label => lambda { t('roles.student', 'Student') }, :plural_label => lambda { t('roles.students', 'Students') } },
+          {:base_role_name => 'TeacherEnrollment', :name => 'TeacherEnrollment', :label => lambda { t('roles.teacher', 'Teacher') }, :plural_label => lambda { t('roles.teachers', 'Teachers') } },
+          {:base_role_name => 'TaEnrollment', :name => 'TaEnrollment', :label => lambda { t('roles.ta', 'TA') }, :plural_label => lambda { t('roles.tas', 'TAs') } },
+          {:base_role_name => 'DesignerEnrollment', :name => 'DesignerEnrollment', :label => lambda { t('roles.designer', 'Designer') }, :plural_label => lambda { t('roles.designers', 'Designers') } },
+          {:base_role_name => 'ObserverEnrollment', :name => 'ObserverEnrollment', :label => lambda { t('roles.observer', 'Observer') }, :plural_label => lambda { t('roles.observers', 'Observers') } }
+      ].freeze
 
   def self.enrollment_types
     ENROLLMENT_TYPES
@@ -67,18 +67,18 @@ class RoleOverride < ActiveRecord::Base
   NO_PERMISSIONS_TYPE = 'NoPermissions'
 
   KNOWN_ROLE_TYPES =
-    [
-      'TeacherEnrollment',
-      'TaEnrollment',
-      'DesignerEnrollment',
-      'StudentEnrollment',
-      'StudentViewEnrollment',
-      'ObserverEnrollment',
-      'TeacherlessStudentEnrollment',
-      'AccountAdmin',
-      'AccountMembership',
-      NO_PERMISSIONS_TYPE
-    ].freeze
+      [
+          'TeacherEnrollment',
+          'TaEnrollment',
+          'DesignerEnrollment',
+          'StudentEnrollment',
+          'StudentViewEnrollment',
+          'ObserverEnrollment',
+          'TeacherlessStudentEnrollment',
+          'AccountAdmin',
+          'AccountMembership',
+          NO_PERMISSIONS_TYPE
+      ].freeze
   def self.known_role_types
     KNOWN_ROLE_TYPES
   end
@@ -754,7 +754,7 @@ class RoleOverride < ActiveRecord::Base
     permissions.reject!{ |k, p| !p[:available_to].include?(base_role_type)} unless base_role_type.nil?
     permissions.reject!{ |k, p| p[:account_allows] && !p[:account_allows].call(context)}
     permissions.reject!{ |k, p| p[:enabled_for_plugin] &&
-      !((plugin = Canvas::Plugin.find(p[:enabled_for_plugin])) && plugin.enabled?)}
+        !((plugin = Canvas::Plugin.find(p[:enabled_for_plugin])) && plugin.enabled?)}
     permissions
   end
 
@@ -833,14 +833,14 @@ class RoleOverride < ActiveRecord::Base
     account_allows = !!(default_data[:account_allows].nil? || (default_data[:account_allows].respond_to?(:call) &&
         default_data[:account_allows].call(role_context.root_account)))
     generated_permission = {
-      :account_allows => account_allows,
-      :permission =>  default_data,
-      :enabled    =>  account_allows && (default_data[:true_for].include?(base_role) ? [:self, :descendants] : false),
-      :locked     => !default_data[:available_to].include?(base_role),
-      :readonly   => !default_data[:available_to].include?(base_role),
-      :explicit   => false,
-      :base_role_type => base_role,
-      :enrollment_type => custom_role
+        :account_allows => account_allows,
+        :permission =>  default_data,
+        :enabled    =>  account_allows && (default_data[:true_for].include?(base_role) ? [:self, :descendants] : false),
+        :locked     => !default_data[:available_to].include?(base_role),
+        :readonly   => !default_data[:available_to].include?(base_role),
+        :explicit   => false,
+        :base_role_type => base_role,
+        :enrollment_type => custom_role
     }
     if default_data[:account_only]
       if role_context.is_a? Account
@@ -915,8 +915,8 @@ class RoleOverride < ActiveRecord::Base
     role_override = context.role_overrides.find_by_permission_and_enrollment_type(permission, role)
     if !settings[:override].nil? || settings[:locked]
       role_override ||= context.role_overrides.build(
-        :permission => permission,
-        :enrollment_type => role)
+          :permission => permission,
+          :enrollment_type => role)
       role_override.enabled = settings[:override] unless settings[:override].nil?
       role_override.locked = settings[:locked] unless settings[:locked].nil?
       role_override.save!

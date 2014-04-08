@@ -1,4 +1,6 @@
 gem 'omniauth'
+gem 'omniauth-windowslive'
+gem 'omniauth-yahoo'
 gem 'omniauth-facebook'
 gem 'omniauth-linkedin'
 gem 'omniauth-google-oauth2'

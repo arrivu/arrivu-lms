@@ -25,6 +25,8 @@ class Course < ActiveRecord::Base
   include TextHelper
   include HtmlTextHelper
 
+  acts_as_tagger
+  acts_as_commentable
   attr_accessible :name,
                   :section,
                   :account,
@@ -64,7 +66,10 @@ class Course < ActiveRecord::Base
                   :hide_final_grades,
                   :hide_distribution_graphs,
                   :lock_all_announcements,
-                  :public_syllabus
+                  :public_syllabus,
+  #               arrivu changes for course section privilege for students
+                  :section_privilege_to_students
+  #               end of arrivu changes for course section privilege for students
 
   serialize :tab_configuration
   serialize :settings, Hash
@@ -74,7 +79,7 @@ class Course < ActiveRecord::Base
   belongs_to :grading_standard
   belongs_to :template_course, :class_name => 'Course'
   has_many :templated_courses, :class_name => 'Course', :foreign_key => 'template_course_id'
-
+  has_many :live_class_links
   has_many :course_sections
   has_many :active_course_sections, :class_name => 'CourseSection', :conditions => {:workflow_state => 'active'}
   has_many :enrollments, :include => [:user, :course], :conditions => ['enrollments.workflow_state != ?', 'deleted'], :dependent => :destroy
@@ -158,6 +163,7 @@ class Course < ActiveRecord::Base
   has_many :web_conferences, :as => :context, :order => 'created_at DESC', :dependent => :destroy
   has_many :collaborations, :as => :context, :order => 'title, created_at', :dependent => :destroy
   has_many :context_modules, :as => :context, :order => :position, :dependent => :destroy
+  has_many :context_module_groups, :as => :context, :order => :position, :dependent => :destroy
   has_many :active_context_modules, :as => :context, :class_name => 'ContextModule', :conditions => {:workflow_state => 'active'}
   has_many :context_module_tags, :class_name => 'ContentTag', :as => 'context', :order => :position, :conditions => ['tag_type = ?', 'context_module'], :dependent => :destroy
   has_many :media_objects, :as => :context
@@ -174,7 +180,7 @@ class Course < ActiveRecord::Base
   attr_accessor :import_source
   has_many :zip_file_imports, :as => :context
   has_many :content_participation_counts, :as => :context, :dependent => :destroy
-
+  has_many :comment
   include Profile::Association
 
   before_save :assign_uuid
@@ -867,7 +873,7 @@ class Course < ActiveRecord::Base
     return 'unpublished' if workflow_state == 'created' || workflow_state == 'claimed'
     workflow_state
   end
-  
+
   alias_method :destroy!, :destroy
   def destroy
     self.workflow_state = 'deleted'
@@ -2437,13 +2443,25 @@ class Course < ActiveRecord::Base
     granted_permissions = self.grants_rights?(user, nil, *permissions).select {|key, value| value}.keys
     if granted_permissions.empty?
       :restricted # e.g. observer, can only see admins in the course
-    elsif visibilities.present? && visibility_limited_to_course_sections?(user, visibilities)
+    # arrivu changes for course section privilege for students
+    elsif (visibilities.present? && visibility_limited_to_course_sections?(user, visibilities)) && (user_has_been_student?(user) && self.settings[:section_privilege_to_students] ==true )
       :sections
+    elsif user_has_been_student?(user)
+      if !(visibilities.present? && visibility_limited_to_course_sections?(user, visibilities)) && (self.settings[:section_privilege_to_students] ==true || self.settings[:section_privilege_to_students].nil?)
+        :sections
+      elsif (visibilities.present? && visibility_limited_to_course_sections?(user, visibilities)) && (self.settings[:section_privilege_to_students] == false)
+        :sections
+      elsif (visibilities.present? && visibility_limited_to_course_sections?(user, visibilities))
+        :sections
+      else
+        :limited
+      end
     elsif granted_permissions.eql? [:read_roster]
       :limited
     else
       :full
     end
+    #end of arrivu changes for course section privilege for students
   end
 
   def invited_count_visible_to(user)
@@ -2480,24 +2498,43 @@ class Course < ActiveRecord::Base
   TAB_ANNOUNCEMENTS = 14
   TAB_OUTCOMES = 15
   TAB_COLLABORATIONS = 16
+  TAB_FAQS = 17
+  TAB_CAREERS = 18
+  TAB_REFERRALS=19
+  TAB_VIDEOS=20
+  TAB_OFFERS=21
+  TAB_BONUSVIDEOS=22
+  TAB_LIVECLASSLINKS=23
+  TAB_COMMENTS=24
+  TAB_LABS=25
 
   def self.default_tabs
     [
       { :id => TAB_HOME, :label => t('#tabs.home', "Home"), :css_class => 'home', :href => :course_path },
       { :id => TAB_ANNOUNCEMENTS, :label => t('#tabs.announcements', "Announcements"), :css_class => 'announcements', :href => :course_announcements_path },
       { :id => TAB_ASSIGNMENTS, :label => t('#tabs.assignments', "Assignments"), :css_class => 'assignments', :href => :course_assignments_path },
-      { :id => TAB_DISCUSSIONS, :label => t('#tabs.discussions', "Discussions"), :css_class => 'discussions', :href => :course_discussion_topics_path },
+      { :id => TAB_DISCUSSIONS, :label => t('#tabs.forum', "Forum"), :css_class => 'discussions', :href => :course_discussion_topics_path },
       { :id => TAB_GRADES, :label => t('#tabs.grades', "Grades"), :css_class => 'grades', :href => :course_grades_path },
-      { :id => TAB_PEOPLE, :label => t('#tabs.people', "People"), :css_class => 'people', :href => :course_users_path },
-      { :id => TAB_PAGES, :label => t('#tabs.pages', "Pages"), :css_class => 'pages', :href => :course_wiki_pages_path },
+      { :id => TAB_PEOPLE, :label => t('#tabs.people', "Batch Mates"), :css_class => 'people', :href => :course_users_path },
+      { :id => TAB_PAGES, :label => t('#tabs.pages', "Pages"), :css_class => 'pages', :href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_PAGES },
       { :id => TAB_FILES, :label => t('#tabs.files', "Files"), :css_class => 'files', :href => :course_files_path },
-      { :id => TAB_SYLLABUS, :label => t('#tabs.syllabus', "Syllabus"), :css_class => 'syllabus', :href => :syllabus_course_assignments_path },
+      { :id => TAB_SYLLABUS, :label => t('#tabs.syllabus', "Schedule"), :css_class => 'syllabus', :href => :syllabus_course_assignments_path },
       { :id => TAB_OUTCOMES, :label => t('#tabs.outcomes', "Outcomes"), :css_class => 'outcomes', :href => :course_outcomes_path },
       { :id => TAB_QUIZZES, :label => t('#tabs.quizzes', "Quizzes"), :css_class => 'quizzes', :href => :course_quizzes_path },
-      { :id => TAB_MODULES, :label => t('#tabs.modules', "Modules"), :css_class => 'modules', :href => :course_context_modules_path },
+      { :id => TAB_MODULES, :label => t('#tabs.classes', "Classes"), :css_class => 'classes', :href => :course_context_modules_path },
       { :id => TAB_CONFERENCES, :label => t('#tabs.conferences', "Conferences"), :css_class => 'conferences', :href => :course_conferences_path },
       { :id => TAB_COLLABORATIONS, :label => t('#tabs.collaborations', "Collaborations"), :css_class => 'collaborations', :href => :course_collaborations_path },
-      { :id => TAB_SETTINGS, :label => t('#tabs.settings', "Settings"), :css_class => 'settings', :href => :course_settings_path },
+      { :id => TAB_FAQS, :label =>t('#tabs.faq', "FAQ"), :css_class => 'faq',:href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_FAQS  },
+      { :id => TAB_CAREERS, :label =>t('#tabs.careers', "Careers"), :css_class => 'career', :href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_CAREERS },
+      { :id => TAB_REFERRALS, :label => t('#tabs.referrals', "Refer a friend"), :css_class => 'referrals', :href => :course_referrals_path},
+      { :id => TAB_VIDEOS, :label => t('#tabs.videos', "Videos"), :css_class => 'videos',:href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_VIDEOS },
+      { :id => TAB_OFFERS, :label => t('#tabs.offers', "Offers"), :css_class => 'offer',:href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_OFFERS },
+      { :id => TAB_BONUSVIDEOS, :label => t('#tabs.bonusvideos', "Bonus Videos"), :css_class => 'bonus_videos', :href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_BONUS_VIDEOS },
+      { :id => TAB_LABS, :label => t('#tabs.labs', "Labs"), :css_class => 'labs', :href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_LABS },
+      {:id => TAB_COMMENTS, :label => t('#tabs.testimonial', "Testimonial"), :css_class => 'comments', :href => :course_comments_path},
+      {:id => TAB_LIVECLASSLINKS, :label => t('#tabs.live_class_links', "Live Class Links"), :css_class => 'live_class_links', :href => :course_live_class_links_path},
+      { :id => TAB_SETTINGS, :label => t('#tabs.settings', "Settings"), :css_class => 'settings', :href => :course_settings_path }
+
     ]
   end
 
@@ -2549,6 +2586,10 @@ class Course < ActiveRecord::Base
           tab[:args] = default_tab[:args]
           tab[:visibility] = default_tab[:visibility]
           tab[:external] = default_tab[:external]
+          #for add wiki type
+          if default_tab[:type]
+            tab[:type] = default_tab[:type]
+          end
           default_tabs.delete_if {|t| t[:id] == tab[:id] }
           external_tabs.delete_if {|t| t[:id] == tab[:id] }
           tab
@@ -2573,6 +2614,13 @@ class Course < ActiveRecord::Base
         tab[:hidden_unused] = true if tab[:id] == TAB_CONFERENCES && !active_record_types[:conferences] && !self.grants_right?(user, nil, :create_conferences)
         tab[:hidden_unused] = true if tab[:id] == TAB_ANNOUNCEMENTS && !active_record_types[:announcements]
         tab[:hidden_unused] = true if tab[:id] == TAB_OUTCOMES && !active_record_types[:outcomes]
+        tab[:hidden_unused] = true if tab[:id] == TAB_FAQS && !active_record_types[:faq]
+        tab[:hidden_unused] = true if tab[:id] == TAB_CAREERS && !active_record_types[:career]
+        tab[:hidden_unused] = true if tab[:id] == TAB_VIDEOS && !active_record_types[:videos]
+        tab[:hidden_unused] = true if tab[:id] == TAB_OFFERS && !active_record_types[:offers]
+        tab[:hidden_unused] = true if tab[:id] == TAB_BONUSVIDEOS && !active_record_types[:bonus_videos]
+        tab[:hidden_unused] = true if tab[:id] == TAB_COMMENTS && !active_record_types[:comments]
+        tab[:hidden_unused] = true if tab[:id] == TAB_LABS && !active_record_types[:lab]
       end
 
       # remove tabs that the user doesn't have access to
@@ -2585,6 +2633,7 @@ class Course < ActiveRecord::Base
           tabs.delete_if { |t| t[:id] == TAB_CONFERENCES }
           tabs.delete_if { |t| t[:id] == TAB_COLLABORATIONS }
           tabs.delete_if { |t| t[:id] == TAB_MODULES }
+          tabs.delete_if { |t| t[:id] == TAB_LIVECLASSLINKS }
         end
         unless self.grants_rights?(user, opts[:session], :participate_as_student, :manage_content).values.any?
           tabs.delete_if{ |t| t[:visibility] == 'members' }
@@ -2612,6 +2661,8 @@ class Course < ActiveRecord::Base
         tabs.delete_if { |t| t[:id] == TAB_DISCUSSIONS } unless self.grants_rights?(user, opts[:session], :read_forum, :moderate_forum, :post_to_forum).values.any?
         tabs.detect { |t| t[:id] == TAB_DISCUSSIONS }[:manageable] = true if self.grants_right?(user, opts[:session], :moderate_forum)
         tabs.delete_if { |t| t[:id] == TAB_SETTINGS } unless self.grants_right?(user, opts[:session], :read_as_admin)
+        tabs.detect { |t| t[:id] == TAB_LIVECLASSLINKS }[:manageable] = true if self.grants_right?(user, opts[:session], :manage_content)
+        tabs.delete_if { |t| t[:id] == TAB_LIVECLASSLINKS } unless self.grants_right?(user, opts[:session], :read_as_admin)
 
         if !user || !self.grants_right?(user, nil, :manage_content)
           # remove some tabs for logged-out users or non-students
@@ -2724,7 +2775,9 @@ class Course < ActiveRecord::Base
   add_setting :lock_all_announcements, :boolean => true, :default => false
   add_setting :large_roster, :boolean => true, :default => lambda { |c| c.root_account.large_course_rosters? }
   add_setting :public_syllabus, :boolean => true, :default => false
-
+  # arrivu changes for section wise privilege for students
+  add_setting :section_privilege_to_students, :boolean => true
+  # end of arrivu changes for section wise privilege for students
   def user_can_manage_own_discussion_posts?(user)
     return true if allow_student_discussion_editing?
     return true if user_is_instructor?(user)

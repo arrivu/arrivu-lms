@@ -5,13 +5,16 @@ require [
   'compiled/collections/DiscussionTopicsCollection'
   'compiled/views/DiscussionTopics/DiscussionListView'
   'compiled/views/DiscussionTopics/IndexView'
-], (I18n, _, {Router}, DiscussionTopicsCollection, DiscussionListView, IndexView) ->
+  'compiled/views/DiscussionTopics/DiscussionTagListView'
+  'jquery'
+], (I18n, _, {Router}, DiscussionTopicsCollection, DiscussionListView, IndexView,DiscussionTagListView) ->
 
   class DiscussionIndexRouter extends Router
 
     # Public: I18n strings.
     messages:
       lists:
+        discussion_tag: "Discussion forum tags"
         open:   I18n.t('discussions',         'Discussions')
         locked: I18n.t('closed_for_comments', 'Closed for Comments')
         pinned: I18n.t('pinned_discussions',  'Pinned Discussions')
@@ -24,6 +27,7 @@ require [
       '': 'index'
 
     initialize: ->
+      $("#announcements_dialog").dialog({modal: true,width:1000,height:485});
       @discussions =
         open: @_createListView 'open',
           comparator: 'dateComparator'
@@ -39,15 +43,20 @@ require [
           destination: '.open.discussion-list, .locked.discussion-list'
           sortable: true
           pinned: true
+        discussion_tag: @_createTagListView 'discussion_tag'
 
     # Public: The index page action.
     index: ->
       @view = new IndexView
-        openDiscussionView:   @discussions.open
-        lockedDiscussionView: @discussions.locked
-        pinnedDiscussionView: @discussions.pinned
-        permissions:          ENV.permissions
-        atom_feed_url:        ENV.atom_feed_url
+        discussionTagView: @discussions.discussion_tag
+        openDiscussionView:     @discussions.open
+        lockedDiscussionView:   @discussions.locked
+        pinnedDiscussionView:   @discussions.pinned
+        permissions:            ENV.permissions
+        atom_feed_url:          ENV.atom_feed_url
+        home_page_announcement: ENV.home_page_announcement
+        course_url:             ENV.change_home_link_url
+        token:                  ENV.AUTHENTICITY_TOKEN
       @_attachCollections()
       @fetchDiscussions()
       @view.render()
@@ -86,12 +95,29 @@ require [
         titleHelp: (if _.include(['open', 'locked'], type) then @messages.help.title else null)
         toggleMessage: @messages.toggleMessage
 
+    _createTagListView: (type, options = {}) ->
+      new DiscussionTagListView
+        tagLists: eval(ENV.discussionTagLists)
+        className: type
+        destination: options.destination
+        draggable: !!options.draggable
+        itemViewOptions: _.extend(options, pinnable: ENV.permissions.moderate)
+        listID: "#{type}-discussions"
+        locked: !!options.locked
+        taggable: true
+        title: @messages.lists[type]
+        titleHelp: (if _.include(['open', 'locked'], type) then @messages.help.title else null)
+        toggleMessage: @messages.toggleMessage
+
+#      new DiscussionTagListView
+#        collection: eval(ENV.discussionTagLists)
+
     # Internal: Attach events to the discussion topic collections.
     #
     # Returns nothing.
     _attachCollections: ->
       for key, view of @discussions
-        view.collection.on('change:locked change:pinned', @moveModel)
+        view.collection.on('change:locked change:pinned', @moveModel) unless view == @discussions.discussion_tag
 
     # Internal: Handle a page of discussion topic results, fetching the next
     # page if it exists.
@@ -109,7 +135,8 @@ require [
     #
     # Returns nothing.
     _onPipelineEnd: =>
-      view.collection.trigger('fetched:last') for key, view of @discussions
+      for key, view of @discussions
+        view.collection.trigger('fetched:last') unless view == @discussions.discussion_tag
       unless @discussions.pinned.collection.length or ENV.permissions.moderate
         @discussions.pinned.$el.remove()
 
@@ -157,9 +184,21 @@ require [
     #
     # Returns nothing.
     moveModel: (model) =>
-      view.collection.remove(model) for key, view of @discussions
+      for key, view of @discussions
+        view.collection.remove(model) unless view == @discussions.discussion_tag
       @discussions[@_modelBucket(model)].collection.add(model)
 
   # Start up the page
   router = new DiscussionIndexRouter
   Backbone.history.start()
+
+  $(document).ready ->
+    $(".edit_course_home_content_link").click (event) ->
+      event.preventDefault()
+      $("#edit_course_home_content").show()
+      $("#course_home_content").hide()
+
+    $("#edit_course_home_content .cancel_button").click ->
+      $("#edit_course_home_content").hide()
+      $("#course_home_content").show()
+

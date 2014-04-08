@@ -52,3 +52,6 @@ Gemfile.lock
 /.rvmrc
 /vendor/bundle
 /spec/plugins/
+/.idea/workspace.xml
+/vendor/plugins/dashboard/public/javascripts/compiled/
+/vendor/plugins/dashboard/public/javascripts/jst/

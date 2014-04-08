@@ -213,12 +213,13 @@
 #     }
 #
 class DiscussionTopicsController < ApplicationController
-  before_filter :require_context, :except => :public_feed
+  before_filter :require_context, :except => [:public_feed]
 
   include Api::V1::DiscussionTopics
   include Api::V1::Assignment
   include Api::V1::AssignmentOverride
   include KalturaHelper
+  include TagsHelper
 
   # @API List discussion topics
   #
@@ -240,12 +241,11 @@ class DiscussionTopicsController < ApplicationController
   #   The partial title of the discussion topics to match and return.
   #
   # @example_request
-  #     curl https://<canvas>/api/v1/courses/<course_id>/discussion_topics \ 
+  #     curl https://<canvas>/api/v1/courses/<course_id>/discussion_topics \
   #          -H 'Authorization: Bearer <token>'
   def index
     return unless authorized_action(@context.discussion_topics.scoped.new, @current_user, :read)
     return child_topic if is_child_topic?
-
     log_asset_access("topics:#{@context.asset_string}", 'topics', 'other')
 
     scope = if params[:only_announcements]
@@ -274,16 +274,31 @@ class DiscussionTopicsController < ApplicationController
     end
 
     @topics = Api.paginate(scope, self, topic_pagination_url)
-
     if states.present?
       @topics.reject! { |t| t.locked? || t.closed_for_comment_for?(@current_user) } if states.include?('unlocked')
       @topics.select! { |t| t.locked? || t.closed_for_comment_for?(@current_user) } if states.include?('locked')
     end
     @topics.each { |topic| topic.current_user = @current_user }
+    @tag_topic_ids={}
+    context_tag_ids = @context.owned_tag_ids.uniq
+    context_tag_ids.each do |tag_id|
+      taggings = ActsAsTaggableOn::Tagging.where(tag_id: tag_id,tagger_type: @context.class.name,tagger_id: @context.id)
+      topic_ids = []
+      taggings.each do |tagging|
+       topic_ids << tagging.taggable_id
+       @tag_topic_id = {tag_id.to_i => topic_ids}
+      end
+      @tag_topic_ids.merge!(@tag_topic_id)
+    end
+
 
     respond_to do |format|
       format.html do
-        @active_tab = 'discussions'
+        if params[:course_home_view]
+          @active_tab = 'home'
+        else
+         @active_tab = 'discussions'
+        end
         add_crumb(t('#crumbs.discussions', 'Discussions'),
                   named_context_url(@context, :context_discussion_topics_url))
 
@@ -299,7 +314,11 @@ class DiscussionTopicsController < ApplicationController
                     moderate: user_can_moderate,
                     change_settings: user_can_edit_course_settings?,
                     publish: user_can_moderate && @context.feature_enabled?(:draft_state)
-                }}
+                },
+                discussionTagLists: @context.owned_tags.map(&:attributes).to_json,
+                TagWithDiscussionIds: @tag_topic_ids,
+                home_page_announcement:  session["course_#{@context.id}_user_#{@current_user.id}_for_course_home"] != "visited",
+                change_home_link_url: context_url(@context, :context_url)}
         append_sis_data(hash)
 
         js_env(hash)
@@ -362,10 +381,11 @@ class DiscussionTopicsController < ApplicationController
                  SECTION_LIST: sections.map { |section| { id: section.id, name: section.name } },
                  GROUP_CATEGORIES: categories.
                      reject { |category| category.student_organized? }.
-                     map { |category| { id: category.id, name: category.name } },
-                 CONTEXT_ID: @context.id,
-                 CONTEXT_ACTION_SOURCE: :discussion_topic,
-                 DRAFT_STATE: @topic.draft_state_enabled?}
+                     map { |category| { :id => category.id, :name => category.name } },
+                 :CONTEXT_ID => @context.id,
+                 :CONTEXT_ACTION_SOURCE => :discussion_topic,
+                 DRAFT_STATE: @topic.draft_state_enabled?,
+                 :TOPIC_TAGS => @topic.tags.map(&:attributes).to_json(:except => ["account_id","created_at","updated_at"])}
       append_sis_data(js_hash)
       js_env(js_hash)
       render :action => "edit"
@@ -382,6 +402,7 @@ class DiscussionTopicsController < ApplicationController
       nil
     end
     @context.assert_assignment_group rescue nil
+    add_class_view_crumbs
     add_discussion_or_announcement_crumb
     add_crumb(@topic.title, named_context_url(@context, :context_discussion_topic_url, @topic.id))
     if @topic.deleted?
@@ -526,17 +547,17 @@ class DiscussionTopicsController < ApplicationController
   #   when they are listed.
   #
   # @example_request
-  #     curl https://<canvas>/api/v1/courses/<course_id>/discussion_topics \ 
-  #         -F title='my topic' \ 
-  #         -F message='initial message' \ 
-  #         -F podcast_enabled=1 \ 
+  #     curl https://<canvas>/api/v1/courses/<course_id>/discussion_topics \
+  #         -F title='my topic' \
+  #         -F message='initial message' \
+  #         -F podcast_enabled=1 \
   #         -H 'Authorization: Bearer <token>'
   #
   # @example_request
-  #     curl https://<canvas>/api/v1/courses/<course_id>/discussion_topics \ 
-  #         -F title='my assignment topic' \ 
-  #         -F message='initial message' \ 
-  #         -F assignment[points_possible]=15 \ 
+  #     curl https://<canvas>/api/v1/courses/<course_id>/discussion_topics \
+  #         -F title='my assignment topic' \
+  #         -F message='initial message' \
+  #         -F assignment[points_possible]=15 \
   #         -H 'Authorization: Bearer <token>'
   #
   def create
@@ -548,9 +569,9 @@ class DiscussionTopicsController < ApplicationController
   # Accepts the same parameters as create
   #
   # @example_request
-  #     curl https://<canvas>/api/v1/courses/<course_id>/discussion_topics/<topic_id> \ 
-  #         -F title='This will be positioned after Topic #1234' \ 
-  #         -F position_after=1234 \ 
+  #     curl https://<canvas>/api/v1/courses/<course_id>/discussion_topics/<topic_id> \
+  #         -F title='This will be positioned after Topic #1234' \
+  #         -F position_after=1234 \
   #         -H 'Authorization: Bearer <token>'
   #
   def update
@@ -563,7 +584,7 @@ class DiscussionTopicsController < ApplicationController
   # an assignment discussion.
   #
   # @example_request
-  #     curl -X DELETE https://<canvas>/api/v1/courses/<course_id>/discussion_topics/<topic_id> \ 
+  #     curl -X DELETE https://<canvas>/api/v1/courses/<course_id>/discussion_topics/<topic_id> \
   #          -H 'Authorization: Bearer <token>'
   def destroy
     @topic = @context.all_discussion_topics.find(params[:id] || params[:topic_id])
@@ -605,10 +626,10 @@ class DiscussionTopicsController < ApplicationController
   protected
 
   def add_discussion_or_announcement_crumb
-    if  @topic.is_a? Announcement
+    if  @topic.is_a? Announcement and !@skip_crumb
       @active_tab = "announcements"
       add_crumb t('#crumbs.announcements', "Announcements"), named_context_url(@context, :context_announcements_url)
-    else
+    elsif !@skip_crumb
       @active_tab = "discussions"
       add_crumb t('#crumbs.discussions', "Discussions"), named_context_url(@context, :context_discussion_topics_url)
     end
@@ -654,6 +675,7 @@ class DiscussionTopicsController < ApplicationController
       DiscussionTopic.transaction do
         @topic.update_attributes(discussion_topic_hash)
         @topic.root_topic.try(:save)
+        tag_list(params[:tag_tokens], @topic, @context)  unless params[:tag_tokens].nil?
       end
       if !@topic.errors.any? && !@topic.root_topic.try(:errors).try(:any?)
         log_asset_access(@topic, 'topics', 'topics', 'participate')

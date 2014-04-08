@@ -56,6 +56,7 @@ module Context
     WebConference = ::WebConference
     Wiki = ::Wiki
     WikiPage = ::WikiPage
+    ContextModuleGroup = ::ContextModuleGroup
 
     def self.get_for_string(str)
       self.const_defined?(str, false) ? self.const_get(str, false) : nil
@@ -148,12 +149,21 @@ module Context
       res = {}
       res[:files] = self.respond_to?(:attachments) && !self.attachments.active.empty?
       res[:modules] = self.respond_to?(:context_modules) && !self.context_modules.active.empty?
+      res[:module_groups] = self.respond_to?(:context_module_groups) && !self.context_module_groups.active.empty?
+      res[:permissions] = self.respond_to?(:user_module_group_enrollments) && !self.user_module_enrollments.active.empty?
       res[:quizzes] = self.respond_to?(:quizzes) && !self.quizzes.active.empty?
       res[:assignments] = self.respond_to?(:assignments) && !self.assignments.active.empty?
-      res[:pages] = self.respond_to?(:wiki) && self.wiki_id && !self.wiki.wiki_pages.active.empty?
+      res[:pages] = self.respond_to?(:wiki) && self.wiki_id && !self.wiki.wiki_pages.pages.active.empty?
       res[:conferences] = self.respond_to?(:web_conferences) && !self.web_conferences.active.empty?
       res[:announcements] = self.respond_to?(:announcements) && !self.announcements.active.empty?
       res[:outcomes] = self.respond_to?(:has_outcomes?) && self.has_outcomes?
+      res[:faq] = self.respond_to?(:wiki) && self.wiki_id && !self.wiki.wiki_pages.faqs.active.empty?
+      res[:career] = self.respond_to?(:wiki) && self.wiki_id && !self.wiki.wiki_pages.careers.active.empty?
+      res[:videos] = self.respond_to?(:wiki) && self.wiki_id && !self.wiki.wiki_pages.videos.active.empty?
+      res[:offers] = self.respond_to?(:wiki) && self.wiki_id && !self.wiki.wiki_pages.offers.active.empty?
+      res[:bonus_videos] = self.respond_to?(:wiki) && self.wiki_id && !self.wiki.wiki_pages.bonusvideos.active.empty?
+      res[:comments] = self.respond_to?(:comments) && !self.comments.empty?
+      res[:lab] = self.respond_to?(:wiki) && self.wiki_id && !self.wiki.wiki_pages.labs.active.empty?
       res
     end
   end

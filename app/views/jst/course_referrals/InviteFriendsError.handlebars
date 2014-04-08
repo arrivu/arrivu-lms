@@ -1,0 +1,14 @@
+{{#if errored_users.length}}
+    <div class="alert alert-error content-box">
+        <p>
+            {{#t "will_not_be_added"}}These users had errors and will not be added. Please ensure they are formatted correctly.{{/t}}<br>
+            <small>Examples: student@example.com,firstlast@example.com</small>
+        </p>
+        <ul class="createUsersErroredUsers">
+            {{#each errored_users}}
+                <li> {{this}}</li>
+            {{/each}}
+        </ul>
+    </div>
+
+{{/if}}

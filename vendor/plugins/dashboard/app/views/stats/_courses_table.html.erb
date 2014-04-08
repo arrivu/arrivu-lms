@@ -1,0 +1,25 @@
+<table cellpadding="5">
+    <thead>
+        <tr>
+          <th>ID</th>
+          <th>SIS ID</th>
+          <th>Name</th>
+          <th>Code</th>
+          <th>Status</th>
+          <th>Account ID</th>
+        </tr>
+    </thead>
+    <tbody>
+    <%@courses_for_term.each do |details| %>
+        <tr>
+        <td style="text-align: center;"> <%=details.id %> </td>
+        <td style="text-align: center;"> <%=details.sis_source_id %> </td>
+        <td> <%=details.name %> </td>
+        <td> <%=details.course_code %> </td>
+        <td style="text-align: center;"> <%=details.workflow_state %></td>
+        <td style="text-align: center;"> <%=details.account_id %> </td>
+        </tr>
+        <%end %>
+
+    </tbody>
+</table>

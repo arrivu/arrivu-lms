@@ -24,7 +24,7 @@ class Quizzes::QuizzesController < ApplicationController
   include Filters::Quizzes
 
   before_filter :require_context
-  add_crumb(proc { t('#crumbs.quizzes', "Quizzes") }) { |c| c.send :named_context_url, c.instance_variable_get("@context"), :context_quizzes_url }
+  add_crumb(proc { t('#crumbs.quizzes', "Quizzes") },:except => :show) { |c| c.send :named_context_url, c.instance_variable_get("@context"), :context_quizzes_url }
   before_filter { |c| c.active_tab = "quizzes" }
   before_filter :require_quiz, :only => [:statistics, :edit, :show, :history, :update, :destroy, :moderate, :read_only, :managed_quiz_data, :submission_versions]
   before_filter :set_download_submission_dialog_title , only: [:show,:statistics]
@@ -109,6 +109,7 @@ class Quizzes::QuizzesController < ApplicationController
       return if value_to_boolean(params[:force_user]) && !force_user
 
       @quiz = @quiz.overridden_for(@current_user)
+      add_class_view_crumbs
       add_crumb(@quiz.title, named_context_url(@context, :context_quiz_url, @quiz))
 
       setup_headless

@@ -18,12 +18,11 @@
 class WikiPagesController < ApplicationController
   include Api::V1::WikiPage
   include KalturaHelper
-
   before_filter :require_context
   before_filter :get_wiki_page
-  before_filter :set_js_rights, :only => [:pages_index, :show_page, :edit_page, :page_revisions]
-  before_filter :set_js_wiki_data, :only => [:pages_index, :show_page, :edit_page, :page_revisions]
-  add_crumb(proc { t '#crumbs.wiki_pages', "Pages"}) do |c|
+  before_filter :set_js_rights, :only => [:pages_index, :show_page, :edit_page]
+  before_filter :set_js_wiki_data, :only => [:pages_index, :show_page, :edit_page]
+  add_crumb(proc { t '#crumbs.wiki_pages', "Pages"}, :except => [:show]) do |c|
     url = nil
     context = c.instance_variable_get('@context')
     current_user = c.instance_variable_get('@current_user')
@@ -31,19 +30,20 @@ class WikiPagesController < ApplicationController
       if context.feature_enabled?(:draft_state)
         url = c.send :polymorphic_path, [context, :pages]
       else
-        url = c.send :named_context_url, c.instance_variable_get("@context"), :context_wiki_pages_url
+        url = c.send :named_context_url, c.instance_variable_get("@context"), :context_wiki_pages_url, c.instance_variable_get("@wiki_type")
       end
     end
     url
   end
-  before_filter { |c| c.active_tab = "pages" }
+  before_filter { |c|  c.active_tab = (c.instance_variable_get("@wiki_type") ==  WikiPage::WIKI_TYPE_PAGES) ?  "pages" : c.instance_variable_get("@wiki_type") }
 
   def js_rights
     [:wiki, :page]
   end
 
   def show
-    if @context.feature_enabled?(:draft_state)
+    @page_comments = PageComment.where(page_id: @page.id,page_type: @page.wiki_type).paginate(:page => params[:page], :per_page => 15)
+    if  @context.feature_enabled?(:draft_state)
       redirect_to polymorphic_url([@context, :named_page], :wiki_page_id => @page)
       return
     end
@@ -62,7 +62,8 @@ class WikiPagesController < ApplicationController
     end
 
     if is_authorized_action?(@page, @current_user, :read)
-      add_crumb(@page.title)
+      add_class_view_crumbs
+      add_crumb(@page.title,context_wiki_page_url(@context))
       @page.increment_view_count(@current_user, @context)
       log_asset_access(@page, "wiki", @wiki)
       respond_to do |format|
@@ -74,13 +75,26 @@ class WikiPagesController < ApplicationController
     end
   end
 
+
   def index
-    return unless tab_enabled?(@context.class::TAB_PAGES)
+    return unless tab_enabled?(tab_type(@wiki_type))
 
     if @context.feature_enabled?(:draft_state)
       front_page
     else
-      redirect_to named_context_url(@context, :context_wiki_page_url, @context.wiki.get_front_page_url || Wiki::DEFAULT_FRONT_PAGE_URL)
+      if @page.wiki_type == WikiPage::WIKI_TYPE_FAQS
+        redirect_to named_context_url(@context, :context_wiki_page_url, @page.wiki_type, WikiPage::DEFAULT_FAQ_FRONT_PAGE_URL)
+      elsif @page.wiki_type == WikiPage::WIKI_TYPE_CAREERS
+        redirect_to named_context_url(@context, :context_wiki_page_url, @page.wiki_type, WikiPage::DEFAULT_CAREER_FRONT_PAGE_URL)
+      elsif @page.wiki_type == WikiPage::WIKI_TYPE_VIDEOS
+        redirect_to named_context_url(@context, :context_wiki_page_url, @page.wiki_type, WikiPage::DEFAULT_VIDEO_FRONT_PAGE_URL)
+      elsif @page.wiki_type == WikiPage::WIKI_TYPE_OFFERS
+        redirect_to named_context_url(@context, :context_wiki_page_url, @page.wiki_type, WikiPage::DEFAULT_OFFER_FRONT_PAGE_URL)
+      elsif @page.wiki_type == WikiPage::WIKI_TYPE_LABS
+        redirect_to named_context_url(@context, :context_wiki_page_url, @page.wiki_type, WikiPage::DEFAULT_LAB_FRONT_PAGE_URL)
+      else
+        redirect_to named_context_url(@context, :context_wiki_page_url, @page.wiki_type, @context.wiki.get_front_page_url || Wiki::DEFAULT_FRONT_PAGE_URL)
+       end
     end
   end
 
@@ -103,7 +117,6 @@ class WikiPagesController < ApplicationController
       end
     end
   end
-
   def perform_update
     if params[:wiki_page].include?(:hide_from_students)
       hide_from_students = Canvas::Plugin::value_to_boolean(params[:wiki_page].delete(:hide_from_students))
@@ -146,13 +159,13 @@ class WikiPagesController < ApplicationController
         @page.workflow_state = 'deleted'
         @page.save
         respond_to do |format|
-          format.html { redirect_to(named_context_url(@context, :context_wiki_pages_url)) }
+          format.html { redirect_to(named_context_url(@context, :context_wiki_pages_url, @page.wiki_type)) }
         end
       else #they dont have permissions to destroy this page
         respond_to do |format|
           format.html { 
             flash[:error] = t('errors.cannot_delete_front_page', 'You cannot delete the front page.')
-            redirect_to(named_context_url(@context, :context_wiki_pages_url))
+            redirect_to(named_context_url(@context, :context_wiki_pages_url, @page.wiki_type ))
           }
         end
       end
@@ -160,7 +173,7 @@ class WikiPagesController < ApplicationController
   end
 
   def front_page
-    return unless tab_enabled?(@context.class::TAB_PAGES)
+    return unless tab_enabled?(tab_type(@wiki_type))
 
     front_page = @context.wiki.front_page if @context.wiki.has_front_page?
     if front_page && !front_page.new_record?
@@ -252,15 +265,81 @@ class WikiPagesController < ApplicationController
     end
   end
 
+  def comments_create
+    @page_details = WikiPage.find(@page.id)
+    @comment = @page_details.page_comments.build(message:params[:page_comment][:message],page_id:@page.id,
+                                                 page_type:params[:type],user_id:@current_user.id)
+    respond_to do |format|
+      if @comment.save
+        format.html { redirect_to   named_context_url(@context, :context_wiki_page_url, @page.wiki_type, @page) }
+        #format.json { render :json => @comment.to_json }
+      elsif params[:page_comment][:message] == ""
+        flash[:warning] =" Enter Comments"
+        format.html { redirect_to   named_context_url(@context, :context_wiki_page_url, @page.wiki_type, @page) }
+      else
+        flash[:error] = t('errors.create_failed', "Comment creation failed")
+        format.html { redirect_to   named_context_url(@context, :context_wiki_page_url, @page.wiki_type, @page) }
+        #format.json { render :json => @comment.errors.to_json, :status => :bad_request }
+      end
+
+    end
+  end
+
+
+  def comment_destroy
+    @page_details = WikiPage.find(@page.id)
+    @comment = PageComment.find(params[:id])
+       @comment.destroy
+      render :json => @comment.to_json
+  end
+
   protected
 
   def context_wiki_page_url(opts={})
     page_name = @page.url
-    res = named_context_url(@context, :context_wiki_page_url, page_name)
+    res = named_context_url(@context, :context_wiki_page_url, @page.wiki_type, page_name)
     if opts && opts[:edit]
       res += "#edit"
     end
    res
+  end
+
+  def set_js_wiki_data
+    hash = {}
+
+    hash[:DEFAULT_EDITING_ROLES] = @context.default_wiki_editing_roles if @context.respond_to?(:default_wiki_editing_roles)
+    hash[:WIKI_PAGES_PATH] = polymorphic_path([@context, :pages])
+
+    if @page
+      hash[:WIKI_PAGE] = wiki_page_json(@page, @current_user, session)
+      hash[:WIKI_PAGE_REVISION] = (current_version = @page.versions.current) ? current_version.number : nil
+      hash[:WIKI_PAGE_SHOW_PATH] = polymorphic_path([@context, :named_page], :wiki_page_id => @page)
+      hash[:WIKI_PAGE_EDIT_PATH] = polymorphic_path([@context, :edit_named_page], :wiki_page_id => @page)
+      hash[:WIKI_PAGE_HISTORY_PATH] = polymorphic_path([@context, @page, :wiki_page_revisions])
+      if @context.is_a?(Course)
+        hash[:COURSE_ID] = @context.id if @context.grants_right?(@current_user, :read)
+      end
+    end
+
+    js_env hash
+  end
+
+  def tab_type(wiki_type='wiki')
+    if wiki_type == 'faq'
+       @context.class::TAB_FAQS
+    elsif wiki_type == 'career'
+       @context.class::TAB_CAREERS
+    elsif wiki_type == 'video'
+      @context.class::TAB_VIDEOS
+    elsif wiki_type == 'offer'
+      @context.class::TAB_OFFERS
+    elsif wiki_type == 'bonus_video'
+      @context.class::TAB_BONUSVIDEOS
+    elsif wiki_type == 'labs'
+      @context.class::TAB_LABS
+    else
+       @context.class::TAB_PAGES
+    end
   end
 
 end

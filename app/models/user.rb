@@ -26,8 +26,13 @@ class User < ActiveRecord::Base
 
   include Context
 
-  attr_accessible :name, :short_name, :sortable_name, :time_zone, :show_user_services, :gender, :visible_inbox_types, :avatar_image, :subscribe_to_emails, :locale, :bio, :birthdate, :terms_of_use, :self_enrollment_code, :initial_enrollment_type
+  attr_accessible :name, :short_name, :sortable_name, :time_zone, :show_user_services, :gender, :visible_inbox_types,
+                  :avatar_image, :subscribe_to_emails, :locale, :bio, :birthdate, :terms_of_use, :self_enrollment_code,
+                  :initial_enrollment_type,:avatar_image_url,:avatar_image_source,:avatar_image_updated_at,
+                  :workflow_state,:phone
   attr_accessor :previous_id, :menu_data
+  cattr_accessor :is_active
+
 
   before_save :infer_defaults
   serialize :preferences
@@ -133,7 +138,8 @@ class User < ActiveRecord::Base
         enrollment_conditions(:completed, strict_course_state, course_workflow_state)
     end
   end
-
+  has_one :omniauth_authentication , :dependent => :destroy
+  has_many :user_module_group_enrollments , :dependent => :destroy
   has_many :communication_channels, :order => 'communication_channels.position ASC', :dependent => :destroy
   has_many :notification_policies, through: :communication_channels
   has_one :communication_channel, :conditions => ["workflow_state<>'retired'"], :order => 'position'
@@ -242,6 +248,7 @@ class User < ActiveRecord::Base
   alias :orig_profile :profile
 
   has_many :progresses, :as => :context
+  has_many :comments
 
   belongs_to :otp_communication_channel, :class_name => 'CommunicationChannel'
 
@@ -265,6 +272,12 @@ class User < ActiveRecord::Base
         where("pseudonyms.current_login_at>?", 1.month.ago).
         order("pseudonyms.current_login_at DESC").
         limit(25)
+  }
+  scope :currently_logged_in, lambda {
+    includes(:pseudonyms).
+        where("pseudonyms.last_request_at>?", 10.seconds.ago).
+        order("pseudonyms.last_request_at DESC").
+        limit(9999)
   }
   scope :include_pseudonym, includes(:pseudonym)
   scope :restrict_to_sections, lambda { |sections|
@@ -886,6 +899,7 @@ class User < ActiveRecord::Base
     state :registered
 
     state :deleted
+    state :inactive
   end
 
   def unavailable?
@@ -909,6 +923,7 @@ class User < ActiveRecord::Base
     courses_to_update = self.enrollments.active.select(:course_id).uniq.map(&:course_id)
     Enrollment.suspend_callbacks(:update_cached_due_dates) do
       self.enrollments.each { |e| e.destroy }
+      self.omniauth_authentication.destroy
     end
     courses_to_update.each do |course|
       DueDateCacher.recompute_course(course)
@@ -2134,7 +2149,7 @@ class User < ActiveRecord::Base
       self.class.default_storage_quota :
       accounts.sum(&:default_user_storage_quota)
   end
-  
+
   def self.default_storage_quota
     Setting.get('user_default_quota', 50.megabytes.to_s).to_i
   end

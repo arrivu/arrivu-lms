@@ -318,7 +318,7 @@ define [
         bIndex = sortMap[String(b.object.id)]
         if aIndex? and bIndex?
           return aIndex - bIndex
-        # if there's a new assignment and its order has not been stored, it should come at the end
+          # if there's a new assignment and its order has not been stored, it should come at the end
         else if aIndex? and not bIndex?
           return -1
         else if bIndex?
@@ -452,9 +452,9 @@ define [
         idToMatch = "assignment_#{submission.assignment_id}"
         cell = index for column, index in columns when column.id is idToMatch
         thisCellIsActive = activeCell? and
-          editing and
-          activeCell.row is student.row and
-          activeCell.cell is cell
+        editing and
+        activeCell.row is student.row and
+        activeCell.cell is cell
         @updateSubmission(submission)
         @calculateStudentGrade(student)
         @grid.updateCell student.row, cell unless thisCellIsActive
@@ -601,8 +601,8 @@ define [
 
     hoverMinimizedCell: (event) =>
       $hoveredCell = $(event.currentTarget)
-                     # get rid of hover class so that no other tooltips show up
-                     .removeClass('hover')
+      # get rid of hover class so that no other tooltips show up
+      .removeClass('hover')
       cell = @grid.getCellFromEvent(event)
       # cell will be null when hovering a header cell
       return unless cell
@@ -900,7 +900,7 @@ define [
       for column in @allAssignmentColumns
         submissionType = ''+ column.object.submission_types
         res.push(column) unless submissionType is "not_graded" or
-                                submissionType is "attendance" and !@show_attendance
+        submissionType is "attendance" and !@show_attendance
       res.concat(@aggregateColumns)
 
     assignmentHeaderHtml: (assignment) ->
@@ -952,9 +952,9 @@ define [
 
       @allAssignmentColumns = for id, assignment of @assignments
         outOfFormatter = assignment &&
-                         assignment.grading_type == 'points' &&
-                         assignment.points_possible? &&
-                         SubmissionCell.out_of
+        assignment.grading_type == 'points' &&
+        assignment.points_possible? &&
+        SubmissionCell.out_of
         minWidth = if outOfFormatter then 70 else 90
         fieldName = "assignment_#{id}"
         columnDef =
@@ -964,8 +964,8 @@ define [
           object: assignment
           formatter: this.cellFormatter
           editor: outOfFormatter ||
-                  SubmissionCell[assignment.grading_type] ||
-                  SubmissionCell
+          SubmissionCell[assignment.grading_type] ||
+          SubmissionCell
           minWidth: columnWidths.assignment.min,
           maxWidth: columnWidths.assignment.max,
           width: testWidth(assignment.name, minWidth, columnWidths.assignment.default_max),
@@ -1120,9 +1120,9 @@ define [
           groupNames = (ag.name for ag in invalidAssignmentGroups)
           @totalGradeWarning = I18n.t 'invalid_assignment_groups_warning',
             one: "Score does not include %{groups} because it has
-                  no points possible"
+                              no points possible"
             other: "Score does not include %{groups} because they have
-                    no points possible"
+                                no points possible"
           ,
             groups: $.toSentence(groupNames)
             count: groupNames.length

@@ -1,8 +1,10 @@
-<% 
+<%
   js_bundle :wiki
   jammit_css :tinymce
   content_for :page_title, join_title(@page.title.to_s, @context.name)
-  content_for :right_side, render(:partial => 'wiki_pages/wiki_right_side')
+  if can_do(@page, @current_user, [:update_content,:manage_content])
+   content_for :right_side, render(:partial => 'wiki_pages/wiki_right_side')
+  end
 %>
 
 <% if reason = @page.locked_for?(@current_user, :context => @context) %>
@@ -13,3 +15,32 @@
 <% end %>
 
 <%= render :partial => "shared/sequence_footer", :locals => {:asset => @page} if @page.context_module_tag_for(@context) %>
+
+<%if @page.allow_comments %>
+<div id="page_comments_holder" style="margin-top: 50px;">
+  <h2 style=""><%= t 'headings.page_comments', 'Comments' %></h2>
+  <% if  @page_comments %>
+    <div id="page_comments" style="padding: 5px 20px;">
+      <%= t(:no_comments, "No Comments") if @page.allow_comments && @page_comments.count == 0 %>
+      <%= render :partial => "wiki_pages/page_comment",:collection =>  @page_comments %>
+    </div>
+    <%= render :partial => "wiki_pages/page_comment", :object => nil %>
+<div id="pagination"  style ="margin-top: 1em;text-align: center;">
+    <%= will_paginate(@page_comments) %>
+</div>
+  <% end %>
+  <% form_for :page_comment,:url => course_wiki_page_comments_create_path(@context,@page.wiki_type,@page.title),:html => {:id => "add_page_comment_form", :style => "margin-top: 20px;"} do |f| %>
+        <h3><%= before_label(:add_comment, "Add a New Comment") %></h3>
+            <%= f.text_area :message, :style => "width: 400px; height: 75px;", :maxlength=>"250"%>
+            <div class="button-container">
+              <button type="submit" class="btn btn-primary"><i class="icon-discussion"></i> <%= t('buttons.add_comment', "Add Comment") %></button>
+            </div>
+     <%end %>
+</div>
+<% elsif !@page.allow_comments && @page_comments.count > 0%>
+    <h2 style=""><%= t 'headings.page_comments', 'Comments' %></h2>
+    <%= render :partial => "wiki_pages/page_comment",:collection =>  @page_comments %>
+    <div id="pagination"  style ="margin-top: 1em;text-align: center;">
+      <%= will_paginate(@page_comments) %>
+    </div>
+<%end %>

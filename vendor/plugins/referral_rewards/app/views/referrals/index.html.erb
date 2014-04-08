@@ -1,0 +1,7 @@
+
+<%
+   content_for :page_title, join_title("Course Referrals", @context.name)
+   js_bundle :course_referrals
+   jammit_css :tinymce
+   @active_tab = "referrals"
+%>

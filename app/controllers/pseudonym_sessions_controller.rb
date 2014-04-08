@@ -17,11 +17,17 @@
 #
 
 class PseudonymSessionsController < ApplicationController
+  include ApplicationHelper
   protect_from_forgery :except => [:create, :destroy, :saml_consume, :oauth2_token, :oauth2_logout, :cas_logout]
   before_filter :forbid_on_files_domain, :except => [ :clear_file_session ]
   before_filter :require_password_session, :only => [ :otp_login, :disable_otp_login ]
   before_filter :require_user, :only => [ :otp_login ]
   skip_before_filter :require_reacceptance_of_terms
+  skip_before_filter :check_for_terms_and_conditions
+
+  def corp_login
+    redirect_to login_url :lms_login => 1
+  end
 
   def new
     if @current_user && !params[:re_login] && !params[:confirm] && !params[:expected_user_id] && !session[:used_remember_me_token]
@@ -76,7 +82,7 @@ class PseudonymSessionsController < ApplicationController
           else
             logger.warn "Received CAS login for unknown user: #{st.response.user}"
             reset_session
-            session[:delegated_message] = t 'errors.no_matching_user', "Canvas doesn't have an account for user: %{user}", :user => st.response.user
+            session[:delegated_message] = t 'errors.no_matching_user', "Jigsaw LMS doesn't have an account for user: %{user}", :user => st.response.user
             redirect_to(cas_client.logout_url(cas_login_url :no_auto => true))
             return
           end
@@ -94,7 +100,7 @@ class PseudonymSessionsController < ApplicationController
         if aac = @domain_root_account.account_authorization_configs.find_by_id(params[:account_authorization_config_id])
           initiate_saml_login(request.host_with_port, aac)
         else
-          message = t('errors.login_errors.no_config_for_id', "The Canvas account has no authentication configuration with that id")
+          message = t('errors.login_errors.no_config_for_id', "The Jigsaw LMS account has no authentication configuration with that id")
           if @domain_root_account.auth_discovery_url
             redirect_to @domain_root_account.auth_discovery_url + "?message=#{URI.escape message}"
           else
@@ -223,7 +229,7 @@ class PseudonymSessionsController < ApplicationController
         return
       else
         logout_current_user
-        flash[:message] = t('errors.logout_errors.no_idp_found', "Canvas was unable to log you out at your identity provider")
+        flash[:message] = t('errors.logout_errors.no_idp_found', "Jigsaw LMS was unable to log you out at your identity provider")
       end
     elsif @domain_root_account.cas_authentication? and session[:cas_session]
       logout_current_user
@@ -284,7 +290,7 @@ class PseudonymSessionsController < ApplicationController
           logger.error "Attempted SAML login for #{response.issuer} on account without that IdP"
           destroy_session
           if @domain_root_account.auth_discovery_url
-            message = t('errors.login_errors.unrecognized_idp', "Canvas did not recognize your identity provider")
+            message = t('errors.login_errors.unrecognized_idp', "Jigsaw LMS did not recognize your identity provider")
             redirect_to @domain_root_account.auth_discovery_url + "?message=#{URI.escape message}"
           else
             flash[:delegated_message] = t 'errors.login_errors.no_idp_set', "The institution you logged in from is not configured on this account."
@@ -360,7 +366,7 @@ class PseudonymSessionsController < ApplicationController
             logger.warn message
             aac.debug_set(:canvas_login_fail_message, message) if debugging
             # the saml message has to survive a couple redirects
-            session[:delegated_message] = t 'errors.no_matching_user', "Canvas doesn't have an account for user: %{user}", :user => unique_id
+            session[:delegated_message] = t 'errors.no_matching_user', "Jigsaw LMS doesn't have an account for user: %{user}", :user => unique_id
             redirect_to :action => :destroy
           end
         elsif response.auth_failure?
@@ -579,9 +585,11 @@ class PseudonymSessionsController < ApplicationController
         # assumed that if that URL is found rather than using the default,
         # they must have cookies enabled and we don't need to worry about
         # adding the :login_success param to it.
-        format.html { redirect_back_or_default(dashboard_url(:login_success => '1')) }
+        #format.html { redirect_back_or_default(dashboard_url(:login_success => '1')) }
+        format.html {favourites}
+
       end
-      format.json { render :json => pseudonym.as_json(:methods => :user_code), :status => :ok }
+      #format.json { render :json => pseudonym.to_json(:methods => :user_code), :status => :ok }
     end
   end
 
@@ -635,13 +643,16 @@ class PseudonymSessionsController < ApplicationController
         redirect_to oauth2_auth_confirm_url
       end
     else
-      redirect_to login_url(:canvas_login => params[:canvas_login])
+      redirect_to login_url(:lms_login => params[:lms_login])
     end
   end
 
   def oauth2_confirm
     @provider = Canvas::Oauth::Provider.new(session[:oauth2][:client_id], session[:oauth2][:redirect_uri], session[:oauth2][:scopes], session[:oauth2][:purpose])
-
+    badge_host = URI.parse(session[:oauth2][:redirect_uri]).host
+    if (request.domain.split('.')[0] == badge_host.split('.')[1]) or (request.domain.split('.')[0] == badge_host.split('.')[0]) or (badge_host == "localhost")
+      redirect_to :controller =>  'pseudonym_sessions',:action => 'oauth2_accept'
+    end
     if mobile_device?
       js_env :GOOGLE_ANALYTICS_KEY => Setting.get('google_analytics_key', nil)
       render :layout => 'mobile_auth', :action => 'oauth2_confirm_mobile'
@@ -702,4 +713,5 @@ class PseudonymSessionsController < ApplicationController
 
     session.delete(:oauth2)
   end
+
 end

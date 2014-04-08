@@ -28,9 +28,13 @@ class DiscussionTopic < ActiveRecord::Base
   include ContextModuleItem
   include SearchTermHelper
 
+  acts_as_taggable_on :tags
+  named_scope :by_join_date, :order => "created_at DESC"
+
   attr_accessible :title, :message, :user, :delayed_post_at, :lock_at, :assignment,
     :plaintext_message, :podcast_enabled, :podcast_has_student_posts,
     :require_initial_post, :threaded, :discussion_type, :context, :pinned, :locked
+
 
   module DiscussionTypes
     SIDE_COMMENT = 'side_comment'

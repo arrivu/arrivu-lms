@@ -1,0 +1,16 @@
+<%
+   @current_user_badges = get_user_badges_for_header
+%>
+<% if @current_user_badges and !@current_user_badges.empty?  %>
+    <div class="main_navigation_badges" style="background: #ffffff;">
+      <div class="progress-divider"> Badges </div>
+      <div style="float: right;margin-top: 7px; text-align: center;">
+        <% @current_user_badges.each do |key, value| %>
+            <div style="float: left;margin-left: 5px;">
+              <img src=<%= value['badge_url'] %>  width="34" height="34"  title="<%= value['badge_description']%>" data-tooltip>
+              <div style="color: #fff;font-weight:bolder;text-align:center;margin-top: -25px;"><%= value['badge_count'] %></div>
+            </div>
+        <% end %>
+      </div>
+    </div>
+<% end  %>

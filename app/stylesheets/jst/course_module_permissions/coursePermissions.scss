@@ -1,0 +1,42 @@
+.course_module_permission{
+  width:100%;
+  overflow-x: scroll;
+}
+.table th, .table td{
+  border: none !important;
+
+}
+#content
+{
+  overflow-x: scroll;
+}
+.role-tab {
+  padding-bottom: 200px !important;
+  overflow-x: scroll;
+}
+
+.manage-permissions{
+  thead th{
+    text-align: center;
+    white-space: nowrap;
+    width:20%
+  }
+
+  td {
+    vertical-align: middle;
+    width:20%
+  }
+
+  th{
+    width: 20%;
+  }
+}
+
+.toolbar{
+  th, td {
+    background-color:#dae1e6 !important;
+    &:hover{
+      background-color:#dae1e6 !important;
+    }
+  }
+}

@@ -61,6 +61,11 @@ class ApplicationController < ActionController::Base
   before_filter :init_body_classes
   after_filter :set_response_headers
   after_filter :update_enrollment_last_activity_at
+  before_filter :get_wiki_type
+  #before_filter :currently_logged_in_user_count
+  before_filter :check_for_terms_and_conditions
+
+  include ApplicationHelper
   include Tour
 
   add_crumb(proc {
@@ -100,13 +105,15 @@ class ApplicationController < ActionController::Base
   #
   def js_env(hash = {})
     # set some defaults
-    unless @js_env
+     unless @js_env
       @js_env = {
         :current_user_id => @current_user.try(:id),
         :current_user => user_display_json(@current_user, :profile),
         :current_user_roles => @current_user.try(:roles),
         :AUTHENTICITY_TOKEN => form_authenticity_token,
         :files_domain => HostUrl.file_host(@domain_root_account || Account.default, request.host_with_port),
+        :FAQ_button_disable => @wiki_type == 'faq' ? true :false,
+        :Wistia_Plugin_disable => check_wistia_status
       }
       @js_env[:lolcalize] = true if ENV['LOLCALIZE']
     end
@@ -123,6 +130,15 @@ class ApplicationController < ActionController::Base
     @js_env
   end
   helper_method :js_env
+
+  def check_wistia_status
+    wistia_plugin = PluginSetting.find_by_name('wistia')
+    if wistia_plugin.nil?
+      true
+    else
+      wistia_plugin.disabled ? true : false
+    end
+  end
 
   protected
 
@@ -340,7 +356,7 @@ class ApplicationController < ActionController::Base
   def delegated_authentication_url?
     @domain_root_account.delegated_authentication? &&
     !@domain_root_account.ldap_authentication? &&
-    !params[:canvas_login]
+    !params[:lms_login]
   end
 
   # To be used as a before_filter, requires controller or controller actions
@@ -700,7 +716,7 @@ class ApplicationController < ActionController::Base
   end
   
   def cache_buster
-    # Annoying problem.  If I set the cache-control to anything other than "no-cache, no-store" 
+    # Annoying problem.  If I set the cache-control to anything other than "no-cache, no-store"
     # then the local cache is used when the user clicks the 'back' button.  I don't know how
     # to tell the browser to ALWAYS check back other than to disable caching...
     return true if @cancel_cache_buster || request.xhr? || api_request?
@@ -1051,8 +1067,14 @@ class ApplicationController < ActionController::Base
   def get_wiki_page
     @wiki = @context.wiki
     @wiki.check_has_front_page
-
+    @wiki.make_sure_wiki_has_front_page
     page_name = params[:wiki_page_id] || params[:id] || (params[:wiki_page] && params[:wiki_page][:title])
+    page_name ||= WikiPage::DEFAULT_FAQ_FRONT_PAGE_URL if (@wiki_type ==  WikiPage::WIKI_TYPE_FAQS)
+    page_name ||= WikiPage::DEFAULT_CAREER_FRONT_PAGE_URL if (@wiki_type ==  WikiPage::WIKI_TYPE_CAREERS)
+    page_name ||= WikiPage::DEFAULT_VIDEO_FRONT_PAGE_URL if (@wiki_type == WikiPage::WIKI_TYPE_VIDEOS)
+    page_name ||= WikiPage::DEFAULT_OFFER_FRONT_PAGE_URL if (@wiki_type == WikiPage::WIKI_TYPE_OFFERS)
+    page_name ||= WikiPage::DEFAULT_BONUS_VIDEO_FRONT_PAGE_URL if (@wiki_type == WikiPage::WIKI_TYPE_BONUS_VIDEOS)
+    page_name ||= WikiPage::DEFAULT_LAB_FRONT_PAGE_URL if (@wiki_type == WikiPage::WIKI_TYPE_LABS)
     page_name ||= (@wiki.get_front_page_url || Wiki::DEFAULT_FRONT_PAGE_URL) unless @context.feature_enabled?(:draft_state)
     if(params[:format] && !['json', 'html'].include?(params[:format]))
       page_name += ".#{params[:format]}"
@@ -1061,16 +1083,53 @@ class ApplicationController < ActionController::Base
     return if @page || !page_name
 
     if params[:action] != 'create'
-      @page = @wiki.wiki_pages.not_deleted.find_by_url(page_name.to_s) ||
-              @wiki.wiki_pages.not_deleted.find_by_url(page_name.to_s.to_url) ||
-              @wiki.wiki_pages.not_deleted.find_by_id(page_name.to_i)
+      @page = @wiki.wiki_pages.deleted_last.find_by_url(page_name.to_s) ||
+              @wiki.wiki_pages.deleted_last.find_by_url(page_name.to_s.to_url) ||
+              @wiki.wiki_pages.find_by_id(page_name.to_i)
+    end
+
+    @page ||= @wiki.wiki_pages.new(
+      :title => page_name.titleize,
+      :url => page_name.to_url, :wiki_type => @wiki_type
+    )
+    if @page.new_record?
+      @page.wiki = @wiki
+      initialize_wiki_page
+    end
+  end
+
+  # Initializes the state of @page, but only if it is a new page
+  def initialize_wiki_page
+    return unless @page.new_record? || @page.deleted?
+
+    unless @context.draft_state_enabled?
+      @page.set_as_front_page! if !@wiki.has_front_page? and @page.url == Wiki::DEFAULT_FRONT_PAGE_URL
+    end
+
+    is_privileged_user = is_authorized_action?(@page.wiki, @current_user, :manage)
+    if is_privileged_user && @context.draft_state_enabled? && !@context.is_a?(Group)
+      @page.workflow_state = 'unpublished'
+    else
+      @page.workflow_state = 'active'
+    end
+
+    @page.editing_roles = (@context.default_wiki_editing_roles rescue nil) || @page.default_roles
+
+    if @page.is_front_page? or @wiki.wiki_pages.faqs.empty? or @wiki.wiki_pages.careers.empty? or @wiki.wiki_pages.videos.empty? or @wiki.wiki_pages.offers.empty? or @wiki.wiki_pages.bonusvideos.empty?
+      if @page.wiki_type == "bonus_video"
+        @page.body = t "#application.wiki_front_page_default_content_course", "Welcome to your new course Bonus Video!" if @context.is_a?(Course)
+        @page.body = t "#application.wiki_front_page_default_content_group", "Welcome to your new group Bonus Video!" if @context.is_a?(Group)
+      else
+        @page.body = t "#application.wiki_front_page_default_content_course", "Welcome to your new course #{@page.wiki_type}!" if @context.is_a?(Course)
+        @page.body = t "#application.wiki_front_page_default_content_group", "Welcome to your new group #{@page.wiki_type}!" if @context.is_a?(Group)
+      end
     end
     @page ||= @wiki.build_wiki_page(@current_user, :url => page_name)
   end
 
   def context_wiki_page_url
     page_name = @page.url
-    named_context_url(@context, :context_wiki_page_url, page_name)
+    named_context_url(@context, :context_wiki_page_url, @page.wiki_type, page_name)
   end
 
   def content_tag_redirect(context, tag, error_redirect_symbol)
@@ -1078,7 +1137,7 @@ class ApplicationController < ActionController::Base
     if tag.content_type == 'Assignment'
       redirect_to named_context_url(context, :context_assignment_url, tag.content_id, url_params)
     elsif tag.content_type == 'WikiPage'
-      redirect_to named_context_url(context, :context_wiki_page_url, tag.content.url, url_params)
+      redirect_to named_context_url(context, :context_wiki_page_url, tag.content.wiki_type, tag.content.url, url_params)
     elsif tag.content_type == 'Attachment'
       redirect_to named_context_url(context, :context_file_url, tag.content_id, url_params)
     elsif tag.content_type_quiz?
@@ -1115,7 +1174,7 @@ class ApplicationController < ActionController::Base
           @launch.for_assignment!(@tag.context, lti_grade_passback_api_url(@tool), blti_legacy_grade_passback_api_url(@tool))
         end
         @tool_launch_type = 'window' if tag.new_tab
-        @tool_settings = @launch.generate
+        @tool_settings = @launch.generate([],@tag.context_module.id)
         render :template => 'external_tools/tool_show'
       end
     else
@@ -1559,7 +1618,7 @@ class ApplicationController < ActionController::Base
   helper_method :flash_notices
 
   def unsupported_browser
-    t("#application.warnings.unsupported_browser", "Your browser does not meet the minimum requirements for Canvas. Please visit the *Canvas Guides* for a complete list of supported browsers.", :wrapper => view_context.link_to('\1', 'http://guides.instructure.com/s/2204/m/4214/l/41056-which-browsers-does-canvas-support'))
+    t("#application.warnings.unsupported_browser", "Your browser does not meet the minimum requirements for Arrivu LMS. Please visit the *Arrivu Guides* for a complete list of supported browsers.", :wrapper => view_context.link_to('\1', 'http://guides.arrivuapps.com/s/2204/m/4214/l/41056-which-browsers-does-canvas-support'))
   end
 
   def browser_supported?
@@ -1680,6 +1739,56 @@ class ApplicationController < ActionController::Base
     end
 
     js_env hash
+  end
+
+  def get_wiki_type
+    @wiki_type =  WikiPage::WIKI_TYPE_PAGES
+    @wiki_type = params[:type] if params[:type]
+  end
+
+  def has_any_wiki_page_for_wiki_type?
+    if @wiki_type ==  WikiPage::WIKI_TYPE_FAQS
+      @context.wiki.wiki_pages.faqs.count == 0
+    elsif @wiki_type ==  WikiPage::WIKI_TYPE_CAREERS
+        @context.wiki.wiki_pages.careers.count == 0
+    elsif @wiki_type == WikiPage::WIKI_TYPE_VIDEOS
+      @context.wiki.wiki_pages.videos.count == 0
+    elsif @wiki_type == WikiPage::WIKI_TYPE_OFFERS
+      @context.wiki.wiki_pages.offers.count == 0
+    elsif @wiki_type == WikiPage::WIKI_TYPE_BONUS_VIDEOS
+      @context.wiki.wiki_pages.bonusvideos.count == 0
+    elsif @wiki_type == WikiPage::WIKI_TYPE_LABS
+      @context.wiki.wiki_pages.labs.count == 0
+    else
+       @context.wiki.wiki_pages.pages.count == 0
+    end
+  end
+
+  def currently_logged_in_user_count
+    @users = User.currently_logged_in
+    @totalcount = 0
+    @users.each do |student|
+      @enrollment_type = Enrollment.find_by_user_id(student.id)
+      if @enrollment_type.type == "StudentEnrollment"
+           @totalcount+=1
+      end
+    end
+  end
+
+  def check_for_terms_and_conditions
+   if @domain_root_account.terms_and_condition and @current_user and @current_pseudonym and !api_request?
+     if params[:action] == "masquerade"
+       session[:masquearding] = "masquerading"
+     end
+     if session[:masquearding] != "masquerading"
+       unless can_do(@domain_root_account, @current_user, :manage_account_settings)
+          @check_terms = @current_pseudonym.settings[:is_terms_and_conditions_accepted]
+          if @check_terms.nil?
+              render :template => "shared/terms_required", :layout => "application", :status => :authorized
+          end
+       end
+     end
+   end
   end
 
 end

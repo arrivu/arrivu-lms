@@ -13,7 +13,8 @@ css_compressor: 'sass'
 <%= plugin_assets.bundle_yml %>
 
 javascripts:
-
+  referral_rewards:
+    - public/javascripts/plugins/referral_rewards/javascripts/compiled/bundles/rewards.js
 stylesheets:
   course_show: 
     - public/stylesheets/compiled/course_show.css
@@ -195,5 +196,9 @@ stylesheets:
     - public/stylesheets/compiled/locale.css
   mobile_auth:
     - public/stylesheets/compiled/mobile_auth.css
+  token_input:
+    - public/stylesheets/compiled/token_input.css
+  flip_classes:
+    - public/stylesheets/compiled/flip_classes.css
 
   <%= plugin_assets.anchors_yml %>

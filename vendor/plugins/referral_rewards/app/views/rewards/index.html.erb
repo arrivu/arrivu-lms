@@ -1,0 +1,57 @@
+
+<% content_for :page_title, t(:page_title, "Rewards") %>
+<% @show_left_side = true %>
+
+
+<% content_for :right_side do %>
+    <div class="rs-margin-all">
+      <a href="rewards/new" class="add_user_link btn button-sidebar-wide"><i class="icon-add"></i> <%= t(:new_reward_link, "Add New Reward") %></a>
+    </div>
+<% end %>
+
+
+
+<table id="dataTable"  class = "table table-bordered table-striped">
+  <tr>
+    <th>Course</th>
+    <th>Coupon Name</th>
+    <th>Alpha Mask</th>
+    <th>Referrer Amount </th>
+    <th>Referrer Percentage </th>
+    <th>Referree Amount </th>
+    <th>Referree Percentage </th>
+    <th>Referrer Expiry Date</th>
+    <th>Referree Expiry Date</th>
+    <th>How Many</th>
+    <th>Actions</th> <th></th>
+
+  </tr>
+
+
+
+      <tr>
+        <td><%= @context.name %></td>
+        <td><%= @rewards.name %></td>
+        <td><%= @rewards.alpha_mask %></td>
+        <td><%= @rewards.referrer_amount  %></td>
+        <td><%= @rewards.referrer_percentage %></td>
+        <td><%= @rewards.referree_amount %></td>
+        <td><%= @rewards.referree_percentage %></td>
+        <td><%= @rewards.referrer_expiry_date %></td>
+        <td><%= @rewards.referree_expiry_date %></td>
+        <td><%= @rewards.how_many %></td>
+
+        <td><%= link_to 'edit', {:action => 'edit', :id => @rewards} %></td>
+
+
+        <td> <%= link_to 'delete', {:action=>'destroy', :id=> @rewards}, :confirm=>"You sure?", :method=> :delete %></td>
+
+
+
+      </tr>
+
+
+
+</table>
+
+

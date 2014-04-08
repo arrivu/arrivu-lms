@@ -36,7 +36,7 @@ module Api::V1::User
     end
   end
 
-  def user_json(user, current_user, session, includes = [], context = @context, enrollments = nil)
+  def user_json(user, current_user, session, includes = [], context = @context, enrollments = nil,badges=[])
     includes ||= []
     api_json(user, current_user, session, API_USER_JSON_OPTS).tap do |json|
       if user_json_is_admin?(context, current_user)
@@ -73,13 +73,64 @@ module Api::V1::User
         end
         json[:last_login] = last_login.try(:iso8601)
       end
+
+      if includes.include?('user_progression')
+        json[:progression] = "#{calc_progression_percentage(@context,user)}%"
+      end
+
+      if includes.include?('get_badges')
+        json[:badges] = badges
+      end
+
     end
   end
 
   def users_json(users, current_user, session, includes = [], context = @context, enrollments = nil)
-    users.map{ |user| user_json(user, current_user, session, includes, context, enrollments) }
+    if includes.include?('get_badges')
+      user_ids=[]
+      users.map do |user|
+        user_ids << user.id
+      end
+      response = get_course_badges(user_ids)
+      @response_ok = (!@error && response && (response.code == '200'|| '304'))
+      if @response_ok
+        @badges_array = JSON.parse(response.body)
+      end
+    end
+    users.map do |user|
+      badges =[]
+      if includes.include?('get_badges') and @response_ok
+        @badges_array.each do |key, value|
+          if value['user_id'].to_i == user.id
+            badges << {:badge_url => value['badge_url'],:badge_count => value['badge_count'],
+                       :badge_description => value['badge_description']}
+          end
+        end
+      end
+      user_json(user, current_user, session, includes, context, enrollments,badges)
+    end
   end
 
+
+  def get_course_badges(user_ids)
+    get_badges(true,user_ids)
+    if @tool.nil?
+      print_badge_error
+    else
+      base_url = URI(@tool.url)
+      uri = URI("#{base_url.scheme}://#{base_url.host}:#{base_url.port}/api/v1/courses/#{@tool_settings['custom_canvas_course_id']}/badges.json")
+      begin
+        post_to_badge(uri)
+      rescue => e
+        print_badge_error(e)
+      end
+    end
+  end
+
+  def print_badge_error(error=nil)
+    @error = true
+    logger.error("Error while getting badges:#{error}")
+  end
   # this mini-object is used for secondary user responses, when we just want to
   # provide enough information to display a user.
   # for instance, discussion entries return this json as a sub-object.
@@ -112,17 +163,17 @@ module Api::V1::User
     return false if context.nil? || current_user.nil?
     @user_json_is_admin ||= {}
     @user_json_is_admin[[context.class.name, context.id, current_user.id]] ||= (
-      if context.is_a?(::UserProfile)
-        permissions_context = permissions_account = @domain_root_account
-      else
-        permissions_context = context
-        permissions_account = context.is_a?(Account) ? context : context.account
-      end
-      !!(
-        permissions_context.grants_right?(current_user, :manage_students) ||
+    if context.is_a?(::UserProfile)
+      permissions_context = permissions_account = @domain_root_account
+    else
+      permissions_context = context
+      permissions_account = context.is_a?(Account) ? context : context.account
+    end
+    !!(
+    permissions_context.grants_right?(current_user, :manage_students) ||
         permissions_account.membership_for_user(current_user) ||
         permissions_account.root_account.grants_rights?(current_user, :manage_sis, :read_sis).values.any?
-      )
+    )
     )
   end
 
@@ -150,7 +201,7 @@ module Api::V1::User
       end
       if enrollment.student?
         json[:grades] = {
-          :html_url => course_student_grades_url(enrollment.course_id, enrollment.user_id),
+            :html_url => course_student_grades_url(enrollment.course_id, enrollment.user_id),
         }
 
         if has_grade_permissions?(user, enrollment)
@@ -178,6 +229,6 @@ module Api::V1::User
     course = enrollment.course
 
     (user.id == enrollment.user_id && !course.hide_final_grades?) ||
-     course.grants_rights?(user, :manage_grades, :view_all_grades).values.any?
+        course.grants_rights?(user, :manage_grades, :view_all_grades).values.any?
   end
 end

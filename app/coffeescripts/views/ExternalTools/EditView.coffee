@@ -16,6 +16,9 @@ define [
     events:
       'change #external_tool_config_type': 'onConfigTypeChange'
 
+    initialize: ->
+
+
     afterRender: ->
       super
       @$el.dialog
@@ -69,4 +72,10 @@ define [
       super
       message = I18n.t 'generic_error', 'There was an error in processing your request'
       @$el.prepend("<div class='alert alert-error'>#{message}</span>")
+
+    toJSON: ->
+
+      json = super
+
+      json
 

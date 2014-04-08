@@ -1,0 +1,64 @@
+<div id="pre_class_videos" class="class_preview_box">
+  <div class="classes_header" > <b class="classes_header_text">Pre Class Videos</b>
+      <div class="admin_link" >
+        &nbsp; <a  style="background-color: #7c7c7c;border: none;
+              border-radius: 4px;
+              padding: 3px;
+              color: #FFF;
+              width: 130PX;margin-top: -10px; " href="<%=course_context_modules_path(@context) %>" >&nbsp;&nbsp;Back&nbsp;&nbsp;</a>
+      </div>
+  </div>
+
+  <%@module.content_tags.active.pre_class_videos.each do |tag|  %>
+      <div style="margin: 5px 15px; font-size: 100%;
+              font-weight: bold;
+              color: #7f8c8d;
+              line-height: 1;
+               height:18px;">
+        <% if tag.content_type == "Assignment" %>
+          <%= image_tag "course_assignment.png", :style=>"line-height:20px;height:28px;margin-top:1px;margin-left:5px;" %> &nbsp;&nbsp;&nbsp;&nbsp;
+        <% elsif tag.content_type == "Attachment" %>
+          <%= image_tag "Attachment.png", :style=>"line-height:20px;height:30px;margin-top:1px;margin-left:5px;" %> &nbsp;&nbsp;&nbsp;&nbsp;
+        <% elsif tag.content_type == "DiscussionTopic" %>
+          <%= image_tag "discussion_icon.png", :style=>"line-height:20px;height:27px;margin-top:-3px;margin-left: 10px;" %> &nbsp;&nbsp;&nbsp;&nbsp;
+        <% elsif tag.content_type == "ContextModuleSubHeader" %>
+          <%= image_tag "context_icon.png", :style=>"line-height:20px;height:27px;margin-top:-3px;margin-left: 10px;" %> &nbsp;&nbsp;&nbsp;&nbsp;
+        <% elsif tag.content_type == "ExternalUrl" %>
+           <%= image_tag "fancy_link_url.png",:style=>"line-height:20px;height:28px;margin-top:-3px;margin-left: 10px;border-radius:20px;"%> &nbsp;&nbsp;&nbsp;&nbsp;
+        <% elsif tag.content_type == "WikiPage" %>
+            <% if tag.content.wiki_type == "video" %>
+              <%= image_tag "play_icon.png", :style=>"line-height:20px;height:34px;margin-top:-3px;margin-left: 3px;" %> &nbsp;&nbsp;&nbsp;&nbsp;
+            <% else %>
+              <%= image_tag "wiki_pages.png", :style=>"line-height:20px;height:26px;margin-top:-3px;margin-left: 10px;" %> &nbsp;&nbsp;&nbsp;&nbsp;
+            <% end %>
+        <% elsif tag.content_type == "ContextExternalTool" %>
+            <%= image_tag "badges.png", :style=>"line-height:28px;;height:26px;margin-top:-3px;margin-left: 10px;" %> &nbsp;&nbsp;&nbsp;&nbsp;
+        <% elsif tag.content_type == "Quiz" %>
+            <%= image_tag "class_quiz.jpg", :style=>"line-height:28px;height:29px;margin-top:-3px;margin-left:6px;" %> &nbsp;&nbsp;&nbsp;&nbsp;
+        <% end %>
+        <a class="title <%= '_explicit_external_link' if tag && tag.content_type == 'ExternalUrl' %>"
+        <% if is_managable or @authorized_for_user  %>
+           href="<%= context_url(@context, :context_url) %>/modules/items/<%= tag ? tag.id : "{{ id }}" %>"
+        <% end %>
+        >
+          <%= truncate(tag.title, length: 53, omission: '..') %>
+        </a>
+      </div>
+      <hr/>
+
+<% end %>
+
+  <div id="class_preview_blank" style="margin: 10px 15px; font-size: 100%;
+          font-weight: normal;
+          color: #7f8c8d;
+          line-height: 1;display: none">
+    <%= image_tag "play_icon.png" %> &nbsp;&nbsp;&nbsp;&nbsp;
+    <a class="add_pre_class_video_link" href="<%= context_url(@context, :context_url) %>/modules/items/">
+
+    </a>
+    <hr/>
+  </div>
+
+</div>
+
+<%= render :partial => "shared/select_content_dialog", :locals => {:for_modules => true,:only => [:videos]} %>

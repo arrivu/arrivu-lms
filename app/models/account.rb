@@ -25,6 +25,7 @@ class Account < ActiveRecord::Base
     :default_user_storage_quota_mb, :default_group_storage_quota_mb
 
   include Workflow
+  has_many :rewards
   belongs_to :parent_account, :class_name => 'Account'
   belongs_to :root_account, :class_name => 'Account'
   authenticates_many :pseudonym_sessions
@@ -84,7 +85,7 @@ class Account < ActiveRecord::Base
   has_many :alerts, :as => :context, :include => :criteria
   has_many :user_account_associations
   has_many :report_snapshots
-
+  has_one :terms_and_condition
   before_validation :verify_unique_sis_source_id
   before_save :ensure_defaults
   before_save :set_update_account_associations_if_changed
@@ -93,7 +94,7 @@ class Account < ActiveRecord::Base
   
   serialize :settings, Hash
   include TimeZoneHelper
-  time_zone_attribute :default_time_zone, default: "America/Denver"
+  time_zone_attribute :default_time_zone, default: "New Delhi"
 
   validates_locale :default_locale, :allow_nil => true
   validates_length_of :name, :maximum => maximum_string_length, :allow_blank => true
@@ -179,6 +180,9 @@ class Account < ActiveRecord::Base
   add_setting :edit_institution_email, :boolean => true, :root_only => true, :default => true
   add_setting :enable_fabulous_quizzes, :boolean => true, :root_only => true, :default => false
   add_setting :google_docs_domain, root_only: true
+  #arrivu changes to add introduction video
+  add_setting :account_video_url
+  #End arrivu changes to add introduction video
 
   def settings=(hash)
     if hash.is_a?(Hash)
@@ -249,11 +253,11 @@ class Account < ActiveRecord::Base
   end
 
   def terms_of_use_url
-    Setting.get('terms_of_use_url', 'http://www.instructure.com/policies/terms-of-use')
+    Setting.get('terms_of_use_url', 'http://www.arrivuapps.com/policies/terms-of-use')
   end
 
   def privacy_policy_url
-    Setting.get('privacy_policy_url', 'http://www.instructure.com/policies/privacy-policy-instructure')
+    Setting.get('privacy_policy_url', 'http://www.arrivuapps.com/policies/privacy-policy-arrivu')
   end
 
   def terms_required?
@@ -1042,6 +1046,7 @@ class Account < ActiveRecord::Base
   TAB_DEVELOPER_KEYS = 16
   TAB_ADMIN_TOOLS = 17
 
+
   def external_tool_tabs(opts)
     tools = ContextExternalTool.active.find_all_for(self, :account_navigation)
     tools.sort_by(&:id).map do |tool|
@@ -1139,16 +1144,16 @@ class Account < ActiveRecord::Base
         :description => "",
         :expose_to_ui => (Twitter.config ? :service : false)
       },
-      :delicious => {
-        :name => "Delicious", 
-        :description => "",
-        :expose_to_ui => :service
-      },
-      :diigo => {
-        :name => "Diigo", 
-        :description => "",
-        :expose_to_ui => :service
-      },
+      #:delicious => {
+      #  :name => "Delicious",
+      #  :description => "",
+      #  :expose_to_ui => :service
+      #},
+      #:diigo => {
+      #  :name => "Diigo",
+      #  :description => "",
+      #  :expose_to_ui => :service
+      #},
       # TODO: move avatars to :settings hash, it makes more sense there
       # In the meantime, we leave it as a service but expose it in the
       # "Features" (settings) portion of the account admin UI

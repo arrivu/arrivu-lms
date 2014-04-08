@@ -89,7 +89,7 @@ class AccountsController < ApplicationController
   before_filter :require_user, :only => [:index]
   before_filter :reject_student_view_student
   before_filter :get_context
-
+  skip_before_filter :check_for_terms_and_conditions
   include Api::V1::Account
 
   INTEGER_REGEX = /\A[+-]?\d+\z/
@@ -447,7 +447,7 @@ class AccountsController < ApplicationController
         if @account.root_account? && !can_edit_email.nil?
           @account[:settings][:edit_institution_email] = value_to_boolean(can_edit_email)
         end
-
+        params[:account][:settings][:account_video_url] = params[:account][:settings][:videolink]
         if @account.update_attributes(params[:account])
           format.html { redirect_to account_settings_url(@account) }
           format.json { render :json => @account }

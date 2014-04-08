@@ -78,7 +78,7 @@ module BasicLTI
       hash['text'] = CGI::escape(html)
     end
 
-    def generate
+    def generate(user_ids=[],context_module_id=nil)
       hash['lti_message_type'] = 'basic-lti-launch-request'
       hash['lti_version'] = 'LTI-1p0'
       hash['resource_link_id'] = link_code
@@ -147,6 +147,14 @@ module BasicLTI
         hash['ext_content_return_url'] = return_url
       end
       hash['oauth_callback'] = 'about:blank'
+
+      unless user_ids.empty?
+        hash['user_ids'] = user_ids.join(",")
+      end
+
+      unless context_module_id.nil?
+        hash['context_module_id'] = context_module_id
+      end
 
       VariableSubstitutor.new(self).substitute!
       BasicLTI.generate_params(hash, url, tool.consumer_key, tool.shared_secret)

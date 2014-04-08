@@ -65,6 +65,103 @@ module ApplicationHelper
     end
   end
 
+  def lock_explanation(hash, type, context=nil)
+    # Any additions to this function should also be made in javascripts/content_locks.js
+    if hash[:lock_at]
+      case type
+      when "quiz"
+        return I18n.t('messages.quiz_locked_at', "This quiz was locked %{at}.", :at => datetime_string(hash[:lock_at]))
+      when "assignment"
+        return I18n.t('messages.assignment_locked_at', "This assignment was locked %{at}.", :at => datetime_string(hash[:lock_at]))
+      when "topic"
+        return I18n.t('messages.topic_locked_at', "This topic was locked %{at}.", :at => datetime_string(hash[:lock_at]))
+      when "file"
+        return I18n.t('messages.file_locked_at', "This file was locked %{at}.", :at => datetime_string(hash[:lock_at]))
+      when "page"
+        return I18n.t('messages.page_locked_at', "This page was locked %{at}.", :at => datetime_string(hash[:lock_at]))
+      else
+        return I18n.t('messages.content_locked_at', "This content was locked %{at}.", :at => datetime_string(hash[:lock_at]))
+      end
+    elsif hash[:unlock_at]
+      case type
+      when "quiz"
+        return I18n.t('messages.quiz_locked_until', "This quiz is locked until %{date}.", :date => datetime_string(hash[:unlock_at]))
+      when "assignment"
+        return I18n.t('messages.assignment_locked_until', "This assignment is locked until %{date}.", :date => datetime_string(hash[:unlock_at]))
+      when "topic"
+        return I18n.t('messages.topic_locked_until', "This topic is locked until %{date}.", :date => datetime_string(hash[:unlock_at]))
+      when "file"
+        return I18n.t('messages.file_locked_until', "This file is locked until %{date}.", :date => datetime_string(hash[:unlock_at]))
+      when "page"
+        return I18n.t('messages.page_locked_until', "This page is locked until %{date}.", :date => datetime_string(hash[:unlock_at]))
+      else
+        return I18n.t('messages.content_locked_until', "This content is locked until %{date}.", :date => datetime_string(hash[:unlock_at]))
+      end
+    elsif hash[:context_module]
+      obj = hash[:context_module].is_a?(ContextModule) ? hash[:context_module] : OpenObject.new(hash[:context_module])
+      html = if obj.workflow_state == 'unpublished'
+        case type
+          when "quiz"
+            I18n.t('messages.quiz_unpublished_module', "This quiz is part of an unpublished module and is not available yet.")
+          when "assignment"
+            I18n.t('messages.assignment_unpublished_module', "This assignment is part of an unpublished module and is not available yet.")
+          when "topic"
+            I18n.t('messages.topic_unpublished_module', "This topic is part of an unpublished module and is not available yet.")
+          when "file"
+            I18n.t('messages.file_unpublished_module', "This file is part of an unpublished module and is not available yet.")
+          when "page"
+            I18n.t('messages.page_unpublished_module', "This page is part of an unpublished module and is not available yet.")
+          else
+            I18n.t('messages.content_unpublished_module', "This content is part of an unpublished module and is not available yet.")
+        end
+      else
+        case type
+          when "quiz"
+            I18n.t('messages.quiz_locked_module', "This quiz is part of the class *%{module}* and hasn't been unlocked yet.",
+              :module => TextHelper.escape_html(obj.name), :wrapper => '<b>\1</b>')
+          when "assignment"
+            I18n.t('messages.assignment_locked_module', "This assignment is part of the class *%{module}* and hasn't been unlocked yet.",
+              :module => TextHelper.escape_html(obj.name), :wrapper => '<b>\1</b>')
+          when "topic"
+            I18n.t('messages.topic_locked_module', "This topic is part of the class *%{module}* and hasn't been unlocked yet.",
+              :module => TextHelper.escape_html(obj.name), :wrapper => '<b>\1</b>')
+          when "file"
+            I18n.t('messages.file_locked_module', "This file is part of the class *%{module}* and hasn't been unlocked yet.",
+              :module => TextHelper.escape_html(obj.name), :wrapper => '<b>\1</b>')
+          when "page"
+            I18n.t('messages.page_locked_module', "This page is part of the class *%{module}* and hasn't been unlocked yet.",
+              :module => TextHelper.escape_html(obj.name), :wrapper => '<b>\1</b>')
+          else
+            I18n.t('messages.content_locked_module', "This content is part of the class *%{module}* and hasn't been unlocked yet.",
+              :module => TextHelper.escape_html(obj.name), :wrapper => '<b>\1</b>')
+        end
+      end
+      if context && (obj.workflow_state != 'unpublished')
+        html << "<br/>".html_safe
+        html << I18n.t('messages.visit_modules_page', "*Visit the course modules page for information on how to unlock this content.*",
+          :wrapper => "<a href='#{context_url(context, :context_context_modules_url)}'>\\1</a>")
+        html << "<a href='#{context_url(context, :context_context_module_prerequisites_needing_finishing_url, obj.id, hash[:asset_string])}' style='display: none;' id='module_prerequisites_lookup_link'>&nbsp;</a>".html_safe
+        js_bundle :prerequisites_lookup
+      end
+      return html
+    else
+      case type
+      when "quiz"
+        return I18n.t('messages.quiz_locked', "This quiz is currently locked.")
+      when "assignment"
+        return I18n.t('messages.assignment_locked', "This assignment is currently locked.")
+      when "topic"
+        return I18n.t('messages.topic_locked', "This topic is currently locked.")
+      when "file"
+        return I18n.t('messages.file_locked', "This file is currently locked.")
+      when "page"
+        return I18n.t('messages.page_locked', "This page is currently locked.")
+      else
+        return I18n.t('messages.content_locked', "This quiz is currently locked.")
+      end
+    end
+  end
+
   # don't use this anymore. circular avatars are the new hotness
   def square_avatar_image(user_or_id, width=50, opts = {})
     user_id = user_or_id.is_a?(User) ? user_or_id.id : user_or_id
@@ -221,7 +318,7 @@ module ApplicationHelper
     includes = [:active_assignments, :active_discussion_topics, :active_quizzes, :active_context_modules]
     includes.each{|i| @wiki_sidebar_data[i] = @context.send(i).limit(150) if @context.respond_to?(i) }
     includes.each{|i| @wiki_sidebar_data[i] ||= [] }
-    @wiki_sidebar_data[:wiki_pages] = @context.wiki.wiki_pages.active.order(:title).limit(150) if @context.respond_to?(:wiki)
+    @wiki_sidebar_data[:wiki_pages] = @context.wiki.wiki_pages.active.order(:title).limit(900) if @context.respond_to?(:wiki)
     @wiki_sidebar_data[:wiki_pages] ||= []
     if can_do(@context, @current_user, :manage_files)
       @wiki_sidebar_data[:root_folders] = Folder.root_folders(@context)
@@ -355,13 +452,22 @@ module ApplicationHelper
             path = send(tab[:href], *tab[:args])
           elsif tab[:no_args]
             path = send(tab[:href])
+          elsif tab[:type]
+            path = send(tab[:href], @context, tab[:type])
           else
             path = send(tab[:href], @context)
           end
           hide = tab[:hidden] || tab[:hidden_unused]
           class_name = tab[:css_class].downcase.replace_whitespace("-")
           class_name += ' active' if @active_tab == tab[:css_class]
-          html << "<li class='section #{"section-tab-hidden" if hide }'>" + link_to(tab[:label], path, :class => class_name) + "</li>" if tab[:href]
+          unless (tab[:label] == "Sub-Accounts") || (tab[:label] == "Outcomes")  || (tab[:label] == "Pages")
+            if FileTest.exist?("#{RAILS_ROOT}/public/images/#{tab[:css_class]}.png")
+              link_icon =  tab[:css_class]
+            else
+              link_icon = "missing"
+            end
+            html << "<li class='section #{"section-tab-hidden" if hide }'>" + "<a href='"+path+"' class='"+class_name+"'> "+image_tag("#{link_icon}.png",:style => 'padding: 0px 10px 0px 0px;' ) + tab[:label] + "</a>" + "</li>" if tab[:href]
+          end
         end
         html << "</ul></nav>"
         html.join("")
@@ -866,4 +972,148 @@ module ApplicationHelper
       }
     )
   end
-end
+
+  #arrivu changes for favourite course redirect
+  def favourites
+    @user ||= @current_user
+    @pseudonym ||= @current_pseudonym
+    if @user.nil? or @pseudonym.nil? or @user.enrollments.active.nil? or @user.enrollments.active.empty?
+      redirect_to root_url
+    else
+      favourite_course_id = @pseudonym.settings[:favourite_course_id]
+      if favourite_course_id.nil? || favourite_course_id.empty?
+        first_enrollment
+      else
+        @context = Course.find(favourite_course_id)
+        if is_authorized_action?(@context, @user, :read)
+          redirect_to course_url(@context)
+        else
+          first_enrollment
+        end
+      end
+    end
+  end
+
+  def first_enrollment
+    enrollment = @user.enrollments.active.first
+    unless enrollment.nil?
+      @context = Course.find_by_id(enrollment.course_id)
+      redirect_to course_url(@context)
+    else
+      redirect_to  dashboard_url
+    end
+  end
+
+  def add_class_view_crumbs
+    @skip_crumb = true
+    if @context.is_a?(Course) and params[:module_item_id].present?
+      add_crumb("Classes",named_context_url(@context, :context_context_modules_url))
+      content_tag = ContentTag.find(params[:module_item_id])
+      @context_module = content_tag.context_module
+      add_crumb(@context_module.name,course_context_module_url(@context,@context_module))
+      add_category_crumb(content_tag)
+    end
+  end
+
+  def add_category_crumb(content_tag)
+    @context_module ||= @module
+   if @context and @context_module
+      if content_tag.category == ContentTag::PRE_CLASS_VIDEO
+        add_crumb(ContentTag::PRE_CLASS_VIDEO_NAME,course_context_module_url(@context,@context_module))
+      elsif content_tag.category == ContentTag::PRE_CLASS_RECORDING
+        add_crumb(ContentTag::PRE_CLASS_RECORDING_NAME,course_context_module_url(@context,@context_module))
+      elsif content_tag.category == ContentTag::PRE_CLASS_PRESENTATION
+        add_crumb(ContentTag::PRE_CLASS_PRESENTATION_NAME,course_context_module_url(@context,@context_module))
+      elsif content_tag.category == ContentTag::PRE_CLASS_ASSIGNMENTS
+        add_crumb(ContentTag::PRE_CLASS_ASSIGNMENTS_NAME,course_context_module_url(@context,@context_module))
+      elsif content_tag.category == ContentTag::PRE_CLASS_READING_MATERIALS
+        add_crumb(ContentTag::PRE_CLASS_READING_MATERIALS_NAME,course_context_module_url(@context,@context_module))
+      else
+        add_crumb(ContentTag::SUPPLEMENTARY_NAME,course_context_module_url(@context,@context_module))
+      end
+  end
+  end
+
+  def get_badges(for_leader_board=nil,user_ids=[])
+    unless @current_user.nil?
+      context_external_tool = ContextExternalTool.find_by_tool_id_and_workflow_state('canvabadges',['anonymous','name_only','email_only','public']).try(:id)
+      unless context_external_tool.nil?
+        @tool = ContextExternalTool.find_for(context_external_tool, @domain_root_account, :main_navigation)
+        unless @tool.nil?
+          @resource_title = @tool.label_for(:main_navigation)
+          @resource_url_for_main_nav = @tool.main_navigation(:url)
+          @opaque_id = @current_user.opaque_identifier(:asset_string)
+          @resource_type = 'main_navigation'
+          @return_url = user_profile_url(@current_user, :include_host => true)
+          if for_leader_board
+            badge_context = @context
+          else
+            badge_context = @domain_root_account
+          end
+          @launch = BasicLTI::ToolLaunch.new(:url => @resource_url_for_main_nav, :tool => @tool, :user => @current_user, :context => badge_context, :link_code => @opaque_id, :return_url => @return_url, :resource_type => @resource_type)
+          unless user_ids.empty?
+            @tool_settings = @launch.generate(user_ids)
+          else
+            @tool_settings = @launch.generate
+         end
+        end
+      end
+    end
+  end
+
+  def get_user_badges
+    @current_user ||= @user
+    if @current_user
+      get_badges
+      unless @tool.nil?
+        base_url = URI(@tool.url)
+        uri = URI("#{base_url.scheme}://#{base_url.host}:#{base_url.port}/api/v1/#{@current_user.id}/badges.json")
+        begin
+        post_to_badge(uri)
+        rescue => e
+          @badge_error = true
+          logger.error("Error while getting badges for user #{@current_user.name}:#{e}")
+        end
+      end
+    end
+  end
+
+  def get_user_badges_for_header
+    response = get_user_badges
+    @response_ok = (!@badge_error && response && (response.code == '200'|| '304'))
+    if @response_ok
+      @badges_array = JSON.parse(response.body)
+    end
+  end
+
+  def calc_progression_percentage(context,user)
+    context_modules = context.context_modules.active
+    progressions = context_modules.map{|m| m.evaluate_for(user, true, true) }
+    possible = context_modules.size
+    score = progressions.select { |progression| progression.workflow_state == 'completed' unless progression.nil? }
+    calculate_percentage(score.size,possible)
+  end
+
+  def calculate_percentage(score,possible)
+    begin
+      res = (Float(score) / possible * 100).ceil
+    rescue => e
+      logger.error("Error While Calculating Percentage:#{e}")
+      res= 0
+    end
+  end
+
+  def post_to_badge(uri)
+    req = Net::HTTP::Post.new(uri.path)
+    req.set_form_data(@tool_settings)
+    sock = Net::HTTP.new(uri.host, uri.port)
+    if uri.scheme == 'https'
+      sock.use_ssl = true
+      sock.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    end
+    res = sock.start {|http| http.request(req) }
+  end
+
+
+  #arrivu changes
+  end

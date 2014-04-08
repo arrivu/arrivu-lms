@@ -39,8 +39,8 @@ $(document).ready(function() {
   INST.selectContentDialog = function(options) {
     var for_modules = options.for_modules;
     var select_button_text = options.select_button_text || I18n.t('buttons.add_item', "Add Item");
-    var holder_name = options.holder_name || "module";
-    var dialog_title = options.dialog_title || I18n.t('titles.add_item_to_module', "Add Item to Module");
+    var holder_name = options.holder_name || "class";
+    var dialog_title = options.dialog_title || I18n.t('titles.add_item_to_class', "Add Item to Class");
     var allow_external_urls = for_modules;
     $dialog.data('submitted_function', options.submit);
     $dialog.find(".context_module_content").showIf(for_modules);
@@ -77,7 +77,7 @@ $(document).ready(function() {
     $("#select_context_content_dialog .module_item_select").change();
     $("#select_context_content_dialog").dialog({
       title: dialog_title,
-      width: 400
+      width: 600
     }).fixDialogButtons();
     $("#select_context_content_dialog").dialog('option', 'title', dialog_title);
   }
@@ -98,7 +98,7 @@ $(document).ready(function() {
       }
     };
     var item_type = $("#add_module_item_select").val();
-    if(item_type == 'external_url') {
+     if(item_type == 'external_url') {
       var item_data = {
         'item[type]': $("#add_module_item_select").val(),
         'item[id]': $("#select_context_content_dialog .module_item_option:visible:first .module_item_select").val(),
@@ -106,7 +106,7 @@ $(document).ready(function() {
       }
       item_data['item[url]'] = $("#content_tag_create_url").val();
       item_data['item[title]'] = $("#content_tag_create_title").val();
-      submit(item_data);   
+      submit(item_data);
     } else if(item_type == 'context_external_tool') {
       var item_data = {
         'item[type]': $("#add_module_item_select").val(),
@@ -131,7 +131,7 @@ $(document).ready(function() {
         'item[indent]': $("#content_tag_indent").val()
       }
       item_data['item[title]'] = $("#sub_header_title").val();
-      submit(item_data);   
+      submit(item_data);
     } else {
       var $options = $("#select_context_content_dialog .module_item_option:visible:first .module_item_select option:selected");
       $options.each(function() {
@@ -152,7 +152,11 @@ $(document).ready(function() {
             // discussion_topics will come from real api v1 and so wont be nested behind a `discussion_topic` root object
             if (item_data['item[type]'] === 'discussion_topic') {
               obj = data;
-            } else {
+            }else if (item_data['item[type]'] === 'wiki' || item_data['item[type]'] === 'faq' ||  item_data['item[type]'] === 'career'
+             ||  item_data['item[type]'] === 'video' ||  item_data['item[type]'] === 'offer' || item_data['item[type]'] === 'labs' ){
+              obj = data['wiki_page']
+            }
+            else {
               obj = data[item_data['item[type]']]; // e.g. data['wiki_page'] for wiki pages
             }
 
@@ -188,9 +192,9 @@ $(document).ready(function() {
   });
   $("#context_external_tools_select .tools").delegate('.tool', 'click', function() {
     var $tool = $(this);
-    if($(this).hasClass('selected') && !$(this).hasClass('resource_selection')) { 
-      $(this).removeClass('selected'); 
-      return; 
+    if($(this).hasClass('selected') && !$(this).hasClass('resource_selection')) {
+      $(this).removeClass('selected');
+      return;
     }
     $tool.parents(".tools").find(".tool.selected").removeClass('selected');
     $tool.addClass('selected');
@@ -247,7 +251,7 @@ $(document).ready(function() {
       }
       $dialog.dialog('close')
         .dialog('option', 'width', width || 800)
-        .dialog('option', 'height', height || frameHeight || 400)
+        .dialog('option', 'height', height || frameHeight || 600)
         .dialog('open');
       $dialog.triggerHandler('dialogresize');
       var url = $.replaceTags($("#select_content_resource_selection_url").attr('href'), 'id', tool.id);

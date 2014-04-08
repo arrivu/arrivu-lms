@@ -1,37 +1,37 @@
 .table td.permissionButtonView {
   position: relative;
 
-    .default_permission {
-      opacity: .5;
-    }
+  .default_permission {
+    opacity: .5;
+  }
 
-    .icon-x {
-      color: #9B0000;
-    }
-    
-    .icon-check {
-      color: green;
-    }
+  .icon-x {
+    color: #9B0000;
+  }
 
-    .btn-group{
-      margin: 0 auto;
-      width: 40px;
+  .icon-check {
+    color: green;
+  }
+
+  .btn-group{
+    margin: 0 auto;
+    width: 40px;
+    position: relative;
+
+    .btn.dropdown-toggle{
       position: relative;
+      min-width: 35px;
 
-      .btn.dropdown-toggle{
-        position: relative;
-        min-width: 35px;
+      &:disabled, &[disabled] {
+        background: none;
+        border: none;
 
-        &:disabled, &[disabled] {
-          background: none;
-          border: none;
-
-          & .icon-lock {
-            display: none;
-          }
+        & .icon-lock {
+          display: none;
         }
       }
     }
+  }
 
   .dropdown-menu {
     text-align: left;

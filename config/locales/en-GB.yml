@@ -292,6 +292,7 @@ en-GB:
       add_course_button: "Add course"
       add_course_link: "Add a new course"
       add_user_button: "Add user"
+      add_comment_button: "Add Comment"
       add_user_link: "Add a new user"
       display_name_help: "People will see this name in discussions, messages and comments."
       full_name_description: "This name will be used by teachers for grading."
@@ -571,7 +572,7 @@ en-GB:
       account_reports: 
         sis_export: 
           description: 
-            text: "This report will export all the needed information that relates to provisioning Canvas in its respective categories."
+            text: "This report will export all the needed information that relates to provisioning Jigsaw Academy in its respective categories."
     quiz_data_csv_description: 
       account_reports: 
         ace: 
@@ -630,7 +631,7 @@ en-GB:
             field: "Section ID"
     settings: 
       about_google_docs: |-
-          In order to make it easier for users, rather than forcing them to download things like Word documents, PDFs, Excel spreadsheets, and OpenOffice documents (In addition to requiring that those programs be installed on their on their computer), in many areas throughout Canvas, it will allow you an inline preview of the document.
+          In order to make it easier for users, rather than forcing them to download things like Word documents, PDFs, Excel spreadsheets, and OpenOffice documents (In addition to requiring that those programs be installed on their on their computer), in many areas throughout Jigsaw Academy, it will allow you an inline preview of the document.
           
           If Scribd has been enabled for this account, it will try to use it to show the preview. But because Scribd uses flash paper to display the documents, and many users (namely those using an iPad/iPhone) do not have Flash Player installed, that preview will not work.  By leaving Google Docs Previews enabled, when a browser does not have Flash enabled, or if Scribd is not enabled, it will use preview powered by Google Docs. Using this service is subject to Google's Viewer [terms of service](%{terms_url})
       about_google_docs_tooltip: "About Google Docs previews"
@@ -653,7 +654,7 @@ en-GB:
         add_users: "OK, looks good. Add these users"
         continue: Continue...
         modify_users: "Go back and edit the list of users"
-      confirm_global_announcement: "This announcement will be shown to *all* Canvas users. Confirm that you want to create it."
+      confirm_global_announcement: "This announcement will be shown to *all* Jigsaw Academy users. Confirm that you want to create it."
       confirm_turnitin_settings_link: "confirm Turnitin settings"
       create_courses_description: "(Account Administrators can always create courses)"
       create_courses_title: "Who can create new courses"
@@ -661,7 +662,7 @@ en-GB:
       default_language_description: "This will override any browser/OS language settings. Preferred languages can still be set at the course/user level."
       delete: delete
       delete_announcement_tooltip: "Delete this announcement"
-      email_notification_from_description: "This setting allows the admin to brand or label the 'From' text on all notifications sent from Canvas for this account."
+      email_notification_from_description: "This setting allows the admin to brand or label the 'From' text on all notifications sent from Jigsaw Academy for this account."
       email_notification_from_settings: "E-mail notification \"From\" settings"
       enabled_web_serices_title: "Enabled web services"
       equall_endpoint_help: "This is the URL to your equella service. It will probably look something like \"%{sample_url}\"."
@@ -671,6 +672,7 @@ en-GB:
       global_announcements_title: "Global announcements"
       global_js_and_css_includes_description: "These files will be included on all page loads for your account"
       global_js_and_css_includes_title: "Global JavaScript and CSS includes"
+      videolink: "Video Link"
       headers: 
         report_last_run: "Last run"
         report_name: Name
@@ -688,7 +690,7 @@ en-GB:
         allow_invitation_previews: "Invitation previews"
         allow_sending_scores_in_emails: "Students can opt-in to receiving scores in email notifications"
         allow_sis_import: "SIS imports"
-        canvas_authentication: "Canvas authentication"
+        canvas_authentication: "Jigsaw Academy authentication"
         default_language: "Default language"
         default_time_zone: "Default Time Zone"
         edit_institution_email: "Users can delete their institution-assigned email address"
@@ -715,7 +717,7 @@ en-GB:
         no_enrollments_can_create_courses: "Users with no enrolments"
         open_registration: "Open registration"
         outgoing_email_default_name_option_custom: "Custom \"From\" name"
-        outgoing_email_default_name_option_default: "Default Canvas setting"
+        outgoing_email_default_name_option_default: "Default Jigsaw Academy setting"
         prevent_course_renaming_by_teachers: "Don't let teachers rename their courses"
         restrict_student_future_view: "Restrict students from viewing courses before start date"
         self_enrollment: "Allow self-enrolment"
@@ -750,14 +752,14 @@ en-GB:
       never_allow_self_enrollment_option: Never
       no_language_preference: "Not set (defaults to %{language})"
       notifications: 
-        custom_name_description: "If selected, this will replace all other branding sent in Canvas notifications."
+        custom_name_description: "If selected, this will replace all other branding sent in Jigsaw Academy notifications."
         email_date: Date
         email_reply_to: Reply-To
         email_to: To
         example: "Example:"
         external_services: "Notifications sent to external services"
         external_services_label: "Display one time pop-up warning on Notification Preferences page."
-        external_services_warning: "Notice: Some notifications may contain confidential information. Selecting to receive notifications at an email other than your institution provided address may result in sending sensitive Canvas course and group information outside of the institutional system."
+        external_services_warning: "Notice: Some notifications may contain confidential information. Selecting to receive notifications at an email other than your institution provided address may result in sending sensitive Jigsaw Academy course and group information outside of the institutional system."
         external_services_warning_label: "Pop-up message content:"
         from: From
         sample_subject: "Grade changed: Check in survey, testing course"
@@ -800,7 +802,7 @@ en-GB:
       tab_quotas: Quotas
       tab_reports: Reports
       tab_settings: Settings
-      transifex_message: "Join the [Canvas Translation Community](%{transifex_url})"
+      transifex_message: "Join the [Jigsaw Academy Translation Community](%{transifex_url})"
       turnitin_comments_help: "these comments will be shown to students when submitting a Turnitin-enabled assignment"
       turnitin_pledge_help: "students must check a box acknowledging that they agree with this pledge"
       turnitin_settings_title: "Turnitin settings"
@@ -963,7 +965,7 @@ en-GB:
           login: 
             check_box: "Include users that have never logged in?"
           parameters: 
-            note: "This report does not reflect the last activity in Canvas rather the last time that the user logged in."
+            note: "This report does not reflect the last activity in Jigsaw Academy rather the last time that the user logged in."
     student_submissions_csv_description: 
       account_reports: 
         vilas: 
@@ -1215,11 +1217,11 @@ en-GB:
       page_disabled_for_group: "That page has been disabled for this group"
     warnings: 
       details: 
-        suspended: "This institution's Canvas account has been suspended. Only Account Administrators may log in to correct any problems."
+        suspended: "This institution's Jigsaw Academy account has been suspended. Only Account Administrators may log in to correct any problems."
       please_log_in: "For security purposes, please enter your password to continue"
       titles: 
         suspended: "Institution suspended"
-      unsupported_browser: "Your browser does not meet the minimum requirements for Canvas. Please visit the *Canvas Guides* for a complete list of supported browsers."
+      unsupported_browser: "Your browser does not meet the minimum requirements for Arrivu LMS. Please visit the *Arrivu Academy Guides* for a complete list of supported browsers."
     wiki_front_page_default_content_course: "Welcome to your new course wiki!"
     wiki_front_page_default_content_group: "Welcome to your new group wiki!"
   appointment_group: 
@@ -1812,16 +1814,16 @@ en-GB:
           website: "Website URL"
       loading_tools: "Loading tools..."
       messages: 
-        google_docs_auth_required: "Before you can submit assignments directly from Google Docs you need to authorise Canvas to access your Google Docs account:"
+        google_docs_auth_required: "Before you can submit assignments directly from Google Docs you need to authorise Jigsaw Academy to access your Google Docs account:"
         media_recording_ready: "Ready to submit! Click 'Submit assignment' button to finish."
-        media_recordings_disabled: "Media recordings are not enabled for this Canvas site, and you will not be able to submit these types of assignments. Please contact your instructor about changing the settings for this assignment, or your system administrator about enabling media recordings."
+        media_recordings_disabled: "Media recordings are not enabled for this Jigsaw Academy site, and you will not be able to submit these types of assignments. Please contact your instructor about changing the settings for this assignment, or your system administrator about enabling media recordings."
         submitting: Submitting...
         uploading: "Retrieving a copy of your Google Doc to submit for this assignment. This may take a little while, depending on the size of the file..."
       no_files: "No files"
       no_submission: "No submission selected"
       submission_url: "Submission:"
       titles: 
-        media_recordings_disabled: "Media recordings are not enabled for this Canvas site"
+        media_recordings_disabled: "Media recordings are not enabled for this Jigsaw Academy site"
       upload_or_choose_file: "Upload a file, or choose a file you've already uploaded."
     syllabus: 
       page_title: "Syllabus for %{course}"
@@ -1951,9 +1953,9 @@ en-GB:
     export_failed: "There was an error exporting the course with bb_lcid %{id} from Blackboard"
     export_failed_no_id: "There was an error importing a course"
     export_failed_not_found: "The course with bb_lcid %{id} could not be found in Blackboard with user %{user_name}"
-    export_failed_with_id: "There was an error importing the course with bb_lcid %{id} into Canvas"
+    export_failed_with_id: "There was an error importing the course with bb_lcid %{id} into Jigsaw Academy"
     no_course_found: "No course was found with %{id_type} of %{id}"
-    no_course_id_given: "No Canvas course was identified for bb_lcid %{id}"
+    no_course_id_given: "No Jigsaw Academy course was identified for bb_lcid %{id}"
     no_credentials_found: "No credentials were found for the user name %{user_name}"
     no_credentials_given: "No user name was given for the course %{course_identifier}"
     no_lcid_found: "No bb_lcid was specified for a row"
@@ -1963,7 +1965,7 @@ en-GB:
       exporting: "Exporting from Blackboard"
       failed: Failed
       finished: Finished
-      importing: "Importing into Canvas"
+      importing: "Importing into Jigsaw Academy"
       migration_cancelled_on: "Cancelled on %{date}"
       migration_failed_on: "Failed on %{date}"
       migration_finished_on: "Finished on %{date}"
@@ -1973,7 +1975,7 @@ en-GB:
       see_results: "See results"
       show_warnings: "Show warnings"
       waiting_to_export: "Waiting to export from Blackboard"
-      waiting_to_import: "Waiting to import into Canvas"
+      waiting_to_import: "Waiting to import into Jigsaw Academy"
     index: 
       available_courses: "Available Courses"
       bulk_description: "These are the headers expected in the CSV:"
@@ -1981,8 +1983,8 @@ en-GB:
         add_credentials: "Add credentials"
         migrate_courses: "Migrate courses"
       column_name: "Column name"
-      course_id_description: "The canvas ID of the course to import into."
-      credential_description: "This tool will help you migrate multiple courses at the same time from a Blackboard Vista/CE system. Add a set of credentials for your Blackboard system then add Canvas course identifiers to the provided CSV template to migrate your courses."
+      course_id_description: "The Jigsaw Academy ID of the course to import into."
+      credential_description: "This tool will help you migrate multiple courses at the same time from a Blackboard Vista/CE system. Add a set of credentials for your Blackboard system then add Jigsaw Academy course identifiers to the provided CSV template to migrate your courses."
       csv_description: "Any other columns can be added but they will be ignored. Here is an example of a simple CSV for 3 courses in the account for a user name of \"greg\":"
       csv_template: "CSV Template"
       current_migration_batch: "Current Migration Batch"
@@ -1999,8 +2001,8 @@ en-GB:
       page_title: "Bulk course migration"
       previous_migration_batches: "Previous migration batches"
       school: School
-      school_not_supported: "Please have your administrator contact Instructure to help get your school supported."
-      sis_id_description: "The SIS ID of the canvas course to import into."
+      school_not_supported: "Please have your administrator contact Jigsaw Academy to help get your school supported."
+      sis_id_description: "The SIS ID of the Jigsaw Academy course to import into."
       upload_migration_csv: "Upload a migration CSV"
       user_name: "User Name"
       user_name_description: "The username of the user that has teacher/designer access to the course for the row. This must match one of the usernames listed in the Blackboard login credentials above."
@@ -2343,7 +2345,7 @@ en-GB:
     ics_description_course: "Calendar events for the course, %{course_name}"
     ics_description_group: "Calendar events for the group, %{group_name}"
     ics_description_user: "Calendar events for the user, %{user_name}"
-    ics_title: "%{course_or_group_name} Calendar (Canvas)"
+    ics_title: "%{course_or_group_name} Calendar (Jigsaw Academy)"
   calendars: 
     assignment_details: "Assignment details"
     calendar: 
@@ -2482,10 +2484,10 @@ en-GB:
         invalid_url: "Invalid URL"
         login_expiration_minimum: "Session expiration must be 20 minutes or greater"
         need_integer: "Please enter an integer for the play list cache"
-  canvas_cartridge_description: "This enables converting a canvas export to the intermediary json format to be imported"
-  canvas_cartridge_display: "Canvas Common Cartridge"
-  canvas_cartridge_file_description: "Canvas course export package"
-  canvas_cartridge_name: "Canvas cartridge importer"
+  canvas_cartridge_description: "This enables converting a Jigsaw Academy export to the intermediary json format to be imported"
+  canvas_cartridge_display: "Jigsaw Academy Common Cartridge"
+  canvas_cartridge_file_description: "Jigsaw Academy course export package"
+  canvas_cartridge_name: "Jigsaw Academy cartridge importer"
   cc: 
     by: "CC attribution"
     by_nc: "CC attribution non-commercial"
@@ -2538,7 +2540,7 @@ en-GB:
       cannot_load_collaboration: "Cannot load collaboration"
       create_failed: "Collaboration creation failed"
       no_name: "Please enter a name for this collaboration."
-      not_enabled: "Collaborations have not been enabled for this Canvas site"
+      not_enabled: "Collaborations have not been enabled for this Jigsaw Academy site"
       title_too_long: "Please use %{maxLength} characters or less for the name. Use the description for additional content."
       update_failed: "Collaboration update failed"
     forms: 
@@ -2566,7 +2568,7 @@ en-GB:
         description: Description
         document_name: "Document name:"
       messages: 
-        delete_google_doc_as_well: "This collaboration is being stored as a Google Doc. Did you want to delete it just from Canvas, or remove it from Google Docs as well?"
+        delete_google_doc_as_well: "This collaboration is being stored as a Google Doc. Did you want to delete it just from Jigsaw Academy, or remove it from Google Docs as well?"
       titles: 
         new: "Start a new collaboration"
     index: 
@@ -2601,7 +2603,7 @@ en-GB:
       delete: "Delete collaboration?"
   collection_items: 
     new: 
-      pin_to_canvas_network: "Pin to Canvas Network"
+      pin_to_canvas_network: "Pin to Jigsaw Academy Network"
       saved_successfully: "Saved successfully"
   collection_view: 
     no_items: "No items."
@@ -2613,7 +2615,7 @@ en-GB:
   common_cartridge_file_description: "Common Cartridge 1.0/1.1/1.2 Package"
   common_cartridge_name: "Common Cartridge Importer"
   communication_channel: 
-    body: "Your Canvas verification code is %{verification_code}"
+    body: "Your Jigsaw Academy verification code is %{verification_code}"
     default_facebook_account: "Facebook account"
     default_twitter_handle: "Twitter handle"
   communication_channels: 
@@ -2623,7 +2625,7 @@ en-GB:
         back: Back
         continue: Continue
         create_account: "Create my account"
-        have_account: "I have a canvas account"
+        have_account: "I have a Jigsaw Academy account"
         login_as: "Log in as %{invited_user}"
         merge: Combine
         new_account: "No"
@@ -2638,7 +2640,7 @@ en-GB:
             There's a user account already associated with %{email}.
             
               **Are you %{name}?**
-        account_needed: "You've been invited to join **%{course}**. To accept this request you need a Canvas account. Click the link below to create a Canvas account."
+        account_needed: "You've been invited to join **%{course}**. To accept this request you need a Jigsaw Academy account. Click the link below to create a Jigsaw Academy account."
         add_email: "Would you like to add this email address to your current account?"
         choose_login: "Select where you would like to log in at."
         logged_in_other_user: "**%{email}** is a new account, but you are currently logged in as **%{user}**."
@@ -2655,7 +2657,7 @@ en-GB:
         wrong_account: "The invitation for %{course} was sent to **%{invited_user}**, but you are currently logged in as **%{current_user}**"
       labels: 
         password: Password
-        subscribe_to_emails: "I want to receive information, news and tips from Instructure"
+        subscribe_to_emails: "I want to receive information, news and tips from Jigsaw Academy"
         time_zone: "Time Zone"
         unique_id: Login
       page_title: "Register %{email}"
@@ -2685,7 +2687,7 @@ en-GB:
           
           You will not be able to reopen it.
       delete: "Are you sure you want to delete this conference?"
-    disabled_error: "Web conferencing has not been enabled for this Canvas site"
+    disabled_error: "Web conferencing has not been enabled for this Jigsaw Academy site"
     edit_conference_form: 
       advanced_settings: "Manage advanced settings..."
       buttons: 
@@ -2738,7 +2740,7 @@ en-GB:
         finished: "Finished %{date_and_time} (%{duration})"
         new: "Hasn't started yet"
         started: "Started %{time}"
-    type_disabled_error: "This type of conference is no longer enabled for this Canvas site"
+    type_disabled_error: "This type of conference is no longer enabled for this Jigsaw Academy site"
     update_conference_title: "Update conference"
   content_exports: 
     buttons: 
@@ -2778,7 +2780,7 @@ en-GB:
     files: 
       buttons: 
         skip: "Skip this step"
-      description: "You can upload a zipped collection of files into your course and we'll extract them all out for you. This is an easy way to move files from another system into Canvas."
+      description: "You can upload a zipped collection of files into your course and we'll extract them all out for you. This is an easy way to move files from another system into Jigsaw Academy."
       page_title: "Import files"
     messages: 
       copying: "Copying... this will take a few minutes"
@@ -2807,7 +2809,7 @@ en-GB:
       page_locked_no_reason: "This page is locked.  No other reason has been provided."
       page_locked_until: "This page is locked until %{date}."
       quiz_locked_at: "This quiz was locked %{at}."
-      quiz_locked_module: "This quiz is part of the module *%{module}* and hasn't been unlocked yet."
+      quiz_locked_module: "This quiz is part of the class *%{module}* and hasn't been unlocked yet."
       quiz_locked_no_reason: "This quiz is locked.  No other reason has been provided."
       quiz_locked_until: "This quiz is locked until %{date}."
       topic_locked_at: "This topic was locked %{at}."
@@ -2938,7 +2940,7 @@ en-GB:
     chat: 
       titles: 
         chat: Chat
-    chat_not_enabled: "Chat has not been enabled for this Canvas site"
+    chat_not_enabled: "Chat has not been enabled for this Jigsaw Academy site"
     communication: 
       headings: 
         discussions: Discussions
@@ -3053,7 +3055,7 @@ en-GB:
         user_services: "Registered web services"
       help: 
         list_services: "You haven't enabled your list of registered services. Enabling this list will let fellow course and group members more easily link up with you outside of class."
-        services: "You haven't linked your user profile to any external services. You can link your Canvas account to services like Facebook and Twitter. This will make it easier for fellow course and group members to link up with you outside of class."
+        services: "You haven't linked your user profile to any external services. You can link your Jigsaw Academy account to services like Facebook and Twitter. This will make it easier for fellow course and group members to link up with you outside of class."
       labels: 
         public_list_services: "Let fellow course/group members see which services I've linked to my profile"
         user_privileges: Privileges
@@ -3091,9 +3093,9 @@ en-GB:
         registered_services: "Registered services"
         service_types: "Service types"
       help: 
-        no_services: "You haven't linked your user profile to any external services. You can link your Canvas account to services like Facebook and Twitter."
-        services_private: "You haven't enabled your list of registered services. Enabling this list will let fellow course and group members see which services you have linked to your Canvas account."
-        user_services: "If other members choose, they can let you see which outside services they've linked to their Canvas account. This can make it easier to coordinate group projects and also link up outside of class."
+        no_services: "You haven't linked your user profile to any external services. You can link your Jigsaw Academy account to services like Facebook and Twitter."
+        services_private: "You haven't enabled your list of registered services. Enabling this list will let fellow course and group members see which services you have linked to your Jigsaw Academy account."
+        user_services: "If other members choose, they can let you see which outside services they've linked to their Jigsaw Academy account. This can make it easier to coordinate group projects and also link up outside of class."
       labels: 
         allow_view_services: "Let fellow course/group members see which services I've linked to my profile"
       links: 
@@ -3132,6 +3134,7 @@ en-GB:
       min_score: "must score at least a %{score}"
       must_contribute: "must contribute to the page"
       must_submit: "must submit the assignment"
+      must_submit_survey: "must submit the survey"
       must_view: "must view the page"
   context_module_items_api: 
     invalid_content: "Could not find content"
@@ -3246,10 +3249,11 @@ en-GB:
         must_contribute: "contribute to the page"
         must_score_at_least: "score at least"
         must_submit: "submit the assignment"
+        must_submit_survey: "must submit the survey"
         must_view: "view the item"
       select_module: 
         instructions: "Select module"
-        name: "the module, %{module}"
+        name: "the class, %{module}"
       select_prerequisite: "Select the type of prerequisite. Students cannot see a module until all prerequisites are satisfied."
       student_name: "Student name"
       table_headings: 
@@ -3598,7 +3602,7 @@ en-GB:
   conversations_intro: 
     slide1: 
       paragraph1: "Take a look at your Inbox!"
-      paragraph2: "Conversations—the new Canvas messaging system—has arrived!"
+      paragraph2: "Conversations—the new Jigsaw Academy messaging system—has arrived!"
       paragraph3: "Use conversations to send a private message to a classmate or use conversations to talk to an entire group of people."
       paragraph4: "Ready for a short intro? Click the right arrow to get started."
     slide2: 
@@ -3659,7 +3663,7 @@ en-GB:
       sis_in_use: "SIS ID \"%{sis_id}\" is already in use"
     file_copy_error: "Couldn't copy file \"%{name}\""
     grade_export_types: 
-      instructure_csv: "Instructure formatted CSV"
+      instructure_csv: "Jigsaw Academy formatted CSV"
     grade_publishing_status: 
       error: Error
       error_with_message: "Error: %{message}"
@@ -3682,10 +3686,10 @@ en-GB:
       only_teachers: "Only teachers"
       teachers_students: "Teacher and students"
   course_copy_argument_error: "A course copy requires a source course."
-  course_copy_description: "Migration plugin for copying canvas courses"
+  course_copy_description: "Migration plugin for copying Jigsaw Academy courses"
   course_copy_display: "Course copy"
-  course_copy_file_description: "Copy a Canvas course"
-  course_copy_name: "Copy Canvas course"
+  course_copy_file_description: "Copy a Jigsaw Academy course"
+  course_copy_name: "Copy Jigsaw Academy course"
   course_copy_no_course_error: "The source course was not found."
   course_copy_not_allowed_error: "You are not allowed to copy the source course."
   course_exports: 
@@ -3694,7 +3698,7 @@ en-GB:
       assignment_groups: "Failed to export assignment groups"
       assignment_is_locked: "The assignment \"%{title}\" could not be copied because it is locked."
       assignments: "Failed to export some assignments"
-      canvas_meta: "Failed to export canvas-specific meta data"
+      canvas_meta: "Failed to export Jigsaw Academy-specific meta data"
       course_export: "Error running course export."
       course_settings: "Failed to export course settings"
       events: "Failed to export calendar events"
@@ -3887,7 +3891,7 @@ en-GB:
               Great, so you've got a course...  Now what?  Well, before you go publishing it to the world, you may want to check and make sure you've got the basics laid out.  Work through the list on the left to ensure that your course is ready to use.
               
               *This course is visible only to teachers until it is published*
-          saved: "Done and done!  Your course, %{course} is now officially created. It's only visible to you until it is published -- but before you jump the gun, you'll want to run through the list to the left to get a feel for how Canvas works and to make sure you really are ready to teach."
+          saved: "Done and done!  Your course, %{course} is now officially created. It's only visible to you until it is published -- but before you jump the gun, you'll want to run through the list to the left to get a feel for how Jigsaw Academy works and to make sure you really are ready to teach."
         created: 
           not_saved: |-
               This class has been created, but not claimed.  It'll get deleted if it's not claimed within a week.  In the mean time, tick through the list to the left to make sure you're ready to go.
@@ -3896,21 +3900,21 @@ en-GB:
               
               Please **log in** or ***register*** to claim this course.
           saved: |-
-              Done and done!  Your course, %{course} is now officially created.  It's only visible to you until it is published -- but before you jump the gun, you'll want to run through the list to the left to get a feel for how Canvas works and to make sure you really are ready to teach.
+              Done and done!  Your course, %{course} is now officially created.  It's only visible to you until it is published -- but before you jump the gun, you'll want to run through the list to the left to get a feel for how Jigsaw Academy works and to make sure you really are ready to teach.
               
               If you need to leave and come back before then, just save *this link* to get back here later.
               
               Please **log in** or ***register*** to claim this course.
-        files: "The Files tab is the place to share lecture slides, example documents, study helps -- anything your students will want to download. Uploading and organising your files is easy with Canvas. We'll show you how."
+        files: "The Files tab is the place to share lecture slides, example documents, study helps -- anything your students will want to download. Uploading and organising your files is easy with Jigsaw Academy. We'll show you how."
         home: "When people visit the course, this is the page they'll see. You can set it to show an activity stream, the list of course modules, a syllabus, or a custom page you write yourself. The default is the course activity stream. To customise this, just click %{change_layout}."
-        import: "If you've been using another course management system, you probably have stuff in there that you're going to want moved over to Canvas. We can walk you through the process of easily migrating your content into Canvas."
+        import: "If you've been using another course management system, you probably have stuff in there that you're going to want moved over to Jigsaw Academy. We can walk you through the process of easily migrating your content into Jigsaw Academy."
         navigation: "By default all links are enabled for a course. Students won't see links to sections that don't have content. For example, if you haven't created any quizzes, they won't see the quizzes link. You can sort and explicitly disable these links if there are areas of the course you don't want your students accessing."
         publish: 
           form: |-
               All finished?  Time to publish your course!  Click the button below to make it official!
               
               Publishing will allow the users to begin participating in the course.
-          not_registered: "This course is claimed and ready, but you'll need to finish the registration process before you can publish the course. You should have received an email from Canvas with a link to finish the process. Be sure to check your spam box."
+          not_registered: "This course is claimed and ready, but you'll need to finish the registration process before you can publish the course. You should have received an email from Jigsaw Academy with a link to finish the process. Be sure to check your spam box."
         students: "You'll definitely want some of these. What's the fun of teaching a course if nobody's even listening?"
         tas: "You may want to assign some TAs to help you with the course. TAs can grade student submissions, help moderate the discussions and even update due dates and assignment details for you."
       headings: 
@@ -3960,10 +3964,10 @@ en-GB:
       path_syntax: "lower-case letters, numbers and dashes"
       portal_path_syntax: "lower-case letters, numbers, dashes and slashes (e.g. harvard/chemistry)"
       private: Hidden
-      public: "Listed on canvas.net"
+      public: "Listed on jigsawacademy.com"
       save_changes: "Save changes"
       self_paced: Self-paced
-      unlisted: "Unlisted on canvas.net (accessible via url)"
+      unlisted: "Unlisted on jigsawacademy.com (accessible via url)"
       when_to_set_tentative_start: "e.g. \"Fall 2013\", if the course doesn't have a definitive start date"
     enrollment_reminders: 
       buttons: 
@@ -4099,7 +4103,7 @@ en-GB:
         pending_acceptance_explanation: "This user has not yet accepted the invitation to the course"
         pending_acceptance_of_invitation: pending
       roster_users: 
-        canvas_user_id: "Canvas user ID"
+        canvas_user_id: "Jigsaw Academy user ID"
         login_name_or_sis_id: "Login / SIS ID"
         name: Name
         no_people_found: "No people found"
@@ -4215,7 +4219,7 @@ en-GB:
         users: Users
       titles: 
         edit_navigation: "Edit course navigation"
-      transifex_message: "Join the [Canvas Translation Community](%{transifex_url})"
+      transifex_message: "Join the [Jigsaw Academy Translation Community](%{transifex_url})"
       turnitin: "these comments will be shown to students when submitting a Turnitin-enabled assignment"
       view_grading_scheme: "view grading scheme"
       wiki_editing_roles: "can create, rename, and edit course wiki pages by default"
@@ -4611,11 +4615,11 @@ en-GB:
       provost: Provost
       ready: Ready!
       school_admin: "School Administrator"
-      sign_up_to_canvas: "Sign up to try Canvas"
+      sign_up_to_canvas: "Sign up to try Jigsaw Academy"
       specify_lms: "Please specify your current LMS or choose 'none'"
       specify_size: "Please specify your organisation's size"
       student: Student
-      subscribe: "I want to receive news, tips and info from Instructure"
+      subscribe: "I want to receive news, tips and info from Jigsaw Academy"
       support: Support
       teacher: Teacher/Instructor
       technologist: Technologist
@@ -4997,7 +5001,7 @@ en-GB:
       formatting: "Formatting. Press down to select"
       rte_help: "Rich text area. Press ALT F10 for toolbar. Press ALT 0 for help."
   email: 
-    default_from_name: "Instructure Canvas"
+    default_from_name: "Jigsaw Academy "
   enrollment: 
     default_course_name: Course
     default_email: "No email"
@@ -5214,7 +5218,7 @@ en-GB:
       write_only_comments: "Comments for this page are private. You can make comments, but only the portfolio's owner will be able to see them."
     show_me: "show me"
     static_page: 
-      created_with_canvas: "Created with Canvas"
+      created_with_canvas: "Created with Jigsaw Academy"
       headers: 
         page_comments: "Page comments"
       links: 
@@ -5408,8 +5412,8 @@ en-GB:
     index_view: 
       add_new_tool: "Add new App"
       app_headder: "External Apps"
-      external_tools_note: "Apps are an easy way to add new features to Canvas. They can be added to individual courses, or to all courses in an account. Once configured, you can link to them through course modules and create assignments for assessment tools."
-      external_tools_references: "Click *here* to see some LTI tools that work great with Canvas. You can also check out the Canvas Community topics about LTI tools **here**"
+      external_tools_note: "Apps are an easy way to add new features to Jigsaw Academy. They can be added to individual courses, or to all courses in an account. Once configured, you can link to them through course modules and create assignments for assessment tools."
+      external_tools_references: "Click *here* to see some LTI tools that work great with Jigsaw Academy. You can also check out the Jigsaw Academy Community topics about LTI tools **here**"
       search_filter: "Filter by name"
       view_app_center: "View App Centre"
       view_installed_tools: "View installed Apps"
@@ -5431,27 +5435,27 @@ en-GB:
     user_navigation_configured: "User navigation configured"
   facebook: 
     authorization_required: "Only authorised users can access that page"
-    authorization_success: "Authorisation successful!  Canvas and Facebook are now friends."
+    authorization_success: "Authorisation successful!  Jigsaw Academy and Facebook are now friends."
     deleted: Deleted
     index: 
       all_set: "You're all set up!"
-      bookmark_notice: "You can see the number of new Canvas notifications from your Facebook home page if you bookmark this application."
-      canvas_messages: "Canvas messages"
-      configure_notification_preferences_notice: "After you *configure your notification preferences* you should start to see notifications show up here letting you know about things happening in your Canvas account."
-      installation_about: "To install the Canvas Facebook app, go to your profile page in Canvas and click the Facebook button to connect your account to Facebook."
-      learn_more: "Learn more at instructure.com"
+      bookmark_notice: "You can see the number of new Jigsaw Academy notifications from your Facebook home page if you bookmark this application."
+      canvas_messages: "Jigsaw Academy messages"
+      configure_notification_preferences_notice: "After you *configure your notification preferences* you should start to see notifications show up here letting you know about things happening in your Jigsaw Academy account."
+      installation_about: "To install the Jigsaw Academy Facebook app, go to your profile page in Jigsaw Academy and click the Facebook button to connect your account to Facebook."
+      learn_more: "Learn more at jigsawacademy.com"
       more_information: "More information at %{domain_list}"
-      no_messages_notice: "As things happen in the course you'll start seeing notifications show up here letting you know about things happening in your Canvas account."
-      notification_about: "The Canvas Facebook app is here to give you easier access to the interactions going on inside your courses. You can set it to send you notifications when your assignments are graded, when due dates change, etc. Your private data will still stay private at Canvas."
+      no_messages_notice: "As things happen in the course you'll start seeing notifications show up here letting you know about things happening in your Jigsaw Academy account."
+      notification_about: "The Jigsaw Academy Facebook app is here to give you easier access to the interactions going on inside your courses. You can set it to send you notifications when your assignments are graded, when due dates change, etc. Your private data will still stay private at Jigsaw Academy."
       notification_settings: "Notification settings"
-      notifications_notice: "Below you can see a list of your most recent notifications from Canvas. You can see the number of new Canvas notifications from your Facebook home page if you bookmark this application."
+      notifications_notice: "Below you can see a list of your most recent notifications from Jigsaw Academy. You can see the number of new Jigsaw Academy notifications from your Facebook home page if you bookmark this application."
       welcome: "Welcome back, %{name}!"
-      welcome_message: "Welcome to a new breed of online learning software, courtesy of Instructure. We're here to make it easy for you to use the web to improve learning. Our interface is simple, clean and open, and we work with the tools you and your students are already using -- tools like Facebook -- to provide a more open, collaborative learning experience. We roll it all up into one powerful, open package that does more than just tracks assignments. It encourages interaction and fosters learning."
-      welcome_title: "Welcome to Instructure Canvas"
+      welcome_message: "Welcome to a new breed of online learning software, courtesy of Jigsaw Academy. We're here to make it easy for you to use the web to improve learning. Our interface is simple, clean and open, and we work with the tools you and your students are already using -- tools like Facebook -- to provide a more open, collaborative learning experience. We roll it all up into one powerful, open package that does more than just tracks assignments. It encourages interaction and fosters learning."
+      welcome_title: "Welcome to Jigsaw Academy Jigsaw Academy"
     index_disabled: 
-      disabled_notice: "This Canvas site is not configured to communicate with Facebook."
-      get_help: "Get help at support.instructure.com"
-      instructure_canvas: "Instructure Canvas"
+      disabled_notice: "This Jigsaw Academy site is not configured to communicate with Facebook."
+      get_help: "Get help at support.jigsawacademy.com"
+      instructure_canvas: "Jigsaw Academy Jigsaw Academy"
     invalid_signature: "Invalid Facebook signature"
     message: 
       hide: Hide
@@ -5472,9 +5476,9 @@ en-GB:
       weekly: Weekly
     settings: 
       back_to_messages: "Back to messages"
-      link_needed: "Before you can configure the Canvas Facebook App you need to link it to your Canvas login. Please click \"Welcome\" for more information."
-      notifications_config_notice: "Notifications from Canvas can automatically be sent over to your Facebook account. Below you'll see the types of notifications you can have sent. You can change your notification preferences at any time, either here or in Canvas."
-      settings_title: "Canvas notification settings"
+      link_needed: "Before you can configure the Jigsaw Academy Facebook App you need to link it to your Jigsaw Academy login. Please click \"Welcome\" for more information."
+      notifications_config_notice: "Notifications from Jigsaw Academy can automatically be sent over to your Facebook account. Below you'll see the types of notifications you can have sent. You can change your notification preferences at any time, either here or in Jigsaw Academy."
+      settings_title: "Jigsaw Academy notification settings"
       updating_preferences: "Updating preferences..."
   filebrowserview: 
     course_files: "Course files"
@@ -6617,9 +6621,9 @@ en-GB:
     message_will_be_sent_to_all_the_teachers_tas_in_the_course: "Message will be sent to all the teachers / TA's in the course."
     please_select_one: "Please select one..."
     report_problem: "Report a problem"
-    report_problem_sub: "If Canvas misbehaves, tell us about it"
-    search_the_canvas_guides: "Search the Canvas Guides"
-    see_if_your_issue_is_addressed_in_the_canvas_guides: "See if your issue is addressed in the *Canvas Guides*."
+    report_problem_sub: "If Jigsaw LMS misbehaves, tell us about it"
+    search_the_canvas_guides: "Search the Jigsaw Academy Guides"
+    see_if_your_issue_is_addressed_in_the_canvas_guides: "See if your issue is addressed in the *Jigsaw Academy Guides*."
     send_message: "Send message"
     sending: Sending...
     somethings_broken_but_i_can_work_around_it_for_now: "Something's broken but I can work around it for now"
@@ -6662,15 +6666,17 @@ en-GB:
     styleguide: 
       manage: Manage
   instructions: 
-    authorize_google_docs: "Before you can collaborate on documents, you need to authorise Canvas to access your Google Docs account:"
+    authorize_google_docs: "Before you can collaborate on documents, you need to authorise Jigsaw Academy to access your Google Docs account:"
   instructure: 
     alerts: 
-      file_previews_disabled: "File previews have been disabled for this Canvas site"
+      file_previews_disabled: "File previews have been disabled for this Jigsaw Academy site"
     browsers: 
       unrecognized: "Unrecognized browser"
     buttons: 
       next_module: "Next module"
+      next_class: "Next Class"
       previous_module: "Previous module"
+      previous_class: "Previous Class"
       search: Search
       search_by_tag: "Search by tag"
     confirms: 
@@ -6784,7 +6790,7 @@ en-GB:
     lock_module_until: "lock module until a given date"
   layouts: 
     application: 
-      instructure_description: "Instructure, makers of the open source learning management system Canvas"
+      instructure_description: "Jigsaw Academy, makers of the  learning management system"
       keyboard_navigation: 
         close: "Press comma to close this dialog"
       links: 
@@ -6799,9 +6805,10 @@ en-GB:
         assignments_recently_graded: "Recently graded"
         calendar: Calendar
         grades: Grades
+        leaderboard: LeaderBoard
       navigation: 
         main: "Main Navigation"
-      open_source_learning_management_system: "Open source LMS"
+      open_source_learning_management_system: "Learning Management System"
     facebook: 
       title: "Facebook page"
     fixed_bottom: 
@@ -6814,13 +6821,13 @@ en-GB:
         reset_explanation: "Resetting the test student will clear all history for this student, %{line_break}allowing you to view the course as a brand new student."
         warning_title: "You are currently logged in to student view"
     head: 
-      default_page_title: "Canvas LMS"
+      default_page_title: "Jigsaw Academy LMS"
     menu: 
       view_all_accounts: "View all accounts"
       view_all_enrollments: "View all courses"
       view_all_groups: "View all groups"
     mobile_auth: 
-      log_in_to_canvas: "Log in to Canvas"
+      log_in_to_canvas: "Log in to Jigsaw Academy"
   learning_outcome: 
     no_comment: "No comment"
     no_context_found: "The external Learning Outcome couldn't be found for \"%{title}\", creating a copy."
@@ -6831,7 +6838,7 @@ en-GB:
   lib: 
     angel: 
       failed_import_link: "Failed import link"
-      failed_import_link_body: "This link referenced an Angel feature that couldn't be linked to by Canvas or that was left out of the export."
+      failed_import_link_body: "This link referenced an Angel feature that couldn't be linked to by Jigsaw Academy or that was left out of the export."
     api: 
       attachments: 
         only_one_folder: "Can't set folder path and folder ID"
@@ -6873,21 +6880,21 @@ en-GB:
       standard: 
         failed_to_convert_qti: "Failed to import Assessment %{file_identifier}"
     google_docs: 
-      default_document_name: "Instructure doc"
+      default_document_name: "Jigsaw Academy doc"
     incoming_message_processor: 
       failure_message: 
         body: |-
-            The message titled "%{subject}" could not be delivered.  The message was sent to an unknown mailbox address.  If you are trying to contact someone through Canvas you can try logging in to your account and sending them a message using the Inbox tool.
+            The message titled "%{subject}" could not be delivered.  The message was sent to an unknown mailbox address.  If you are trying to contact someone through Jigsaw Academy you can try logging in to your account and sending them a message using the Inbox tool.
             
                       Thank you,
-                      Canvas Support
+                      Jigsaw Academy Support
         subject: "Message reply failed: %{subject}"
       locked_topic: 
         body: |-
-            The message titled "%{subject}" could not be delivered because the discussion topic is locked. If you are trying to contact someone through Canvas you can try logging in to your account and sending them a message using the Inbox tool.
+            The message titled "%{subject}" could not be delivered because the discussion topic is locked. If you are trying to contact someone through Jigsaw Academy you can try logging in to your account and sending them a message using the Inbox tool.
             
                       Thank you,
-                      Canvas Support
+                      Jigsaw Academy Support
         subject: "Message reply failed: %{subject}"
     progress_runner: 
       completed_message: 
@@ -6951,7 +6958,7 @@ en-GB:
       relationships: Relationships
   media_comments: 
     alerts: 
-      kaltura_disabled: "Kaltura has been disabled for this Canvas site"
+      kaltura_disabled: "Kaltura has been disabled for this Jigsaw Academy site"
     buttons: 
       submit: "Submit media file"
     cancel: Cancel
@@ -6990,7 +6997,7 @@ en-GB:
     managed_accounts: "Managed accounts"
     my_courses: "My courses"
   message: 
-    default_subject: "Canvas alert"
+    default_subject: "Jigsaw Academy alert"
   message_students: 
     buttons: 
       send_message: "Send message"
@@ -7023,39 +7030,39 @@ en-GB:
           click_to_finish_registration: "Click here to finish the registration process"
           email: Email
           name: Name
-          subject: "Canvas account admin invitation"
-          url_info_label: "You'll need to register with Canvas before you can participate as an account admin."
+          subject: "Jigsaw Academy account admin invitation"
+          url_info_label: "You'll need to register with Jigsaw Academy before you can participate as an account admin."
           username: Username
         name_info: "Name: %{name}"
-        subject: "Canvas account admin invitation"
+        subject: "Jigsaw Academy account admin invitation"
         url_info: |-
-            You'll need to register with Canvas before you can participate as an account admin.  You can finish the registration process here:
+            You'll need to register with Jigsaw Academy before you can participate as an account admin.  You can finish the registration process here:
             %{url}
         username_info: "Username: %{username}"
     added_to_conversation: 
       email: 
-        body: "%{user_name} just added you to a conversation in Canvas. To view the conversation, click the link below:"
+        body: "%{user_name} just added you to a conversation in Jigsaw Academy. To view the conversation, click the link below:"
         html: 
-          body: "%{user_name} just added you to a conversation in Canvas."
+          body: "%{user_name} just added you to a conversation in Jigsaw Academy."
           link_text: "View conversation"
-          subject: "%{user_name} just added you to a conversation in Canvas."
+          subject: "%{user_name} just added you to a conversation in Jigsaw Academy."
           unknown_user: "Unknown user"
-        subject: "%{user_name} just added you to a conversation in Canvas."
+        subject: "%{user_name} just added you to a conversation in Jigsaw Academy."
         unknown_user: "Unknown user"
       facebook: 
-        body: "%{user_name} just added you to a conversation in Canvas."
+        body: "%{user_name} just added you to a conversation in Jigsaw Academy."
         link_text: "View conversation"
         unknown_user: "Unknown user"
       sms: 
-        body: "%{user_name} just added you to a conversation in Canvas."
+        body: "%{user_name} just added you to a conversation in Jigsaw Academy."
         more_info: "More info at %{url}"
         unknown_user: "Unknown user"
       summary: 
-        body: "%{user_name} just added you to a conversation in Canvas."
-        subject: "%{user_name} just added you to a conversation in Canvas."
+        body: "%{user_name} just added you to a conversation in Jigsaw Academy."
+        subject: "%{user_name} just added you to a conversation in Jigsaw Academy."
         unknown_user: "Unknown user"
       twitter: 
-        tweet: "Canvas Alert - Added to conversation by %{user_name}."
+        tweet: "Jigsaw Academy Alert - Added to conversation by %{user_name}."
         unknown_user: "Unknown user"
     alert: 
       email: 
@@ -7174,7 +7181,7 @@ en-GB:
         message: "%{user} cancelled his/her reservation for \"%{appointment_name}\"."
         more_info: "More info at %{url}"
       twitter: 
-        message: "Canvas Alert - %{user} cancelled his/her reservation for \"%{appointment_name}\"."
+        message: "Jigsaw Academy Alert - %{user} cancelled his/her reservation for \"%{appointment_name}\"."
     appointment_deleted_for_user: 
       email: 
         html: 
@@ -7217,7 +7224,7 @@ en-GB:
         message: "Your time slot for \"%{appointment_name} was cancelled\"."
         more_info: "More info at %{url}"
       twitter: 
-        message: "Canvas Alert - Your time slot for \"%{appointment_name} was cancelled\"."
+        message: "Jigsaw Academy Alert - Your time slot for \"%{appointment_name} was cancelled\"."
     appointment_group_deleted: 
       email: 
         html: 
@@ -7249,7 +7256,7 @@ en-GB:
         message: "All appointments for \"%{appointment_name} have been cancelled\"."
         more_info: "More info at %{url}"
       twitter: 
-        message: "Canvas Alert - All appointments for \"%{appointment_name} have been cancelled\"."
+        message: "Jigsaw Academy Alert - All appointments for \"%{appointment_name} have been cancelled\"."
     appointment_group_published: 
       email: 
         group_signup: "Group (%{group_category})"
@@ -7292,7 +7299,7 @@ en-GB:
         message: "Time slots for \"%{appointment_name}\" are now available for signup (%{dates})."
         subject: "Appointment \"%{appointment_name}\" is available for signup (%{course})"
       twitter: 
-        message: "Canvas Alert - Signups are open for \"%{appointment_name}\"."
+        message: "Jigsaw Academy Alert - Signups are open for \"%{appointment_name}\"."
     appointment_group_updated: 
       email: 
         group_signup: "Group (%{group_category})"
@@ -7334,7 +7341,7 @@ en-GB:
         message: "Time slots have been added to \"%{appointment_name}\" and are available for signup (%{dates})."
         subject: "Appointment \"%{appointment_name}\" has been updated (%{course})"
       twitter: 
-        message: "Canvas Alert - New time slots are available for \"%{appointment_name}\"."
+        message: "Jigsaw Academy Alert - New time slots are available for \"%{appointment_name}\"."
     appointment_reserved_by_user: 
       email: 
         html: 
@@ -7374,7 +7381,7 @@ en-GB:
         message: "%{user} has signed up for \"%{appointment_name}\"."
         more_info: "More info at %{url}"
       twitter: 
-        message: "Canvas Alert - %{user} has signed up for \"%{appointment_name}\"."
+        message: "Jigsaw Academy Alert - %{user} has signed up for \"%{appointment_name}\"."
     appointment_reserved_for_user: 
       email: 
         html: 
@@ -7417,7 +7424,7 @@ en-GB:
         message: "%{user} has signed you up for \"%{appointment_name}\" (%{date_and_time})."
         subject: "You have been signed up for \"%{appointment_name}\" (%{course})"
       twitter: 
-        message: "Canvas Alert - You have been signed up for \"%{appointment_name}\"."
+        message: "Jigsaw Academy Alert - You have been signed up for \"%{appointment_name}\"."
     assignment_changed: 
       email: 
         body: |-
@@ -7440,7 +7447,7 @@ en-GB:
       summary: 
         subject: "Assignment changed: %{title}, %{course}"
       twitter: 
-        assignment_change: "Canvas Alert - Change: %{assignment_name}, %{course_name}"
+        assignment_change: "Jigsaw Academy Alert - Change: %{assignment_name}, %{course_name}"
     assignment_created: 
       email: 
         assignment_created: "Assignment Created - %{assignment_name}, %{course_name}"
@@ -7474,7 +7481,7 @@ en-GB:
         multiple_due_dates: "due: Multiple dates"
         no_due_date: "due: No due date"
       twitter: 
-        assignment_change: "Canvas Alert - Change: %{assignment_name}, %{course_name}"
+        assignment_change: "Jigsaw Academy Alert - Change: %{assignment_name}, %{course_name}"
         due_at: "due: %{assignment_due_date_time}"
         multiple_due_dates: "due: Multiple dates"
         no_due_date: "due: No due date"
@@ -7502,7 +7509,7 @@ en-GB:
         due_at: "due: %{assignment_due_date_time}"
         no_due_date: "due: No due date"
       twitter: 
-        assignment_change: "Canvas Alert - Date change: %{assignment_name}, %{course_name}"
+        assignment_change: "Jigsaw Academy Alert - Date change: %{assignment_name}, %{course_name}"
         due_at: "due: %{assignment_due_date_time}"
         no_due_date: "due: No due date"
     assignment_due_date_override_changed: 
@@ -7529,7 +7536,7 @@ en-GB:
         due_at: "due: %{assignment_due_date_time}"
         no_due_date: "due: No due date"
       twitter: 
-        assignment_change: "Canvas alert - Date change: %{assignment_name}, %{course_name} (%{override})"
+        assignment_change: "Jigsaw Academy alert - Date change: %{assignment_name}, %{course_name} (%{override})"
         due_at: "due: %{assignment_due_date_time}"
         no_due_date: "due: No due date"
     assignment_graded: 
@@ -7551,7 +7558,7 @@ en-GB:
         assignment_graded: "Assignment graded: %{assignment_name}, %{course_name}"
         the_assignment_is_graded: "The assignment, %{assignment_name}, has been graded."
       twitter: 
-        assignment_graded: "Canvas Alert - graded: %{assignment_name}, %{course_name}"
+        assignment_graded: "Jigsaw Academy Alert - graded: %{assignment_name}, %{course_name}"
     assignment_locked: "This assignment is currently locked."
     assignment_locked_at: "This assignment was locked %{at}."
     assignment_locked_module: "This assignment is part of the module *%{module}* and hasn't been unlocked yet."
@@ -7576,7 +7583,7 @@ en-GB:
         turned_in_at: "Submitted: %{submission_date}"
         user_resubmitted: "Resubmission: %{user_name}, %{assignment_name}"
       twitter: 
-        user_resubmitted: "Canvas Alert - Resubmission: %{user_name}, %{assignment_name}"
+        user_resubmitted: "Jigsaw Academy Alert - Resubmission: %{user_name}, %{assignment_name}"
     assignment_submitted: 
       email: 
         html: 
@@ -7597,7 +7604,7 @@ en-GB:
         turned_in_at: "Submitted: %{submission_date}"
         user_submitted: "Submission: %{user_name}, %{assignment_name}"
       twitter: 
-        user_submitted: "Canvas Alert - Submission: %{user_name}, %{assignment_name}"
+        user_submitted: "Jigsaw Academy Alert - Submission: %{user_name}, %{assignment_name}"
     assignment_submitted_late: 
       email: 
         html: 
@@ -7618,7 +7625,7 @@ en-GB:
         turned_in_at: "Submitted: %{submission_date}"
         user_submitted: "Late assignment: %{user_name}, %{assignment_name}"
       twitter: 
-        user_submitted: "Canvas Alert - Late submission: %{user_name}, %{assignment_name}"
+        user_submitted: "Jigsaw Academy Alert - Late submission: %{user_name}, %{assignment_name}"
     assignment_unmuted: 
       email: 
         body: |-
@@ -7687,7 +7694,7 @@ en-GB:
             in %{service} and you were invited using your email address, %{email}.
         subject: "Collaboration invitation: %{course_or_group}"
       twitter: 
-        body: "Canvas Alert - Collaboration invitation: %{document}, %{course_or_group}"
+        body: "Jigsaw Academy Alert - Collaboration invitation: %{document}, %{course_or_group}"
     confirm_email_communication_channel: 
       email: 
         body: "The email address, %{email} is being registered at %{website} for the user, %{user}."
@@ -7695,8 +7702,8 @@ en-GB:
         html: 
           body: "The email address, %{email} is being registered at %{website} for the user, %{user}."
           details: "Click here to confirm this registration"
-          subject: "Confirm email: Canvas"
-        subject: "Confirm email: Canvas"
+          subject: "Confirm email: Jigsaw Academy"
+        subject: "Confirm email: Jigsaw Academy"
     confirm_registration: 
       email: 
         body: "Thank you for registering with Canvas!  This email is confirmation that the user %{user} is registering for a new account at %{website}."
@@ -7766,7 +7773,7 @@ en-GB:
         subject: "%{user_name} just sent you a message in Canvas."
         unknown_user: "Unknown user"
       twitter: 
-        tweet: "Canvas Alert - Message from %{user_name}."
+        tweet: "Jigsaw LMS Alert - Message from %{user_name}."
     course_already_started: 
       email: 
         body: |-
@@ -7869,7 +7876,7 @@ en-GB:
         body_teacher: "%{user} just accepted their invitation to participate in the course, %{course}, as a teacher."
         subject: "%{user} accepted the course invitation"
       twitter: 
-        body: "Canvas Alert - Accepted: %{user}, %{enrollment_type}, course, %{course}"
+        body: "Jigsaw LMS Alert - Accepted: %{user}, %{enrollment_type}, course, %{course}"
     enrollment_invitation: 
       email: 
         body_designer: "You've been invited to participate in the course, %{course}, as a designer."
@@ -7927,7 +7934,7 @@ en-GB:
         body_teacher: "You've been invited to participate in the course, %{course}, as a teacher."
         subject: "Course invitation"
       twitter: 
-        body: "Canvas Alert - Invited: course as %{enrollment_type}"
+        body: "Jigsaw LMS Alert - Invited: course as %{enrollment_type}"
     enrollment_notification: 
       email: 
         body_designer: "You've been enrolled in the course, %{course}, as a designer."
@@ -7986,7 +7993,7 @@ en-GB:
         body_teacher: "You've been enrollment in the course, %{course}, as a teacher."
         subject: "Course enrolment"
       twitter: 
-        body: "Canvas Alert - Enrolled: course as %{enrollment_type}"
+        body: "Jigsaw LMS Alert - Enrolled: course as %{enrollment_type}"
     enrollment_registration: 
       email: 
         body_designer: "You've been invited to participate in a class at %{website}.  The class is called %{course}, and you've been invited to participate as a designer."
@@ -8035,7 +8042,7 @@ en-GB:
         body_teacher: "You've been invited to participate in a class at %{website}.  The class is called %{course}, and you've been invited to participate as a teacher."
         subject: "Course invitation"
       twitter: 
-        body: "Canvas Alert - Invited: course as %{enrollment_type}"
+        body: "Jigsaw LMS Alert - Invited: course as %{enrollment_type}"
     event_date_changed: 
       email: 
         email_body: "The event, %{event_title}, for the course, %{course_name}, has changed times. It's now:"
@@ -8083,7 +8090,7 @@ en-GB:
             change_password_at: "change this login's password at"
           login_at_account: "%{login_email} at %{account_name}"
           login_managed_by_account: "this login's credentials are managed by %{account_name}"
-          password_from_account: "The password for this login should have been given to you by the system administrators at %{account_name}, and Instructure doesn't have access to your password. If your password is not working, please contact the system administrators about changing or verifying your password."
+          password_from_account: "The password for this login should have been given to you by the system administrators at %{account_name}, and Jigsaw Academy doesn't have access to your password. If your password is not working, please contact the system administrators about changing or verifying your password."
           requested_password_reset: "You requested a confirmation of your password for logging into Canvas."
           subject: "Forgot password: Canvas"
         labels: 
@@ -8092,7 +8099,7 @@ en-GB:
           click_to_reset: "To set a new password, please click the following link"
         login_at_account: "%{login_email} at %{account_name}"
         login_managed_by_account: "this login's credentials are managed by %{account_name}"
-        password_from_account: "The password for this login should have been given to you by the system administrators at %{account_name}, and Instructure doesn't have access to your password.  If your password is not working, please contact the system administrators about changing or verifying your password."
+        password_from_account: "The password for this login should have been given to you by the system administrators at %{account_name}, and Jigsaw Academy doesn't have access to your password.  If your password is not working, please contact the system administrators about changing or verifying your password."
         requested_password_reset: "You requested a confirmation of your password for logging into Canvas."
         subject: "Forgot password: Canvas"
     grade_weight_changed: 
@@ -8125,7 +8132,7 @@ en-GB:
           grades_based_on_percent: "Grading is based on the weighted total for each assignment group"
           subject: "Grade weight changed"
       twitter: 
-        grade_changed: "Canvas Alert - Grading policy changed: %{course_name}"
+        grade_changed: "Jigsaw LMS Alert - Grading policy changed: %{course_name}"
     group_assignment_submitted_late: 
       email: 
         body: "The group %{group_name} has just submitted late to %{assignment_name} in the course %{course_name}."
@@ -8145,7 +8152,7 @@ en-GB:
         body: "The group %{group_name} submitted late to %{assignment_name} in the course %{course_name}."
         subject: "Late assignment: %{group_name}, %{assignment_name}"
       twitter: 
-        subject: "Canvas Alert - Late group submission: %{group_name}, %{assignment_name}"
+        subject: "Jigsaw LMS Alert - Late group submission: %{group_name}, %{assignment_name}"
     group_membership_accepted: 
       email: 
         account_group: "Your request to join the group %{group_name} for the account %{account_name} has been accepted."
@@ -8173,8 +8180,8 @@ en-GB:
         course_group: "Your request to join the group %{group_name} for the course %{course_name} has been accepted."
         subject: "Group membership accepted: %{group_name}"
       twitter: 
-        account_group: "Canvas Alert - Group membership accepted: %{group_name} for the account %{account_name}."
-        course_group: "Canvas Alert - Group membership accepted: %{group_name} for the course %{course_name}."
+        account_group: "Jigsaw LMS Alert - Group membership accepted: %{group_name} for the account %{account_name}."
+        course_group: "Jigsaw LMS Alert - Group membership accepted: %{group_name} for the course %{course_name}."
     group_membership_rejected: 
       email: 
         account_group: "Your request to join the group %{group_name} for the account %{account_name} has been rejected."
@@ -8201,8 +8208,8 @@ en-GB:
         course_group: "Your request to join the group %{group_name} for the course %{course_name} has been rejected."
         subject: "Group membership rejected for %{group_name}"
       twitter: 
-        account_group: "Canvas Alert - Group membership rejected: %{group_name} for the account %{account_name}."
-        course_group: "Canvas Alert - Group membership rejected: %{group_name} for the course %{course_name}."
+        account_group: "Jigsaw LMS Alert - Group membership rejected: %{group_name} for the account %{account_name}."
+        course_group: "Jigsaw LMS Alert - Group membership rejected: %{group_name} for the course %{course_name}."
     html_message: 
       html_not_exist: "The HTML version of this message was not created nor sent"
     index: 
@@ -8266,7 +8273,7 @@ en-GB:
         body: "A new admin, %{user}, has been added for the account %{account}"
         subject: "New account user"
       twitter: 
-        body: "Canvas Alert - New admin: %{user}, %{account}"
+        body: "Jigsaw LMS Alert - New admin: %{user}, %{account}"
     new_announcement: 
       email: 
         html: 
@@ -8281,7 +8288,7 @@ en-GB:
         details: "More info at %{url}"
         subject: "New announcement: %{title}, %{course}"
       twitter: 
-        body: "Canvas Alert - announcement: %{title}, %{course}."
+        body: "Jigsaw LMS Alert - announcement: %{title}, %{course}."
     new_context_group_membership: 
       email: 
         body_account: "You've been added to a new group for the account %{account}.  The name of the group is %{group_name}."
@@ -8308,8 +8315,8 @@ en-GB:
         body_course: "You've been added to a new group for the course %{course}.  The name of the group is %{group_name}."
         subject: "New group membership for %{course_or_account}"
       twitter: 
-        body_account: "Canvas Alert - New group: %{group} for the account %{account}"
-        body_course: "Canvas Alert - New group: %{group} for the course %{course}"
+        body_account: "Jigsaw LMS Alert - New group: %{group} for the account %{account}"
+        body_course: "Jigsaw LMS Alert - New group: %{group} for the course %{course}"
     new_context_group_membership_invitation: 
       email: 
         body_account: "You've been invited to join the group %{group} for the account %{account}."
@@ -8335,8 +8342,8 @@ en-GB:
         body_course: "You've been invited to join the group %{group} for the course %{course}."
         subject: "New group membership for %{course_or_account}"
       twitter: 
-        body_account: "Canvas Alert - Invitation: %{group} for the account %{account}"
-        body_course: "Canvas Alert - Invitation: %{group} for the course %{course}."
+        body_account: "Jigsaw LMS Alert - Invitation: %{group} for the account %{account}"
+        body_course: "Jigsaw LMS Alert - Invitation: %{group} for the course %{course}."
     new_course: 
       email: 
         body: "A course, %{course}, has been added for the account %{account}"
@@ -8367,7 +8374,7 @@ en-GB:
           teachers: Teachers
         subject: "New course"
       twitter: 
-        body: "Canvas Alert - New course: %{course}, %{account}"
+        body: "Jigsaw LMS Alert - New course: %{course}, %{account}"
     new_discussion_entry: 
       email: 
         body: "%{user} posted a new comment on the thread %{discussion_topic} for %{course}:"
@@ -8385,7 +8392,7 @@ en-GB:
       summary: 
         subject: "New comment for %{discussion_topic}: %{course}"
       twitter: 
-        body: "Canvas Alert - Comment: %{discussion_topic}, %{course}."
+        body: "Jigsaw LMS Alert - Comment: %{discussion_topic}, %{course}."
     new_discussion_topic: 
       email: 
         body: "A new discussion has been started that may be interesting to you:"
@@ -8407,7 +8414,7 @@ en-GB:
       summary: 
         subject: "New discussion - %{discussion_topic}: %{course}"
       twitter: 
-        subject: "Canvas Alert - Topic: %{discussion_topic}, %{course}"
+        subject: "Jigsaw LMS Alert - Topic: %{discussion_topic}, %{course}"
     new_event_created: 
       email: 
         body: "There's a new event scheduled for %{course_name} that you should be aware of:"
@@ -8438,7 +8445,7 @@ en-GB:
       twitter: 
         from_to_time: "from %{start_date_time} to %{end_date_time}"
         no_time_set: "No time set"
-        subject: "Canvas Alert - Event: %{event_title}, %{course_name}"
+        subject: "Jigsaw LMS Alert - Event: %{event_title}, %{course_name}"
     new_file_added: 
       email: 
         body: "A new file has been added for the course, %{name}:"
@@ -8456,7 +8463,7 @@ en-GB:
       summary: 
         subject: "New file added: %{title}, %{name}"
       twitter: 
-        body: "Canvas Alert - new file: %{title} (%{size}) for %{name}:"
+        body: "Jigsaw LMS Alert - new file: %{title} (%{size}) for %{name}:"
     new_files_added: 
       email: 
         body: "%{count} new files have been added for the course, %{name}:"
@@ -8477,7 +8484,7 @@ en-GB:
         link: "You can view them here"
         subject: "%{count} new files added for the course, %{name}:"
       twitter: 
-        body: "Canvas Alert - %{count} new files for %{name}"
+        body: "Jigsaw LMS Alert - %{count} new files for %{name}"
     new_student_organized_group: 
       email: 
         body_account: "A new student organised group named \"%{group_name}\" was created for the account %{account}. The first member is %{user}."
@@ -8503,8 +8510,8 @@ en-GB:
         body_course: "A new student organised group named \"%{group_name}\" was created for the course %{course}. The first member is %{user}."
         subject: "New student group for %{course_or_account}"
       twitter: 
-        body_account: "Canvas Alert - New group: %{group_name} for the account %{account}"
-        body_course: "Canvas Alert - New group: %{group_name} for the course %{course}"
+        body_account: "Jigsaw LMS Alert - New group: %{group_name} for the account %{account}"
+        body_course: "Jigsaw LMS Alert - New group: %{group_name} for the course %{course}"
     new_teacher_registration: 
       email: 
         body: "%{user} just registered as a teacher at %{website}."
@@ -8536,7 +8543,7 @@ en-GB:
           school_position: "School position"
         subject: "New teacher registration"
       twitter: 
-        body: "Canvas Alert - New teacher: %{user}, %{account}"
+        body: "Jigsaw LMS Alert - New teacher: %{user}, %{account}"
     new_user: 
       email: 
         body: "A new user, %{user}, has just registered for the account %{account}"
@@ -8556,7 +8563,7 @@ en-GB:
         body: "A new user, %{user}, has just registered for the account %{account}"
         subject: "New user"
       twitter: 
-        body: "Canvas Alert - New user: %{user}, %{account}"
+        body: "Jigsaw LMS Alert - New user: %{user}, %{account}"
     page_locked: "This page is currently locked."
     page_locked_at: "This page was locked %{at}."
     page_locked_module: "This page is part of the module *%{module}* and hasn't been unlocked yet."
@@ -8573,7 +8580,7 @@ en-GB:
         subject: "Finish registration: Canvas"
     quiz_locked: "This quiz is currently locked."
     quiz_locked_at: "This quiz was locked %{at}."
-    quiz_locked_module: "This quiz is part of the module *%{module}* and hasn't been unlocked yet."
+    quiz_locked_module: "This quiz is part of the class *%{module}* and hasn't been unlocked yet."
     quiz_locked_until: "This quiz is locked until %{date}."
     quiz_regrade_finished: 
       email: 
@@ -8593,7 +8600,7 @@ en-GB:
         body: "A regrade has finished for your quiz %{title}."
         subject: "Quiz regraded: %{quiz}, %{context}"
       twitter: 
-        body: "Canvas Alert - Quiz regraded : %{quiz}"
+        body: "Jigsaw LMS Alert - Quiz regraded : %{quiz}"
     quiz_unpublished_module: "This quiz is part of an unpublished module and is not available yet."
     report_generated: 
       email: 
@@ -8625,7 +8632,7 @@ en-GB:
         body: "You've been reminded to assess: %{rubric}, %{context}:"
         subject: "Reminder to assess: %{rubric}, %{context}"
       twitter: 
-        tweet: "Canvas Alert - Reminder: assess %{rubric}, %{context}"
+        tweet: "Jigsaw LMS Alert - Reminder: assess %{rubric}, %{context}"
     rubric_association_created: 
       email: 
         body: "A new assessment has been created for %{context}:"
@@ -8644,7 +8651,7 @@ en-GB:
         body: "A new assessment has been created for %{context}:"
         subject: "New assessment: %{title}, %{context}"
       twitter: 
-        tweet: "Canvas Alert - New assessment: %{title}, %{context}."
+        tweet: "Jigsaw LMS Alert - New assessment: %{title}, %{context}."
     send_form: 
       labels: 
         message_body: Message
@@ -8671,7 +8678,7 @@ en-GB:
         someone: Someone
         subject: "Submission Comment: %{user}, %{assignment}, %{context}"
       twitter: 
-        tweet: "Canvas Alert - Comment: %{author} for %{assignment}, %{user}, %{context}."
+        tweet: "Jigsaw LMS Alert - Comment: %{author} for %{assignment}, %{user}, %{context}."
     submission_comment_for_teacher: 
       email: 
         body: "%{author} just made a new comment on the submission for %{user} for %{assignment}"
@@ -8694,7 +8701,7 @@ en-GB:
         someone: Someone
         subject: "Submission comment: %{user}, %{assignment}, %{context}"
       twitter: 
-        tweet: "Canvas Alert - Comment: %{author} for %{assignment}, %{user}, %{context}."
+        tweet: "Jigsaw LMS Alert - Comment: %{author} for %{assignment}, %{user}, %{context}."
     submission_grade_changed: 
       email: 
         body: "The grade on your assignment, %{assignment_title} has been changed."
@@ -8741,7 +8748,7 @@ en-GB:
         not_applicable: N/A
         score: "score:  %{score} out of %{total}"
         score_pending: "(pending review)"
-        tweet: "Canvas Alert - Grade change: %{date}"
+        tweet: "Jigsaw LMS Alert - Grade change: %{date}"
     submission_graded: 
       email: 
         body: "Your assignment, %{assignment}, has been graded."
@@ -8788,7 +8795,7 @@ en-GB:
         not_applicable: N/A
         score: "score:  %{score} out of %{total}"
         score_pending_review: "(pending review)"
-        tweet: "Canvas Alert - Graded: %{assignment}, %{context}"
+        tweet: "Jigsaw LMS Alert - Graded: %{assignment}, %{context}"
     submission_needs_grading: 
       email: 
         body: "%{user_name} has completed the quiz %{quiz_title}, and it requires manual grading."
@@ -8816,7 +8823,7 @@ en-GB:
         subject: "Quiz submitted: %{quiz}, %{context}"
         submitted_date: "submitted: %{date}"
       twitter: 
-        body: "Canvas Alert - Quiz submitted: %{quiz}, %{user_name}"
+        body: "Jigsaw LMS Alert - Quiz submitted: %{quiz}, %{user_name}"
     summaries: 
       email: 
         daily_body: "You're signed up to receive a daily report of some notifications from your Canvas account.  Below is the report for %{date}:"
@@ -8834,7 +8841,7 @@ en-GB:
       sms: 
         notifications_sms: "%{notifications_count} new notifications at %{url}"
       twitter: 
-        tweet: "Canvas Alert - %{notification_count} new notifications"
+        tweet: "Jigsaw LMS Alert - %{notification_count} new notifications"
     topic_locked: "This topic is currently locked."
     topic_locked_at: "This topic was locked %{at}."
     topic_locked_module: "This topic is part of the module *%{module}* and hasn't been unlocked yet."
@@ -8857,7 +8864,7 @@ en-GB:
       summary: 
         subject: "Updated Wiki Page: %{title}, %{user}"
       twitter: 
-        tweet: "Canvas Alert - Page Updated: %{title}, %{user}."
+        tweet: "Jigsaw LMS Alert - Page Updated: %{title}, %{user}."
     visit_modules_page: "*Visit the course modules page for information on how to unlock this content.*"
     web_conference_invitation: 
       email: 
@@ -8877,7 +8884,7 @@ en-GB:
         body: "You've been invited to participate in a web conference, %{title} for %{name}."
         subject: "Web conference invitation: %{name}"
       twitter: 
-        tweet: "Canvas Alert - Invite: attend %{title}, %{name}"
+        tweet: "Jigsaw LMS Alert - Invite: attend %{title}, %{name}"
   migration: 
     announcement_type: Announcement
     assignment_group_type: "Assignment group"
@@ -9900,7 +9907,7 @@ en-GB:
       page_title: "User settings"
       profile_pictures: "Select the image you'd like to use as your profile pic, or upload a new image:"
       skype_description: "Skype offers free online voice and video calls. Lots of students use Skype as a free, easy way to communicate. If you register your Skype Name and enable visibility, then other students can easily find your contact and call or add you using Skype."
-      subscribe_to_emails: "I want to receive information, news and tips from Instructure"
+      subscribe_to_emails: "I want to receive information, news and tips from Jigsaw Academy"
       titles: 
         access_token_details: "Access token details"
         authorize_facebook: "Authorise Facebook"
@@ -11569,7 +11576,7 @@ en-GB:
     invalid_lti_resource_selection: "There was a problem retrieving a valid link from the external tool"
     link_from_external_tool: "Link resource from external tool"
     titles: 
-      add_item_to_module: "Add item to module"
+      add_item_to_class: "Add item to class"
       find_links_using_service: "Find links using %{service}"
   self_enrollments: 
     already_enrolled: 
@@ -11865,7 +11872,7 @@ en-GB:
     keyboard_navigation_hint: 
       prompt: "Press comma to hear a list of keyboard shortcuts for this page."
     locale_warning: 
-      crowdsourced_warning_message: "The language you have selected was translated via crowdsourcing. Instructure has not reviewed or verified the accuracy of the translation, and accepts no responsibility for your use of this language setting. Please use at your own discretion."
+      crowdsourced_warning_message: "The language you have selected was translated via crowdsourcing. Jigsaw Academy has not reviewed or verified the accuracy of the translation, and accepts no responsibility for your use of this language setting. Please use at your own discretion."
       crowdsourced_warning_title: "Crowdsourced language"
     login: 
       back_to_login: "Back to login"
@@ -12082,7 +12089,7 @@ en-GB:
       discussion_item: Discussion
       domain_match_notice: "to use this tool the domain must match %{domain}"
       external_tool_item: "External tool"
-      external_tool_notice: "Select a tool from the list below, or enter a URL for an external tool you already know is configured with Basic LTI to add a link to it to this *module*."
+      external_tool_notice: "Select a tool from the list below, or enter a URL for an external tool you already know is configured with Basic LTI to add a link to it to this *class*."
       external_url_item: "External URL"
       external_url_notice: "Enter a URL and page name to add a link to any website URL to this *module*."
       file_item: File
@@ -12261,7 +12268,7 @@ en-GB:
       too_many_errors: "There were %{count} more errors"
       too_many_warnings: "There were %{count} more warnings"
       unrecorgnized_type: "Unrecognised import type"
-    instructure_csv: "Instructure formatted CSV or zipfile of CSVs"
+    instructure_csv: "Jigsaw Academy formatted CSV or zipfile of CSVs"
     upload_filename: "sis_upload_%{id}.zip"
   sis_import: 
     buttons: 
@@ -12503,6 +12510,14 @@ en-GB:
     grades: Grades
     home: Home
     modules: Modules
+    classes: Classes
+    live_class_links: "Live Class Links"
+    testimonial: "Testimonial"
+    bonusvideos: "Bonus Videos"
+    offers: Offers
+    videos: Videos
+    referrals: "Refer a friend"
+    faq: FAQ
     outcomes: Outcomes
     pages: Pages
     people: People
@@ -12510,6 +12525,8 @@ en-GB:
     quizzes: Quizzes
     settings: Settings
     syllabus: Syllabus
+    labs: Labs
+    careers: Careers
   terms: 
     index: 
       date: 

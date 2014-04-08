@@ -263,10 +263,10 @@ group :development do
   # Option to DISABLE_RUBY_DEBUGGING is helpful IDE-based debugging.
   # The ruby debug gems conflict with the IDE-based debugger gem.
   # Set this option in your dev environment to disable.
-  unless ENV['DISABLE_RUBY_DEBUGGING']
-    gem 'byebug', '2.4.1', :platforms => [:ruby_20, :ruby_21]
-    gem 'debugger', '1.5.0', :platforms => :ruby_19
-  end
+  #unless ENV['DISABLE_RUBY_DEBUGGING']
+  #  gem 'byebug', '2.4.1', :platforms => [:ruby_20, :ruby_21]
+  #  gem 'debugger', '1.5.0', :platforms => :ruby_19
+  #end
 end
 
 group :development, :test do
@@ -309,3 +309,15 @@ end
 Dir[File.join(File.dirname(__FILE__), 'vendor/plugins/*/Gemfile')].each do |g|
   eval(File.read(g))
 end
+
+gem 'acts-as-taggable-on',:git => 'http://github.com/arrivu/acts-as-taggable-on.git', :branch => 'multitenant'
+
+gem 'wistia-api' ,'~> 0.2.3'
+
+gem 'acts_as_commentable', '2.1.1'
+#gem 'acts_as_commentable', git: 'http://github.com/jackdempsey/acts_as_commentable.git'  , branch: '2.x'
+
+#group :development do
+#  gem "coffee-script-redux-debugger", :git => "git://github.com/JetBrains/coffee-script-redux-debugger.git"
+#end
+

@@ -22,14 +22,14 @@ describe WikiPagesController do
   describe "GET 'index'" do
     it "should redirect on index request" do
       course_with_teacher(:active_all => true)
-      get 'index', :course_id => @course.id
+      get 'index', :course_id => @course.id,:type => 'wiki'
       response.should be_redirect
     end
 
     it "should redirect 'disabled', if disabled by the teacher" do
       course_with_student_logged_in(:active_all => true)
       @course.update_attribute(:tab_configuration, [{'id'=>2,'hidden'=>true}])
-      get 'index', :course_id => @course.id
+      get 'index', :course_id => @course.id,:type => 'wiki'
       response.should be_redirect
       flash[:notice].should match(/That page has been disabled/)
     end
@@ -91,7 +91,7 @@ describe WikiPagesController do
 
     it "should allow students when allowed" do
       course_with_teacher_logged_in(:active_all => true)
-      post 'create', :course_id => @course.id, :wiki_page => {:title => "Some Secret Page"}
+      post 'create', :course_id => @course.id, :wiki_page => {:title => "Some Secret Page"} ,:type=>'wiki'
       response.should be_redirect
       page = assigns[:page]
       page.should_not be_nil
@@ -111,7 +111,7 @@ describe WikiPagesController do
 
     it "should not allow students when not allowed" do
       course_with_teacher_logged_in(:active_all => true)
-      post 'create', :course_id => @course.id, :wiki_page => {:title => "Some Secret Page"}
+      post 'create', :course_id => @course.id, :wiki_page => {:title => "Some Secret Page"} ,:type => 'wiki'
       response.should be_redirect
       page = assigns[:page]
       page.should_not be_nil
@@ -150,13 +150,13 @@ describe WikiPagesController do
   describe "POST 'create'" do
     it "should require authorization" do
       course_with_teacher(:active_all => true)
-      post 'create', :course_id => @course.id, :wiki_page => {:title => "Some Great Page"}
+      post 'create', :course_id => @course.id, :wiki_page => {:title => "Some Great Page"},:type => 'wiki'
       assert_unauthorized
     end
 
     it "should create page" do
       course_with_teacher_logged_in(:active_all => true)
-      post 'create', :course_id => @course.id, :wiki_page => {:title => "Some Great Page"}
+      post 'create', :course_id => @course.id, :wiki_page => {:title => "Some Great Page"},:type => 'wiki'
       response.should be_redirect
       assigns[:page].should_not be_nil
       assigns[:page].should_not be_new_record
@@ -165,7 +165,7 @@ describe WikiPagesController do
 
     it "should allow users to create a page" do
       group_with_user_logged_in(:active_all => true)
-      post 'create', :group_id => @group.id, :wiki_page => {:title => "Some Great Page"}
+      post 'create', :group_id => @group.id, :wiki_page => {:title => "Some Great Page"},:type => 'wiki'
       response.should be_redirect
       assigns[:page].should_not be_nil
       assigns[:page].should_not be_new_record
@@ -176,7 +176,7 @@ describe WikiPagesController do
       account_model
       @account.disable_feature! :draft_state
       course_with_teacher_logged_in(:account => @account, :active_all => true)
-      post 'create', :course_id => @course.id, :wiki_page => {:title => "Front Page"}
+      post 'create', :course_id => @course.id, :wiki_page => {:title => "Front Page"},:type => 'wiki'
       @course.reload
       @course.wiki.should have_front_page
       @course.wiki.front_page.id.should == assigns[:page].id
@@ -186,20 +186,20 @@ describe WikiPagesController do
   describe "PUT 'update'" do
     it "should require authorization" do
       course_with_teacher(:active_all => true)
-      put 'update', :course_id => @course.id, :id => 1, :wiki_page => {:title => "Some Great Page"}
+      put 'update', :course_id => @course.id, :id => 1, :wiki_page => {:title => "Some Great Page"} ,:type => 'wiki'
       assert_unauthorized
     end
 
     it "should update page" do
       course_with_teacher_logged_in(:active_all => true)
       @course.wiki.wiki_pages.create!(:title => 'Test')
-      put 'update', :course_id => @course.id, :id => @course.wiki.wiki_pages.first.url, :wiki_page => {:title => "Some Great Page"}
+      put 'update', :course_id => @course.id, :id => @course.wiki.wiki_pages.first.url, :wiki_page => {:title => "Some Great Page",:wiki_type => 'wiki'} ,:type => 'wiki'
       response.should be_redirect
       assigns[:page].should_not be_nil
       assigns[:page].title.should eql("Some Great Page")
       page = assigns[:page]
 
-      put 'update', :course_id => @course.id, :id => page.url, :wiki_page => {:title => "New Name"}
+      put 'update', :course_id => @course.id, :id => page.url, :wiki_page => {:title => "New Name"},:type=>'wiki'
       response.should be_redirect
       assigns[:page].should_not be_nil
       assigns[:page].title.should eql("New Name")
@@ -209,7 +209,7 @@ describe WikiPagesController do
       before do
         group_with_user_logged_in(:active_all => true)
         @group.wiki.wiki_pages.create!(:title => 'Test')
-        put 'update', :group_id => @group.id, :id => @group.wiki.wiki_pages.first.url, :wiki_page => {:title => "Some Great Page"}
+        put 'update', :group_id => @group.id, :id => @group.wiki.wiki_pages.first.url, :wiki_page => {:title => "Some Great Page",:wiki_type => 'wiki'} ,:type => 'wiki'
         @page = assigns[:page]
       end
 
@@ -225,7 +225,7 @@ describe WikiPagesController do
       describe 'and is updating an existing page' do
         before do
           Setting.set('enable_page_views', 'db')
-          put 'update', :group_id => @group.id, :id => @page.url, :wiki_page => {:title => "New Name" }
+          put 'update', :group_id => @group.id, :id => @page.url, :wiki_page => {:title => "New Name" } ,:type => 'wiki'
           @page = assigns[:page]
         end
 
@@ -267,7 +267,7 @@ describe WikiPagesController do
       course_with_teacher(:active_all => true)
       page = @course.wiki.front_page
       page.save!
-      delete 'destroy', :course_id => @course.id, :id => page.url
+      delete 'destroy', :course_id => @course.id, :id => page.url ,:type => 'wiki'
       assert_unauthorized
     end
     
@@ -275,7 +275,7 @@ describe WikiPagesController do
       course_with_teacher_logged_in(:active_all => true)
       page = @course.wiki.front_page
       page.save!
-      delete 'destroy', :course_id => @course.id, :id => page.url
+      delete 'destroy', :course_id => @course.id, :id => page.url ,:type => 'wiki'
       flash[:error].should eql('You cannot delete the front page.')
       response.should be_redirect
     end
@@ -284,7 +284,7 @@ describe WikiPagesController do
       course_with_teacher_logged_in(:active_all => true)
       page = @course.wiki.wiki_pages.create(:title => "a page")
       page.save!
-      delete 'destroy', :course_id => @course.id, :id => page.url
+      delete 'destroy', :course_id => @course.id, :id => page.url,:type => 'wiki'
       response.should be_redirect
       assigns[:page].should eql(page)
       assigns[:page].should be_deleted #frozen
@@ -295,7 +295,7 @@ describe WikiPagesController do
       group_with_user_logged_in(:active_all => true)
       page = @group.wiki.wiki_pages.create(:title => "a page")
       page.save!
-      delete 'destroy', :group_id => @group.id, :id => page.url
+      delete 'destroy', :group_id => @group.id, :id => page.url, :type => 'wiki'
       response.should be_redirect
       assigns[:page].should eql(page)
       assigns[:page].should be_deleted #frozen
