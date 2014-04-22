@@ -1083,15 +1083,22 @@ class ApplicationController < ActionController::Base
     return if @page || !page_name
 
     if params[:action] != 'create'
-      @page = @wiki.wiki_pages.deleted_last.find_by_url(page_name.to_s) ||
-              @wiki.wiki_pages.deleted_last.find_by_url(page_name.to_s.to_url) ||
-              @wiki.wiki_pages.find_by_id(page_name.to_i)
+      @page = @wiki.wiki_pages.not_deleted.find_by_url(page_name.to_s) ||
+              @wiki.wiki_pages.not_deleted.find_by_url(page_name.to_s.to_url) ||
+              @wiki.wiki_pages.not_deleted.find_by_id(page_name.to_i)
     end
 
-    @page ||= @wiki.wiki_pages.new(
-      :title => page_name.titleize,
-      :url => page_name.to_url, :wiki_type => @wiki_type
-    )
+    if @wiki_type == "faq"
+      @page ||= @wiki.wiki_pages.new(
+          :title => page_name,
+          :url => page_name.to_url, :wiki_type => @wiki_type
+      )
+    else
+      @page ||= @wiki.wiki_pages.new(
+        :title => page_name.titleize,
+        :url => page_name.to_url, :wiki_type => @wiki_type
+      )
+    end
     if @page.new_record?
       @page.wiki = @wiki
       initialize_wiki_page
@@ -1102,12 +1109,12 @@ class ApplicationController < ActionController::Base
   def initialize_wiki_page
     return unless @page.new_record? || @page.deleted?
 
-    unless @context.draft_state_enabled?
+    unless @context.feature_enabled?(:draft_state)
       @page.set_as_front_page! if !@wiki.has_front_page? and @page.url == Wiki::DEFAULT_FRONT_PAGE_URL
     end
 
     is_privileged_user = is_authorized_action?(@page.wiki, @current_user, :manage)
-    if is_privileged_user && @context.draft_state_enabled? && !@context.is_a?(Group)
+    if is_privileged_user && @context.feature_enabled?(:draft_state) && !@context.is_a?(Group)
       @page.workflow_state = 'unpublished'
     else
       @page.workflow_state = 'active'
@@ -1124,7 +1131,6 @@ class ApplicationController < ActionController::Base
         @page.body = t "#application.wiki_front_page_default_content_group", "Welcome to your new group #{@page.wiki_type}!" if @context.is_a?(Group)
       end
     end
-    @page ||= @wiki.build_wiki_page(@current_user, :url => page_name)
   end
 
   def context_wiki_page_url
