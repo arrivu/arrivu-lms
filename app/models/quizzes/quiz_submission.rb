@@ -78,10 +78,20 @@ class Quizzes::QuizSubmission < ActiveRecord::Base
     :dependent => :destroy,
     :inverse_of => :versionable,
     :extend => SoftwareHeretics::ActiveRecord::SimplyVersioned::VersionsProxyMethods do
-      def construct_sql
-        @finder_sql = @counter_sql =
-          "#{@reflection.quoted_table_name}.#{@reflection.options[:as]}_id = #{owner_quoted_id} AND " +
-        "#{@reflection.quoted_table_name}.#{@reflection.options[:as]}_type IN ('QuizSubmission', #{@owner.class.quote_value(@owner.class.base_class.name.to_s)})"
+      if CANVAS_RAILS2
+        def construct_sql
+          @finder_sql = @counter_sql =
+            "#{@reflection.quoted_table_name}.#{@reflection.options[:as]}_id = #{owner_quoted_id} AND " +
+          "#{@reflection.quoted_table_name}.#{@reflection.options[:as]}_type IN ('QuizSubmission', #{@owner.class.quote_value(@owner.class.base_class.name.to_s)})"
+        end
+      else
+        def where(*args)
+          if args.length == 1 && args.first.is_a?(Arel::Nodes::Equality) && args.first.left.name == 'versionable_type'
+            super(args.first.left.in(['QuizSubmission', 'Quizzes::QuizSubmission']))
+          else
+            super
+          end
+        end
       end
     end
 
@@ -280,7 +290,7 @@ class Quizzes::QuizSubmission < ActiveRecord::Base
   def needs_grading?(strict=false)
     if strict && self.untaken? && self.overdue?(true)
       true
-    elsif self.untaken? && self.end_at && self.end_at < Time.now && !self.extendable?
+    elsif self.untaken? && self.end_at && self.end_at < Time.now
       true
     elsif self.completed? && self.submission_data && self.submission_data.is_a?(Hash)
       true
@@ -829,6 +839,9 @@ class Quizzes::QuizSubmission < ActiveRecord::Base
   #
   # @throw ArgumentError If the submission does not have an end_at timestamp set.
   def grade_when_overdue
+    # disable grading in background until we figure out potential race condition issues
+    return
+
     unless self.end_at.present?
       raise ArgumentError,
         'QuizSubmission is not applicable for overdue enforced grading!'
@@ -845,6 +858,9 @@ class Quizzes::QuizSubmission < ActiveRecord::Base
 
   # don't use this directly, see #grade_when_overdue
   def grade_if_untaken
+    # disable grading in background until we figure out potential race condition issues
+    return
+
     # We can skip the needs_grading? test because we know that the submission
     # is overdue since the job will be processed after submission.end_at ...
     # so we simply test its workflow state.

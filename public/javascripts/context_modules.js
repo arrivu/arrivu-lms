@@ -17,8 +17,8 @@
  */
 
 define([
-  'compiled/models/PublishableModuleItem',
-  'compiled/views/PublishIconView',
+    'compiled/models/PublishableModuleItem',
+    'compiled/views/PublishIconView',
     'INST' /* INST */,
     'i18n!context_modules',
     'jquery' /* $ */,
@@ -28,7 +28,7 @@ define([
     'compiled/models/Publishable',
     'compiled/views/PublishButtonView',
     'jquery.ajaxJSON' /* ajaxJSON */,
-    'jquery.instructure_date_and_time' /* parseFromISO, time_field, datetime_field */,
+    'jquery.instructure_date_and_time' /* dateString, datetimeString, time_field, datetime_field */,
     'jquery.instructure_forms' /* formSubmit, fillFormData, formErrors, errorBox */,
     'jqueryui/dialog',
     'compiled/jquery/fixDialogButtons' /* fix dialog formatting */,
@@ -41,6 +41,7 @@ define([
     'vendor/jquery.scrollTo' /* /\.scrollTo/ */,
     'jqueryui/sortable' /* /\.sortable/ */
 ], function(PublishableModuleItem, PublishIconView, INST, I18n, $, ContextModulesView, vddTooltip, vddTooltipView, Publishable, PublishButtonView) {
+
     // TODO: AMD don't export global, use as module
     window.modules = (function() {
         return {
@@ -90,7 +91,7 @@ define([
                 });
                 $module.find(".context_module_items.ui-sortable").sortable('disable');
                 $module.disableWhileLoading(
-                    $.ajaxJSON(url, 'POST', {order: items.join(","),category: $category,dragged_item_id: $draggedItemId}, function(data) {
+                    $.ajaxJSON(url, 'POST', {order: items.join(",")}, function(data) {
                         if(data && data.context_module && data.context_module.content_tags) {
                             for(var idx in data.context_module.content_tags) {
                                 var tag = data.context_module.content_tags[idx].content_tag;
@@ -226,10 +227,10 @@ define([
                         $context_module_item = $("#context_module_item_" + id);
                         var data = {};
                         if (info["points_possible"] != null) {
-                            data["points_possible_display"] = I18n.t('points_possible_short', '%{points} pts', { 'points': "<span class='points_possible_block'>" + info["points_possible"] + "</span>" });
+                            data["points_possible_display"] = I18n.t('points_possible_short', '%{points} pts', { 'points': "" + info["points_possible"]});
                         }
                         if (info["due_date"] != null) {
-                            data["due_date_display"] = $.parseFromISO(info["due_date"]).date_formatted
+                            data["due_date_display"] = $.dateString(info["due_date"])
                         } else if (info["vdd_tooltip"] != null) {
                             info['vdd_tooltip']['link_href'] = $context_module_item.find('a.title').attr('href');
                             $context_module_item.find('.due_date_display').html(vddTooltipView(info["vdd_tooltip"]));
@@ -251,7 +252,7 @@ define([
             editModule: function($module) {
                 var $form = $("#add_context_module_form");
                 $form.data('current_module', $module);
-        var data = $module.getTemplateData({textValues: ['name', 'unlock_at', 'require_sequential_progress', 'publish_final_grade']});
+                var data = $module.getTemplateData({textValues: ['name', 'unlock_at', 'require_sequential_progress', 'publish_final_grade']});
                 $form.fillFormData(data, {object_name: 'context_module'});
                 var isNew = false;
                 if($module.attr('id') == 'context_module_new') {
@@ -268,7 +269,7 @@ define([
                 }
                 $form.find("#unlock_module_at").prop('checked', data.unlock_at);
                 $form.find("#require_sequential_progress").attr('checked', data.require_sequential_progress == "true" || data.require_sequential_progress == "1");
-        $form.find("#publish_final_grade").attr('checked', data.publish_final_grade == "true" || data.publish_final_grade == "1");
+                $form.find("#publish_final_grade").attr('checked', data.publish_final_grade == "true" || data.publish_final_grade == "1");
                 $form.find(".prerequisites_entry").showIf($("#context_modules .context_module").length > 1);
                 var prerequisites = [];
                 $module.find(".prerequisites .criterion").each(function() {
@@ -330,19 +331,18 @@ define([
                 data.new_tab = data.new_tab ? '1' : '0';
                 var $item, $olditem = (data.id != 'new') ? $("#context_module_item_" + data.id) : [];
                 if($olditem.length) {
-          var admin = $olditem.find('.ig-admin');
-          if (admin.length) { admin.detach(); }
-          $item = $olditem.clone(true);
-          if (admin.length) {
-            $item.find('.ig-row').append(admin)
-          };
+                    var admin = $olditem.find('.ig-admin');
+                    if (admin.length) { admin.detach(); }
+                    $item = $olditem.clone(true);
+                    if (admin.length) {
+                        $item.find('.ig-row').append(admin)
+                    };
                 } else {
                     $item = $("#context_module_item_blank").clone(true).removeAttr('id');
                 }
                 $item.addClass(data.type + "_" + data.id);
                 $item.addClass(data.type);
                 $item.attr('aria-label', data.title);
-                $item.attr('data-id',data.id)
                 $item.fillTemplateData({
                     data: data,
                     id: 'context_module_item_' + data.id,
@@ -363,27 +363,31 @@ define([
                         }
                     }
                 });
-                if(!$before && (data.category == 'pre_class_video')) {
-                    $module.find(".pre_class_video .context_module_items").append($item.show());
-                }
-                else if (!$before && (data.category == 'pre_class_recording')){
-                    console.log(data.category);
-                    $module.find(".pre_class_recording .context_module_items").append($item.show());
-                }
-                else if (!$before && (data.category == 'pre_class_presentation')){
-                    console.log(data.category);
-                    $module.find(".pre_class_presentation .context_module_items").append($item.show());
-                }
-                else if (!$before && (data.category == 'pre_class_assignments')){
-                    console.log(data.category);
-                    $module.find(".pre_class_assignments .context_module_items").append($item.show());
-                }
-                else if (!$before && (data.category == 'pre_class_reading_materials')){
-                    console.log(data.category);
-                    $module.find(".pre_class_reading_materials .context_module_items").append($item.show());
-                }
-                else {
-                    $before.before($item.show());
+                if($olditem.length) {
+                    $olditem.replaceWith($item.show());
+                } else {
+                    if(!$before) {
+                        $module.find(".pre_class_video .context_module_items").append($item.show());
+                    }
+                    else if (!$before && (data.category == 'pre_class_recording')){
+                        console.log(data.category);
+                        $module.find(".pre_class_recording .context_module_items").append($item.show());
+                    }
+                    else if (!$before && (data.category == 'pre_class_presentation')){
+                        console.log(data.category);
+                        $module.find(".pre_class_presentation .context_module_items").append($item.show());
+                    }
+                    else if (!$before && (data.category == 'pre_class_assignments')){
+                        console.log(data.category);
+                        $module.find(".pre_class_assignments .context_module_items").append($item.show());
+                    }
+                    else if (!$before && (data.category == 'pre_class_reading_materials')){
+                        console.log(data.category);
+                        $module.find(".pre_class_reading_materials .context_module_items").append($item.show());
+                    }
+                    else {
+                        $before.before($item.show());
+                    }
                 }
                 return $item;
             },
@@ -511,7 +515,7 @@ define([
 
         // -------- BINDING THE UPDATE EVENT -----------------
         $(".context_module").bind('update', function(event, data) {
-            data.context_module.unlock_at = $.parseFromISO(data.context_module.unlock_at).datetime_formatted;
+            data.context_module.unlock_at = $.datetimeString(data.context_module.unlock_at);
             var $module = $("#context_module_" + data.context_module.id);
             $module.attr('aria-label', data.context_module.name);
             $module.find(".header").fillTemplateData({
@@ -590,12 +594,10 @@ define([
             success: function(data, $module) {
                 $module.loadingImage('remove');
                 $module.attr('id', 'context_module_' + data.context_module.id);
-                console.log("here");
+
                 // Set this module up with correct data attributes
-                $module.find('.add_module_item_link').attr('rel',"/courses/6/classes/"+data.context_module.id+"/items")
-                $module.attr('data-module-id',data.context_module.id);
-                $module.attr('data-module-url', "/courses/" + data.context_module.context_id + "/modules/" + data.context_module.id);
-                $module.attr('data-workflow-state', data.context_module.workflow_state);
+                $module.data('module-url', "/courses/" + data.context_module.context_id + "/modules/" + data.context_module.id);
+                $module.data('workflow-state', data.context_module.workflow_state);
                 if(data.context_module.workflow_state == "unpublished"){
                     $module.find('.workflow-state-action').text("Publish");
                     $module.find('.workflow-state-icon').addClass('publish-module-link')
@@ -604,22 +606,22 @@ define([
                 }
 
                 $("#no_context_modules_message").slideUp();
-        var $publishIcon = $module.find('.publish-icon');
-        // new module, setup publish icon and other stuff
-        if (ENV.ENABLE_DRAFT && !$publishIcon.data('id')) {
-          var collapse = $module.find('h2.collapse_module_link');
-          var expand = $module.find('h2.collapse_module_link');
-          var href = collapse.attr('href');
-          $(collapse, expand).attr('href', href.replace('{{ id }}', data.context_module.id));
-          var publishData = {
-            moduleType: 'module',
-            id: data.context_module.id,
-            courseId: data.context_module.context_id,
-            published: data.context_module.workflow_state == 'published',
-            publishable: true
-          };
-          initPublishButton($publishIcon, publishData);
-        }
+                var $publishIcon = $module.find('.publish-icon');
+                // new module, setup publish icon and other stuff
+                if (ENV.ENABLE_DRAFT && !$publishIcon.data('id')) {
+                    var collapse = $module.find('h2.collapse_module_link');
+                    var expand = $module.find('h2.collapse_module_link');
+                    var href = collapse.attr('href');
+                    $(collapse, expand).attr('href', href.replace('{{ id }}', data.context_module.id));
+                    var publishData = {
+                        moduleType: 'module',
+                        id: data.context_module.id,
+                        courseId: data.context_module.context_id,
+                        published: data.context_module.workflow_state == 'published',
+                        publishable: true
+                    };
+                    initPublishButton($publishIcon, publishData);
+                }
                 $module.triggerHandler('update', data);
             },
             error: function(data, $module) {
@@ -713,9 +715,7 @@ define([
             var $option = $(this).parents(".completion_criterion_option");
             $option.find(".min_score_box").showIf($(this).val() == 'min_score');
             var id = $option.find(".id").val();
-            var points_possible = $.trim($("#context_module_item_" + id + " .points_possible").text()) ||
-                // for some reason the previous did not have anything in it sometimes (noticed when you are dealing with a newly added module)
-                $.trim($("#context_module_item_" + id + " .points_possible_block").text());
+            var points_possible = $.trim($("#context_module_item_" + id + " .points_possible_display").text().split(' ')[0]);
             if(points_possible.length > 0) {
                 $option.find(".points_possible").text(points_possible);
                 $option.find(".points_possible_parent").show();
@@ -790,7 +790,7 @@ define([
                 var $module = $("#context_module_" + data.content_tag.context_module_id);
                 var $item = modules.addItemToModule($module, data.content_tag);
                 $module.find(".context_module_items.ui-sortable").sortable('refresh');
-                if (data.content_tag.content_id != 0) {
+                if (data.content_tag.content_id != 0 && data.content_tag.content_type != 'ContextExternalTool') {
                     modules.updateAllItemInstances(data.content_tag);
                 }
                 modules.updateAssignmentData();
@@ -888,8 +888,9 @@ define([
                         $.ajaxJSON(url, 'POST', item_data, function(data) {
                             $item.remove();
                             data.content_tag.type = item_data['item[type]'];
-                            modules.addItemToModule($module, data.content_tag);
+                            $item = modules.addItemToModule($module, data.content_tag);
                             $module.find(".context_module_items.ui-sortable").sortable('enable').sortable('refresh');
+                            if (ENV.ENABLE_DRAFT) { initNewItemPublishButton($item, data.content_tag); }
                             modules.updateAssignmentData();
                         })
                     );
@@ -997,49 +998,49 @@ define([
         }, 1000);
     }
 
-  function initNewItemPublishButton($item, data) {
-    var publishData = {
-      moduleType: data.type,
-      id: data.publishable_id,
-      moduleId: data.context_module_id,
-      courseId: data.context_id,
-      published: data.published,
-      publishable: data.publishable,
-      unpublishable: data.unpublishable
-    };
-    initPublishButton($item.find('.publish-icon'), publishData);
-  }
+    function initNewItemPublishButton($item, data) {
+        var publishData = {
+            moduleType: data.type,
+            id: data.publishable_id,
+            moduleId: data.context_module_id,
+            courseId: data.context_id,
+            published: data.published,
+            publishable: data.publishable,
+            unpublishable: data.unpublishable
+        };
+        initPublishButton($item.find('.publish-icon'), publishData);
+    }
 
-  function initPublishButton($el, data) {
-    data = data || $el.data();
-    var model = new PublishableModuleItem({
-      module_type: data.moduleType,
-      id: data.id,
-      module_id: data.moduleId,
-      course_id: data.courseId,
-      published: data.published,
-      publishable: data.publishable,
-      unpublishable: data.unpublishable
-    });
-    var view = new PublishIconView({model: model, el: $el[0]});
-    var row = $el.closest('.ig-row');
-    if (data.published) { row.addClass('ig-published'); }
-    // TODO: need to go find this item in other modules and update their state
-    view.on('publish', function() {
-      this.$el.closest('.ig-row').addClass('ig-published');
-    });
-    view.on('unpublish', function() {
-      this.$el.closest('.ig-row').removeClass('ig-published');
-    });
-    view.render()
-  }
+    function initPublishButton($el, data) {
+        data = data || $el.data();
+        var model = new PublishableModuleItem({
+            module_type: data.moduleType,
+            id: data.id,
+            module_id: data.moduleId,
+            course_id: data.courseId,
+            published: data.published,
+            publishable: data.publishable,
+            unpublishable: data.unpublishable
+        });
+        var view = new PublishIconView({model: model, el: $el[0]});
+        var row = $el.closest('.ig-row');
+        if (data.published) { row.addClass('ig-published'); }
+        // TODO: need to go find this item in other modules and update their state
+        view.on('publish', function() {
+            this.$el.closest('.ig-row').addClass('ig-published');
+        });
+        view.on('unpublish', function() {
+            this.$el.closest('.ig-row').removeClass('ig-published');
+        });
+        view.render()
+    }
 
     $(document).ready(function() {
-    if (ENV.ENABLE_DRAFT) {
-      $('.publish-icon:visible').each(function(index, el) {
-        initPublishButton($(el));
-      });
-    }
+        if (ENV.ENABLE_DRAFT) {
+            $('.publish-icon:visible').each(function(index, el) {
+                initPublishButton($(el));
+            });
+        }
 
         $(".datetime_field").datetime_field();
 
@@ -1147,8 +1148,8 @@ define([
             var reload_entries = $module.find(".content .context_module_items").children().length === 0;
             var toggle = function(show) {
                 var callback = function() {
-          $module.find(".collapse_module_link").css('display', $module.find(".content:visible").length > 0 ? 'inline-block' : 'none');
-          $module.find(".expand_module_link").css('display', $module.find(".content:visible").length === 0 ? 'inline-block' : 'none');
+                    $module.find(".collapse_module_link").css('display', $module.find(".content:visible").length > 0 ? 'inline-block' : 'none');
+                    $module.find(".expand_module_link").css('display', $module.find(".content:visible").length === 0 ? 'inline-block' : 'none');
                     if($module.find(".content:visible").length > 0) {
                         $module.find(".footer .manage_module").css('display', '');
                         $module.toggleClass('collapsed_module', false);

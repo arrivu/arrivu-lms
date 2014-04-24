@@ -94,7 +94,7 @@
 #             "type": "integer"
 #           },
 #           "type": {
-#             "description": "The enrollment role, for course-level permissions.",
+#             "description": "The enrollment type. One of 'StudentEnrollment', 'TeacherEnrollment', 'TaEnrollment', 'DesignerEnrollment', 'ObserverEnrollment'.",
 #             "example": "StudentEnrollment",
 #             "type": "string"
 #           },
@@ -108,8 +108,8 @@
 #             "type": "integer"
 #           },
 #           "role": {
-#             "description": "The enrollment role, for course-level permissions",
-#             "example": null,
+#             "description": "The enrollment role, for course-level permissions. This field will match `type` if the enrollment role has not been customized.",
+#             "example": "StudentEnrollment",
 #             "type": "string"
 #           },
 #           "updated_at": {
@@ -325,7 +325,9 @@ class EnrollmentsApiController < ApplicationController
     if params[:enrollment][:course_section_id].present?
       params[:enrollment][:section] = @context.course_sections.active.find params[:enrollment].delete(:course_section_id)
     end
-    user = api_find(User, params[:enrollment].delete(:user_id))
+    api_user_id = params[:enrollment].delete(:user_id)
+    user = api_find(User, api_user_id)
+    raise(ActiveRecord::RecordNotFound, "Couldn't find User with API id '#{api_user_id}'") unless user.can_be_enrolled_in_course?(@context)
     @enrollment = @context.enroll_user(user, type, params[:enrollment].merge(:allow_multiple_enrollments => true))
     @enrollment.valid? ?
       render(:json => enrollment_json(@enrollment, @current_user, session)) :

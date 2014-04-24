@@ -125,21 +125,19 @@ define([
         instructure_buttons = instructure_buttons + ",instructure_external_button_clump";
       }
     }
-    if (!ENV.Wistia_Plugin_disable)
-    {
+    if (!ENV.Wistia_Plugin_disable){
     INST.allowWistia = true
     if(INST && INST.allowWistia) {
         instructure_buttons = instructure_buttons + ",wistia";
     }
     }
-    if (ENV.FAQ_button_disable)
-    {
+    if (ENV.FAQ_button_disable){
     INST.allowfaq = true
     if(INST && INST.allowfaq) {
         instructure_buttons = instructure_buttons + ",faq";
     }
     }
-    if(INST && INST.allowMediaComments) {
+    if(INST && INST.allowMediaComments && (INST.kalturaSettings && !INST.kalturaSettings.hide_rte_button)) {
       instructure_buttons = instructure_buttons + ",instructure_record";
     }
     var equella_button = INST && INST.equellaEnabled ? ",instructure_equella" : "";

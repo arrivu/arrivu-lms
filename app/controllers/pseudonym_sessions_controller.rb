@@ -562,7 +562,7 @@ class PseudonymSessionsController < ApplicationController
     otp_passed ||= cookies['canvas_otp_remember_me'] &&
         @current_user.validate_otp_secret_key_remember_me_cookie(cookies['canvas_otp_remember_me'])
     if !otp_passed
-      mfa_settings = @current_pseudonym.mfa_settings
+      mfa_settings = @current_user.mfa_settings
       if (@current_user.otp_secret_key && mfa_settings == :optional) ||
           mfa_settings == :required
         session[:pending_otp] = true
@@ -643,11 +643,13 @@ class PseudonymSessionsController < ApplicationController
         redirect_to oauth2_auth_confirm_url
       end
     else
-      redirect_to login_url(:lms_login => params[:lms_login])
+      redirect_to login_url(params.slice(:lms_login, :pseudonym_session))
     end
   end
 
   def oauth2_confirm
+
+
     @provider = Canvas::Oauth::Provider.new(session[:oauth2][:client_id], session[:oauth2][:redirect_uri], session[:oauth2][:scopes], session[:oauth2][:purpose])
     badge_host = URI.parse(session[:oauth2][:redirect_uri]).host
     if (request.domain.split('.')[0] == badge_host.split('.')[1]) or (request.domain.split('.')[0] == badge_host.split('.')[0]) or (badge_host == "localhost")

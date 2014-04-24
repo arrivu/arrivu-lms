@@ -21,7 +21,6 @@ define([
   'jquery' /* $ */,
   'wikiSidebar',
   'jquery.ajaxJSON' /* ajaxJSON */,
-  'jquery.instructure_date_and_time' /* parseFromISO */,
   'jquery.instructure_forms' /* formSubmit, formErrors */,
   'jquery.instructure_misc_plugins' /* confirmDelete, fragmentChange, showIf */,
   'jquery.templateData' /* fillTemplateData */,

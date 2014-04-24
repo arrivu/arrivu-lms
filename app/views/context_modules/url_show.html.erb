@@ -4,6 +4,7 @@
   add_category_crumb(@tag)
   add_crumb @tag.title
   js_bundle :file_inline
+  js_bundle 'module_sequence_footer'
 %>
 
 <% if @tag.locked_for? @current_user %>

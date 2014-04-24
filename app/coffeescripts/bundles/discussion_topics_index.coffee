@@ -184,12 +184,13 @@ require [
     #
     # Returns nothing.
     moveModel: (model) =>
-      for key, view of @discussions
-        view.collection.remove(model) unless view == @discussions.discussion_tag
-      @discussions[@_modelBucket(model)].collection.add(model)
+      bucket = @discussions[@_modelBucket(model)].collection
+      return if bucket == model.collection
+      model.collection.remove(model) unless view == @discussions.discussion_tag
+      bucket.add(model)
 
   # Start up the page
-  router = new DiscussionIndexRouter
+  @router = new DiscussionIndexRouter
   Backbone.history.start()
 
   $(document).ready ->
