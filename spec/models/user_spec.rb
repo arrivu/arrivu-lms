@@ -933,21 +933,6 @@ describe User do
       search_messageable_users(@student, :context => "course_#{course2.id}", :ids => [@admin.id]).should_not be_empty
     end
 
-    it "should return names with shared contexts" do
-      set_up_course_with_users
-      @course.enroll_user(@student, 'StudentEnrollment', :enrollment_state => 'active')
-      @group.users << @student
-
-      @student.shared_contexts(@this_section_user).should eql ['the course', 'the group']
-      @student.short_name_with_shared_contexts(@this_section_user).should eql "#{@this_section_user.short_name} (the course and the group)"
-
-      @student.shared_contexts(@other_section_user).should eql ['the course']
-      @student.short_name_with_shared_contexts(@other_section_user).should eql "#{@other_section_user.short_name} (the course)"
-
-      @student.shared_contexts(@unrelated_user).should eql []
-      @student.short_name_with_shared_contexts(@unrelated_user).should eql @unrelated_user.short_name
-    end
-
     it "should not rank results by default" do
       set_up_course_with_users
       @course.enroll_user(@student, 'StudentEnrollment', :enrollment_state => 'active')
@@ -1461,6 +1446,34 @@ describe User do
         p.save!
         p.valid_password?('qwerty').should be_true
       end
+    end
+  end
+
+  describe "can_be_enrolled_in_course?" do
+    before do
+      course active_all: true
+    end
+
+    it "should allow a user with a pseudonym in the course's root account" do
+      user_with_pseudonym account: @course.root_account, active_all: true
+      @user.can_be_enrolled_in_course?(@course).should be_true
+    end
+
+    it "should allow a temporary user with an existing enrollment but no pseudonym" do
+      @user = User.create! { |u| u.workflow_state = 'creation_pending' }
+      @course.enroll_student(@user)
+      @user.can_be_enrolled_in_course?(@course).should be_true
+    end
+
+    it "should not allow a registered user with an existing enrollment but no pseudonym" do
+      user active_all: true
+      @course.enroll_student(@user)
+      @user.can_be_enrolled_in_course?(@course).should be_false
+    end
+
+    it "should not allow a user with neither an enrollment nor a pseudonym" do
+      user active_all: true
+      @user.can_be_enrolled_in_course?(@course).should be_false
     end
   end
 
