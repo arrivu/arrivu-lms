@@ -11,7 +11,7 @@
   <div style="height: 70px;
           margin: 0 0 16px;
           background-color: #efefef;
-          text-align: center;"><%= image_tag "jigsaw_logo.png" ,:style => "height: 67px;" %></div>
+          text-align: center;"><%= image_tag "arrivu_logo.png" ,:style => "height: 67px;" %></div>
   <% form_for :terms_and_condition,:url=> account_terms_and_condition_url(@domain_root_account,@terms),:html=> {:method => :put} do |f|%>
 
       <div id="login_form" style="width:auto;margin-left: 28px">
@@ -22,7 +22,7 @@
         </div>
         <div style="color: #131212;">
           <h5>
-            <%= "In order to finish signing you up for the Jigsaw, You have to accept the Terms and Conditions" %>
+            <%= "In order to finish signing you up for the Arrivu LMS, You have to accept the Terms and Conditions" %>
           </h5>
         </div>
         <hr>
@@ -39,11 +39,11 @@
         </div>
         <div align="right" style="text-align: left;color: #131212;">
           <input type="checkbox"  id="enable_terms_and_conditions" value="1"    />
-          <%= f.label :information, :en => "I want to receive information, news and tips from Jigsaw Academy"%>
+          <%= f.label :information, :en => "I want to receive information, news and tips from Arrivu LMS"%>
         </div>
         <div id="check_box" style="text-align: left;color: #131212;" class="<%= root_url %>">
           <input type="checkbox"  id="agree_terms_and_conditions" value="1" class="<%= account_terms_and_condition_url(@domain_root_account,@terms) %>"   />
-          <%= f.label :enable_terms_and_conditions, :en => " I Agree to the Terms of Jigsaw Academy" %>
+          <%= f.label :enable_terms_and_conditions, :en => " I Agree to the Terms of Arrivu LMS" %>
         </div>
         </div>
         <div>

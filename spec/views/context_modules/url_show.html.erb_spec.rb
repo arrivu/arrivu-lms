@@ -50,7 +50,7 @@ describe "/context_modules/url_show" do
     doc.at_css('h2').inner_text.should == 'pls view'
     doc.at_css('b').inner_text.should == 'locked module'
     doc.at_css('#module_prerequisites_lookup_link')['href'].should ==
-        "/courses/#{@course.id}/modules/#{@module.id}/prerequisites/content_tag_#{@tag.id}"
+        "/courses/#{@course.id}/classes/#{@module.id}/prerequisites/content_tag_#{@tag.id}"
     doc.css('iframe').should be_empty
   end
 end

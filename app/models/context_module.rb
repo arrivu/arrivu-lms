@@ -278,7 +278,7 @@ class ContextModule < ActiveRecord::Base
   def add_item(params, added_item=nil, opts={})
     params[:type] = params[:type].underscore if params[:type]
     position = opts[:position] || (self.content_tags.not_deleted.maximum(:position) || 0) + 1
-      if params[:type] == "wiki_page" || params[:type] == "page"
+    if params[:type] == "wiki_page" || params[:type] == "page" || params[:type] == "wiki"
         item = opts[:wiki_page] || self.context.wiki.wiki_pages.find_by_id(params[:id])
     elsif params[:type] == "faq"
       item = opts[:faq] || self.context.wiki.wiki_pages.faqs.find_by_id(params[:id])
@@ -537,14 +537,15 @@ class ContextModule < ActiveRecord::Base
   end
 
   def check_for_user_module_group_enrollment(user)
-    enrollment = UserModuleGroupEnrollment.find_by_context_module_group_id_and_user_id(self.context_module_group_association.try(:context_module_group_id),user.id)
-    if enrollment and (enrollment.workflow_state == UserModuleGroupEnrollment::ACTIVE)
-      true
-    elsif !enrollment
-      default_context_module_group = self.context.context_module_groups.default.active.first
-      ContextModuleGroupAssociation.find_by_context_module_id_and_context_module_group_id(self.id,default_context_module_group.try(:id))
+    unless user.nil?
+      enrollment = UserModuleGroupEnrollment.find_by_context_module_group_id_and_user_id(self.context_module_group_association.try(:context_module_group_id),user.id)
+      if enrollment and (enrollment.workflow_state == UserModuleGroupEnrollment::ACTIVE)
+        true
+      elsif !enrollment
+        default_context_module_group = self.context.context_module_groups.default.active.first
+        ContextModuleGroupAssociation.find_by_context_module_id_and_context_module_group_id(self.id,default_context_module_group.try(:id))
+      end
     end
-
   end
 
   def to_be_unlocked

@@ -363,31 +363,27 @@ define([
                         }
                     }
                 });
-                if($olditem.length) {
-                    $olditem.replaceWith($item.show());
-                } else {
-                    if(!$before) {
-                        $module.find(".pre_class_video .context_module_items").append($item.show());
-                    }
-                    else if (!$before && (data.category == 'pre_class_recording')){
-                        console.log(data.category);
-                        $module.find(".pre_class_recording .context_module_items").append($item.show());
-                    }
-                    else if (!$before && (data.category == 'pre_class_presentation')){
-                        console.log(data.category);
-                        $module.find(".pre_class_presentation .context_module_items").append($item.show());
-                    }
-                    else if (!$before && (data.category == 'pre_class_assignments')){
-                        console.log(data.category);
-                        $module.find(".pre_class_assignments .context_module_items").append($item.show());
-                    }
-                    else if (!$before && (data.category == 'pre_class_reading_materials')){
-                        console.log(data.category);
-                        $module.find(".pre_class_reading_materials .context_module_items").append($item.show());
-                    }
-                    else {
-                        $before.before($item.show());
-                    }
+                if(!$before && (data.category == 'pre_class_video')) {
+                    $module.find(".pre_class_video .context_module_items").append($item.show());
+                }
+                else if (!$before && (data.category == 'pre_class_recording')){
+                    console.log(data.category);
+                    $module.find(".pre_class_recording .context_module_items").append($item.show());
+                }
+                else if (!$before && (data.category == 'pre_class_presentation')){
+                    console.log(data.category);
+                    $module.find(".pre_class_presentation .context_module_items").append($item.show());
+                }
+                else if (!$before && (data.category == 'pre_class_assignments')){
+                    console.log(data.category);
+                    $module.find(".pre_class_assignments .context_module_items").append($item.show());
+                }
+                else if (!$before && (data.category == 'pre_class_reading_materials')){
+                    console.log(data.category);
+                    $module.find(".pre_class_reading_materials .context_module_items").append($item.show());
+                }
+                else {
+                    $before.before($item.show());
                 }
                 return $item;
             },
@@ -596,8 +592,10 @@ define([
                 $module.attr('id', 'context_module_' + data.context_module.id);
 
                 // Set this module up with correct data attributes
-                $module.data('module-url', "/courses/" + data.context_module.context_id + "/modules/" + data.context_module.id);
-                $module.data('workflow-state', data.context_module.workflow_state);
+                $module.find('.add_module_item_link').attr('rel',"/courses/" + data.context_module.context_id + "/classes/" + data.context_module.id + "/items")
+                $module.attr('data-module-url', "/courses/" + data.context_module.context_id + "/classes/" + data.context_module.id);
+                $module.attr('data-workflow-state', data.context_module.workflow_state);
+                $module.attr('data-module-id', data.context_module.id);
                 if(data.context_module.workflow_state == "unpublished"){
                     $module.find('.workflow-state-action').text("Publish");
                     $module.find('.workflow-state-icon').addClass('publish-module-link')

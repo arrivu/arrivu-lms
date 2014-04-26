@@ -7,7 +7,7 @@ define [
     $(template(email: ENV.USER_EMAIL)).
       appendTo($('body')).
       dialog
-        title: I18n.t('welcome_to_canvas', 'Welcome to Jigsaw LMS!')
+        title: I18n.t('welcome_to_arrivu_lms', 'Welcome to Arrivu LMS!')
         width: 400
         resizable: false
         buttons: [

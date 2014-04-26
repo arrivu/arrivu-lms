@@ -70,7 +70,7 @@
                 </div>
                 <div id="category" class="pre_class_video" style="margin-top: 5px;">
                   <div class="items context_module_items <%= 'manageable' if editable %>" style="min-height: 10px;margin-bottom: 18px;">
-                      <% context_module.content_tags.pre_class_videos.active.each do |tag| %>
+                      <% context_module.content_tags.pre_class_videos.not_deleted.each do |tag| %>
                           <%= render :partial => 'context_modules/module_item', :object => tag, :locals => {:completion_criteria => context_module.completion_requirements, :editable => editable} %>
                       <% end %>
                   </div>
@@ -86,7 +86,7 @@
               </div>
               <div  id="category" class="pre_class_reading_materials" style="margin-top: 5px;">
                 <div class="items context_module_items <%= 'manageable' if editable %>" style="min-height: 10px;margin-bottom: 18px;">
-                  <% context_module.content_tags.pre_class_reading_materials.active.each do |tag| %>
+                  <% context_module.content_tags.pre_class_reading_materials.not_deleted.each do |tag| %>
                       <%= render :partial => 'context_modules/module_item', :object => tag, :locals => {:completion_criteria => context_module.completion_requirements, :editable => editable} %>
                   <% end %>
                 </div>
@@ -101,7 +101,7 @@
                 </div>
                 <div id="category" class="pre_class_presentation" style="margin-top: 5px;">
                   <div class="items context_module_items <%= 'manageable' if editable %>" style="min-height: 10px;margin-bottom: 18px;">
-                    <% context_module.content_tags.pre_class_presentation.active.each do |tag| %>
+                    <% context_module.content_tags.pre_class_presentation.not_deleted.each do |tag| %>
                         <%= render :partial => 'context_modules/module_item', :object => tag, :locals => {:completion_criteria => context_module.completion_requirements, :editable => editable} %>
                     <% end %>
                   </div>
@@ -116,7 +116,7 @@
                 </div>
                 <div id="category" class="pre_class_assignments" style="margin-top: 5px;">
                 <div class="items context_module_items <%= 'manageable' if editable %>" style="min-height: 10px;margin-bottom: 18px;">
-                    <% context_module.content_tags.pre_class_assignments.active.each do |tag| %>
+                    <% context_module.content_tags.pre_class_assignments.not_deleted.each do |tag| %>
                         <%= render :partial => 'context_modules/module_item', :object => tag, :locals => {:completion_criteria => context_module.completion_requirements, :editable => editable} %>
                     <% end %>
                 </div>

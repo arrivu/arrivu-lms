@@ -1,4 +1,4 @@
 <% define_content :link do %>
   <%= HostUrl.protocol %>://<%= HostUrl.context_host(asset.quiz.context) %>/<%= course_quiz_path(asset.quiz.context,asset.quiz) %>
 <% end %>
-  <%= t :body, "Jigsaw LMS Alert - Quiz Regraded : %{quiz}", :quiz => asset.quiz.title %>
+  <%= t :body, "Arrivu LMS Alert - Quiz Regraded : %{quiz}", :quiz => asset.quiz.title %>

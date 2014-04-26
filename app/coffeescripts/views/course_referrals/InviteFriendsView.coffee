@@ -55,6 +55,7 @@ define [
 
 
     initialize: ->
+      super
       @referral = @options.referral
       @email_subject = @options.referral.email_subject if @options.referral
       @email_text = @options.referral.email_text if @options.referral

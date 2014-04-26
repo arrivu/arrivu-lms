@@ -11,7 +11,7 @@ define [
     introSlideshow.addSlide I18n.t('titles.slide1', 'Slide 1'), (slide) ->
       slide.addImage('/images/conversations/intro/icon.png', 'icon')
       slide.addParagraph(I18n.t('slide1.paragraph1', 'Take a look at your Inbox!'), 'large')
-      slide.addParagraph(I18n.t('slide1.paragraph2', 'Conversations—the new Jigsaw Academy messaging system—has arrived!'), 'large')
+      slide.addParagraph(I18n.t('slide1.paragraph2', 'Conversations—the new Arrivu LMS messaging system—has arrived!'), 'large')
       slide.addParagraph(I18n.t('slide1.paragraph3', 'Use Conversations to send a private message to a classmate or use Conversations to talk to an entire group of people.'), 'large_and_blue')
       slide.addParagraph(I18n.t('slide1.paragraph4', 'Ready for a short intro? Click the right arrow to get started.'), 'large')
 

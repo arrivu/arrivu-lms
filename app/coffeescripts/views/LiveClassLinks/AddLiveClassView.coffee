@@ -14,6 +14,7 @@ define [
 
 
     initialize: ->
+      super
       @courseModules = @options.courseModules if @options.courseModules
       @courseSections = @options.courseSections if @options.courseSections
 

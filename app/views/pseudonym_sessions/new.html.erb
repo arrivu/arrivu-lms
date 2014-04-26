@@ -1,5 +1,5 @@
 <% content_for :page_title do %>
-  <%= t :page_title, "Log In to Jigsaw" %>
+  <%= t :page_title, "Log In to Arrivu LMS" %>
 <% end %>
 <%= render :partial => "shared/login" %>
 <% if flash[:logged_out] && HostUrl.file_host(@domain_root_account, @request.host_with_port) %>

@@ -186,7 +186,7 @@ require [
     moveModel: (model) =>
       bucket = @discussions[@_modelBucket(model)].collection
       return if bucket == model.collection
-      model.collection.remove(model) unless view == @discussions.discussion_tag
+      model.collection.remove(model)
       bucket.add(model)
 
   # Start up the page

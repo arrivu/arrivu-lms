@@ -15,9 +15,6 @@ define [
 
     className: 'validated-form-view form-horizontal bootstrap-form'
 
-    initialize: ->
-      tinymce.execCommand('mceRemoveControl',true,'email_text');
-
     afterRender: ->
       super
       @$el.dialog
@@ -25,7 +22,9 @@ define [
         width: 920
         height: "auto"
         resizable: true
-        close: => @$el.remove()
+        close: =>
+          tinymce.execCommand('mceRemoveControl',true,'email_text');
+          @$el.remove()
         buttons: [
           class: "btn-primary"
           text:  'Submit'
@@ -46,6 +45,7 @@ define [
       this
 
     submit: ->
+      tinymce.execCommand('mceRemoveControl',true,'email_text');
       this.$el.parent().find('.btn-primary').removeClass('ui-state-hover')
       super
 

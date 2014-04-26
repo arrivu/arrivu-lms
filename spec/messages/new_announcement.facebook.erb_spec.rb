@@ -24,7 +24,7 @@ describe 'new_announcement.facebook' do
     announcement_model
     @object = @a
     @message = generate_message(:new_announcement, :facebook, @object)
-    @message.subject.should == "Jigsaw LMS Alert"
+    @message.subject.should == "Arrivu LMS Alert"
     @message.url.should match(/\/courses\/\d+\/announcements\/\d+/)
     @message.body.should match(/\/courses\/\d+\/announcements\/\d+/)
   end

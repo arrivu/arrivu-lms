@@ -36,6 +36,9 @@
   <% end %>
   <li id="rewards_tab"><a href="#tab-rewards"><%= t('tabs.sections', %{Rewards}) %></a></li>
   <li id="reports_tab"><a href="#tab-reports"><%= t('tabs.reports', %{Reports}) %></a></li>
+  <% if can_do @context, @current_user, :manage_feature_flags %>
+      <li id="feature_flags_tab"><a href="#tab-features" id="tab-features-link"><%= t('tabs.feature_options', %{Feature Options}) %></a></li>
+  <% end %>
 </ul>
 <div id="tab-details">
 <h2><%= t('headings.details', %{Course Details}) %></h2>
@@ -157,7 +160,7 @@
       <!--<%#= f.select :locale, [[no_language, nil]] + available_locales.invert.sort, {:selected => @context.locale}, {:class => 'locale'} %>-->
       <!--<%#= render :partial => 'shared/locale_warning' %>-->
       <p> <%#= mt :transifex_message, <<-TEXT, :transifex_url => "https://www.transifex.com/projects/p/canvas-lms/"
-<!--Join the [Jigsaw LMS Translation Community](%{transifex_url})-->
+<!--Join the [Arrivu LMS Translation Community](%{transifex_url})-->
 <!--TEXT-->
             <!--%>
         <!--</p>-->
@@ -406,7 +409,7 @@
         <th class="reports"><%= t 'headers.report_last_run', 'Last Run' %></th>
         <th class="reports"></th>
       </tr>
-      <% @available_reports.each do |report, details|
+      <% (@available_reports ||= []).each do |report, details|
         if report == "last_user_course_access_csv"
             @user_acess_course = true
             title = details[:title] || details

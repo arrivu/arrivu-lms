@@ -273,7 +273,7 @@ Allowing Draft State here will allow teachers to enable it in their individual c
                 <% if @account.account_authorization_config %>
                   <div>
                     <%= settings.check_box :canvas_authentication, :checked => @account.canvas_authentication? %>
-                    <%= settings.label :canvas_authentication, :en => "Jigsaw LMS Authentication" %>
+                    <%= settings.label :canvas_authentication, :en => "Arrivu LMS Authentication" %>
                   </div>
                 <% end %>
               <% end %>
@@ -494,7 +494,7 @@ Allowing Draft State here will allow teachers to enable it in their individual c
                   "In order to make it easier for users, rather than forcing them to download " +
                   "things like Word docs, PDFs, Excel spreadsheets, and open office documents " +
                   "(In addition to requiring that those programs be installed on their on their " +
-                  "computer), in many areas throughout Jigsaw LMS, it will allow you an inline " +
+                  "computer), in many areas throughout Arrivu LMS, it will allow you an inline " +
                   "preview of the document.\n\n" +
 
                   "If Scribd has been enabled for this account, it will try to use it to show the preview. " +
@@ -560,7 +560,7 @@ Allowing Draft State here will allow teachers to enable it in their individual c
               <%= settings.radio_button :outgoing_email_default_name_option, 'default',
                                         :checked => @account.settings[:outgoing_email_default_name].blank?,
                                         :class => 'notification_from_name_option' %>
-              <%= settings.label :outgoing_email_default_name_option_default, :en => "Default Jigsaw LMS Setting" %>
+              <%= settings.label :outgoing_email_default_name_option_default, :en => "Default Arrivu LMS Setting" %>
             </div>
             <div style='padding-left: 2em;'>
               <strong><%= t 'notifications.example', 'Example:' %></strong>
@@ -597,7 +597,7 @@ Allowing Draft State here will allow teachers to enable it in their individual c
             </div>
             <div style='padding-left: 2em;'>
               <p>
-                <%= t('notifications.custom_name_description', 'If selected, this will replace all other branding sent in Jigsaw LMS notifications.') %>
+                <%= t('notifications.custom_name_description', 'If selected, this will replace all other branding sent in Arrivu LMS notifications.') %>
                 <br/>
                 <%= text_field_tag 'account[settings][outgoing_email_default_name]', @account.settings[:outgoing_email_default_name] %>
               </p>
@@ -645,7 +645,7 @@ Allowing Draft State here will allow teachers to enable it in their individual c
               <tr>
                 <td>
                   <b><%= t('notifications.external_services_warning_label', 'Pop-up Message Content:') %></b>
-                  <blockquote><%= t('notifications.external_services_warning', 'Notice: Some notifications may contain confidential information. Selecting to receive notifications at an email other than your institution provided address may result in sending sensitive Jigsaw LMS course and group information outside of the institutional system.')%></blockquote>
+                  <blockquote><%= t('notifications.external_services_warning', 'Notice: Some notifications may contain confidential information. Selecting to receive notifications at an email other than your institution provided address may result in sending sensitive Arrivu LMS course and group information outside of the institutional system.')%></blockquote>
                 </td>
               </tr>
             </table>
@@ -790,7 +790,7 @@ Allowing Draft State here will allow teachers to enable it in their individual c
             </tr>
             <% if @account.site_admin? %>
               <tr id="confirm_global_announcement_field">
-                <td colspan=2><input type="checkbox" id="confirm_global_announcement" name="confirm_global_announcement"> <%= label_tag :confirm_global_announcement, t(:confirm_global_announcement, "This announcement will be shown to *all* Jigsaw LMS users. Confirm that you want to create it.", :wrapper => '<b>\1</b>') %></td>
+                <td colspan=2><input type="checkbox" id="confirm_global_announcement" name="confirm_global_announcement"> <%= label_tag :confirm_global_announcement, t(:confirm_global_announcement, "This announcement will be shown to *all* Arrivu LMS users. Confirm that you want to create it.", :wrapper => '<b>\1</b>') %></td>
               </tr>
               <tr>
                 <td colspan=2>

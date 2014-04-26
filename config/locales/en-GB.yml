@@ -31,18 +31,18 @@ en-GB:
   accont: 
     feedback_pricing_sub: "Get the numbers for your institution"
   account: 
-    ask_canvas_network: "Ask the Canvas Network Community"
+    ask_canvas_network: "Ask the Arrivu LMS Network Community"
     default_account_name: "Default account"
     default_site_administrator_account_name: "Site admin"
     default_term_name: "Default term"
     errors: 
       invalid_discovery_url: "The discovery URL is not valid"
     feedback_coach: "Ask the Community"
-    feedback_coach_sub: "Get help from a Canvas expert"
+    feedback_coach_sub: "Get help from a Arrivu LMS expert"
     feedback_feature_request: "Request a feature"
-    feedback_feature_request_canvas_net: "Request a feature in Canvas Network"
-    feedback_feature_request_sub: "Have an idea to improve Canvas?"
-    feedback_pricing: "Canvas pricing information"
+    feedback_feature_request_canvas_net: "Request a feature in Arrivu LMS Network"
+    feedback_feature_request_sub: "Have an idea to improve Arrivu LMS?"
+    feedback_pricing: "Arrivu LMS pricing information"
     manually_created_courses: "Manually-created courses"
     root_account_cant_have_sis_id: "SIS IDs cannot be set on root accounts"
     sis_id_in_use: "SIS ID \"%{sis_id}\" is already in use"
@@ -92,13 +92,13 @@ en-GB:
       canvas_login_tip: |-
           If you configure settings that cause you to not be able to log in you can add
           *%{url1}* to the end of your login url. This will let you login
-          using the normal Canvas login procedure. For this account the url would be %{url2}
+          using the normal Arrivu LMS login procedure. For this account the url would be %{url2}
       choose_auth_type_option: "Choose an authentication service"
       current_settings_title: "Current integration"
       delete_auth_confirmation: "Are you sure? Users may not be able to log in if this is removed."
       delete_auth_link: "Remove authentication"
       edit_auth_link: "Edit details"
-      ip_address_list_description: "If you are using an authentication service that requires the Canvas servers to contact your servers directly, such as LDAP, you'll need to make sure that your servers can accept connections from these IP addresses:"
+      ip_address_list_description: "If you are using an authentication service that requires the Arrivu LMS servers to contact your servers directly, such as LDAP, you'll need to make sure that your servers can accept connections from these IP addresses:"
       no_auth_type_description: "This account does not currently integrate with an identity provider."
       page_title: "Authentication settings"
       profile_page_link_example: "For example, here is your profile page: [%{friendlyname}](%{url})"
@@ -109,7 +109,7 @@ en-GB:
     ldap_settings: 
       add_secondary_ldap_server_link: "Add secondary LDAP server"
       auth_type_label: Type
-      change_password_url_help: "Leave blank for default Canvas behaviour"
+      change_password_url_help: "Leave blank for default Arrivu LMS behaviour"
       change_password_url_not_specified: "None specified"
       labels: 
         change_password_url: "Forgot password URL"
@@ -122,7 +122,7 @@ en-GB:
     ldap_settings_fields: 
       auth_filter_description: "Use *%{placeholder}* as a placeholder for the username supplied by the user. For example: *(sAMAccountName=%{placeholder})*"
       auth_password_description: "Leave blank to continue using the current password."
-      identifer_format_description: "The LDAP attribute to use to look up the Canvas login. Leave blank to use the username supplied by the user."
+      identifer_format_description: "The LDAP attribute to use to look up the Arrivu LMS login. Leave blank to use the username supplied by the user."
       labels: 
         auth_base: Base
         auth_filter: Filter
@@ -145,14 +145,14 @@ en-GB:
       ldap_test_login_button: "Test login"
       test_ldap_bind_help_body: "Your LDAP server rejected the bind attempt. Things to consider:"
       test_ldap_bind_help_fixes_1: "Verify the provided filter string (i.e. '(sAMAccountName={{login}})')."
-      test_ldap_bind_help_fixes_2: "Does the username require more scoping information? (i.e. 'cn=Canvas,ou=people,dc=example,dc=com')."
-      test_ldap_bind_help_header: "Canvas can't bind (login) to your LDAP server"
+      test_ldap_bind_help_fixes_2: "Does the username require more scoping information? (i.e. 'cn=Arrivu LMS,ou=people,dc=example,dc=com')."
+      test_ldap_bind_help_header: "Arrivu LMS can't bind (login) to your LDAP server"
       test_ldap_bind_label: "Testing LDAP bind..."
       test_ldap_connection_help_body: "The connection either timed out or was refused. Things to consider:"
-      test_ldap_connection_help_fixes_1: "Canvas is connecting to %{ips}"
+      test_ldap_connection_help_fixes_1: "Arrivu LMS is connecting to %{ips}"
       test_ldap_connection_help_fixes_2: "This was only a connection test. SSL certificates were not validated."
-      test_ldap_connection_help_fixes_3: "Check your firewall settings. Are all Canvas IP address allowed to access your server?"
-      test_ldap_connection_help_header: "Canvas can't connect to your LDAP server"
+      test_ldap_connection_help_fixes_3: "Check your firewall settings. Are all Arrivu LMS IP address allowed to access your server?"
+      test_ldap_connection_help_header: "Arrivu LMS can't connect to your LDAP server"
       test_ldap_connection_label: "Testing connection..."
       test_ldap_dialog_close: Close
       test_ldap_dialog_page_title: "Testing Your LDAP Configuration"
@@ -163,11 +163,11 @@ en-GB:
       test_ldap_search_help_fixes_1: "Verify the provided filter string (i.e. '(sAMAccountName={{login}})')."
       test_ldap_search_help_fixes_2: "Verify the provided search base (i.e. 'ou=people,dc=example,dc=com')."
       test_ldap_search_help_fixes_3: "Verify that the user object in LDAP has search privileges for the provided search base."
-      test_ldap_search_help_header: "Canvas can't search your LDAP instance"
+      test_ldap_search_help_header: "Arrivu LMS can't search your LDAP instance"
       test_ldap_search_label: "Testing LDAP search..."
     ldap_timeout_error: 
       last_ldap_timeout_failure: "Last timeout failure"
-      ldap_timeout_failure_help: "If Canvas times out communicating with the LDAP server, it will block further login attempts from using that LDAP server for %{time}."
+      ldap_timeout_failure_help: "If Arrivu LMS times out communicating with the LDAP server, it will block further login attempts from using that LDAP server for %{time}."
     login_required: "must be supplied"
     no_auth_mixing: "Cannot mix authentication types"
     no_changing_auth_types: "Cannot change type of authorisation config. Please delete and create new config."
@@ -182,7 +182,7 @@ en-GB:
       certificate_fingerprint: "Certificate fingerprint"
       change_password_url: "Change password link"
       discovery_url: "Discovery URL:"
-      discovery_url_description: "If a discovery url is set, canvas will forward all users to that URL when they need to be authenticated. That page will need to then help the user figure out where they need to go to log in. If no discovery url is configured, the first SAML configuration will be used to attempt to authenticate the user."
+      discovery_url_description: "If a discovery url is set, Arrivu LMS will forward all users to that URL when they need to be authenticated. That page will need to then help the user figure out where they need to go to log in. If no discovery url is configured, the first SAML configuration will be used to attempt to authenticate the user."
       identifier_format: "Identifier format"
       idp_entity_id: "IdP Entity ID"
       labels: 
@@ -214,7 +214,7 @@ en-GB:
       auth_request_to_idp: "AuthnRequest sent to IdP"
       auth_response_from_idp: "AuthnResponse from IdP"
       labels: 
-        canvas_login_fail_message: "Canvas login failure message"
+        canvas_login_fail_message: "Arrivu LMS login failure message"
         fingerprint_from_idp: "IdP certificate fingerprint"
         idp_in_response_to: "IdP inResponseTo"
         idp_login_destination: "IdP LoginResponse destination"
@@ -225,10 +225,10 @@ en-GB:
         idp_response_encoded: "IdP LoginResponse encoded"
         idp_response_xml_decrypted: "IdP LoginResponse decrypted"
         idp_response_xml_encrypted: "IdP LoginResponse encrypted"
-        is_valid_login_response: "Canvas thinks response is valid"
+        is_valid_login_response: "Arrivu LMS thinks response is valid"
         logged_in_user_id: "Logged in user id"
         login_response_validation_error: "Validation error"
-        login_to_canvas_success: "User successfully logged into Canvas"
+        login_to_canvas_success: "User successfully logged into Arrivu LMS"
         logout_request_id: "Logout request ID"
         logout_to_idp_url: "LogoutRequest encoded URL"
         logout_to_idp_xml: "LogoutRequest XML sent to IdP"
@@ -341,7 +341,7 @@ en-GB:
         sent_at: "Sent at"
         to: To
       comm_messages_content_pane: 
-        search_info2: "To view all notifications sent to a Canvas user, select the user and date range for your search."
+        search_info2: "To view all notifications sent to a Arrivu LMS user, select the user and date range for your search."
         view_notifications: "View notifications"
       comm_messages_search_overview: 
         messages_viewed: "Notifications sent to *%{user}* from *%{start_date}* to *%{end_date}*."
@@ -572,7 +572,7 @@ en-GB:
       account_reports: 
         sis_export: 
           description: 
-            text: "This report will export all the needed information that relates to provisioning Jigsaw Academy in its respective categories."
+            text: "This report will export all the needed information that relates to provisioning Arrivu LMS in its respective categories."
     quiz_data_csv_description: 
       account_reports: 
         ace: 
@@ -631,7 +631,7 @@ en-GB:
             field: "Section ID"
     settings: 
       about_google_docs: |-
-          In order to make it easier for users, rather than forcing them to download things like Word documents, PDFs, Excel spreadsheets, and OpenOffice documents (In addition to requiring that those programs be installed on their on their computer), in many areas throughout Jigsaw Academy, it will allow you an inline preview of the document.
+          In order to make it easier for users, rather than forcing them to download things like Word documents, PDFs, Excel spreadsheets, and OpenOffice documents (In addition to requiring that those programs be installed on their on their computer), in many areas throughout Arrivu LMS, it will allow you an inline preview of the document.
           
           If Scribd has been enabled for this account, it will try to use it to show the preview. But because Scribd uses flash paper to display the documents, and many users (namely those using an iPad/iPhone) do not have Flash Player installed, that preview will not work.  By leaving Google Docs Previews enabled, when a browser does not have Flash enabled, or if Scribd is not enabled, it will use preview powered by Google Docs. Using this service is subject to Google's Viewer [terms of service](%{terms_url})
       about_google_docs_tooltip: "About Google Docs previews"
@@ -654,7 +654,7 @@ en-GB:
         add_users: "OK, looks good. Add these users"
         continue: Continue...
         modify_users: "Go back and edit the list of users"
-      confirm_global_announcement: "This announcement will be shown to *all* Jigsaw Academy users. Confirm that you want to create it."
+      confirm_global_announcement: "This announcement will be shown to *all* Arrivu LMS users. Confirm that you want to create it."
       confirm_turnitin_settings_link: "confirm Turnitin settings"
       create_courses_description: "(Account Administrators can always create courses)"
       create_courses_title: "Who can create new courses"
@@ -662,7 +662,7 @@ en-GB:
       default_language_description: "This will override any browser/OS language settings. Preferred languages can still be set at the course/user level."
       delete: delete
       delete_announcement_tooltip: "Delete this announcement"
-      email_notification_from_description: "This setting allows the admin to brand or label the 'From' text on all notifications sent from Jigsaw Academy for this account."
+      email_notification_from_description: "This setting allows the admin to brand or label the 'From' text on all notifications sent from Arrivu LMS for this account."
       email_notification_from_settings: "E-mail notification \"From\" settings"
       enabled_web_serices_title: "Enabled web services"
       equall_endpoint_help: "This is the URL to your equella service. It will probably look something like \"%{sample_url}\"."
@@ -690,7 +690,7 @@ en-GB:
         allow_invitation_previews: "Invitation previews"
         allow_sending_scores_in_emails: "Students can opt-in to receiving scores in email notifications"
         allow_sis_import: "SIS imports"
-        canvas_authentication: "Jigsaw Academy authentication"
+        canvas_authentication: "Arrivu LMS authentication"
         default_language: "Default language"
         default_time_zone: "Default Time Zone"
         edit_institution_email: "Users can delete their institution-assigned email address"
@@ -717,7 +717,7 @@ en-GB:
         no_enrollments_can_create_courses: "Users with no enrolments"
         open_registration: "Open registration"
         outgoing_email_default_name_option_custom: "Custom \"From\" name"
-        outgoing_email_default_name_option_default: "Default Jigsaw Academy setting"
+        outgoing_email_default_name_option_default: "Default Arrivu LMS setting"
         prevent_course_renaming_by_teachers: "Don't let teachers rename their courses"
         restrict_student_future_view: "Restrict students from viewing courses before start date"
         self_enrollment: "Allow self-enrolment"
@@ -752,14 +752,14 @@ en-GB:
       never_allow_self_enrollment_option: Never
       no_language_preference: "Not set (defaults to %{language})"
       notifications: 
-        custom_name_description: "If selected, this will replace all other branding sent in Jigsaw Academy notifications."
+        custom_name_description: "If selected, this will replace all other branding sent in Arrivu LMS notifications."
         email_date: Date
         email_reply_to: Reply-To
         email_to: To
         example: "Example:"
         external_services: "Notifications sent to external services"
         external_services_label: "Display one time pop-up warning on Notification Preferences page."
-        external_services_warning: "Notice: Some notifications may contain confidential information. Selecting to receive notifications at an email other than your institution provided address may result in sending sensitive Jigsaw Academy course and group information outside of the institutional system."
+        external_services_warning: "Notice: Some notifications may contain confidential information. Selecting to receive notifications at an email other than your institution provided address may result in sending sensitive Arrivu LMS course and group information outside of the institutional system."
         external_services_warning_label: "Pop-up message content:"
         from: From
         sample_subject: "Grade changed: Check in survey, testing course"
@@ -802,7 +802,7 @@ en-GB:
       tab_quotas: Quotas
       tab_reports: Reports
       tab_settings: Settings
-      transifex_message: "Join the [Jigsaw Academy Translation Community](%{transifex_url})"
+      transifex_message: "Join the [Arrivu LMS Translation Community](%{transifex_url})"
       turnitin_comments_help: "these comments will be shown to students when submitting a Turnitin-enabled assignment"
       turnitin_pledge_help: "students must check a box acknowledging that they agree with this pledge"
       turnitin_settings_title: "Turnitin settings"
@@ -965,7 +965,7 @@ en-GB:
           login: 
             check_box: "Include users that have never logged in?"
           parameters: 
-            note: "This report does not reflect the last activity in Jigsaw Academy rather the last time that the user logged in."
+            note: "This report does not reflect the last activity in Arrivu LMS rather the last time that the user logged in."
     student_submissions_csv_description: 
       account_reports: 
         vilas: 
@@ -1217,7 +1217,7 @@ en-GB:
       page_disabled_for_group: "That page has been disabled for this group"
     warnings: 
       details: 
-        suspended: "This institution's Jigsaw Academy account has been suspended. Only Account Administrators may log in to correct any problems."
+        suspended: "This institution's Arrivu LMS account has been suspended. Only Account Administrators may log in to correct any problems."
       please_log_in: "For security purposes, please enter your password to continue"
       titles: 
         suspended: "Institution suspended"
@@ -1814,16 +1814,16 @@ en-GB:
           website: "Website URL"
       loading_tools: "Loading tools..."
       messages: 
-        google_docs_auth_required: "Before you can submit assignments directly from Google Docs you need to authorise Jigsaw Academy to access your Google Docs account:"
+        google_docs_auth_required: "Before you can submit assignments directly from Google Docs you need to authorise Arrivu LMS to access your Google Docs account:"
         media_recording_ready: "Ready to submit! Click 'Submit assignment' button to finish."
-        media_recordings_disabled: "Media recordings are not enabled for this Jigsaw Academy site, and you will not be able to submit these types of assignments. Please contact your instructor about changing the settings for this assignment, or your system administrator about enabling media recordings."
+        media_recordings_disabled: "Media recordings are not enabled for this Arrivu LMS site, and you will not be able to submit these types of assignments. Please contact your instructor about changing the settings for this assignment, or your system administrator about enabling media recordings."
         submitting: Submitting...
         uploading: "Retrieving a copy of your Google Doc to submit for this assignment. This may take a little while, depending on the size of the file..."
       no_files: "No files"
       no_submission: "No submission selected"
       submission_url: "Submission:"
       titles: 
-        media_recordings_disabled: "Media recordings are not enabled for this Jigsaw Academy site"
+        media_recordings_disabled: "Media recordings are not enabled for this Arrivu LMS site"
       upload_or_choose_file: "Upload a file, or choose a file you've already uploaded."
     syllabus: 
       page_title: "Syllabus for %{course}"
@@ -1953,9 +1953,9 @@ en-GB:
     export_failed: "There was an error exporting the course with bb_lcid %{id} from Blackboard"
     export_failed_no_id: "There was an error importing a course"
     export_failed_not_found: "The course with bb_lcid %{id} could not be found in Blackboard with user %{user_name}"
-    export_failed_with_id: "There was an error importing the course with bb_lcid %{id} into Jigsaw Academy"
+    export_failed_with_id: "There was an error importing the course with bb_lcid %{id} into Arrivu LMS"
     no_course_found: "No course was found with %{id_type} of %{id}"
-    no_course_id_given: "No Jigsaw Academy course was identified for bb_lcid %{id}"
+    no_course_id_given: "No Arrivu LMS course was identified for bb_lcid %{id}"
     no_credentials_found: "No credentials were found for the user name %{user_name}"
     no_credentials_given: "No user name was given for the course %{course_identifier}"
     no_lcid_found: "No bb_lcid was specified for a row"
@@ -1965,7 +1965,7 @@ en-GB:
       exporting: "Exporting from Blackboard"
       failed: Failed
       finished: Finished
-      importing: "Importing into Jigsaw Academy"
+      importing: "Importing into Arrivu LMS"
       migration_cancelled_on: "Cancelled on %{date}"
       migration_failed_on: "Failed on %{date}"
       migration_finished_on: "Finished on %{date}"
@@ -1975,7 +1975,7 @@ en-GB:
       see_results: "See results"
       show_warnings: "Show warnings"
       waiting_to_export: "Waiting to export from Blackboard"
-      waiting_to_import: "Waiting to import into Jigsaw Academy"
+      waiting_to_import: "Waiting to import into Arrivu LMS"
     index: 
       available_courses: "Available Courses"
       bulk_description: "These are the headers expected in the CSV:"
@@ -1983,8 +1983,8 @@ en-GB:
         add_credentials: "Add credentials"
         migrate_courses: "Migrate courses"
       column_name: "Column name"
-      course_id_description: "The Jigsaw Academy ID of the course to import into."
-      credential_description: "This tool will help you migrate multiple courses at the same time from a Blackboard Vista/CE system. Add a set of credentials for your Blackboard system then add Jigsaw Academy course identifiers to the provided CSV template to migrate your courses."
+      course_id_description: "The Arrivu LMS ID of the course to import into."
+      credential_description: "This tool will help you migrate multiple courses at the same time from a Blackboard Vista/CE system. Add a set of credentials for your Blackboard system then add Arrivu LMS course identifiers to the provided CSV template to migrate your courses."
       csv_description: "Any other columns can be added but they will be ignored. Here is an example of a simple CSV for 3 courses in the account for a user name of \"greg\":"
       csv_template: "CSV Template"
       current_migration_batch: "Current Migration Batch"
@@ -2001,8 +2001,8 @@ en-GB:
       page_title: "Bulk course migration"
       previous_migration_batches: "Previous migration batches"
       school: School
-      school_not_supported: "Please have your administrator contact Jigsaw Academy to help get your school supported."
-      sis_id_description: "The SIS ID of the Jigsaw Academy course to import into."
+      school_not_supported: "Please have your administrator contact Arrivu LMS to help get your school supported."
+      sis_id_description: "The SIS ID of the Arrivu LMS course to import into."
       upload_migration_csv: "Upload a migration CSV"
       user_name: "User Name"
       user_name_description: "The username of the user that has teacher/designer access to the course for the row. This must match one of the usernames listed in the Blackboard login credentials above."
@@ -2345,7 +2345,7 @@ en-GB:
     ics_description_course: "Calendar events for the course, %{course_name}"
     ics_description_group: "Calendar events for the group, %{group_name}"
     ics_description_user: "Calendar events for the user, %{user_name}"
-    ics_title: "%{course_or_group_name} Calendar (Jigsaw Academy)"
+    ics_title: "%{course_or_group_name} Calendar (Arrivu LMS)"
   calendars: 
     assignment_details: "Assignment details"
     calendar: 
@@ -2484,10 +2484,10 @@ en-GB:
         invalid_url: "Invalid URL"
         login_expiration_minimum: "Session expiration must be 20 minutes or greater"
         need_integer: "Please enter an integer for the play list cache"
-  canvas_cartridge_description: "This enables converting a Jigsaw Academy export to the intermediary json format to be imported"
-  canvas_cartridge_display: "Jigsaw Academy Common Cartridge"
-  canvas_cartridge_file_description: "Jigsaw Academy course export package"
-  canvas_cartridge_name: "Jigsaw Academy cartridge importer"
+  canvas_cartridge_description: "This enables converting a Arrivu LMS export to the intermediary json format to be imported"
+  canvas_cartridge_display: "Arrivu LMS Common Cartridge"
+  canvas_cartridge_file_description: "Arrivu LMS course export package"
+  canvas_cartridge_name: "Arrivu LMS cartridge importer"
   cc: 
     by: "CC attribution"
     by_nc: "CC attribution non-commercial"
@@ -2540,14 +2540,14 @@ en-GB:
       cannot_load_collaboration: "Cannot load collaboration"
       create_failed: "Collaboration creation failed"
       no_name: "Please enter a name for this collaboration."
-      not_enabled: "Collaborations have not been enabled for this Jigsaw Academy site"
+      not_enabled: "Collaborations have not been enabled for this Arrivu LMS site"
       title_too_long: "Please use %{maxLength} characters or less for the name. Use the description for additional content."
       update_failed: "Collaboration update failed"
     forms: 
       buttons: 
         delete_from_canvas: |-
             Just delete  
-            from Canvas
+            from Arrivu LMS
         delete_from_google_docs: |-
             Also delete from  
             Google Docs
@@ -2568,7 +2568,7 @@ en-GB:
         description: Description
         document_name: "Document name:"
       messages: 
-        delete_google_doc_as_well: "This collaboration is being stored as a Google Doc. Did you want to delete it just from Jigsaw Academy, or remove it from Google Docs as well?"
+        delete_google_doc_as_well: "This collaboration is being stored as a Google Doc. Did you want to delete it just from Arrivu LMS, or remove it from Google Docs as well?"
       titles: 
         new: "Start a new collaboration"
     index: 
@@ -2603,7 +2603,7 @@ en-GB:
       delete: "Delete collaboration?"
   collection_items: 
     new: 
-      pin_to_canvas_network: "Pin to Jigsaw Academy Network"
+      pin_to_canvas_network: "Pin to Arrivu LMS Network"
       saved_successfully: "Saved successfully"
   collection_view: 
     no_items: "No items."
@@ -2615,7 +2615,7 @@ en-GB:
   common_cartridge_file_description: "Common Cartridge 1.0/1.1/1.2 Package"
   common_cartridge_name: "Common Cartridge Importer"
   communication_channel: 
-    body: "Your Jigsaw Academy verification code is %{verification_code}"
+    body: "Your Arrivu LMS verification code is %{verification_code}"
     default_facebook_account: "Facebook account"
     default_twitter_handle: "Twitter handle"
   communication_channels: 
@@ -2625,7 +2625,7 @@ en-GB:
         back: Back
         continue: Continue
         create_account: "Create my account"
-        have_account: "I have a Jigsaw Academy account"
+        have_account: "I have a Arrivu LMS account"
         login_as: "Log in as %{invited_user}"
         merge: Combine
         new_account: "No"
@@ -2640,7 +2640,7 @@ en-GB:
             There's a user account already associated with %{email}.
             
               **Are you %{name}?**
-        account_needed: "You've been invited to join **%{course}**. To accept this request you need a Jigsaw Academy account. Click the link below to create a Jigsaw Academy account."
+        account_needed: "You've been invited to join **%{course}**. To accept this request you need a Arrivu LMS account. Click the link below to create a Arrivu LMS account."
         add_email: "Would you like to add this email address to your current account?"
         choose_login: "Select where you would like to log in at."
         logged_in_other_user: "**%{email}** is a new account, but you are currently logged in as **%{user}**."
@@ -2657,7 +2657,7 @@ en-GB:
         wrong_account: "The invitation for %{course} was sent to **%{invited_user}**, but you are currently logged in as **%{current_user}**"
       labels: 
         password: Password
-        subscribe_to_emails: "I want to receive information, news and tips from Jigsaw Academy"
+        subscribe_to_emails: "I want to receive information, news and tips from Arrivu LMS"
         time_zone: "Time Zone"
         unique_id: Login
       page_title: "Register %{email}"
@@ -2687,7 +2687,7 @@ en-GB:
           
           You will not be able to reopen it.
       delete: "Are you sure you want to delete this conference?"
-    disabled_error: "Web conferencing has not been enabled for this Jigsaw Academy site"
+    disabled_error: "Web conferencing has not been enabled for this Arrivu LMS site"
     edit_conference_form: 
       advanced_settings: "Manage advanced settings..."
       buttons: 
@@ -2740,7 +2740,7 @@ en-GB:
         finished: "Finished %{date_and_time} (%{duration})"
         new: "Hasn't started yet"
         started: "Started %{time}"
-    type_disabled_error: "This type of conference is no longer enabled for this Jigsaw Academy site"
+    type_disabled_error: "This type of conference is no longer enabled for this Arrivu LMS site"
     update_conference_title: "Update conference"
   content_exports: 
     buttons: 
@@ -2780,7 +2780,7 @@ en-GB:
     files: 
       buttons: 
         skip: "Skip this step"
-      description: "You can upload a zipped collection of files into your course and we'll extract them all out for you. This is an easy way to move files from another system into Jigsaw Academy."
+      description: "You can upload a zipped collection of files into your course and we'll extract them all out for you. This is an easy way to move files from another system into Arrivu LMS."
       page_title: "Import files"
     messages: 
       copying: "Copying... this will take a few minutes"
@@ -2940,7 +2940,7 @@ en-GB:
     chat: 
       titles: 
         chat: Chat
-    chat_not_enabled: "Chat has not been enabled for this Jigsaw Academy site"
+    chat_not_enabled: "Chat has not been enabled for this Arrivu LMS site"
     communication: 
       headings: 
         discussions: Discussions
@@ -3055,7 +3055,7 @@ en-GB:
         user_services: "Registered web services"
       help: 
         list_services: "You haven't enabled your list of registered services. Enabling this list will let fellow course and group members more easily link up with you outside of class."
-        services: "You haven't linked your user profile to any external services. You can link your Jigsaw Academy account to services like Facebook and Twitter. This will make it easier for fellow course and group members to link up with you outside of class."
+        services: "You haven't linked your user profile to any external services. You can link your Arrivu LMS account to services like Facebook and Twitter. This will make it easier for fellow course and group members to link up with you outside of class."
       labels: 
         public_list_services: "Let fellow course/group members see which services I've linked to my profile"
         user_privileges: Privileges
@@ -3093,9 +3093,9 @@ en-GB:
         registered_services: "Registered services"
         service_types: "Service types"
       help: 
-        no_services: "You haven't linked your user profile to any external services. You can link your Jigsaw Academy account to services like Facebook and Twitter."
-        services_private: "You haven't enabled your list of registered services. Enabling this list will let fellow course and group members see which services you have linked to your Jigsaw Academy account."
-        user_services: "If other members choose, they can let you see which outside services they've linked to their Jigsaw Academy account. This can make it easier to coordinate group projects and also link up outside of class."
+        no_services: "You haven't linked your user profile to any external services. You can link your Arrivu LMS account to services like Facebook and Twitter."
+        services_private: "You haven't enabled your list of registered services. Enabling this list will let fellow course and group members see which services you have linked to your Arrivu LMS account."
+        user_services: "If other members choose, they can let you see which outside services they've linked to their Arrivu LMS account. This can make it easier to coordinate group projects and also link up outside of class."
       labels: 
         allow_view_services: "Let fellow course/group members see which services I've linked to my profile"
       links: 
@@ -3602,7 +3602,7 @@ en-GB:
   conversations_intro: 
     slide1: 
       paragraph1: "Take a look at your Inbox!"
-      paragraph2: "Conversations—the new Jigsaw Academy messaging system—has arrived!"
+      paragraph2: "Conversations—the new Arrivu LMS messaging system—has arrived!"
       paragraph3: "Use conversations to send a private message to a classmate or use conversations to talk to an entire group of people."
       paragraph4: "Ready for a short intro? Click the right arrow to get started."
     slide2: 
@@ -3663,7 +3663,7 @@ en-GB:
       sis_in_use: "SIS ID \"%{sis_id}\" is already in use"
     file_copy_error: "Couldn't copy file \"%{name}\""
     grade_export_types: 
-      instructure_csv: "Jigsaw Academy formatted CSV"
+      instructure_csv: "Arrivu LMS formatted CSV"
     grade_publishing_status: 
       error: Error
       error_with_message: "Error: %{message}"
@@ -3686,10 +3686,10 @@ en-GB:
       only_teachers: "Only teachers"
       teachers_students: "Teacher and students"
   course_copy_argument_error: "A course copy requires a source course."
-  course_copy_description: "Migration plugin for copying Jigsaw Academy courses"
+  course_copy_description: "Migration plugin for copying Arrivu LMS courses"
   course_copy_display: "Course copy"
-  course_copy_file_description: "Copy a Jigsaw Academy course"
-  course_copy_name: "Copy Jigsaw Academy course"
+  course_copy_file_description: "Copy a Arrivu LMS course"
+  course_copy_name: "Copy Arrivu LMS course"
   course_copy_no_course_error: "The source course was not found."
   course_copy_not_allowed_error: "You are not allowed to copy the source course."
   course_exports: 
@@ -3698,7 +3698,7 @@ en-GB:
       assignment_groups: "Failed to export assignment groups"
       assignment_is_locked: "The assignment \"%{title}\" could not be copied because it is locked."
       assignments: "Failed to export some assignments"
-      canvas_meta: "Failed to export Jigsaw Academy-specific meta data"
+      canvas_meta: "Failed to export Arrivu LMS-specific meta data"
       course_export: "Error running course export."
       course_settings: "Failed to export course settings"
       events: "Failed to export calendar events"
@@ -3891,7 +3891,7 @@ en-GB:
               Great, so you've got a course...  Now what?  Well, before you go publishing it to the world, you may want to check and make sure you've got the basics laid out.  Work through the list on the left to ensure that your course is ready to use.
               
               *This course is visible only to teachers until it is published*
-          saved: "Done and done!  Your course, %{course} is now officially created. It's only visible to you until it is published -- but before you jump the gun, you'll want to run through the list to the left to get a feel for how Jigsaw Academy works and to make sure you really are ready to teach."
+          saved: "Done and done!  Your course, %{course} is now officially created. It's only visible to you until it is published -- but before you jump the gun, you'll want to run through the list to the left to get a feel for how Arrivu LMS works and to make sure you really are ready to teach."
         created: 
           not_saved: |-
               This class has been created, but not claimed.  It'll get deleted if it's not claimed within a week.  In the mean time, tick through the list to the left to make sure you're ready to go.
@@ -3900,21 +3900,21 @@ en-GB:
               
               Please **log in** or ***register*** to claim this course.
           saved: |-
-              Done and done!  Your course, %{course} is now officially created.  It's only visible to you until it is published -- but before you jump the gun, you'll want to run through the list to the left to get a feel for how Jigsaw Academy works and to make sure you really are ready to teach.
+              Done and done!  Your course, %{course} is now officially created.  It's only visible to you until it is published -- but before you jump the gun, you'll want to run through the list to the left to get a feel for how Arrivu LMS works and to make sure you really are ready to teach.
               
               If you need to leave and come back before then, just save *this link* to get back here later.
               
               Please **log in** or ***register*** to claim this course.
-        files: "The Files tab is the place to share lecture slides, example documents, study helps -- anything your students will want to download. Uploading and organising your files is easy with Jigsaw Academy. We'll show you how."
+        files: "The Files tab is the place to share lecture slides, example documents, study helps -- anything your students will want to download. Uploading and organising your files is easy with Arrivu LMS. We'll show you how."
         home: "When people visit the course, this is the page they'll see. You can set it to show an activity stream, the list of course modules, a syllabus, or a custom page you write yourself. The default is the course activity stream. To customise this, just click %{change_layout}."
-        import: "If you've been using another course management system, you probably have stuff in there that you're going to want moved over to Jigsaw Academy. We can walk you through the process of easily migrating your content into Jigsaw Academy."
+        import: "If you've been using another course management system, you probably have stuff in there that you're going to want moved over to Arrivu LMS. We can walk you through the process of easily migrating your content into Arrivu LMS."
         navigation: "By default all links are enabled for a course. Students won't see links to sections that don't have content. For example, if you haven't created any quizzes, they won't see the quizzes link. You can sort and explicitly disable these links if there are areas of the course you don't want your students accessing."
         publish: 
           form: |-
               All finished?  Time to publish your course!  Click the button below to make it official!
               
               Publishing will allow the users to begin participating in the course.
-          not_registered: "This course is claimed and ready, but you'll need to finish the registration process before you can publish the course. You should have received an email from Jigsaw Academy with a link to finish the process. Be sure to check your spam box."
+          not_registered: "This course is claimed and ready, but you'll need to finish the registration process before you can publish the course. You should have received an email from Arrivu LMS with a link to finish the process. Be sure to check your spam box."
         students: "You'll definitely want some of these. What's the fun of teaching a course if nobody's even listening?"
         tas: "You may want to assign some TAs to help you with the course. TAs can grade student submissions, help moderate the discussions and even update due dates and assignment details for you."
       headings: 
@@ -4103,7 +4103,7 @@ en-GB:
         pending_acceptance_explanation: "This user has not yet accepted the invitation to the course"
         pending_acceptance_of_invitation: pending
       roster_users: 
-        canvas_user_id: "Jigsaw Academy user ID"
+        canvas_user_id: "Arrivu LMS user ID"
         login_name_or_sis_id: "Login / SIS ID"
         name: Name
         no_people_found: "No people found"
@@ -4219,7 +4219,7 @@ en-GB:
         users: Users
       titles: 
         edit_navigation: "Edit course navigation"
-      transifex_message: "Join the [Jigsaw Academy Translation Community](%{transifex_url})"
+      transifex_message: "Join the [Arrivu LMS Translation Community](%{transifex_url})"
       turnitin: "these comments will be shown to students when submitting a Turnitin-enabled assignment"
       view_grading_scheme: "view grading scheme"
       wiki_editing_roles: "can create, rename, and edit course wiki pages by default"
@@ -4615,11 +4615,11 @@ en-GB:
       provost: Provost
       ready: Ready!
       school_admin: "School Administrator"
-      sign_up_to_canvas: "Sign up to try Jigsaw Academy"
+      sign_up_to_canvas: "Sign up to try Arrivu LMS"
       specify_lms: "Please specify your current LMS or choose 'none'"
       specify_size: "Please specify your organisation's size"
       student: Student
-      subscribe: "I want to receive news, tips and info from Jigsaw Academy"
+      subscribe: "I want to receive news, tips and info from Arrivu LMS"
       support: Support
       teacher: Teacher/Instructor
       technologist: Technologist
@@ -5001,7 +5001,7 @@ en-GB:
       formatting: "Formatting. Press down to select"
       rte_help: "Rich text area. Press ALT F10 for toolbar. Press ALT 0 for help."
   email: 
-    default_from_name: "Jigsaw Academy "
+    default_from_name: "Arrivu LMS "
   enrollment: 
     default_course_name: Course
     default_email: "No email"
@@ -5218,7 +5218,7 @@ en-GB:
       write_only_comments: "Comments for this page are private. You can make comments, but only the portfolio's owner will be able to see them."
     show_me: "show me"
     static_page: 
-      created_with_canvas: "Created with Jigsaw Academy"
+      created_with_canvas: "Created with Arrivu LMS"
       headers: 
         page_comments: "Page comments"
       links: 
@@ -5412,8 +5412,8 @@ en-GB:
     index_view: 
       add_new_tool: "Add new App"
       app_headder: "External Apps"
-      external_tools_note: "Apps are an easy way to add new features to Jigsaw Academy. They can be added to individual courses, or to all courses in an account. Once configured, you can link to them through course modules and create assignments for assessment tools."
-      external_tools_references: "Click *here* to see some LTI tools that work great with Jigsaw Academy. You can also check out the Jigsaw Academy Community topics about LTI tools **here**"
+      external_tools_note: "Apps are an easy way to add new features to Arrivu LMS. They can be added to individual courses, or to all courses in an account. Once configured, you can link to them through course modules and create assignments for assessment tools."
+      external_tools_references: "Click *here* to see some LTI tools that work great with Arrivu LMS. You can also check out the Arrivu LMS Community topics about LTI tools **here**"
       search_filter: "Filter by name"
       view_app_center: "View App Centre"
       view_installed_tools: "View installed Apps"
@@ -5435,27 +5435,27 @@ en-GB:
     user_navigation_configured: "User navigation configured"
   facebook: 
     authorization_required: "Only authorised users can access that page"
-    authorization_success: "Authorisation successful!  Jigsaw Academy and Facebook are now friends."
+    authorization_success: "Authorisation successful!  Arrivu LMS and Facebook are now friends."
     deleted: Deleted
     index: 
       all_set: "You're all set up!"
-      bookmark_notice: "You can see the number of new Jigsaw Academy notifications from your Facebook home page if you bookmark this application."
-      canvas_messages: "Jigsaw Academy messages"
-      configure_notification_preferences_notice: "After you *configure your notification preferences* you should start to see notifications show up here letting you know about things happening in your Jigsaw Academy account."
-      installation_about: "To install the Jigsaw Academy Facebook app, go to your profile page in Jigsaw Academy and click the Facebook button to connect your account to Facebook."
+      bookmark_notice: "You can see the number of new Arrivu LMS notifications from your Facebook home page if you bookmark this application."
+      canvas_messages: "Arrivu LMS messages"
+      configure_notification_preferences_notice: "After you *configure your notification preferences* you should start to see notifications show up here letting you know about things happening in your Arrivu LMS account."
+      installation_about: "To install the Arrivu LMS Facebook app, go to your profile page in Arrivu LMS and click the Facebook button to connect your account to Facebook."
       learn_more: "Learn more at jigsawacademy.com"
       more_information: "More information at %{domain_list}"
-      no_messages_notice: "As things happen in the course you'll start seeing notifications show up here letting you know about things happening in your Jigsaw Academy account."
-      notification_about: "The Jigsaw Academy Facebook app is here to give you easier access to the interactions going on inside your courses. You can set it to send you notifications when your assignments are graded, when due dates change, etc. Your private data will still stay private at Jigsaw Academy."
+      no_messages_notice: "As things happen in the course you'll start seeing notifications show up here letting you know about things happening in your Arrivu LMS account."
+      notification_about: "The Arrivu LMS Facebook app is here to give you easier access to the interactions going on inside your courses. You can set it to send you notifications when your assignments are graded, when due dates change, etc. Your private data will still stay private at Arrivu LMS."
       notification_settings: "Notification settings"
-      notifications_notice: "Below you can see a list of your most recent notifications from Jigsaw Academy. You can see the number of new Jigsaw Academy notifications from your Facebook home page if you bookmark this application."
+      notifications_notice: "Below you can see a list of your most recent notifications from Arrivu LMS. You can see the number of new Arrivu LMS notifications from your Facebook home page if you bookmark this application."
       welcome: "Welcome back, %{name}!"
-      welcome_message: "Welcome to a new breed of online learning software, courtesy of Jigsaw Academy. We're here to make it easy for you to use the web to improve learning. Our interface is simple, clean and open, and we work with the tools you and your students are already using -- tools like Facebook -- to provide a more open, collaborative learning experience. We roll it all up into one powerful, open package that does more than just tracks assignments. It encourages interaction and fosters learning."
-      welcome_title: "Welcome to Jigsaw Academy Jigsaw Academy"
+      welcome_message: "Welcome to a new breed of online learning software, courtesy of Arrivu LMS. We're here to make it easy for you to use the web to improve learning. Our interface is simple, clean and open, and we work with the tools you and your students are already using -- tools like Facebook -- to provide a more open, collaborative learning experience. We roll it all up into one powerful, open package that does more than just tracks assignments. It encourages interaction and fosters learning."
+      welcome_title: "Welcome to Arrivu LMS Arrivu LMS"
     index_disabled: 
-      disabled_notice: "This Jigsaw Academy site is not configured to communicate with Facebook."
+      disabled_notice: "This Arrivu LMS site is not configured to communicate with Facebook."
       get_help: "Get help at support.jigsawacademy.com"
-      instructure_canvas: "Jigsaw Academy Jigsaw Academy"
+      instructure_canvas: "Arrivu LMS Arrivu LMS"
     invalid_signature: "Invalid Facebook signature"
     message: 
       hide: Hide
@@ -5476,9 +5476,9 @@ en-GB:
       weekly: Weekly
     settings: 
       back_to_messages: "Back to messages"
-      link_needed: "Before you can configure the Jigsaw Academy Facebook App you need to link it to your Jigsaw Academy login. Please click \"Welcome\" for more information."
-      notifications_config_notice: "Notifications from Jigsaw Academy can automatically be sent over to your Facebook account. Below you'll see the types of notifications you can have sent. You can change your notification preferences at any time, either here or in Jigsaw Academy."
-      settings_title: "Jigsaw Academy notification settings"
+      link_needed: "Before you can configure the Arrivu LMS Facebook App you need to link it to your Arrivu LMS login. Please click \"Welcome\" for more information."
+      notifications_config_notice: "Notifications from Arrivu LMS can automatically be sent over to your Facebook account. Below you'll see the types of notifications you can have sent. You can change your notification preferences at any time, either here or in Arrivu LMS."
+      settings_title: "Arrivu LMS notification settings"
       updating_preferences: "Updating preferences..."
   filebrowserview: 
     course_files: "Course files"
@@ -6621,9 +6621,9 @@ en-GB:
     message_will_be_sent_to_all_the_teachers_tas_in_the_course: "Message will be sent to all the teachers / TA's in the course."
     please_select_one: "Please select one..."
     report_problem: "Report a problem"
-    report_problem_sub: "If Jigsaw LMS misbehaves, tell us about it"
-    search_the_canvas_guides: "Search the Jigsaw Academy Guides"
-    see_if_your_issue_is_addressed_in_the_canvas_guides: "See if your issue is addressed in the *Jigsaw Academy Guides*."
+    report_problem_sub: "If Arrivu LMS misbehaves, tell us about it"
+    search_the_canvas_guides: "Search the Arrivu LMS Guides"
+    see_if_your_issue_is_addressed_in_the_canvas_guides: "See if your issue is addressed in the *Arrivu LMS Guides*."
     send_message: "Send message"
     sending: Sending...
     somethings_broken_but_i_can_work_around_it_for_now: "Something's broken but I can work around it for now"
@@ -6666,10 +6666,10 @@ en-GB:
     styleguide: 
       manage: Manage
   instructions: 
-    authorize_google_docs: "Before you can collaborate on documents, you need to authorise Jigsaw Academy to access your Google Docs account:"
+    authorize_google_docs: "Before you can collaborate on documents, you need to authorise Arrivu LMS to access your Google Docs account:"
   instructure: 
     alerts: 
-      file_previews_disabled: "File previews have been disabled for this Jigsaw Academy site"
+      file_previews_disabled: "File previews have been disabled for this Arrivu LMS site"
     browsers: 
       unrecognized: "Unrecognized browser"
     buttons: 
@@ -6790,7 +6790,7 @@ en-GB:
     lock_module_until: "lock module until a given date"
   layouts: 
     application: 
-      instructure_description: "Jigsaw Academy, makers of the  learning management system"
+      instructure_description: "Arrivu LMS, makers of the  learning management system"
       keyboard_navigation: 
         close: "Press comma to close this dialog"
       links: 
@@ -6821,13 +6821,13 @@ en-GB:
         reset_explanation: "Resetting the test student will clear all history for this student, %{line_break}allowing you to view the course as a brand new student."
         warning_title: "You are currently logged in to student view"
     head: 
-      default_page_title: "Jigsaw Academy LMS"
+      default_page_title: "Arrivu LMS LMS"
     menu: 
       view_all_accounts: "View all accounts"
       view_all_enrollments: "View all courses"
       view_all_groups: "View all groups"
     mobile_auth: 
-      log_in_to_canvas: "Log in to Jigsaw Academy"
+      log_in_to_canvas: "Log in to Arrivu LMS"
   learning_outcome: 
     no_comment: "No comment"
     no_context_found: "The external Learning Outcome couldn't be found for \"%{title}\", creating a copy."
@@ -6838,7 +6838,7 @@ en-GB:
   lib: 
     angel: 
       failed_import_link: "Failed import link"
-      failed_import_link_body: "This link referenced an Angel feature that couldn't be linked to by Jigsaw Academy or that was left out of the export."
+      failed_import_link_body: "This link referenced an Angel feature that couldn't be linked to by Arrivu LMS or that was left out of the export."
     api: 
       attachments: 
         only_one_folder: "Can't set folder path and folder ID"
@@ -6880,21 +6880,21 @@ en-GB:
       standard: 
         failed_to_convert_qti: "Failed to import Assessment %{file_identifier}"
     google_docs: 
-      default_document_name: "Jigsaw Academy doc"
+      default_document_name: "Arrivu LMS doc"
     incoming_message_processor: 
       failure_message: 
         body: |-
-            The message titled "%{subject}" could not be delivered.  The message was sent to an unknown mailbox address.  If you are trying to contact someone through Jigsaw Academy you can try logging in to your account and sending them a message using the Inbox tool.
+            The message titled "%{subject}" could not be delivered.  The message was sent to an unknown mailbox address.  If you are trying to contact someone through Arrivu LMS you can try logging in to your account and sending them a message using the Inbox tool.
             
                       Thank you,
-                      Jigsaw Academy Support
+                      Arrivu LMS Support
         subject: "Message reply failed: %{subject}"
       locked_topic: 
         body: |-
-            The message titled "%{subject}" could not be delivered because the discussion topic is locked. If you are trying to contact someone through Jigsaw Academy you can try logging in to your account and sending them a message using the Inbox tool.
+            The message titled "%{subject}" could not be delivered because the discussion topic is locked. If you are trying to contact someone through Arrivu LMS you can try logging in to your account and sending them a message using the Inbox tool.
             
                       Thank you,
-                      Jigsaw Academy Support
+                      Arrivu LMS Support
         subject: "Message reply failed: %{subject}"
     progress_runner: 
       completed_message: 
@@ -6958,7 +6958,7 @@ en-GB:
       relationships: Relationships
   media_comments: 
     alerts: 
-      kaltura_disabled: "Kaltura has been disabled for this Jigsaw Academy site"
+      kaltura_disabled: "Kaltura has been disabled for this Arrivu LMS site"
     buttons: 
       submit: "Submit media file"
     cancel: Cancel
@@ -6997,7 +6997,7 @@ en-GB:
     managed_accounts: "Managed accounts"
     my_courses: "My courses"
   message: 
-    default_subject: "Jigsaw Academy alert"
+    default_subject: "Arrivu LMS alert"
   message_students: 
     buttons: 
       send_message: "Send message"
@@ -7030,39 +7030,39 @@ en-GB:
           click_to_finish_registration: "Click here to finish the registration process"
           email: Email
           name: Name
-          subject: "Jigsaw Academy account admin invitation"
-          url_info_label: "You'll need to register with Jigsaw Academy before you can participate as an account admin."
+          subject: "Arrivu LMS account admin invitation"
+          url_info_label: "You'll need to register with Arrivu LMS before you can participate as an account admin."
           username: Username
         name_info: "Name: %{name}"
-        subject: "Jigsaw Academy account admin invitation"
+        subject: "Arrivu LMS account admin invitation"
         url_info: |-
-            You'll need to register with Jigsaw Academy before you can participate as an account admin.  You can finish the registration process here:
+            You'll need to register with Arrivu LMS before you can participate as an account admin.  You can finish the registration process here:
             %{url}
         username_info: "Username: %{username}"
     added_to_conversation: 
       email: 
-        body: "%{user_name} just added you to a conversation in Jigsaw Academy. To view the conversation, click the link below:"
+        body: "%{user_name} just added you to a conversation in Arrivu LMS. To view the conversation, click the link below:"
         html: 
-          body: "%{user_name} just added you to a conversation in Jigsaw Academy."
+          body: "%{user_name} just added you to a conversation in Arrivu LMS."
           link_text: "View conversation"
-          subject: "%{user_name} just added you to a conversation in Jigsaw Academy."
+          subject: "%{user_name} just added you to a conversation in Arrivu LMS."
           unknown_user: "Unknown user"
-        subject: "%{user_name} just added you to a conversation in Jigsaw Academy."
+        subject: "%{user_name} just added you to a conversation in Arrivu LMS."
         unknown_user: "Unknown user"
       facebook: 
-        body: "%{user_name} just added you to a conversation in Jigsaw Academy."
+        body: "%{user_name} just added you to a conversation in Arrivu LMS."
         link_text: "View conversation"
         unknown_user: "Unknown user"
       sms: 
-        body: "%{user_name} just added you to a conversation in Jigsaw Academy."
+        body: "%{user_name} just added you to a conversation in Arrivu LMS."
         more_info: "More info at %{url}"
         unknown_user: "Unknown user"
       summary: 
-        body: "%{user_name} just added you to a conversation in Jigsaw Academy."
-        subject: "%{user_name} just added you to a conversation in Jigsaw Academy."
+        body: "%{user_name} just added you to a conversation in Arrivu LMS."
+        subject: "%{user_name} just added you to a conversation in Arrivu LMS."
         unknown_user: "Unknown user"
       twitter: 
-        tweet: "Jigsaw Academy Alert - Added to conversation by %{user_name}."
+        tweet: "Arrivu LMS Alert - Added to conversation by %{user_name}."
         unknown_user: "Unknown user"
     alert: 
       email: 
@@ -7181,7 +7181,7 @@ en-GB:
         message: "%{user} cancelled his/her reservation for \"%{appointment_name}\"."
         more_info: "More info at %{url}"
       twitter: 
-        message: "Jigsaw Academy Alert - %{user} cancelled his/her reservation for \"%{appointment_name}\"."
+        message: "Arrivu LMS Alert - %{user} cancelled his/her reservation for \"%{appointment_name}\"."
     appointment_deleted_for_user: 
       email: 
         html: 
@@ -7224,7 +7224,7 @@ en-GB:
         message: "Your time slot for \"%{appointment_name} was cancelled\"."
         more_info: "More info at %{url}"
       twitter: 
-        message: "Jigsaw Academy Alert - Your time slot for \"%{appointment_name} was cancelled\"."
+        message: "Arrivu LMS Alert - Your time slot for \"%{appointment_name} was cancelled\"."
     appointment_group_deleted: 
       email: 
         html: 
@@ -7256,7 +7256,7 @@ en-GB:
         message: "All appointments for \"%{appointment_name} have been cancelled\"."
         more_info: "More info at %{url}"
       twitter: 
-        message: "Jigsaw Academy Alert - All appointments for \"%{appointment_name} have been cancelled\"."
+        message: "Arrivu LMS Alert - All appointments for \"%{appointment_name} have been cancelled\"."
     appointment_group_published: 
       email: 
         group_signup: "Group (%{group_category})"
@@ -7299,7 +7299,7 @@ en-GB:
         message: "Time slots for \"%{appointment_name}\" are now available for signup (%{dates})."
         subject: "Appointment \"%{appointment_name}\" is available for signup (%{course})"
       twitter: 
-        message: "Jigsaw Academy Alert - Signups are open for \"%{appointment_name}\"."
+        message: "Arrivu LMS Alert - Signups are open for \"%{appointment_name}\"."
     appointment_group_updated: 
       email: 
         group_signup: "Group (%{group_category})"
@@ -7341,7 +7341,7 @@ en-GB:
         message: "Time slots have been added to \"%{appointment_name}\" and are available for signup (%{dates})."
         subject: "Appointment \"%{appointment_name}\" has been updated (%{course})"
       twitter: 
-        message: "Jigsaw Academy Alert - New time slots are available for \"%{appointment_name}\"."
+        message: "Arrivu LMS Alert - New time slots are available for \"%{appointment_name}\"."
     appointment_reserved_by_user: 
       email: 
         html: 
@@ -7381,7 +7381,7 @@ en-GB:
         message: "%{user} has signed up for \"%{appointment_name}\"."
         more_info: "More info at %{url}"
       twitter: 
-        message: "Jigsaw Academy Alert - %{user} has signed up for \"%{appointment_name}\"."
+        message: "Arrivu LMS Alert - %{user} has signed up for \"%{appointment_name}\"."
     appointment_reserved_for_user: 
       email: 
         html: 
@@ -7424,7 +7424,7 @@ en-GB:
         message: "%{user} has signed you up for \"%{appointment_name}\" (%{date_and_time})."
         subject: "You have been signed up for \"%{appointment_name}\" (%{course})"
       twitter: 
-        message: "Jigsaw Academy Alert - You have been signed up for \"%{appointment_name}\"."
+        message: "Arrivu LMS Alert - You have been signed up for \"%{appointment_name}\"."
     assignment_changed: 
       email: 
         body: |-
@@ -7447,7 +7447,7 @@ en-GB:
       summary: 
         subject: "Assignment changed: %{title}, %{course}"
       twitter: 
-        assignment_change: "Jigsaw Academy Alert - Change: %{assignment_name}, %{course_name}"
+        assignment_change: "Arrivu LMS Alert - Change: %{assignment_name}, %{course_name}"
     assignment_created: 
       email: 
         assignment_created: "Assignment Created - %{assignment_name}, %{course_name}"
@@ -7481,7 +7481,7 @@ en-GB:
         multiple_due_dates: "due: Multiple dates"
         no_due_date: "due: No due date"
       twitter: 
-        assignment_change: "Jigsaw Academy Alert - Change: %{assignment_name}, %{course_name}"
+        assignment_change: "Arrivu LMS Alert - Change: %{assignment_name}, %{course_name}"
         due_at: "due: %{assignment_due_date_time}"
         multiple_due_dates: "due: Multiple dates"
         no_due_date: "due: No due date"
@@ -7509,7 +7509,7 @@ en-GB:
         due_at: "due: %{assignment_due_date_time}"
         no_due_date: "due: No due date"
       twitter: 
-        assignment_change: "Jigsaw Academy Alert - Date change: %{assignment_name}, %{course_name}"
+        assignment_change: "Arrivu LMS Alert - Date change: %{assignment_name}, %{course_name}"
         due_at: "due: %{assignment_due_date_time}"
         no_due_date: "due: No due date"
     assignment_due_date_override_changed: 
@@ -7536,7 +7536,7 @@ en-GB:
         due_at: "due: %{assignment_due_date_time}"
         no_due_date: "due: No due date"
       twitter: 
-        assignment_change: "Jigsaw Academy alert - Date change: %{assignment_name}, %{course_name} (%{override})"
+        assignment_change: "Arrivu LMS alert - Date change: %{assignment_name}, %{course_name} (%{override})"
         due_at: "due: %{assignment_due_date_time}"
         no_due_date: "due: No due date"
     assignment_graded: 
@@ -7558,7 +7558,7 @@ en-GB:
         assignment_graded: "Assignment graded: %{assignment_name}, %{course_name}"
         the_assignment_is_graded: "The assignment, %{assignment_name}, has been graded."
       twitter: 
-        assignment_graded: "Jigsaw Academy Alert - graded: %{assignment_name}, %{course_name}"
+        assignment_graded: "Arrivu LMS Alert - graded: %{assignment_name}, %{course_name}"
     assignment_locked: "This assignment is currently locked."
     assignment_locked_at: "This assignment was locked %{at}."
     assignment_locked_module: "This assignment is part of the module *%{module}* and hasn't been unlocked yet."
@@ -7583,7 +7583,7 @@ en-GB:
         turned_in_at: "Submitted: %{submission_date}"
         user_resubmitted: "Resubmission: %{user_name}, %{assignment_name}"
       twitter: 
-        user_resubmitted: "Jigsaw Academy Alert - Resubmission: %{user_name}, %{assignment_name}"
+        user_resubmitted: "Arrivu LMS Alert - Resubmission: %{user_name}, %{assignment_name}"
     assignment_submitted: 
       email: 
         html: 
@@ -7604,7 +7604,7 @@ en-GB:
         turned_in_at: "Submitted: %{submission_date}"
         user_submitted: "Submission: %{user_name}, %{assignment_name}"
       twitter: 
-        user_submitted: "Jigsaw Academy Alert - Submission: %{user_name}, %{assignment_name}"
+        user_submitted: "Arrivu LMS Alert - Submission: %{user_name}, %{assignment_name}"
     assignment_submitted_late: 
       email: 
         html: 
@@ -7625,7 +7625,7 @@ en-GB:
         turned_in_at: "Submitted: %{submission_date}"
         user_submitted: "Late assignment: %{user_name}, %{assignment_name}"
       twitter: 
-        user_submitted: "Jigsaw Academy Alert - Late submission: %{user_name}, %{assignment_name}"
+        user_submitted: "Arrivu LMS Alert - Late submission: %{user_name}, %{assignment_name}"
     assignment_unmuted: 
       email: 
         body: |-
@@ -7694,7 +7694,7 @@ en-GB:
             in %{service} and you were invited using your email address, %{email}.
         subject: "Collaboration invitation: %{course_or_group}"
       twitter: 
-        body: "Jigsaw Academy Alert - Collaboration invitation: %{document}, %{course_or_group}"
+        body: "Arrivu LMS Alert - Collaboration invitation: %{document}, %{course_or_group}"
     confirm_email_communication_channel: 
       email: 
         body: "The email address, %{email} is being registered at %{website} for the user, %{user}."
@@ -7702,21 +7702,21 @@ en-GB:
         html: 
           body: "The email address, %{email} is being registered at %{website} for the user, %{user}."
           details: "Click here to confirm this registration"
-          subject: "Confirm email: Jigsaw Academy"
-        subject: "Confirm email: Jigsaw Academy"
+          subject: "Confirm email: Arrivu LMS"
+        subject: "Confirm email: Arrivu LMS"
     confirm_registration: 
       email: 
-        body: "Thank you for registering with Canvas!  This email is confirmation that the user %{user} is registering for a new account at %{website}."
+        body: "Thank you for registering with Arrivu LMS!  This email is confirmation that the user %{user} is registering for a new account at %{website}."
         details: "To finish the registration process, please visit the following url:"
         html: 
-          body: "Thank you for registering with Canvas! This email is confirmation that the user %{user} is registering for a new account at %{website}."
+          body: "Thank you for registering with Arrivu LMS! This email is confirmation that the user %{user} is registering for a new account at %{website}."
           details: "Click here to finish the registration process"
-          subject: "Confirm registration: Canvas"
-        subject: "Confirm Registration: Canvas"
+          subject: "Confirm registration: Arrivu LMS"
+        subject: "Confirm Registration: Arrivu LMS"
     confirm_sms_communication_channel: 
       sms: 
         body: |-
-            Confirm Canvas registration w/ code:
+            Confirm Arrivu LMS registration w/ code:
             
             %{confirmation_code}
             
@@ -7748,95 +7748,95 @@ en-GB:
       email: 
         attached_files: "Attached files:"
         audio_comment: "This message includes media comments. To listen or reply, click the link below:"
-        body: "%{user_name} just sent you a message in Canvas:"
+        body: "%{user_name} just sent you a message in Arrivu LMS:"
         html: 
           attached_files: "Attached files:"
           audio_comment: "This message includes media comments. To listen or reply, click the link below:"
-          body: "%{user_name} just sent you a message in Canvas:"
+          body: "%{user_name} just sent you a message in Arrivu LMS:"
           download: download
           reply_message: "To reply to this message, click the link below:"
-          subject: "%{user_name} just sent you a message in Canvas."
+          subject: "%{user_name} just sent you a message in Arrivu LMS."
           unknown_user: "Unknown user"
         reply_message: "To reply to this message, click the link below:"
-        subject: "%{user_name} just sent you a message in Canvas."
+        subject: "%{user_name} just sent you a message in Arrivu LMS."
         unknown_user: "Unknown user"
       facebook: 
-        body: "%{user_name} just sent you a message in Canvas."
+        body: "%{user_name} just sent you a message in Arrivu LMS."
         link_text: "View message"
         unknown_user: "Unknown user"
       sms: 
-        body: "%{user_name} just sent you a message in Canvas:"
+        body: "%{user_name} just sent you a message in Arrivu LMS:"
         more_info: "More info at %{url}"
         unknown_user: "Unknown user"
       summary: 
-        body: "%{user_name} just sent you a message in Canvas:"
-        subject: "%{user_name} just sent you a message in Canvas."
+        body: "%{user_name} just sent you a message in Arrivu LMS:"
+        subject: "%{user_name} just sent you a message in Arrivu LMS."
         unknown_user: "Unknown user"
       twitter: 
-        tweet: "Jigsaw LMS Alert - Message from %{user_name}."
+        tweet: "Arrivu LMS Alert - Message from %{user_name}."
     course_already_started: 
       email: 
         body: |-
             Hi %{user},
             
-            %{course}, your course on Canvas Network, started a couple days ago, and we noticed you haven't logged in yet. We just wanted to send you one last reminder in case you forgot.
+            %{course}, your course on Arrivu LMS Network, started a couple days ago, and we noticed you haven't logged in yet. We just wanted to send you one last reminder in case you forgot.
             
             To log in, go to %{site} and enter your username and password. If you haven't set a password yet, you can set one here: %{password_url}. If you simply can't make this particular course, feel free to browse our course catalog at %{site} to find something else that inspires you. New courses are being added all the time!
             
             We hope to see you soon,
             
-            Canvas Network
+            Arrivu LMS Network
         course_already_started: "Your course has already started"
     course_required_materials: 
       email: 
         body: |-
             Hi %{user},
             
-            Good news! %{course}, the course you enrolled in on Canvas Network, will be starting soon.
+            Good news! %{course}, the course you enrolled in on Arrivu LMS Network, will be starting soon.
             
-            To help make sure you get the most from your course, you should check for any special instructions or course materials listed by the instructor.  You can look for this on the course details page on Canvas Network, or just click the link below.
+            To help make sure you get the most from your course, you should check for any special instructions or course materials listed by the instructor.  You can look for this on the course details page on Arrivu LMS Network, or just click the link below.
             
             %{url}
             
             Keep learning,
             
-            Canvas Network
+            Arrivu LMS Network
         course_required_materials: "Materials and instructions for %{course}"
     course_started: 
       email: 
         body: |-
             Hello %{user},
             
-            This is a friendly reminder that %{course}, your course on Canvas Network, begins today. You can now log in to %{site} and get started!
+            This is a friendly reminder that %{course}, your course on Arrivu LMS Network, begins today. You can now log in to %{site} and get started!
             
-            Don't forget to set up your Canvas Network profile, so others in the course know who you are. You can update your profile at %{profile_url}
+            Don't forget to set up your Arrivu LMS Network profile, so others in the course know who you are. You can update your profile at %{profile_url}
             
             Keep learning,
             
-            Canvas Network
+            Arrivu LMS Network
         course_starts_today: "Your course begins today"
     course_starts_in_week: 
       email: 
         body: |-
             %{user},
             
-            It's almost time! %{course}, a course you enrolled in on Canvas Network, begins next week. We know how excited you must be, and we're excited too.
+            It's almost time! %{course}, a course you enrolled in on Arrivu LMS Network, begins next week. We know how excited you must be, and we're excited too.
             
             What can you do to get ready?
             
-            If you haven't already created your Canvas Network profile, you can log in and set it up at Canvas.net. Your profile will help other people in the course know who you are. There, you can also set up your notification preferences.
+            If you haven't already created your Arrivu LMS Network profile, you can log in and set it up at Arrivu LMS.net. Your profile will help other people in the course know who you are. There, you can also set up your notification preferences.
             
             Finally, you can review the required materials and any instructions for your course here: %{url}
             
             Keep learning,
             
-            Canvas Network
+            Arrivu LMS Network
         course_starts_next_week: "Your course starts next week"
     dialog: 
       title: "Send a reply message"
     email: 
       footer: |-
-          You received this email because you are participating in one or more classes using Canvas.  To change or turn off email notifications, visit:
+          You received this email because you are participating in one or more classes using Arrivu LMS.  To change or turn off email notifications, visit:
           %{url}
     enrollment_accepted: 
       email: 
@@ -7876,7 +7876,7 @@ en-GB:
         body_teacher: "%{user} just accepted their invitation to participate in the course, %{course}, as a teacher."
         subject: "%{user} accepted the course invitation"
       twitter: 
-        body: "Jigsaw LMS Alert - Accepted: %{user}, %{enrollment_type}, course, %{course}"
+        body: "Arrivu LMS Alert - Accepted: %{user}, %{enrollment_type}, course, %{course}"
     enrollment_invitation: 
       email: 
         body_designer: "You've been invited to participate in the course, %{course}, as a designer."
@@ -7934,7 +7934,7 @@ en-GB:
         body_teacher: "You've been invited to participate in the course, %{course}, as a teacher."
         subject: "Course invitation"
       twitter: 
-        body: "Jigsaw LMS Alert - Invited: course as %{enrollment_type}"
+        body: "Arrivu LMS Alert - Invited: course as %{enrollment_type}"
     enrollment_notification: 
       email: 
         body_designer: "You've been enrolled in the course, %{course}, as a designer."
@@ -7993,7 +7993,7 @@ en-GB:
         body_teacher: "You've been enrollment in the course, %{course}, as a teacher."
         subject: "Course enrolment"
       twitter: 
-        body: "Jigsaw LMS Alert - Enrolled: course as %{enrollment_type}"
+        body: "Arrivu LMS Alert - Enrolled: course as %{enrollment_type}"
     enrollment_registration: 
       email: 
         body_designer: "You've been invited to participate in a class at %{website}.  The class is called %{course}, and you've been invited to participate as a designer."
@@ -8001,14 +8001,14 @@ en-GB:
         body_student: "You've been invited to participate in a class at %{website}.  The class is called %{course}, and you've been invited to participate as a student."
         body_ta: "You've been invited to participate in a class at %{website}.  The class is called %{course}, and you've been invited to participate as a TA."
         body_teacher: "You've been invited to participate in a class at %{website}.  The class is called %{course}, and you've been invited to participate as a teacher."
-        details: "You'll need to register with Canvas before you can participate in the class.  To get started, visit the course page here:"
+        details: "You'll need to register with Arrivu LMS before you can participate in the class.  To get started, visit the course page here:"
         html: 
           body_designer: "The class is called %{course} and you've been invited to participate as a designer."
           body_observer: "The class is called %{course} and you've been invited to participate as a observer."
           body_student: "The class is called %{course} and you've been invited to participate as a student."
           body_ta: "The class is called %{course} and you've been invited to participate as a TA."
           body_teacher: "The class is called %{course} and you've been invited to participate as a teacher."
-          details: "You'll need to register with Canvas before you can participate in the class."
+          details: "You'll need to register with Arrivu LMS before you can participate in the class."
           email: Email
           link: "Click here to get started"
           name: Name
@@ -8042,7 +8042,7 @@ en-GB:
         body_teacher: "You've been invited to participate in a class at %{website}.  The class is called %{course}, and you've been invited to participate as a teacher."
         subject: "Course invitation"
       twitter: 
-        body: "Jigsaw LMS Alert - Invited: course as %{enrollment_type}"
+        body: "Arrivu LMS Alert - Invited: course as %{enrollment_type}"
     event_date_changed: 
       email: 
         email_body: "The event, %{event_title}, for the course, %{course_name}, has changed times. It's now:"
@@ -8090,18 +8090,18 @@ en-GB:
             change_password_at: "change this login's password at"
           login_at_account: "%{login_email} at %{account_name}"
           login_managed_by_account: "this login's credentials are managed by %{account_name}"
-          password_from_account: "The password for this login should have been given to you by the system administrators at %{account_name}, and Jigsaw Academy doesn't have access to your password. If your password is not working, please contact the system administrators about changing or verifying your password."
-          requested_password_reset: "You requested a confirmation of your password for logging into Canvas."
-          subject: "Forgot password: Canvas"
+          password_from_account: "The password for this login should have been given to you by the system administrators at %{account_name}, and Arrivu LMS doesn't have access to your password. If your password is not working, please contact the system administrators about changing or verifying your password."
+          requested_password_reset: "You requested a confirmation of your password for logging into Arrivu LMS."
+          subject: "Forgot password: Arrivu LMS"
         labels: 
           associated_with_accounts: "This address is associated with the following accounts"
           change_password_at: "change this login's password at"
           click_to_reset: "To set a new password, please click the following link"
         login_at_account: "%{login_email} at %{account_name}"
         login_managed_by_account: "this login's credentials are managed by %{account_name}"
-        password_from_account: "The password for this login should have been given to you by the system administrators at %{account_name}, and Jigsaw Academy doesn't have access to your password.  If your password is not working, please contact the system administrators about changing or verifying your password."
-        requested_password_reset: "You requested a confirmation of your password for logging into Canvas."
-        subject: "Forgot password: Canvas"
+        password_from_account: "The password for this login should have been given to you by the system administrators at %{account_name}, and Arrivu LMS doesn't have access to your password.  If your password is not working, please contact the system administrators about changing or verifying your password."
+        requested_password_reset: "You requested a confirmation of your password for logging into Arrivu LMS."
+        subject: "Forgot password: Arrivu LMS"
     grade_weight_changed: 
       email: 
         grade_changed: "The grading policy for the course, %{course_name} has changed."
@@ -8132,7 +8132,7 @@ en-GB:
           grades_based_on_percent: "Grading is based on the weighted total for each assignment group"
           subject: "Grade weight changed"
       twitter: 
-        grade_changed: "Jigsaw LMS Alert - Grading policy changed: %{course_name}"
+        grade_changed: "Arrivu LMS Alert - Grading policy changed: %{course_name}"
     group_assignment_submitted_late: 
       email: 
         body: "The group %{group_name} has just submitted late to %{assignment_name} in the course %{course_name}."
@@ -8152,7 +8152,7 @@ en-GB:
         body: "The group %{group_name} submitted late to %{assignment_name} in the course %{course_name}."
         subject: "Late assignment: %{group_name}, %{assignment_name}"
       twitter: 
-        subject: "Jigsaw LMS Alert - Late group submission: %{group_name}, %{assignment_name}"
+        subject: "Arrivu LMS Alert - Late group submission: %{group_name}, %{assignment_name}"
     group_membership_accepted: 
       email: 
         account_group: "Your request to join the group %{group_name} for the account %{account_name} has been accepted."
@@ -8180,8 +8180,8 @@ en-GB:
         course_group: "Your request to join the group %{group_name} for the course %{course_name} has been accepted."
         subject: "Group membership accepted: %{group_name}"
       twitter: 
-        account_group: "Jigsaw LMS Alert - Group membership accepted: %{group_name} for the account %{account_name}."
-        course_group: "Jigsaw LMS Alert - Group membership accepted: %{group_name} for the course %{course_name}."
+        account_group: "Arrivu LMS Alert - Group membership accepted: %{group_name} for the account %{account_name}."
+        course_group: "Arrivu LMS Alert - Group membership accepted: %{group_name} for the course %{course_name}."
     group_membership_rejected: 
       email: 
         account_group: "Your request to join the group %{group_name} for the account %{account_name} has been rejected."
@@ -8208,8 +8208,8 @@ en-GB:
         course_group: "Your request to join the group %{group_name} for the course %{course_name} has been rejected."
         subject: "Group membership rejected for %{group_name}"
       twitter: 
-        account_group: "Jigsaw LMS Alert - Group membership rejected: %{group_name} for the account %{account_name}."
-        course_group: "Jigsaw LMS Alert - Group membership rejected: %{group_name} for the course %{course_name}."
+        account_group: "Arrivu LMS Alert - Group membership rejected: %{group_name} for the account %{account_name}."
+        course_group: "Arrivu LMS Alert - Group membership rejected: %{group_name} for the course %{course_name}."
     html_message: 
       html_not_exist: "The HTML version of this message was not created nor sent"
     index: 
@@ -8221,12 +8221,12 @@ en-GB:
           click_to_preferences: "Click here to edit your notification preferences"
     merge_email_communication_channel: 
       email: 
-        body: "An account has been created for you at %{host}, but you already have a Canvas account.  If you would like to merge them together, please visit the following url:"
+        body: "An account has been created for you at %{host}, but you already have a Arrivu LMS account.  If you would like to merge them together, please visit the following url:"
         html: 
-          account_created: "An account has been created for you at %{host}, but you already have a Canvas account."
+          account_created: "An account has been created for you at %{host}, but you already have a Arrivu LMS account."
           merge2: "If you would like to merge them together, *click here*"
-          subject: "New Canvas Account"
-        subject: "New canvas account"
+          subject: "New Arrivu LMS Account"
+        subject: "New Arrivu LMS account"
     message: 
       actions: 
         reply: Reply
@@ -8273,7 +8273,7 @@ en-GB:
         body: "A new admin, %{user}, has been added for the account %{account}"
         subject: "New account user"
       twitter: 
-        body: "Jigsaw LMS Alert - New admin: %{user}, %{account}"
+        body: "Arrivu LMS Alert - New admin: %{user}, %{account}"
     new_announcement: 
       email: 
         html: 
@@ -8288,7 +8288,7 @@ en-GB:
         details: "More info at %{url}"
         subject: "New announcement: %{title}, %{course}"
       twitter: 
-        body: "Jigsaw LMS Alert - announcement: %{title}, %{course}."
+        body: "Arrivu LMS Alert - announcement: %{title}, %{course}."
     new_context_group_membership: 
       email: 
         body_account: "You've been added to a new group for the account %{account}.  The name of the group is %{group_name}."
@@ -8315,8 +8315,8 @@ en-GB:
         body_course: "You've been added to a new group for the course %{course}.  The name of the group is %{group_name}."
         subject: "New group membership for %{course_or_account}"
       twitter: 
-        body_account: "Jigsaw LMS Alert - New group: %{group} for the account %{account}"
-        body_course: "Jigsaw LMS Alert - New group: %{group} for the course %{course}"
+        body_account: "Arrivu LMS Alert - New group: %{group} for the account %{account}"
+        body_course: "Arrivu LMS Alert - New group: %{group} for the course %{course}"
     new_context_group_membership_invitation: 
       email: 
         body_account: "You've been invited to join the group %{group} for the account %{account}."
@@ -8342,8 +8342,8 @@ en-GB:
         body_course: "You've been invited to join the group %{group} for the course %{course}."
         subject: "New group membership for %{course_or_account}"
       twitter: 
-        body_account: "Jigsaw LMS Alert - Invitation: %{group} for the account %{account}"
-        body_course: "Jigsaw LMS Alert - Invitation: %{group} for the course %{course}."
+        body_account: "Arrivu LMS Alert - Invitation: %{group} for the account %{account}"
+        body_course: "Arrivu LMS Alert - Invitation: %{group} for the course %{course}."
     new_course: 
       email: 
         body: "A course, %{course}, has been added for the account %{account}"
@@ -8374,7 +8374,7 @@ en-GB:
           teachers: Teachers
         subject: "New course"
       twitter: 
-        body: "Jigsaw LMS Alert - New course: %{course}, %{account}"
+        body: "Arrivu LMS Alert - New course: %{course}, %{account}"
     new_discussion_entry: 
       email: 
         body: "%{user} posted a new comment on the thread %{discussion_topic} for %{course}:"
@@ -8392,7 +8392,7 @@ en-GB:
       summary: 
         subject: "New comment for %{discussion_topic}: %{course}"
       twitter: 
-        body: "Jigsaw LMS Alert - Comment: %{discussion_topic}, %{course}."
+        body: "Arrivu LMS Alert - Comment: %{discussion_topic}, %{course}."
     new_discussion_topic: 
       email: 
         body: "A new discussion has been started that may be interesting to you:"
@@ -8414,7 +8414,7 @@ en-GB:
       summary: 
         subject: "New discussion - %{discussion_topic}: %{course}"
       twitter: 
-        subject: "Jigsaw LMS Alert - Topic: %{discussion_topic}, %{course}"
+        subject: "Arrivu LMS Alert - Topic: %{discussion_topic}, %{course}"
     new_event_created: 
       email: 
         body: "There's a new event scheduled for %{course_name} that you should be aware of:"
@@ -8445,7 +8445,7 @@ en-GB:
       twitter: 
         from_to_time: "from %{start_date_time} to %{end_date_time}"
         no_time_set: "No time set"
-        subject: "Jigsaw LMS Alert - Event: %{event_title}, %{course_name}"
+        subject: "Arrivu LMS Alert - Event: %{event_title}, %{course_name}"
     new_file_added: 
       email: 
         body: "A new file has been added for the course, %{name}:"
@@ -8463,7 +8463,7 @@ en-GB:
       summary: 
         subject: "New file added: %{title}, %{name}"
       twitter: 
-        body: "Jigsaw LMS Alert - new file: %{title} (%{size}) for %{name}:"
+        body: "Arrivu LMS Alert - new file: %{title} (%{size}) for %{name}:"
     new_files_added: 
       email: 
         body: "%{count} new files have been added for the course, %{name}:"
@@ -8484,7 +8484,7 @@ en-GB:
         link: "You can view them here"
         subject: "%{count} new files added for the course, %{name}:"
       twitter: 
-        body: "Jigsaw LMS Alert - %{count} new files for %{name}"
+        body: "Arrivu LMS Alert - %{count} new files for %{name}"
     new_student_organized_group: 
       email: 
         body_account: "A new student organised group named \"%{group_name}\" was created for the account %{account}. The first member is %{user}."
@@ -8510,8 +8510,8 @@ en-GB:
         body_course: "A new student organised group named \"%{group_name}\" was created for the course %{course}. The first member is %{user}."
         subject: "New student group for %{course_or_account}"
       twitter: 
-        body_account: "Jigsaw LMS Alert - New group: %{group_name} for the account %{account}"
-        body_course: "Jigsaw LMS Alert - New group: %{group_name} for the course %{course}"
+        body_account: "Arrivu LMS Alert - New group: %{group_name} for the account %{account}"
+        body_course: "Arrivu LMS Alert - New group: %{group_name} for the course %{course}"
     new_teacher_registration: 
       email: 
         body: "%{user} just registered as a teacher at %{website}."
@@ -8535,7 +8535,7 @@ en-GB:
       sms: 
         body: "%{user} just registered as a teacher at %{website}."
       summary: 
-        body: "%{user} just registered as a teacher in Canvas."
+        body: "%{user} just registered as a teacher in Arrivu LMS."
         labels: 
           email: Email
           phone: Phone
@@ -8543,7 +8543,7 @@ en-GB:
           school_position: "School position"
         subject: "New teacher registration"
       twitter: 
-        body: "Jigsaw LMS Alert - New teacher: %{user}, %{account}"
+        body: "Arrivu LMS Alert - New teacher: %{user}, %{account}"
     new_user: 
       email: 
         body: "A new user, %{user}, has just registered for the account %{account}"
@@ -8563,7 +8563,7 @@ en-GB:
         body: "A new user, %{user}, has just registered for the account %{account}"
         subject: "New user"
       twitter: 
-        body: "Jigsaw LMS Alert - New user: %{user}, %{account}"
+        body: "Arrivu LMS Alert - New user: %{user}, %{account}"
     page_locked: "This page is currently locked."
     page_locked_at: "This page was locked %{at}."
     page_locked_module: "This page is part of the module *%{module}* and hasn't been unlocked yet."
@@ -8571,13 +8571,13 @@ en-GB:
     page_unpublished_module: "This page is part of an unpublished module and is not available yet."
     pseudonym_registration: 
       email: 
-        body: "You have been registered for a Canvas account at %{account}!  Before you can log in and start using Canvas, you'll need to finish the configuration process."
+        body: "You have been registered for a Arrivu LMS account at %{account}!  Before you can log in and start using Arrivu LMS, you'll need to finish the configuration process."
         html: 
-          body: "You have been registered for a Canvas account at %{account}! Before you can log in and start using Canvas, you'll need to finish the configuration process."
+          body: "You have been registered for a Arrivu LMS account at %{account}! Before you can log in and start using Arrivu LMS, you'll need to finish the configuration process."
           link: "Click here to finish the registration process"
-          subject: "Finish registration: canvas"
+          subject: "Finish registration: Arrivu LMS"
         link_message: "To finish the registration process, please visit the following url:"
-        subject: "Finish registration: Canvas"
+        subject: "Finish registration: Arrivu LMS"
     quiz_locked: "This quiz is currently locked."
     quiz_locked_at: "This quiz was locked %{at}."
     quiz_locked_module: "This quiz is part of the class *%{module}* and hasn't been unlocked yet."
@@ -8600,7 +8600,7 @@ en-GB:
         body: "A regrade has finished for your quiz %{title}."
         subject: "Quiz regraded: %{quiz}, %{context}"
       twitter: 
-        body: "Jigsaw LMS Alert - Quiz regraded : %{quiz}"
+        body: "Arrivu LMS Alert - Quiz regraded : %{quiz}"
     quiz_unpublished_module: "This quiz is part of an unpublished module and is not available yet."
     report_generated: 
       email: 
@@ -8632,7 +8632,7 @@ en-GB:
         body: "You've been reminded to assess: %{rubric}, %{context}:"
         subject: "Reminder to assess: %{rubric}, %{context}"
       twitter: 
-        tweet: "Jigsaw LMS Alert - Reminder: assess %{rubric}, %{context}"
+        tweet: "Arrivu LMS Alert - Reminder: assess %{rubric}, %{context}"
     rubric_association_created: 
       email: 
         body: "A new assessment has been created for %{context}:"
@@ -8651,7 +8651,7 @@ en-GB:
         body: "A new assessment has been created for %{context}:"
         subject: "New assessment: %{title}, %{context}"
       twitter: 
-        tweet: "Jigsaw LMS Alert - New assessment: %{title}, %{context}."
+        tweet: "Arrivu LMS Alert - New assessment: %{title}, %{context}."
     send_form: 
       labels: 
         message_body: Message
@@ -8678,7 +8678,7 @@ en-GB:
         someone: Someone
         subject: "Submission Comment: %{user}, %{assignment}, %{context}"
       twitter: 
-        tweet: "Jigsaw LMS Alert - Comment: %{author} for %{assignment}, %{user}, %{context}."
+        tweet: "Arrivu LMS Alert - Comment: %{author} for %{assignment}, %{user}, %{context}."
     submission_comment_for_teacher: 
       email: 
         body: "%{author} just made a new comment on the submission for %{user} for %{assignment}"
@@ -8701,7 +8701,7 @@ en-GB:
         someone: Someone
         subject: "Submission comment: %{user}, %{assignment}, %{context}"
       twitter: 
-        tweet: "Jigsaw LMS Alert - Comment: %{author} for %{assignment}, %{user}, %{context}."
+        tweet: "Arrivu LMS Alert - Comment: %{author} for %{assignment}, %{user}, %{context}."
     submission_grade_changed: 
       email: 
         body: "The grade on your assignment, %{assignment_title} has been changed."
@@ -8748,7 +8748,7 @@ en-GB:
         not_applicable: N/A
         score: "score:  %{score} out of %{total}"
         score_pending: "(pending review)"
-        tweet: "Jigsaw LMS Alert - Grade change: %{date}"
+        tweet: "Arrivu LMS Alert - Grade change: %{date}"
     submission_graded: 
       email: 
         body: "Your assignment, %{assignment}, has been graded."
@@ -8795,7 +8795,7 @@ en-GB:
         not_applicable: N/A
         score: "score:  %{score} out of %{total}"
         score_pending_review: "(pending review)"
-        tweet: "Jigsaw LMS Alert - Graded: %{assignment}, %{context}"
+        tweet: "Arrivu LMS Alert - Graded: %{assignment}, %{context}"
     submission_needs_grading: 
       email: 
         body: "%{user_name} has completed the quiz %{quiz_title}, and it requires manual grading."
@@ -8823,25 +8823,25 @@ en-GB:
         subject: "Quiz submitted: %{quiz}, %{context}"
         submitted_date: "submitted: %{date}"
       twitter: 
-        body: "Jigsaw LMS Alert - Quiz submitted: %{quiz}, %{user_name}"
+        body: "Arrivu LMS Alert - Quiz submitted: %{quiz}, %{user_name}"
     summaries: 
       email: 
-        daily_body: "You're signed up to receive a daily report of some notifications from your Canvas account.  Below is the report for %{date}:"
+        daily_body: "You're signed up to receive a daily report of some notifications from your Arrivu LMS account.  Below is the report for %{date}:"
         html: 
           click_to_preferences: "Click here to edit your notification preferences"
-          daily_body: "You're signed up to receive a daily report of some notifications from your Canvas account. Below is the report for %{date}:"
-          subject: "Recent Canvas notifications"
+          daily_body: "You're signed up to receive a daily report of some notifications from your Arrivu LMS account. Below is the report for %{date}:"
+          subject: "Recent Arrivu LMS notifications"
           view: "Click to view"
-          weekly_body: "You're signed up to receive a weekly report of some notifications from your Canvas account. Below is the report for the week ending %{date}:"
+          weekly_body: "You're signed up to receive a weekly report of some notifications from your Arrivu LMS account. Below is the report for the week ending %{date}:"
         notifications_link: "You can change your notification settings by visiting the following page:"
-        subject: "Recent Canvas Notifications"
-        weekly_body: "You're signed up to receive a weekly report of some notifications from your Canvas account.  Below is the report for the week ending %{date}:"
+        subject: "Recent Arrivu LMS Notifications"
+        weekly_body: "You're signed up to receive a weekly report of some notifications from your Arrivu LMS account.  Below is the report for the week ending %{date}:"
       facebook: 
-        new_notifications: "You've received *%{notification_count} new notifications* in #Canvas#."
+        new_notifications: "You've received *%{notification_count} new notifications* in #Arrivu LMS#."
       sms: 
         notifications_sms: "%{notifications_count} new notifications at %{url}"
       twitter: 
-        tweet: "Jigsaw LMS Alert - %{notification_count} new notifications"
+        tweet: "Arrivu LMS Alert - %{notification_count} new notifications"
     topic_locked: "This topic is currently locked."
     topic_locked_at: "This topic was locked %{at}."
     topic_locked_module: "This topic is part of the module *%{module}* and hasn't been unlocked yet."
@@ -8864,7 +8864,7 @@ en-GB:
       summary: 
         subject: "Updated Wiki Page: %{title}, %{user}"
       twitter: 
-        tweet: "Jigsaw LMS Alert - Page Updated: %{title}, %{user}."
+        tweet: "Arrivu LMS Alert - Page Updated: %{title}, %{user}."
     visit_modules_page: "*Visit the course modules page for information on how to unlock this content.*"
     web_conference_invitation: 
       email: 
@@ -8884,7 +8884,7 @@ en-GB:
         body: "You've been invited to participate in a web conference, %{title} for %{name}."
         subject: "Web conference invitation: %{name}"
       twitter: 
-        tweet: "Jigsaw LMS Alert - Invite: attend %{title}, %{name}"
+        tweet: "Arrivu LMS Alert - Invite: attend %{title}, %{name}"
   migration: 
     announcement_type: Announcement
     assignment_group_type: "Assignment group"
@@ -9147,7 +9147,7 @@ en-GB:
         
         &nbsp;
         
-        Check 'Mark new submission comments as read' if you don't want them to show up as 'new' in your Canvas Inbox
+        Check 'Mark new submission comments as read' if you don't want them to show up as 'new' in your Arrivu LMS Inbox
     submission_comment_display: "Submission comment"
     submission_new_as_read: "Mark new submission comments as read."
   notification_preferences: 
@@ -9264,7 +9264,7 @@ en-GB:
       instructions: 
         main: 
           manage: 
-            description: "*Outcomes are created here to track mastery in a course. To get started, check out the menu bar along the top. Click on the New button to create a new outcome, or the New Group button to create a new group to organise your outcomes into. The Find button will allow you to use outcomes that have been created by your state or institution. As you create and use outcomes you will be able to use the panel to the left to navigate through your outcomes. You can drag and drop outcomes between the different levels to create structure.* *More importantly, Canvas allows you to add outcomes to your grading rubrics so that you can evaluate mastery as you grade assignments. Once you've set up outcomes, click Manage Rubrics to start using your outcomes for grading.*"
+            description: "*Outcomes are created here to track mastery in a course. To get started, check out the menu bar along the top. Click on the New button to create a new outcome, or the New Group button to create a new group to organise your outcomes into. The Find button will allow you to use outcomes that have been created by your state or institution. As you create and use outcomes you will be able to use the panel to the left to navigate through your outcomes. You can drag and drop outcomes between the different levels to create structure.* *More importantly, Arrivu LMS allows you to add outcomes to your grading rubrics so that you can evaluate mastery as you grade assignments. Once you've set up outcomes, click Manage Rubrics to start using your outcomes for grading.*"
             title: "Setting up outcomes"
     mastery_error: "Must be greater than or equal to 0"
     missing_outcome: "Couldn't find that learning outcome"
@@ -9387,7 +9387,7 @@ en-GB:
     exception: "We're sorry, an error has occurred, please try again later."
   plugins: 
     academic_benchmark_importer: 
-      description: "This enables importing Academic Benchmark standards into Canvas."
+      description: "This enables importing Academic Benchmark standards into Arrivu LMS."
     academic_benchmark_settings: 
       api_url_description: "(e.g. %{url})"
       common_core_guid: "(e.g. %{guid})"
@@ -9400,7 +9400,7 @@ en-GB:
       description: "Select account reports"
       name: "Account reports"
     app_center: 
-      description: "App Centre for tracking/installing external tools in Canvas"
+      description: "App Centre for tracking/installing external tools in Arrivu LMS"
       name: "App Centre"
     app_center_settings: 
       description: "App Centre will appear in the \"Apps\" tab on the settings page of either a course or account. The URL provided below should point to a valid App Centre endpoint (for example, https://lti-examples.heroku.com -- be sure to omit the trailing slash)"
@@ -9417,7 +9417,7 @@ en-GB:
       no_copying_frozen: "Don't allow frozen assignments to be copied."
     banner_grade_exchange_settings: 
       labels: 
-        canvas_source_identifier: "Name of your Canvas instance"
+        canvas_source_identifier: "Name of your Arrivu LMS instance"
         sis_source_identifier: "Name of your Banner instance"
     big_blue_button: 
       description: "Big Blue Button web conferencing support"
@@ -9492,7 +9492,7 @@ en-GB:
       sketchpad: SketchPad
       typewithme: TypeWith.me
     facebook: 
-      description: "Canvas Facebook application"
+      description: "Arrivu LMS Facebook application"
       name: Facebook
     facebook_settings: 
       description: |-
@@ -9501,23 +9501,23 @@ en-GB:
           works correctly:
           
           * **Web Site -- Site URL:** set to %{site_url}
-          * **Web Site -- Site Domain:** domain of your main Canvas site.  This must match the Site URL setting
-          * **Facebook Integration -- Canvas Page:** make a note of whatever you choose and enter in the form below
-          * **Facebook Integration -- Canvas URL:** set to %{canvas_url}
-          * Make sure **Advanced -- OAuth 2.0 for Canvas** is enabled
+          * **Web Site -- Site Domain:** domain of your main Arrivu LMS site.  This must match the Site URL setting
+          * **Facebook Integration -- Arrivu LMS Page:** make a note of whatever you choose and enter in the form below
+          * **Facebook Integration -- Arrivu LMS URL:** set to %{Arrivu LMS_url}
+          * Make sure **Advanced -- OAuth 2.0 for Arrivu LMS** is enabled
           * After you save your app, make a note of the App ID, API Key and App Secret
       domain_name: domain
       headers: 
         domain_settings: "Domain settings"
       hints: 
-        canvas_domain: "this is the domain specified in \"Canvas URL\""
-        canvas_name: "this is the path specified in \"Canvas Page\""
+        canvas_domain: "this is the domain specified in \"Arrivu LMS URL\""
+        canvas_name: "this is the path specified in \"Arrivu LMS Page\""
         disable_ssl: "Use only for local testing"
       labels: 
         api_key: "API Key"
         app_id: "App ID"
-        canvas_domain: "Canvas domain"
-        canvas_name: "Canvas name"
+        canvas_domain: "Arrivu LMS domain"
+        canvas_name: "Arrivu LMS name"
         disable_ssl: "Disable SSL"
         secret: "App secret"
     google_docs: 
@@ -9547,7 +9547,7 @@ en-GB:
         default_email_domain: "Default email domain"
         email_preference: "Email preference"
         lms_delivery_name: "LMS delivery name"
-        map_sections_to_courses: "Map IMS sections to Canvas courses"
+        map_sections_to_courses: "Map IMS sections to Arrivu LMS courses"
         section_end_days_adjustment: "Section end days adjustment"
         section_name_selection: "Section name selection"
         section_start_days_adjustment: "Section start days adjustment"
@@ -9558,8 +9558,8 @@ en-GB:
       canvas_revision_unknown: Unknown
       description: Description
       name: Name
-      no_plugins: "There are no Canvas plugins installed"
-      page_title: "Canvas Plugins"
+      no_plugins: "There are no Arrivu LMS plugins installed"
+      page_title: "Arrivu LMS Plugins"
       tag: Tag
       version: Version
       website: Website
@@ -9573,7 +9573,7 @@ en-GB:
           You will need an account either at [Kaltura.com](%{kaltura_url})
           or with a self-hosted instance of Kaltura.
           
-          **Note:** once you have Kaltura configured within Canvas,
+          **Note:** once you have Kaltura configured within Arrivu LMS,
           you need to go to the Kaltura Management Console and under "Settings -> 
           Integration Settings" enable server notifications with a 
           Notification URL of:
@@ -9583,7 +9583,7 @@ en-GB:
           Then check the boxes for "Add Entry" and "Delete Entry" in the "Sent by Server" column.
       headers: 
         account_settings: "Account settings"
-        canvas_settings: "Canvas settings"
+        canvas_settings: "Arrivu LMS settings"
         domain_settings: "Domain settings"
         misc_settings: "Misc settings"
         ui_conf_ids: "UI Conf IDs"
@@ -9707,7 +9707,7 @@ en-GB:
       description: |-
           If the institution does not use WebCT's "Learning Modules" (including schools who adopted WebCT
             prior to version 4.0, when modules were made available), course migrations can be improved by importing the "Course Content"
-            as Canvas modules instead of the "Learning Modules". This page allows one to set the default behavior of the WebCT migrator
+            as Arrivu LMS modules instead of the "Learning Modules". This page allows one to set the default behavior of the WebCT migrator
             with respect to content modules. It is important to remember that, while individual course migrations retain the ability
             to choose, the bulk migrator always utilises the value configured here and cannot be changed per migration.
       labels: 
@@ -9801,8 +9801,8 @@ en-GB:
       updated_profile: "Settings successfully updated"
     please_select_an_option: "Please select an option"
     profile: 
-      access_token_description: "Access tokens can be used to allow other applications to make API calls on your behalf. You can also generate access tokens and *use the Canvas Open API* to come up with your own integrations."
-      approved_integrations: "These are the third-party applications you have authorised to access the Canvas site on your behalf:"
+      access_token_description: "Access tokens can be used to allow other applications to make API calls on your behalf. You can also generate access tokens and *use the Arrivu LMS Open API* to come up with your own integrations."
+      approved_integrations: "These are the third-party applications you have authorised to access the Arrivu LMS site on your behalf:"
       buttons: 
         add_picture_file: "Add file"
         authorize_google_docs: "Authorise Google Docs access"
@@ -9817,15 +9817,15 @@ en-GB:
         select_image: "Select image"
         update_settings: "Update settings"
       confirm_email_instructions: "Before you can edit your profile, you need to verify your email address (%{email}) by clicking the link in the email we sent you. If you don't see it, *click to resend the email*, and make sure to check your spam folder."
-      delicious_description: "Delicious is a tool that lets you store and share your bookmarks with others. Canvas's rich content editor will let you search your Delicious tags to easily link from within Canvas to other resources you find useful."
-      diigo_description: "Diigo is a social bookmarking tool tailored specifically to research and education. Canvas's rich content editor will let you search your Diigo tags to easily link from within Canvas to other resources you find useful."
+      delicious_description: "Delicious is a tool that lets you store and share your bookmarks with others. Arrivu LMS's rich content editor will let you search your Delicious tags to easily link from within Arrivu LMS to other resources you find useful."
+      diigo_description: "Diigo is a social bookmarking tool tailored specifically to research and education. Arrivu LMS's rich content editor will let you search your Diigo tags to easily link from within Arrivu LMS to other resources you find useful."
       error_loading_token_details: "Error loading token details"
-      facebook_description: "If you have a Facebook account, you can install the Canvas app and receive course notifications on your profile. You can specify which types of notifications you want and how often you'd like them sent."
+      facebook_description: "If you have a Facebook account, you can install the Arrivu LMS app and receive course notifications on your profile. You can specify which types of notifications you want and how often you'd like them sent."
       full_token_warning: |-
           **Copy this token down now**. Once you leave this page you won't be able to
           retrieve the full token anymore, you'll have to regenerate it to get a new
           value.
-      generate_access_token_description: "Access tokens are what allow third-party applications to access Canvas resources on your behalf. These tokens are normally created automatically for applications as needed, but if [you're developing a new or limited project](%{documentation_url}) you can just generate the token from here."
+      generate_access_token_description: "Access tokens are what allow third-party applications to access Arrivu LMS resources on your behalf. These tokens are normally created automatically for applications as needed, but if [you're developing a new or limited project](%{documentation_url}) you can just generate the token from here."
       google_docs_description: "Once you authorise us to see your Google Docs you'll be able to submit your assignments directly from Google Docs, and create and share documents with members of your classes."
       headers: 
         application_abbrev: App
@@ -9900,14 +9900,14 @@ en-GB:
         view_facebook_app: "view the Facebook app"
         view_your_profile: "view your profile"
       loading_token_details: "Loading token details..."
-      no_approved_integrations: "Third-party applications can request permission to access the Canvas site on your behalf. As you begin authorising applications you will see them listed here."
+      no_approved_integrations: "Third-party applications can request permission to access the Arrivu LMS site on your behalf. As you begin authorising applications you will see them listed here."
       no_language_preference: "System default (%{language})"
       no_registered_services: "No registered services"
       none: None
       page_title: "User settings"
       profile_pictures: "Select the image you'd like to use as your profile pic, or upload a new image:"
       skype_description: "Skype offers free online voice and video calls. Lots of students use Skype as a free, easy way to communicate. If you register your Skype Name and enable visibility, then other students can easily find your contact and call or add you using Skype."
-      subscribe_to_emails: "I want to receive information, news and tips from Jigsaw Academy"
+      subscribe_to_emails: "I want to receive information, news and tips from Arrivu LMS"
       titles: 
         access_token_details: "Access token details"
         authorize_facebook: "Authorise Facebook"
@@ -9931,7 +9931,7 @@ en-GB:
           These notifications will be sent as direct messages to yourself from
           yourself, and won't appear in your public stream.
       unknown_service: Unknown
-      web_services: "Canvas can make your life a lot easier by tying itself in with the web tools you already use. Click any of the services in \"Other services\" to see what we mean."
+      web_services: "Arrivu LMS can make your life a lot easier by tying itself in with the web tools you already use. Click any of the services in \"Other services\" to see what we mean."
     resending: resending...
     secondary_nav: 
       links: 
@@ -9980,7 +9980,7 @@ en-GB:
         carrier: Network
         cell_number: "Mobile number"
         email_address: "Email address"
-        enable_login_for_email: "I want to log in to Canvas using this email address"
+        enable_login_for_email: "I want to log in to Arrivu LMS using this email address"
         sms_email: "SMS email"
       links: 
         add_contact_method: "Add contact method"
@@ -10022,7 +10022,7 @@ en-GB:
     notifications: 
       privacy_notice: 
         ok: Ok
-        privacy_notice: "Notice: Some notifications may contain confidential information. Selecting to receive notifications at an email other than your institution provided address may result in sending sensitive Canvas course and group information outside of the institutional system."
+        privacy_notice: "Notice: Some notifications may contain confidential information. Selecting to receive notifications at an email other than your institution provided address may result in sending sensitive Arrivu LMS course and group information outside of the institutional system."
         privacy_notice_title: "Privacy notice"
   pseudonym: 
     errors: 
@@ -10049,13 +10049,13 @@ en-GB:
       invalid_otp: "Invalid verification code, please try again"
       login_error: "There was a problem logging in at %{institution}"
       login_errors: 
-        no_config_for_id: "The Canvas account has no authentication configuration with that ID"
+        no_config_for_id: "The Arrivu LMS account has no authentication configuration with that ID"
         no_idp_set: "The institution you logged in from is not configured on this account."
-        unrecognized_idp: "Canvas did not recognise your identity provider"
+        unrecognized_idp: "Arrivu LMS did not recognise your identity provider"
       logout_errors: 
-        no_idp_found: "Canvas was unable to log you out at your identity provider"
+        no_idp_found: "Arrivu LMS was unable to log you out at your identity provider"
       max_attempts: "Too many failed login attempts. Please try again later or contact your system administrator."
-      no_matching_user: "Canvas doesn't have an account for user: %{user}"
+      no_matching_user: "Arrivu LMS doesn't have an account for user: %{user}"
       request_failed: "Request failed. Try again."
       user_deleted: "That user account has been deleted.  Please contact your system administrator to have your account reactivated."
     messages: 
@@ -10071,10 +10071,10 @@ en-GB:
       password: Password
       sending: Sending...
     new: 
-      details: "Before you can log in you need to finish the registration process. You should have received an email with a confirmation link back to Canvas. Follow that link to complete the process. Make sure to check your spam folder."
+      details: "Before you can log in you need to finish the registration process. You should have received an email with a confirmation link back to Arrivu LMS. Follow that link to complete the process. Make sure to check your spam folder."
       links: 
         resend_email: "Resend the email"
-      page_title: "Log in to canvas"
+      page_title: "Log in to Arrivu LMS"
       titles: 
         registration_complete: "Registration incomplete"
     notices: 
@@ -10105,7 +10105,7 @@ en-GB:
         verify: Verify
       details: 
         mfa_enrollment: |-
-            Multi-factor authentication increases security by requiring that you have something in your physical possession, in addition to knowing your password, in order to log in to Canvas. This can be a device that can generate verification codes, or a phone that can receive text messages. The Google Authenticator app for [iPhone](%{iphone_url}) or [Android](%{android_url}) can be configured by scanning the QR Code below. Other tokens can be configured by entering the
+            Multi-factor authentication increases security by requiring that you have something in your physical possession, in addition to knowing your password, in order to log in to Arrivu LMS. This can be a device that can generate verification codes, or a phone that can receive text messages. The Google Authenticator app for [iPhone](%{iphone_url}) or [Android](%{android_url}) can be configured by scanning the QR Code below. Other tokens can be configured by entering the
             secret key **%{secret_key}**.
         mfa_required: "You are required to set up multi-factor authentication."
         otp_on_device: "Please enter the verification code shown by your token."
@@ -11191,7 +11191,7 @@ en-GB:
       labels: 
         started: Started
         times_up: "Time's up! Submitting results in"
-      logged_out_of_canvas: "*You have been logged out of Canvas.* To continue please log in"
+      logged_out_of_canvas: "*You have been logged out of Arrivu LMS.* To continue please log in"
       login_required: "Login required"
       minutes_count: 
         one: "1 minute"
@@ -11315,7 +11315,8 @@ en-GB:
       labels: 
         email: Email
         name: Name
-    welcome_to_canvas: "Welcome to Canvas!"
+    welcome_to_canvas: "Welcome to Arrivu LMS!"
+    welcome_to_arrivu_lms: "Welcome to Arrivu LMS!"
   retrieve_timeout: "could not retrieve configuration, the server response timed out"
   role_override: 
     permission: 
@@ -11333,7 +11334,7 @@ en-GB:
       manage_announcements: "Manage global announcements"
       manage_assignments: "Manage (add/edit/delete) assignments and quizzes"
       manage_calendar: "Add, edit and delete events on the course calendar"
-      manage_canvasnet_courses: "Manage Canvas Network courses"
+      manage_canvasnet_courses: "Manage Arrivu LMS Network courses"
       manage_content: "Manage all other course content"
       manage_courses: "Manage (add/edit/delete ) courses"
       manage_demos: "Manage demos"
@@ -11872,7 +11873,7 @@ en-GB:
     keyboard_navigation_hint: 
       prompt: "Press comma to hear a list of keyboard shortcuts for this page."
     locale_warning: 
-      crowdsourced_warning_message: "The language you have selected was translated via crowdsourcing. Jigsaw Academy has not reviewed or verified the accuracy of the translation, and accepts no responsibility for your use of this language setting. Please use at your own discretion."
+      crowdsourced_warning_message: "The language you have selected was translated via crowdsourcing. Arrivu LMS has not reviewed or verified the accuracy of the translation, and accepts no responsibility for your use of this language setting. Please use at your own discretion."
       crowdsourced_warning_title: "Crowdsourced language"
     login: 
       back_to_login: "Back to login"
@@ -11886,7 +11887,8 @@ en-GB:
       log_in: "Log in"
       login_at_account: "Log in at %{school_name}"
       login_handle: "Enter your %{login_handle_name} and we'll send you a link to change your password."
-      register_for_canvas: "*Need a Canvas account?* **Click here. It's free!**"
+      register_for_canvas: "*Need a Arrivu LMS account?* **Click here. It's free!**"
+      register_for_arrivu_lms: "*Need a Arrivu LMS Account?* **Click Here, It's Free!**"
     menu_assignment: 
       labels: 
         due: due
@@ -11957,9 +11959,9 @@ en-GB:
       links_title: Title
       links_url: URL
       manage_settings: "Manage registered services"
-      message_me: "message me in Canvas"
+      message_me: "message me in Arrivu LMS"
       message_title: Message
-      message_user_canvas: "Message %{user} in Canvas"
+      message_user_canvas: "Message %{user} in Arrivu LMS"
       name: Name
       no_links: "%{name} hasn't added any links"
       nothing_in_common: "You don't have anything in common"
@@ -12133,7 +12135,7 @@ en-GB:
       grading_alt: grading
       submission_comment: "Submission Comment"
     terms_required: 
-      terms_have_changed: "The *terms of use* have changed. Please take a moment to review them before you continue using Canvas."
+      terms_have_changed: "The *terms of use* have changed. Please take a moment to review them before you continue using Arrivu LMS."
       updated_terms_of_use: "Updated Terms of Use"
     unauthorized: 
       headings: 
@@ -12268,7 +12270,7 @@ en-GB:
       too_many_errors: "There were %{count} more errors"
       too_many_warnings: "There were %{count} more warnings"
       unrecorgnized_type: "Unrecognised import type"
-    instructure_csv: "Jigsaw Academy formatted CSV or zipfile of CSVs"
+    instructure_csv: "Arrivu LMS formatted CSV or zipfile of CSVs"
     upload_filename: "sis_upload_%{id}.zip"
   sis_import: 
     buttons: 
@@ -12308,7 +12310,7 @@ en-GB:
       date: Date
       value: Value
     institution_suspended: 
-      body: "Your school's Canvas account is temporarily suspended. Please contact your Canvas administrator."
+      body: "Your school's Arrivu LMS account is temporarily suspended. Please contact your Arrivu LMS administrator."
       links: 
         logout: Logout
         stop_masquerading: "[Stop Masquerading]"
@@ -12612,7 +12614,7 @@ en-GB:
       alt_help_text: "Describe the image to improve accessibility"
       alt_text: "Alt text"
       attributes: Attributes
-      canvas: Canvas
+      canvas: Arrivu LMS
       dimension_help_text: "Aspect ratio will be preserved"
       dimensions: Dimensions
       flickr: Flickr
@@ -12673,7 +12675,7 @@ en-GB:
       agree_to_terms_and_privacy_policy: "You agree to the *terms of use* and acknowledge the **privacy policy**."
       agree_to_terms_with_code_of_conduct: "You agree to the *terms of use* and the **code of conduct**."
   user_date_range_search: 
-    cant_be_blank: "Canvas User ID can't be blank"
+    cant_be_blank: "Arrivu LMS User ID can't be blank"
     cant_come_before_from: "'To date' can't come before 'From date'"
   user_follow: 
     errors: 
@@ -12823,7 +12825,7 @@ en-GB:
     cc_prefs: 
       buttons: 
         configure: "Configure communication preferences"
-      comm_preferences_instructions: "Now that you're registered with Canvas, you might want to configure what notifications you'll receive as your courses progress. Canvas is flexible enough to let you choose how and for what events you'd like to be notified. When things happen in your courses you can choose to be emailed or texted to your cell immediately, daily or weekly."
+      comm_preferences_instructions: "Now that you're registered with Arrivu LMS, you might want to configure what notifications you'll receive as your courses progress. Arrivu LMS is flexible enough to let you choose how and for what events you'd like to be notified. When things happen in your courses you can choose to be emailed or texted to your cell immediately, daily or weekly."
       titles: 
         configure_com_prefs: "Configure communication preferences"
     confirms: 
@@ -12974,7 +12976,7 @@ en-GB:
         name_and_email: "Name and Email"
       update_instructions: "You can update some of this user's information, but they can change it back if they choose."
     new: 
-      create_a_canvas_account: "Create a Canvas account"
+      create_a_canvas_account: "Create a Arrivu LMS account"
       privacy_policy: "Privacy Policy"
       terms_of_use: "Terms of Use"
     no_deleting_sis_user: "You cannot delete a system-generated user"
@@ -12992,11 +12994,11 @@ en-GB:
       almost_there: "You're almost there..."
       done_resending: "Done! Message may take a few minutes."
       failed_resending: "Request failed. Try again."
-      invite_to_read: "We invite you to watch this brief overview of Canvas. You may also *read about how Canvas is helping* to bring students in 27 countries closer to lecture halls, instructors and classmates."
+      invite_to_read: "We invite you to watch this brief overview of Arrivu LMS. You may also *read about how Arrivu LMS is helping* to bring students in 27 countries closer to lecture halls, instructors and classmates."
       links: 
         download_pdf: "download PDF"
       need_flash: "You need Flash player 8+ and JavaScript enabled to view this video."
-      overview_video: "Overview video of canvas"
+      overview_video: "Overview video of Arrivu LMS"
       registration_complete: "Registration complete"
       resending: Resending...
       sent_email_paragraph: "We sent an email to %{email_address}. *Click the link in the email to finish registering*. If you don't see it, **click to re-send the email**, and make sure to check your spam box."
@@ -13056,13 +13058,13 @@ en-GB:
                   those courses are available, you will see information about them here
                   and in the top navigation. In the meantime, feel free to sign up for
                   more courses or set up your profile.
-      welcome_to_happiness: "Welcome to Canvas!"
+      welcome_to_happiness: "Welcome to Arrivu LMS!"
   validate: 
     is_required: "This field is required"
   warnings: 
     test_install: 
-      message: "This Canvas installation is only for testing, and will reset every week."
-      title: "Canvas test installation"
+      message: "This Arrivu LMS installation is only for testing, and will reset every week."
+      title: "Arrivu LMS test installation"
   web_conference: 
     default_name_for_courses: "Course web conference"
     default_name_for_groups: "Group web conference"

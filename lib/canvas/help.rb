@@ -17,7 +17,7 @@ module Canvas
         {
           :available_to => ['user', 'student', 'teacher'],
           :text => I18n.t('#help_dialog.report_problem', 'Report a Problem'),
-          :subtext => I18n.t('#help_dialog.report_problem_sub', 'If Jigsaw LMS misbehaves, tell us about it'),
+          :subtext => I18n.t('#help_dialog.report_problem_sub', 'If Arrivu LMS misbehaves, tell us about it'),
           :url => '#create_ticket'
         }
       ]
