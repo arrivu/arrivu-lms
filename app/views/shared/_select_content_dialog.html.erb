@@ -167,7 +167,7 @@
           <div style="margin-top: 5px;">
             <select class="module_item_select" multiple>
               <optgroup label="Offers">
-                <% @context.wiki.wiki_pages.offers.active.each do |offer| %>
+                <% @context.wiki.wiki_pages.offers.not_deleted.each do |offer| %>
                    <option value="<%= offer.id %>"><%= offer.title %></option>
                 <% end %>
               </optgroup>
