@@ -266,20 +266,29 @@ class WikiPagesController < ApplicationController
   end
 
   def comments_create
+    authorized = can_do(@page, @current_user, :update)
     @page_details = WikiPage.find(@page.id)
-    @comment = @page_details.page_comments.build(message:params[:page_comment][:message],page_id:@page.id,
-                                                 page_type:params[:type],user_id:@current_user.id)
+    if authorized
+      @comment = @page_details.page_comments.build(message:params[:page_comment][:message],page_id:@page.id,
+                                                 page_type:params[:type],user_id:@current_user.id,is_approved: true)
+    else
+      @comment = @page_details.page_comments.build(message:params[:page_comment][:message],page_id:@page.id,
+                                                   page_type:params[:type],user_id:@current_user.id,is_approved: false)
+    end
     respond_to do |format|
       if @comment.save
+        if authorized
+          flash[:notice] = "Your comment has been added"
+        else
+          flash[:notice] = "Your comment is waiting for approval"
+        end
         format.html { redirect_to   named_context_url(@context, :context_wiki_page_url, @page.wiki_type, @page) }
-        #format.json { render :json => @comment.to_json }
       elsif params[:page_comment][:message] == ""
-        flash[:warning] =" Enter Comments"
+        flash[:warning] ="Enter Comment"
         format.html { redirect_to   named_context_url(@context, :context_wiki_page_url, @page.wiki_type, @page) }
       else
         flash[:error] = t('errors.create_failed', "Comment creation failed")
         format.html { redirect_to   named_context_url(@context, :context_wiki_page_url, @page.wiki_type, @page) }
-        #format.json { render :json => @comment.errors.to_json, :status => :bad_request }
       end
 
     end
@@ -287,11 +296,24 @@ class WikiPagesController < ApplicationController
 
 
   def comment_destroy
-    @page_details = WikiPage.find(@page.id)
-    @comment = PageComment.find(params[:id])
-       @comment.destroy
-      render :json => @comment.to_json
+    if authorized_action(@page, @current_user, :update)
+      @page_details = WikiPage.find(@page.id)
+      @comment = PageComment.find(params[:id])
+         @comment.destroy
+        render :json => @comment.to_json
+    end
   end
+
+  def comment_approve
+    if authorized_action(@page, @current_user, :update)
+      @page = WikiPage.find(@page.id)
+      @comment = PageComment.find(params[:id])
+      @comment.is_approved = params[:approval_status]
+      @comment.save!
+      render :json => @comment.to_json
+   end
+  end
+
 
   protected
 
