@@ -250,7 +250,7 @@ class UserService < ActiveRecord::Base
       when 'skype'
         "skype:#{service_user_name}?add"
       else
-        'http://jigsawacademy.com/'
+        'http://arrivusystems.com//'
     end
   end
   

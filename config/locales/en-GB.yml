@@ -3964,10 +3964,10 @@ en-GB:
       path_syntax: "lower-case letters, numbers and dashes"
       portal_path_syntax: "lower-case letters, numbers, dashes and slashes (e.g. harvard/chemistry)"
       private: Hidden
-      public: "Listed on jigsawacademy.com"
+      public: "Listed on arrivusystems.com"
       save_changes: "Save changes"
       self_paced: Self-paced
-      unlisted: "Unlisted on jigsawacademy.com (accessible via url)"
+      unlisted: "Unlisted on arrivusystems.com (accessible via url)"
       when_to_set_tentative_start: "e.g. \"Fall 2013\", if the course doesn't have a definitive start date"
     enrollment_reminders: 
       buttons: 
@@ -5443,7 +5443,7 @@ en-GB:
       canvas_messages: "Arrivu LMS messages"
       configure_notification_preferences_notice: "After you *configure your notification preferences* you should start to see notifications show up here letting you know about things happening in your Arrivu LMS account."
       installation_about: "To install the Arrivu LMS Facebook app, go to your profile page in Arrivu LMS and click the Facebook button to connect your account to Facebook."
-      learn_more: "Learn more at jigsawacademy.com"
+      learn_more: "Learn more at arrivusystems.com"
       more_information: "More information at %{domain_list}"
       no_messages_notice: "As things happen in the course you'll start seeing notifications show up here letting you know about things happening in your Arrivu LMS account."
       notification_about: "The Arrivu LMS Facebook app is here to give you easier access to the interactions going on inside your courses. You can set it to send you notifications when your assignments are graded, when due dates change, etc. Your private data will still stay private at Arrivu LMS."
@@ -5454,7 +5454,7 @@ en-GB:
       welcome_title: "Welcome to Arrivu LMS Arrivu LMS"
     index_disabled: 
       disabled_notice: "This Arrivu LMS site is not configured to communicate with Facebook."
-      get_help: "Get help at support.jigsawacademy.com"
+      get_help: "Get help at support.arrivusystems.com"
       instructure_canvas: "Arrivu LMS Arrivu LMS"
     invalid_signature: "Invalid Facebook signature"
     message: 

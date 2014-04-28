@@ -23,6 +23,19 @@
         <a href="<%= login_path %>" style="font-size: 1.3em;" class="btn"><%= login_message %></a>
       </div>
     <% else %>
+          <div style="display: table;margin: 10px auto;">
+          <ul style="min-width: 480px;text-align:center;margin: 0px;">
+            <li style="list-style: none; display: inline-block; "><%= link_to image_tag("Facebook_light.png",:class => "login_img", alt: "Login with FB", :style => "width: 160px"), '/auth/facebook/' %></li>
+            <li style="list-style: none; display: inline-block; "><%= link_to image_tag("Googleplus_light.png", :class => "login_img", alt: "Login with Goole", :style => "width: 160px"), '/auth/google_oauth2/' %></li>
+            <li style="list-style: none; display: inline-block; "> <%= link_to image_tag("Linkedin_light.png", :class => "login_img", alt: "Login with Linkedin", :style => "width: 160px"), '/auth/linkedin/' %></li>
+          </ul>
+        </div>
+
+          <div style="display: table;margin: 10px auto;">
+            <ul style="min-width: 480px;text-align:center;margin: 0px;">
+              <li style="list-style: none; display: inline-block; ">OR</li>
+            </ul>
+          </div>
       <%= form_for :pseudonym_session, :url => login_path(:nonldap => (@domain_root_account && !@domain_root_account.ldap_authentication?).presence), :html => {:id => "login_form"} do |f| %>
         <% if @domain_root_account && @domain_root_account.self_registration? && !hide_self_reg_banner %>
             <% if @domain_root_account.self_registration_type == 'observer' %>
