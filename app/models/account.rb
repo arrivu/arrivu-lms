@@ -26,6 +26,9 @@ class Account < ActiveRecord::Base
 
   include Workflow
   has_many :rewards
+  #Arrivu changes
+  has_one :account_domain_mapping
+  #Arrivu changes
   belongs_to :parent_account, :class_name => 'Account'
   belongs_to :root_account, :class_name => 'Account'
   authenticates_many :pseudonym_sessions
@@ -91,7 +94,7 @@ class Account < ActiveRecord::Base
   before_save :set_update_account_associations_if_changed
   after_save :update_account_associations_if_changed
   after_create :default_enrollment_term
-  
+
   serialize :settings, Hash
   include TimeZoneHelper
   time_zone_attribute :default_time_zone, default: "New Delhi"
@@ -324,7 +327,7 @@ class Account < ActiveRecord::Base
     @should_update_account_associations = self.parent_account_id_changed? || self.root_account_id_changed?
     true
   end
-  
+
   def update_account_associations_if_changed
     send_later_if_production(:update_account_associations) if @should_update_account_associations
   end

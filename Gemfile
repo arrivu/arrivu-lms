@@ -335,3 +335,5 @@ gem 'acts_as_commentable', '2.1.1'
 #  gem "coffee-script-redux-debugger", :git => "git://github.com/JetBrains/coffee-script-redux-debugger.git"
 #end
 
+gem 'subdomain-fu', '0.5.4'
+gem 'rack-cors', :require => 'rack/cors'
