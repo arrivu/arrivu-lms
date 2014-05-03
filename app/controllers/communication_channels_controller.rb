@@ -178,7 +178,9 @@ class CommunicationChannelsController < ApplicationController
       @cc.errors.add(:path, 'unique!')
       return render :json => @cc.errors.as_json, :status => :bad_request
     end
-
+    #Arrivu changes
+    @cc.pseudonym = @current_pseudonym
+    #Arrivu changes
     @cc.user = @user
     @cc.re_activate! if @cc.retired?
     @cc.workflow_state = skip_confirmation ? 'active' : 'unconfirmed'

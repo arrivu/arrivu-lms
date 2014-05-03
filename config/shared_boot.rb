@@ -43,6 +43,15 @@ end
 
 RAILS_DEFAULT_LOGGER = config.logger if CANVAS_RAILS2
 
+config.middleware.use "Rack::Cors" do
+  allow do
+    origins '*'
+    resource '*', :headers => :any,
+             :methods => [:get, :post, :delete, :put, :options],
+             :expose  => ['Link']
+  end
+end
+
 # RailsLTS configuration (doesn't apply to rails 3)
 if CANVAS_RAILS2
   config.rails_lts_options = {

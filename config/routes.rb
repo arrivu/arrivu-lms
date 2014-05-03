@@ -1589,4 +1589,12 @@ routes.draw do
   get '/get_collection/:collection_id' =>'videos#get_collection'
   match '/rr/:short_url_code' => 'referrals#referree_register',:as => :rr
   match '/update_referree'  => 'referrals#update_referree',:path_name => "reward", :as => :referree_registration, :via => :post
+  #Arrivu changes(LmsCustomization start)
+  map.resources :feature_wishs
+  map.resources :subscription #, :member => {:validate => :post}
+  map.subscription_expired '/subscription_expired', :controller => 'subscription', :action => 'subscription_expired'
+  map.subscription_expired_email '/subscription_expired_email', :controller => 'subscription', :action => 'subscription_expired_email',:conditions => { :method => :post }
+  map.subscription_validate '/subscription_validate', :controller => 'subscription', :action => 'validate',:conditions => { :method => :post }
+  map.authenticate '/authenticate', :controller => 'subscription', :action => 'authenticate'
+  #Arrivu changes(LmsCustomization end)
 end
