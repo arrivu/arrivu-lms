@@ -91,7 +91,7 @@ define([
                 });
                 $module.find(".context_module_items.ui-sortable").sortable('disable');
                 $module.disableWhileLoading(
-                    $.ajaxJSON(url, 'POST', {order: items.join(",")}, function(data) {
+                    $.ajaxJSON(url, 'POST', {order: items.join(","),category: $category,dragged_item_id: $draggedItemId}, function(data) {
                         if(data && data.context_module && data.context_module.content_tags) {
                             for(var idx in data.context_module.content_tags) {
                                 var tag = data.context_module.content_tags[idx].content_tag;
@@ -260,12 +260,12 @@ define([
                     $form.attr('action', $form.find(".add_context_module_url").attr('href'));
                     $form.find(".completion_entry").hide();
                     $form.attr('method', 'POST');
-                    $form.find(".submit_button").text("Add Class");
+                    $form.find(".submit_button").text(ENV.is_fliped_class_enabled ? "Add Class" : "Add Module");
                 } else {
                     $form.attr('action', $module.find(".edit_module_link").attr('href'));
                     $form.find(".completion_entry").show();
                     $form.attr('method', 'PUT');
-                    $form.find(".submit_button").text("Update Class");
+                    $form.find(".submit_button").text(ENV.is_fliped_class_enabled ? "Update Class" : "Update Module");
                 }
                 $form.find("#unlock_module_at").prop('checked', data.unlock_at);
                 $form.find("#require_sequential_progress").attr('checked', data.require_sequential_progress == "true" || data.require_sequential_progress == "1");
@@ -312,7 +312,7 @@ define([
                     close: function() {
                         modules.hideEditModule(true);
                     }
-                }).fixDialogButtons().dialog('option', {title: (isNew ? "Add Class" : "Edit Class Settings"), width: (isNew ? 'auto' : 600)}).dialog('open'); //show();
+                }).fixDialogButtons().dialog('option', {title: (isNew ?  (ENV.is_fliped_class_enabled ? "Add Class" : "Add Module")  : (ENV.is_fliped_class_enabled ? "Edit Class Settings" : "Edit Module Settings")), width: (isNew ? 'auto' : 600)}).dialog('open'); //show();
                 $module.removeClass('dont_remove');
                 $form.find(":text:visible:first").focus().select();
             },
@@ -333,16 +333,15 @@ define([
                 if($olditem.length) {
                     var admin = $olditem.find('.ig-admin');
                     if (admin.length) { admin.detach(); }
-                    $item = $olditem.clone(true);
-                    if (admin.length) {
-                        $item.find('.ig-row').append(admin)
-                    };
+                    $item = $olditem.clone(true).removeAttr('id');
+                    $olditem.remove();
                 } else {
                     $item = $("#context_module_item_blank").clone(true).removeAttr('id');
                 }
                 $item.addClass(data.type + "_" + data.id);
                 $item.addClass(data.type);
                 $item.attr('aria-label', data.title);
+                $item.attr('data-id',data.id)
                 $item.fillTemplateData({
                     data: data,
                     id: 'context_module_item_' + data.id,
@@ -381,6 +380,9 @@ define([
                 else if (!$before && (data.category == 'pre_class_reading_materials')){
                     console.log(data.category);
                     $module.find(".pre_class_reading_materials .context_module_items").append($item.show());
+                }
+                else if(!$before) {
+                    $module.find(".context_module_items").append($item.show());
                 }
                 else {
                     $before.before($item.show());

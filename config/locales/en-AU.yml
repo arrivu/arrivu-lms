@@ -3124,6 +3124,7 @@ en-AU:
       add_item: "Add Item"
       add_module: "Add a New Module"
       add_module_first: "Add a New Module"
+      add_class_first: "Add a new class"
       update: "Update Module"
     confirm: 
       delete: "Are you sure you want to delete this module?"
@@ -3133,25 +3134,32 @@ en-AU:
       assignment_points_possible: "out of %{points_possible}"
       buttons: 
         add_module: "Add Module"
+        add_class: "Add Class"
         add_prerequisite: "Add Prerequisite"
       criterion_for_assignment: "For %{assignment} users must %{select_criterion}"
       headings: 
         add_prerequisite: "Add Prerequisite to %{name}"
         course_modules: "Course Modules"
+        course_classes: "Course Classes"
         student_progress: "Module Progress by Student"
         student_progress_for_module: "Student Progress for %{module}"
         students_completed: "Students who have Completed the Module"
+        students_completed_class: "Students who have completed the class"
         students_in_progress: "Students who are Working on the Module"
+        students_in_progress_class: "Students who are Working on the Class"
         students_locked: "Students who haven't Unlocked the Module"
+        students_locked_class: "Students who haven't unlocked the class"
         students_unlocked: "Students who have Unlocked (but not started) the Module"
+        students_unlocked_class: "Students who have unlocked (but not started) the class"
       help: 
         create: |-
-            Course modules let you organize your assignments, pages, files, etc. into smaller sections or units. Modules could be centered around a theme, focused on a specific topic, or even just grouped chronologically.
-            
-            You can also sequence modules by defining criteria and prerequisites for each module. Students won't be able to access modules until they have unlocked all their prerequisites. That way you can prevent students from accessing certain content or files until they have, say, gotten at least 75% on a review quiz.
-            
-            To start organizing your course into modules, click the "%{button}" button to the right.
+            "%{name_module_or_class}" let you organise your assignments, pages, files, etc. into smaller sections or units. "%{name_module_or_class}" could be centred around a theme, focused on a specific topic, or even just grouped chronologically.
+
+            You can also sequence "%{name_module_or_class}" by defining criteria and prerequisites for each "%{name_module_or_class}". Students won't be able to access "%{name_module_or_class}" until they have unlocked all their prerequisites. That way you can prevent students from accessing certain content or files until they have, for example, achieved at least 75% on a review quiz.
+
+            To start organising your course into "%{name_module_or_class}", click the "%{button}" button to the right.
         no_modules: "No modules have been defined for this course."
+        no_classes: "No classes have been defined for this course."
       images: 
         alt: 
           min_score: "minimum score"
@@ -3171,13 +3179,13 @@ en-AU:
           zero: "Don't Indent"
       key: 
         description: 
-          delete: "Delete Current Module/Item"
-          edit: "Edit Module/Item"
+          delete: "Delete Current "%{name_module_or_class}"/Item"
+          edit: "Edit "%{name_module_or_class}"/Item"
           indent: "Indent Current Item"
-          new: "New Module"
-          next: "Next Module/Item"
+          new: "New "%{name_module_or_class}""
+          next: "Next "%{name_module_or_class}"/Item"
           outdent: "Outdent Current Item"
-          previous: "Previous Module/Item"
+          previous: "Previous "%{name_module_or_class}"/Item"
       keycode_descriptions: 
         next_module_item: "Select next module or module item"
         previous_module_item: "Select previous module or module item"
@@ -3216,6 +3224,7 @@ en-AU:
       module: module
       module_details: "Modules are shown in sequential order, so only modules that are above %{name} can be set as prerequisites."
       module_name: "Module Name"
+      class_name: "Class name"
       must_complete_prerequisites: "They must complete"
       no_preprequisites: "No prerequisites defined"
       no_requirements: "No requirements defined"
@@ -3230,14 +3239,17 @@ en-AU:
         must_view: "view the item"
       select_module: 
         instructions: "Select Module"
+        instructions_class: "Select Class"
         name: "the module, %{module}"
       select_prerequisite: "Select the type of prerequisite. Students cannot see a module until all prerequisites are satisfied."
       student_name: "Student Name"
       table_headings: 
         module: Module
+        class: Class
         state: State
       titles: 
         student_progression: "Module Progression by Student"
+        student_progression_class: "Class progression by student"
     context_module: 
       context_module: 
         draft: (Draft)
@@ -3275,6 +3287,7 @@ en-AU:
     index: 
       titles: 
         course_modules: "Course Modules"
+        course_classes: "Course classes"
     module_empty: "There are no items in the module \"%{module}\""
     module_item: 
       drag_to_reorder: "Drag to reorder or move item to another module"

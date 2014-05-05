@@ -2500,21 +2500,22 @@ class Course < ActiveRecord::Base
   TAB_GROUPS = 7
   TAB_DISCUSSIONS = 8
   TAB_MODULES = 10
-  TAB_FILES = 11
-  TAB_CONFERENCES = 12
-  TAB_SETTINGS = 13
-  TAB_ANNOUNCEMENTS = 14
-  TAB_OUTCOMES = 15
-  TAB_COLLABORATIONS = 16
-  TAB_FAQS = 17
-  TAB_CAREERS = 18
-  TAB_REFERRALS=19
-  TAB_VIDEOS=20
-  TAB_OFFERS=21
-  TAB_BONUSVIDEOS=22
-  TAB_LIVECLASSLINKS=23
-  TAB_COMMENTS=24
-  TAB_LABS=25
+  TAB_CLASSES = 11
+  TAB_FILES = 12
+  TAB_CONFERENCES = 13
+  TAB_SETTINGS = 14
+  TAB_ANNOUNCEMENTS = 15
+  TAB_OUTCOMES = 16
+  TAB_COLLABORATIONS = 17
+  TAB_FAQS = 18
+  TAB_CAREERS = 19
+  TAB_REFERRALS=20
+  TAB_VIDEOS=21
+  TAB_OFFERS=22
+  TAB_BONUSVIDEOS=23
+  TAB_LIVECLASSLINKS=24
+  TAB_COMMENTS=25
+  TAB_LABS=26
 
   def self.default_tabs
     [
@@ -2529,7 +2530,8 @@ class Course < ActiveRecord::Base
       { :id => TAB_SYLLABUS, :label => t('#tabs.syllabus', "Schedule"), :css_class => 'syllabus', :href => :syllabus_course_assignments_path },
       { :id => TAB_OUTCOMES, :label => t('#tabs.outcomes', "Outcomes"), :css_class => 'outcomes', :href => :course_outcomes_path },
       { :id => TAB_QUIZZES, :label => t('#tabs.quizzes', "Quizzes"), :css_class => 'quizzes', :href => :course_quizzes_path },
-      { :id => TAB_MODULES, :label => t('#tabs.classes', "Classes"), :css_class => 'classes', :href => :course_context_modules_path },
+      { :id => TAB_MODULES, :label => t('#tabs.modules', "Modules"), :css_class => 'modules', :href => :course_modules_path },
+      { :id => TAB_CLASSES, :label => t('#tabs.classes', "Classes"), :css_class => 'classes', :href => :course_context_modules_path },
       { :id => TAB_CONFERENCES, :label => t('#tabs.conferences', "Conferences"), :css_class => 'conferences', :href => :course_conferences_path },
       { :id => TAB_COLLABORATIONS, :label => t('#tabs.collaborations', "Collaborations"), :css_class => 'collaborations', :href => :course_collaborations_path },
       { :id => TAB_FAQS, :label =>t('#tabs.faq', "FAQ"), :css_class => 'faq',:href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_FAQS  },
@@ -2615,6 +2617,7 @@ class Course < ActiveRecord::Base
 
       tabs.each do |tab|
         tab[:hidden_unused] = true if tab[:id] == TAB_MODULES && !active_record_types[:modules]
+        tab[:hidden_unused] = true if tab[:id] == TAB_CLASSES && !active_record_types[:classes]
         tab[:hidden_unused] = true if tab[:id] == TAB_FILES && !active_record_types[:files]
         tab[:hidden_unused] = true if tab[:id] == TAB_QUIZZES && !active_record_types[:quizzes]
         tab[:hidden_unused] = true if tab[:id] == TAB_ASSIGNMENTS && !active_record_types[:assignments]
@@ -2640,8 +2643,16 @@ class Course < ActiveRecord::Base
           tabs.delete_if { |t| t[:id] == TAB_CONFERENCES }
           tabs.delete_if { |t| t[:id] == TAB_COLLABORATIONS }
           tabs.delete_if { |t| t[:id] == TAB_MODULES }
+          tabs.delete_if { |t| t[:id] == TAB_CLASSES }
           tabs.delete_if { |t| t[:id] == TAB_LIVECLASSLINKS }
         end
+        #Arrivu changes to add flip classes view start
+        if self.feature_enabled?(:flipped_classes)
+          tabs.delete_if { |t| t[:id] == TAB_MODULES }
+        else
+          tabs.delete_if { |t| t[:id] == TAB_CLASSES }
+        end
+        #Arrivu changes to add flip classes view end
         unless self.grants_rights?(user, opts[:session], :participate_as_student, :manage_content).values.any?
           tabs.delete_if{ |t| t[:visibility] == 'members' }
         end

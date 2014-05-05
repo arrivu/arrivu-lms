@@ -10,7 +10,7 @@
       <a name="module_<%= context_module.id if context_module %>"></a>
       <div class="header context-module-header clearfix">
     <div class="context-module-left-toolbar">
-      <span class="reorder_module_link" aria-hidden="true" title="<%= t('reorder_modules', %{Drag to reorder modules}) %>" style="cursor: move; <%= hidden unless @modules.length > 1 && editable %>"><%= image_tag "move.png", :alt => t('reorder_modules', 'Drag to reorder modules') %></span>
+      <span class="reorder_module_link" aria-hidden="true" title="<%= t('reorder_modules', %{Drag to reorder modules}) %>" style="cursor: move; <%= hidden unless  editable %>"><%= image_tag "move.png", :alt => t('reorder_modules', 'Drag to reorder modules') %></span>
       <span class="completion_status" style="<%= "visibility: hidden;" if !context_module || (context_module.completion_requirements || []).empty? %>">
         <%= image_tag "pass.png", :alt => t('images.alt.complete', "done"), :title => t('images.title.complete', "Module Completed"), :class => "complete_icon" %>
         <%= image_tag "blank.png", :alt => t('images.alt.incomplete', "incomplete"), :title => t('images.title.incomplete', "Module Incomplete"), :class => "incomplete_icon" %>
@@ -28,11 +28,16 @@
                     <i class="icon-settings"></i><i class="icon-mini-arrow-down"></i>
                     <span class="screenreader-only"><%= t('manage', 'Manage') %></span>
                   </a>
-                  <ul class="al-options">
-                    <li>
+                  <ul class="al-options"  role="menubar" aria-hidden="true">
+                    <% unless @context.feature_enabled?(:flipped_classes)   %>
+                        <li role="menuitem">
+                          <a href="#" rel="<%= context_url(@context, :context_url) %>/classes/<%= context_module ? context_module.id : "{{ id }}" %>/items" class="add_module_item_link icon-plus"><%= t('links.add_item', %{Add Content}) %></a>
+                        </li>
+                    <% end  %>
+                    <li role="menuitem">
                       <a href="<%= context_url(@context, :context_url) %>/classes/<%= context_module ? context_module.id : "{{ id }}" %>" class="icon-edit edit_module_link" title="<%= t('links.title.edit_module', %{Edit}) %>"><%= t('links.text.edit_module', %{Edit}) %></a>
                     </li>
-                    <li>
+                    <li role="menuitem">
                       <a href="<%= context_url(@context, :context_url) %>/classes/<%= context_module ? context_module.id : "{{ id }}" %>" class="delete_module_link icon-trash" title="<%= t('links.title.delete_module', %{Delete this module}) %>"><%= t('links.text.delete_module', %{Delete}) %></a>
                     </li>
                   </ul>
@@ -61,121 +66,142 @@
       </div>
       <div class="content">
           <% if context_module %>
-         <!--video-->
-              <div class="class_category" >
-                <div style="background-color: white;line-height: 27px;" > &nbsp; <%= image_tag "play_icon.png" ,:width=> 20%>  <b class="classes_header_text">Pre Class Videos</b>
-                  <% if editable %>
-                    <a href="#" rel="<%= context_url(@context, :context_url) %>/classes/<%= context_module ? context_module.id : "{{ id }}" %>/items" class="add_module_item_link icon-plus" data-category="pre_class_video" style="float: right;margin-right: 19px;" ><%= t('links.add_item', %{Add}) %></a>
-                  <% end %>
-                </div>
-                <div id="category" class="pre_class_video" style="margin-top: 5px;">
-                  <div class="items context_module_items <%= 'manageable' if editable %>" style="min-height: 10px;margin-bottom: 18px;">
-                      <% context_module.content_tags.pre_class_videos.not_deleted.each do |tag| %>
+            <% if @context.feature_enabled?(:flipped_classes) %>
+                 <!--video-->
+                      <div class="class_category" >
+                        <div style="background-color: white;line-height: 27px;" > &nbsp; <%= image_tag "play_icon.png" ,:width=> 20%>  <b class="classes_header_text">Pre Class Videos</b>
+                          <% if editable %>
+                            <a href="#" rel="<%= context_url(@context, :context_url) %>/classes/<%= context_module ? context_module.id : "{{ id }}" %>/items" class="add_module_item_link icon-plus" data-category="pre_class_video" style="float: right;margin-right: 19px;" ><%= t('links.add_item', %{Add}) %></a>
+                          <% end %>
+                        </div>
+                        <div id="category" class="pre_class_video" style="margin-top: 5px;">
+                          <div class="items context_module_items <%= 'manageable' if editable %>" style="min-height: 10px;margin-bottom: 18px;">
+                              <% context_module.content_tags.pre_class_videos.not_deleted.each do |tag| %>
+                                  <%= render :partial => 'context_modules/module_item', :object => tag, :locals => {:completion_criteria => context_module.completion_requirements, :editable => editable} %>
+                              <% end %>
+                          </div>
+                        </div>
+                        </div>
+
+                    <!--preclass reading_materials-->
+                    <div class="class_category" >
+                      <div style="background-color: white;line-height: 27px;" > &nbsp; <%= image_tag "practice_icon.png" ,:width=> 20%>  <b class="classes_header_text">Pre Class Reading Materials</b>
+                        <% if editable %>
+                            <a href="#" rel="<%= context_url(@context, :context_url) %>/classes/<%= context_module ? context_module.id : "{{ id }}" %>/items" class="add_module_item_link icon-plus" data-category="pre_class_reading_materials" style="float: right;margin-right: 19px;" ><%= t('links.add_item', %{Add}) %></a>
+                        <% end %>
+                      </div>
+                      <div  id="category" class="pre_class_reading_materials" style="margin-top: 5px;">
+                        <div class="items context_module_items <%= 'manageable' if editable %>" style="min-height: 10px;margin-bottom: 18px;">
+                          <% context_module.content_tags.pre_class_reading_materials.not_deleted.each do |tag| %>
+                              <%= render :partial => 'context_modules/module_item', :object => tag, :locals => {:completion_criteria => context_module.completion_requirements, :editable => editable} %>
+                          <% end %>
+                        </div>
+                      </div>
+                    </div>
+                  <!--preclass presentations-->
+                      <div class="class_category" >
+                        <div style="background-color: white;line-height: 27px;" > &nbsp; <%= image_tag "pdf_icon.png" ,:width=> 20%>  <b class="classes_header_text">Presentations</b>
+                          <% if editable %>
+                              <a href="#" rel="<%= context_url(@context, :context_url) %>/classes/<%= context_module ? context_module.id : "{{ id }}" %>/items" class="add_module_item_link icon-plus" data-category="pre_class_presentation" style="float: right;margin-right: 19px;" ><%= t('links.add_item', %{Add}) %></a>
+                          <% end %>
+                        </div>
+                        <div id="category" class="pre_class_presentation" style="margin-top: 5px;">
+                          <div class="items context_module_items <%= 'manageable' if editable %>" style="min-height: 10px;margin-bottom: 18px;">
+                            <% context_module.content_tags.pre_class_presentation.not_deleted.each do |tag| %>
+                                <%= render :partial => 'context_modules/module_item', :object => tag, :locals => {:completion_criteria => context_module.completion_requirements, :editable => editable} %>
+                            <% end %>
+                          </div>
+                        </div>
+                      </div>
+                   <!--preclass Assignments-->
+                      <div class="class_category" >
+                        <div style="background-color: white;line-height: 27px;" > &nbsp; <%= image_tag "course_assignment.png" ,:width=> 20%>  <b class="classes_header_text">Assignments</b>
+                          <% if editable %>
+                              <a href="#" rel="<%= context_url(@context, :context_url) %>/classes/<%= context_module ? context_module.id : "{{ id }}" %>/items" class="add_module_item_link icon-plus" data-category="pre_class_assignments" style="float: right;margin-right: 19px;" ><%= t('links.add_item', %{Add}) %></a>
+                          <% end %>
+                        </div>
+                        <div id="category" class="pre_class_assignments" style="margin-top: 5px;">
+                        <div class="items context_module_items <%= 'manageable' if editable %>" style="min-height: 10px;margin-bottom: 18px;">
+                            <% context_module.content_tags.pre_class_assignments.not_deleted.each do |tag| %>
+                                <%= render :partial => 'context_modules/module_item', :object => tag, :locals => {:completion_criteria => context_module.completion_requirements, :editable => editable} %>
+                            <% end %>
+                        </div>
+                        </div>
+                      </div>
+            <% else %>
+                <div class="items context_module_items <%= 'manageable' if editable %>" style="min-height: 10px;">
+                  <% if context_module %>
+                      <%
+                         tags = context_module.content_tags
+                         tags = can_do(@context, @current_user, :manage_content) ? tags.not_deleted : tags.active
+                         tags.each do |tag|
+                      %>
                           <%= render :partial => 'context_modules/module_item', :object => tag, :locals => {:completion_criteria => context_module.completion_requirements, :editable => editable} %>
                       <% end %>
-                  </div>
-                </div>
-                </div>
-
-            <!--preclass reading_materials-->
-            <div class="class_category" >
-              <div style="background-color: white;line-height: 27px;" > &nbsp; <%= image_tag "practice_icon.png" ,:width=> 20%>  <b class="classes_header_text">Pre Class Reading Materials</b>
-                <% if editable %>
-                    <a href="#" rel="<%= context_url(@context, :context_url) %>/classes/<%= context_module ? context_module.id : "{{ id }}" %>/items" class="add_module_item_link icon-plus" data-category="pre_class_reading_materials" style="float: right;margin-right: 19px;" ><%= t('links.add_item', %{Add}) %></a>
-                <% end %>
-              </div>
-              <div  id="category" class="pre_class_reading_materials" style="margin-top: 5px;">
-                <div class="items context_module_items <%= 'manageable' if editable %>" style="min-height: 10px;margin-bottom: 18px;">
-                  <% context_module.content_tags.pre_class_reading_materials.not_deleted.each do |tag| %>
-                      <%= render :partial => 'context_modules/module_item', :object => tag, :locals => {:completion_criteria => context_module.completion_requirements, :editable => editable} %>
                   <% end %>
                 </div>
-              </div>
-            </div>
-          <!--preclass presentations-->
-              <div class="class_category" >
-                <div style="background-color: white;line-height: 27px;" > &nbsp; <%= image_tag "pdf_icon.png" ,:width=> 20%>  <b class="classes_header_text">Presentations</b>
-                  <% if editable %>
-                      <a href="#" rel="<%= context_url(@context, :context_url) %>/classes/<%= context_module ? context_module.id : "{{ id }}" %>/items" class="add_module_item_link icon-plus" data-category="pre_class_presentation" style="float: right;margin-right: 19px;" ><%= t('links.add_item', %{Add}) %></a>
-                  <% end %>
-                </div>
-                <div id="category" class="pre_class_presentation" style="margin-top: 5px;">
-                  <div class="items context_module_items <%= 'manageable' if editable %>" style="min-height: 10px;margin-bottom: 18px;">
-                    <% context_module.content_tags.pre_class_presentation.not_deleted.each do |tag| %>
-                        <%= render :partial => 'context_modules/module_item', :object => tag, :locals => {:completion_criteria => context_module.completion_requirements, :editable => editable} %>
-                    <% end %>
-                  </div>
-                </div>
-              </div>
-           <!--preclass Assignments-->
-              <div class="class_category" >
-                <div style="background-color: white;line-height: 27px;" > &nbsp; <%= image_tag "course_assignment.png" ,:width=> 20%>  <b class="classes_header_text">Assignments</b>
-                  <% if editable %>
-                      <a href="#" rel="<%= context_url(@context, :context_url) %>/classes/<%= context_module ? context_module.id : "{{ id }}" %>/items" class="add_module_item_link icon-plus" data-category="pre_class_assignments" style="float: right;margin-right: 19px;" ><%= t('links.add_item', %{Add}) %></a>
-                  <% end %>
-                </div>
-                <div id="category" class="pre_class_assignments" style="margin-top: 5px;">
-                <div class="items context_module_items <%= 'manageable' if editable %>" style="min-height: 10px;margin-bottom: 18px;">
-                    <% context_module.content_tags.pre_class_assignments.not_deleted.each do |tag| %>
-                        <%= render :partial => 'context_modules/module_item', :object => tag, :locals => {:completion_criteria => context_module.completion_requirements, :editable => editable} %>
-                    <% end %>
-                </div>
-                </div>
-              </div>
+            <% end %>
           <% end %>
         <% if object.nil? %>
-            <!--video-->
-            <div class="class_category" >
-              <div style="background-color: white;line-height: 27px;" > &nbsp; <%= image_tag "play_icon.png" ,:width=> 20%>  <b class="classes_header_text">Pre Class Videos</b>
-                <% if editable %>
-                    <a href="#" rel="<%= context_url(@context, :context_url) %>/classes/<%= context_module ? context_module.id : "{{ id }}" %>/items" class="add_module_item_link icon-plus" data-category="pre_class_video" style="float: right;margin-right: 19px;" ><%= t('links.add_item', %{Add}) %></a>
-                <% end %>
-              </div>
-              <div id="category" class="pre_class_video" style="margin-top: 5px;">
+            <% if @context.feature_enabled?(:flipped_classes) %>
+                <!--video-->
+                <div class="class_category" >
+                  <div style="background-color: white;line-height: 27px;" > &nbsp; <%= image_tag "play_icon.png" ,:width=> 20%>  <b class="classes_header_text">Pre Class Videos</b>
+                    <% if editable %>
+                        <a href="#" rel="<%= context_url(@context, :context_url) %>/classes/<%= context_module ? context_module.id : "{{ id }}" %>/items" class="add_module_item_link icon-plus" data-category="pre_class_video" style="float: right;margin-right: 19px;" ><%= t('links.add_item', %{Add}) %></a>
+                    <% end %>
+                  </div>
+                  <div id="category" class="pre_class_video" style="margin-top: 5px;">
+                    <div class="items context_module_items <%= 'manageable' if editable %>" style="min-height: 10px;margin-bottom: 18px;">
+
+                    </div>
+                  </div>
+                </div>
+                <!--preclass reading_materials-->
+                <div class="class_category" >
+                  <div style="background-color: white;line-height: 27px;" > &nbsp; <%= image_tag "practice_icon.png" ,:width=> 20%>  <b class="classes_header_text">Pre Class Reading Materials</b>
+                    <% if editable %>
+                        <a href="#" rel="<%= context_url(@context, :context_url) %>/classes/<%= context_module ? context_module.id : "{{ id }}" %>/items" class="add_module_item_link icon-plus" data-category="pre_class_reading_materials" style="float: right;margin-right: 19px;" ><%= t('links.add_item', %{Add}) %></a>
+                    <% end %>
+                  </div>
+                  <div  id="category" class="pre_class_reading_materials" style="margin-top: 5px;">
+                    <div class="items context_module_items <%= 'manageable' if editable %>" style="min-height: 10px;margin-bottom: 18px;">
+
+                    </div>
+                  </div>
+                </div>
+                <!--preclass presentations-->
+                <div class="class_category" >
+                  <div style="background-color: white;line-height: 27px;" > &nbsp; <%= image_tag "pdf_icon.png" ,:width=> 20%>  <b class="classes_header_text">Presentations</b>
+                    <% if editable %>
+                        <a href="#" rel="<%= context_url(@context, :context_url) %>/classes/<%= context_module ? context_module.id : "{{ id }}" %>/items" class="add_module_item_link icon-plus" data-category="pre_class_presentation" style="float: right;margin-right: 19px;" ><%= t('links.add_item', %{Add}) %></a>
+                    <% end %>
+                  </div>
+                  <div id="category" class="pre_class_presentation" style="margin-top: 5px;">
+                    <div class="items context_module_items <%= 'manageable' if editable %>" style="min-height: 10px;margin-bottom: 18px;">
+
+                    </div>
+                  </div>
+                </div>
+                <!--preclass Assignments-->
+                <div class="class_category" >
+                  <div style="background-color: white;line-height: 27px;" > &nbsp; <%= image_tag "course_assignment.png" ,:width=> 20%>  <b class="classes_header_text">Assignments</b>
+                    <% if editable %>
+                        <a href="#" rel="<%= context_url(@context, :context_url) %>/classes/<%= context_module ? context_module.id : "{{ id }}" %>/items" class="add_module_item_link icon-plus" data-category="pre_class_assignments" style="float: right;margin-right: 19px;" ><%= t('links.add_item', %{Add}) %></a>
+                    <% end %>
+                  </div>
+                  <div id="category" class="pre_class_assignments" style="margin-top: 5px;">
+                    <div class="items context_module_items <%= 'manageable' if editable %>" style="min-height: 10px;margin-bottom: 18px;">
+
+                    </div>
+                  </div>
+                </div>
+            <% else %>
                 <div class="items context_module_items <%= 'manageable' if editable %>" style="min-height: 10px;margin-bottom: 18px;">
 
                 </div>
-              </div>
-            </div>
-            <!--preclass reading_materials-->
-            <div class="class_category" >
-              <div style="background-color: white;line-height: 27px;" > &nbsp; <%= image_tag "practice_icon.png" ,:width=> 20%>  <b class="classes_header_text">Pre Class Reading Materials</b>
-                <% if editable %>
-                    <a href="#" rel="<%= context_url(@context, :context_url) %>/classes/<%= context_module ? context_module.id : "{{ id }}" %>/items" class="add_module_item_link icon-plus" data-category="pre_class_reading_materials" style="float: right;margin-right: 19px;" ><%= t('links.add_item', %{Add}) %></a>
-                <% end %>
-              </div>
-              <div  id="category" class="pre_class_reading_materials" style="margin-top: 5px;">
-                <div class="items context_module_items <%= 'manageable' if editable %>" style="min-height: 10px;margin-bottom: 18px;">
+            <% end %>
 
-                </div>
-              </div>
-            </div>
-            <!--preclass presentations-->
-            <div class="class_category" >
-              <div style="background-color: white;line-height: 27px;" > &nbsp; <%= image_tag "pdf_icon.png" ,:width=> 20%>  <b class="classes_header_text">Presentations</b>
-                <% if editable %>
-                    <a href="#" rel="<%= context_url(@context, :context_url) %>/classes/<%= context_module ? context_module.id : "{{ id }}" %>/items" class="add_module_item_link icon-plus" data-category="pre_class_presentation" style="float: right;margin-right: 19px;" ><%= t('links.add_item', %{Add}) %></a>
-                <% end %>
-              </div>
-              <div id="category" class="pre_class_presentation" style="margin-top: 5px;">
-                <div class="items context_module_items <%= 'manageable' if editable %>" style="min-height: 10px;margin-bottom: 18px;">
-
-                </div>
-              </div>
-            </div>
-            <!--preclass Assignments-->
-            <div class="class_category" >
-              <div style="background-color: white;line-height: 27px;" > &nbsp; <%= image_tag "course_assignment.png" ,:width=> 20%>  <b class="classes_header_text">Assignments</b>
-                <% if editable %>
-                    <a href="#" rel="<%= context_url(@context, :context_url) %>/classes/<%= context_module ? context_module.id : "{{ id }}" %>/items" class="add_module_item_link icon-plus" data-category="pre_class_assignments" style="float: right;margin-right: 19px;" ><%= t('links.add_item', %{Add}) %></a>
-                <% end %>
-              </div>
-              <div id="category" class="pre_class_assignments" style="margin-top: 5px;">
-                <div class="items context_module_items <%= 'manageable' if editable %>" style="min-height: 10px;margin-bottom: 18px;">
-
-                </div>
-              </div>
-            </div>
         <% end %>
 
             <div class="collapsed">

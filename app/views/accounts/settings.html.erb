@@ -61,6 +61,15 @@
       <li><a href="#tab-features" id="tab-features-link"><%= t(:feature_options, "Feature Options") %></a></li>
     <% end %>
     <li id="terms_tab"><a href="#tab-terms"><%= t('tabs.terms',%{Terms and Conditions}) %></a></li>
+    <% if can_do(@context, @current_user, :manage_account_settings) %>
+        <li><a href="#tab-sms" id="tab-sms-settings-link">SMS Settings</a></li>
+    <% end %>
+
+    <% if Account.site_admin.grants_right?(@current_user, :manage_site_settings) %>
+        <% if can_do(@context, @current_user, :manage_account_settings) %>
+            <li><a href="#tab-plugins" id="tab-plugin-link">Plugins</a></li>
+        <% end %>
+    <% end %>
   </ul>
   <% if can_do(@context, @current_user, :manage_account_settings) %>
     <div id="tab-settings">
@@ -963,4 +972,7 @@ Allowing Draft State here will allow teachers to enable it in their individual c
   <div id="tab-terms">
     <%= render :partial =>'accounts/terms_and_conditions' %>
   </div>
+  <%= render :partial => 'accounts/sms_settings' %>
+  <%= render :partial => 'accounts/plugin_settings' %>
+
 </div>

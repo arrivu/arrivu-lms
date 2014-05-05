@@ -149,6 +149,7 @@ module Context
       res = {}
       res[:files] = self.respond_to?(:attachments) && !self.attachments.active.empty?
       res[:modules] = self.respond_to?(:context_modules) && !self.context_modules.active.empty?
+      res[:classes] = self.respond_to?(:context_modules) && !self.context_modules.active.empty?
       res[:module_groups] = self.respond_to?(:context_module_groups) && !self.context_module_groups.active.empty?
       res[:permissions] = self.respond_to?(:user_module_group_enrollments) && !self.user_module_enrollments.active.empty?
       res[:quizzes] = self.respond_to?(:quizzes) && !self.quizzes.active.empty?

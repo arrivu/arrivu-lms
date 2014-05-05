@@ -395,6 +395,7 @@ routes.draw do
     end
     get 'flip_classes' => 'context_modules#flip_classes',:path => :classes, :via => :get
     get 'classes' => 'context_modules#index',:path => :flip_classes, :via => :get
+    get 'modules' => 'context_modules#index',:as => :modules,:path => :modules, :via => :get
     resources :context_modules, :path => :classes do
       match 'items' => 'context_modules#add_item', :as => :add_item, :via => :post
       match 'reorder' => 'context_modules#reorder_items', :as => :reorder, :via => :post

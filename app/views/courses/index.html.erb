@@ -6,7 +6,7 @@
   <% end %>
 <% end %>
 
-<% if show_user_create_course_button(@current_user) %>
+<% if show_user_create_course_button(@current_user) && !@domain_root_account.Sublime_add_course_disable?%>
   <% content_for :right_side do %>
     <div class="rs-margin-lr">
       <button type="button"

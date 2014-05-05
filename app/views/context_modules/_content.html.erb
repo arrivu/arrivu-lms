@@ -12,13 +12,17 @@
 
 <div class="context-modules-main-header clearfix">
   <h2 class="context-modules-title">
-        <%= t('headings.course_modules', %{Course Classes}) %>
+    <% if @context.feature_enabled?(:flipped_classes) %>
+        <%= t('headings.course_classes', %{Course Classes}) %>
+    <% else %>
+        <%= t('headings.course_modules', %{Course Modules}) %>
+    <% end %>
   </h2>
 
   <% if can_do(@context, @current_user, :manage_content) %>
       <div class="context-modules-main-toolbar">
         <button class="btn btn-small module_progressions_link"><%= t('links.student_progress', 'View Progress') %></button>
-            <button class="btn btn-small btn-primary add_module_link"><%= t('#context_modules.buttons.add_module', 'Add a New Class') %></button>
+            <button class="btn btn-small btn-primary add_module_link"><%= @context.feature_enabled?(:flipped_classes) ?  t('#context_modules.buttons.add_class', 'Add class') : t('#context_modules.buttons.add_module', 'Add module')%></button>
             <%= link_to "Permission groups" ,permission_groups_course_context_modules_url(@context),:class => "btn btn-small btn-primary" %>
       </div>
   <% end %>
@@ -26,27 +30,27 @@
 
 <div id="no_context_modules_message" style="display:none; clear: both;">
       <% if can_do(@context.context_modules.new, @current_user, :create) %>
-          <%= mt 'help.create', <<TEXT, :button => t('#context_modules.buttons.add_module_first', 'Add a New Class')
-Course Classes let you organize your assignments, pages, files, etc. into smaller sections or units. Classes could be centered around a theme, focused on a specific topic, or even just grouped chronologically.
+          <%= mt 'help.create', <<TEXT, :button => @context.feature_enabled?(:flipped_classes) ? t('#context_modules.buttons.add_class_first', 'Add a New Class') : t('#context_modules.buttons.add_module_first', 'Add a New Module'),:name_module_or_class => @context.feature_enabled?(:flipped_classes) ? t('headings.course_classes', %{Course Classes}) : t('headings.course_modules', %{Course Modules})
+%{name_module_or_class} let you organize your assignments, pages, files, etc. into smaller sections or units. %{name_module_or_class} could be centered around a theme, focused on a specific topic, or even just grouped chronologically.
 
-You can also sequence classes by defining criteria and prerequisites for each class. Students won't be able to access classes until they have unlocked all their prerequisites. That way you can prevent students from accessing certain content or files until they have, say, gotten at least 75% on a review quiz.
+You can also sequence %{name_module_or_class} by defining criteria and prerequisites for each %{name_module_or_class}. Students won't be able to access %{name_module_or_class} until they have unlocked all their prerequisites. That way you can prevent students from accessing certain content or files until they have, say, gotten at least 75% on a review quiz.
 
-To start organizing your course into classes, click the "%{button}" button to the right.
+To start organizing your course into %{name_module_or_class}, click the "%{button}" button to the right.
 TEXT
 %>
       <% else %>
-          <p><%= t('help.no_modules', %{No classes have been defined for this course.}) %></p>
+          <p><%= @context.feature_enabled?(:flipped_classes) ? t('help.no_classes', %{No classes have been defined for this course.}) : t('help.no_modules', %{No modules have been defined for this course.}) %></p>
   <% end %>
 </div>
 <div class="hidden-readable" tabindex="0" aria-label="keyboard instructions">
   <%= t('modules_keyboard_hint',
-            'To change the order of the course classs and class items,
+            'To change the order of the %{name_module_or_class} and %{name_module_or_class} items,
         first turn the cursor off on your screen reader. Insert-z in JAWS.
-        Press tab to select the first class.
-        Press up and down to choose a class or class item.
-        Press space to select the class or class item to start dragging.
+        Press tab to select the first %{name_module_or_class}.
+        Press up and down to choose a %{name_module_or_class} or %{name_module_or_class} item.
+        Press space to select the %{name_module_or_class} or %{name_module_or_class} item to start dragging.
         Then press up and down to select a destination.
-        Then press space a second time to drop selection after destination.') %>
+        Then press space a second time to drop selection after destination.',:name_module_or_class => @context.feature_enabled?(:flipped_classes) ? t('headings.course_classes', %{Course Classes}) : t('headings.course_modules', %{Course Modules})) %>
 </div>
 
 <% keyboard_navigation([
@@ -55,7 +59,7 @@ TEXT
                                    {:key => t('keycodes.toggle_module_dragging', 'Space'), :description => t('keycode_descriptions.toggle_module_dragging', 'Select item to begin dragging, or drop previously selected item')}
                            ]) %>
     <div id="context_modules_sortable_container">
-      <div id="context_modules" tabindex="0" aria-label="<%= t('headings.course_modules', %{Course classess}) %>" class="<%= 'editable' if can_do(@context, @current_user, :manage_content) %>">
+      <div id="context_modules" tabindex="0" aria-label="<%= @context.feature_enabled?(:flipped_classes) ? t('headings.course_classes', %{Course Classes}) : t('headings.course_modules', %{Course Modules}) %>" class="<%= 'editable' if can_do(@context, @current_user, :manage_content) %>">
     <% editable = can_do(@context, @current_user, :manage_content) %>
     <% cache([@context.cache_key, editable, 'all_context_modules', collection_cache_key(@modules)].join('/')) do %>
         <% ContextModule.send(:preload_associations, @modules, :content_tags => :content) %>
@@ -73,13 +77,13 @@ TEXT
           <tr>
             <td colspan="2">
               <div class="module_name">
-                    <%= f.text_field :name, :placeholder => t('module_name', %{Class Name}), :class => 'input-block-level' %>
+                    <%= f.text_field :name, :placeholder => @context.feature_enabled?(:flipped_classes) ? t('class_name', %{Class Name}) : t('module_name', %{Module Name}), :class => 'input-block-level' %>
               </div>
             </td>
           </tr><tr>
           <td colspan="2">
             <input type="checkbox" id="unlock_module_at"/>
-                <label for="unlock_module_at"><%= t('#labels.lock_module_until', %{lock class until a given date}) %></label>
+                <label for="unlock_module_at"><%= @context.feature_enabled?(:flipped_classes) ? t('#labels.lock_class_until', %{lock class until a given date}) : t('#labels.lock_module_until', %{lock module until a given date}) %></label>
           </td>
         </tr><tr class="unlock_module_at_details">
           <td>
@@ -129,20 +133,20 @@ TEXT
               <tr>
                 <td colspan="2">
                   <%= f.check_box :publish_final_grade, :id => "publish_final_grade" %>
-                  <%= f.label :publish_final_grade, :en => "publish final grade for the student when this module is completed", :for => "publish_final_grade" %>
+                  <%= f.label :publish_final_grade, :en => @context.feature_enabled?(:flipped_classes) ? "publish final grade for the student when this class is completed" : "publish final grade for the student when this module is completed", :for => "publish_final_grade" %>
                 </td>
               </tr>
           <% end %>
           <tr>
             <td colspan="2">
               <%= f.check_box :require_sequential_progress, :id => "require_sequential_progress" %>
-              <%= f.label :require_sequential_progress, :en => "students must move through requirements in this module in sequential order", :for => "require_sequential_progress" %>
+              <%= f.label :require_sequential_progress, :en => @context.feature_enabled?(:flipped_classes) ? "students must move through requirements in this class in sequential order" : "students must move through requirements in this module in sequential order", :for => "require_sequential_progress" %>
             </td>
           </tr><tr>
           <td colspan="2">
             <div class="button-container">
               <button type="button" class="btn cancel_button"><%= t('#buttons.cancel', %{Cancel}) %></button>
-              <button type="submit" class="btn btn-primary submit_button"><%= t('buttons.add_module', %{Add Module}) %></button>
+              <button type="submit" class="btn btn-primary submit_button"><%= @context.feature_enabled?(:flipped_classes) ? t('#context_modules.buttons.add_module', 'Add module') :  t('#context_modules.buttons.add_class', 'Add class') %></button>
             </div>
             <a href="<%= context_url(@context, :context_context_modules_url) %>" style="display: none;" class="add_context_module_url">&nbsp;</a>
           </td>
@@ -220,8 +224,8 @@ TEXT
       </div>
       </p>
     </div>
-        <div id="student_progression_dialog" style="display: none;" title="<%= t 'titles.student_progression', 'class Progression by Student' %>">
-          <h2 style="margin-top: 0;"><%= t('headings.student_progress', %{class Progress by Student}) %></h2>
+        <div id="student_progression_dialog" style="display: none;" title="<%= @context.feature_enabled?(:flipped_classes) ? t('titles.student_progression_class', 'Class Progression by Student') : t('titles.student_progression', 'Module Progression by Student') %>">
+          <h2 style="margin-top: 0;"><%= @context.feature_enabled?(:flipped_classes) ? t('titles.student_progression_class', 'Class Progression by Student') : t('headings.student_progress', %{Module Progress by Student}) %></h2>
       <table class="side_tabs_table" style="width: 100%;">
         <tr>
           <td class="left">
@@ -249,7 +253,7 @@ TEXT
                 <thead>
                 <tr>
                   <th>&nbsp;</th>
-                      <th><%= t('table_headings.module', %{class}) %></th>
+                      <th><%= @context.feature_enabled?(:flipped_classes) ? t('table_headings.class', %{Class}) : t('table_headings.module', %{Module}) %></th>
                   <th><%= t('table_headings.state', %{State}) %></th>
                 </tr>
                 </thead>
@@ -279,22 +283,22 @@ TEXT
       <div style="max-height: 200px; overflow: auto;">
         <div>
           <div class="completed_list progression_list" style="margin-bottom: 10px;">
-                <h3 style="margin: 0;"><%= t('headings.students_completed', %{Students who have Completed the class}) %></h3>
+                <h3 style="margin: 0;"><%= @context.feature_enabled?(:flipped_classes) ? t('headings.students_completed_class', %{Students who have Completed the class}) : t('headings.students_completed', %{Students who have Completed the module}) %></h3>
                 <ul>
                 </ul>
               </div>
               <div class="started_list progression_list" style="margin-bottom: 10px;">
-                <h3 style="margin: 0;"><%= t('headings.students_in_progress', %{Students who are Working on the class}) %></h3>
+                <h3 style="margin: 0;"><%= @context.feature_enabled?(:flipped_classes) ? t('headings.students_in_progress_class', %{Students who are Working on the Class}) : t('headings.students_in_progress', %{Students who are Working on the Module}) %></h3>
                 <ul>
                 </ul>
               </div>
               <div class="unlocked_list progression_list" style="margin-bottom: 10px;">
-                <h3 style="margin: 0;"><%= t('headings.students_unlocked', %{Students who have Unlocked (but not started) the class}) %></h3>
+                <h3 style="margin: 0;"><%= @context.feature_enabled?(:flipped_classes) ? t('headings.students_unlocked_class', %{Students who have Unlocked (but not started) the class}) : t('headings.students_unlocked', %{Students who have Unlocked (but not started) the module}) %></h3>
                 <ul>
                 </ul>
               </div>
               <div class="locked_list progression_list" style="margin-bottom: 10px;">
-                <h3 style="margin: 0;"><%= t('headings.students_locked', %{Students who haven't Unlocked the class}) %></h3>
+                <h3 style="margin: 0;"><%= @context.feature_enabled?(:flipped_classes) ? t('headings.students_locked_class', %{Students who haven't Unlocked the class}) : t('headings.students_locked', %{Students who haven't Unlocked the module}) %></h3>
             <ul>
             </ul>
           </div>
@@ -306,9 +310,9 @@ TEXT
   <a href="<%= context_url(@context, :progressions_context_context_modules_url) %>" class="progression_list_url">&nbsp;</a>
   <a href="<%= context_url(@context, :context_context_modules_assignment_info_url) %>" class="assignment_info_url">&nbsp;</a>
   <select id="module_list">
-        <option value="">[ <%= t('select_module.instructions', %{Select class}) %> ]</option>
+        <option value="">[ <%= @context.feature_enabled?(:flipped_classes) ? t('select_module.instructions_class', %{Select class}) : t('select_module.instructions', %{Select module}) %> ]</option>
     <% @modules.each do |m| %>
-            <option value="<%= m.id %>" class="context_module_option context_module_<%= m.id %>"><%= t 'select_module.name', 'the class, %{module}', :module => m.name %></option>
+            <option value="<%= m.id %>" class="context_module_option context_module_<%= m.id %>"><%= t 'select_module.name', 'the module, %{module}', :module => m.name %></option>
     <% end %>
   </select>
   <div id="display_criterion_blank" class="criterion" style="display: none; float: left;">
@@ -380,7 +384,7 @@ TEXT
       <li>
         <span class="keycode"><%= t('keycodes.next', %{j}) %></span>
         <span class="colon">:</span>
-            <span class="description"><%= t('key.description.next', %{Next class/Item}) %></span>
+            <span class="description"><%= t('key.description.next', %{Next "%{}"/Item}) %></span>
       </li>
       <li>
         <span class="keycode"><%= t('keycodes.previous', %{k}) %></span>
@@ -390,12 +394,12 @@ TEXT
       <li>
         <span class="keycode"><%= t('keycodes.edit', %{e}) %></span>
         <span class="colon">:</span>
-            <span class="description"><%= t('key.description.edit', %{Edit class/Item}) %></span>
+            <span class="description"><%= t('key.description.edit', %{Edit %{name_module_or_class}/Item},:name_module_or_class => @context.feature_enabled?(:flipped_classes) ? t('headings.course_classes', %{Course Classes}) : t('headings.course_modules', %{Course Modules})) %></span>
       </li>
       <li>
         <span class="keycode"><%= t('keycodes.delete', %{d}) %></span>
         <span class="colon">:</span>
-            <span class="description"><%= t('key.description.delete', %{Delete Current class/Item}) %></span>
+            <span class="description"><%= t('key.description.delete', %{Delete Current %{name_module_or_class}/Item},:name_module_or_class => @context.feature_enabled?(:flipped_classes) ? t('headings.course_classes', %{Course Classes}) : t('headings.course_modules', %{Course Modules})) %></span>
       </li>
       <li>
         <span class="keycode"><%= t('keycodes.indent', %{i}) %></span>
@@ -410,7 +414,7 @@ TEXT
       <li>
         <span class="keycode"><%= t('keycodes.new', %{n}) %></span>
         <span class="colon">:</span>
-            <span class="description"><%= t('key.description.new', %{New class}) %></span>
+            <span class="description"><%= t('key.description.new', %{New %{name_module_or_class}},:name_module_or_class => @context.feature_enabled?(:flipped_classes) ? t('headings.course_classes', %{Course Classes}) : t('headings.course_modules', %{Course Modules})) %></span>
       </li>
     </ul>
 <% end %>

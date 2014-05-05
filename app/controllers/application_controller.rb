@@ -1312,19 +1312,21 @@ class ApplicationController < ActionController::Base
       elsif feature == :linked_in
         !!LinkedIn.config
       elsif feature == :google_docs
-        !!GoogleDocs.config
+        if @domain_root_account
+          !!GoogleDocs.config   unless  @domain_root_account.Sublime_google_docs_disable?
+        end
       elsif feature == :etherpad
         !!EtherpadCollaboration.config
       elsif feature == :kaltura
-        !!Kaltura::ClientV3.config
+        !!Kaltura::ClientV3.config and !!!@domain_root_account.Sublime_kaltura_disable?
       elsif feature == :web_conferences
-        !!WebConference.config
+        !!WebConference.config and !!!@domain_root_account.Sublime_bbb_disable?
       elsif feature == :scribd
         !!ScribdAPI.config
       elsif feature == :scribd_html5
         ScribdAPI.config && ScribdAPI.config[:enable_html5_viewer]
       elsif feature == :crocodoc
-        !!Canvas::Crocodoc.config
+        !!Canvas::Crocodoc.config unless @domain_root_account.Sublime_Crocodoc_disable?
       elsif feature == :lockdown_browser
         Canvas::Plugin.all_for_tag(:lockdown_browser).any? { |p| p.settings[:enabled] }
       else
