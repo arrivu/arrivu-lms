@@ -1,7 +1,7 @@
 <%
   hide_add_course ||= false; hide_add_user ||= false
-  show_course = !hide_add_course && can_do(@account, @current_user, :manage_courses)
-  show_user = !hide_add_user && can_do(@account.root_account, @current_user, :manage_user_logins)
+  show_course = !hide_add_course && can_do(@account, @current_user, :manage_courses) && !@domain_root_account.Sublime_add_course_disable?
+  show_user = !hide_add_user && can_do(@account.root_account, @current_user, :manage_user_logins) && !@domain_root_account.Sublime_add_user_disable?
 %>
 
 <% if show_course || show_user %>

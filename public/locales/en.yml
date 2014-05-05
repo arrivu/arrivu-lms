@@ -5628,6 +5628,9 @@ en:
       a new unpublished state that is invisible to students and excluded from grade
       calculations. Caution--disabling this feature may delete newly created or edited
       content from the teacher's view.
+  flipped_classes_description: |-
+      This feature changes the modules listing in to Flipped Class design so that
+      we can add Pre-class materials,Videos etc.,
   due_dates: 
     due_at: "due: %{assignment_due_date_time}"
     multiple_due_dates: "due: Multiple Due Dates"
@@ -6210,6 +6213,7 @@ en:
   features: 
     differentiated_assignments: "Differentiated Assignments"
     draft_state: "Draft State"
+    flipped_classes: "Flipped classes"
     draft_state_account_disable_warning: |-
         Turning this feature off will impact existing courses. For assistance in disabling this feature, please contact
         your Canvas Success Manager.

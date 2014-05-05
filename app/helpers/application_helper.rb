@@ -17,7 +17,8 @@
 #
 
 # Methods added to this helper will be available to all templates in the application.
-module ApplicationHelper
+module
+ApplicationHelper
   include TextHelper
   include HtmlTextHelper
   include LocaleSelection
@@ -367,14 +368,30 @@ module ApplicationHelper
           hide = tab[:hidden] || tab[:hidden_unused]
           class_name = tab[:css_class].downcase.replace_whitespace("-")
           class_name += ' active' if @active_tab == tab[:css_class]
-          #unless (tab[:label] == "Sub-Accounts") || (tab[:label] == "Outcomes")  || (tab[:label] == "Pages")
+          #Plugin settings start
+          if (tab[:label] == "Sub-Accounts" and !!@domain_root_account.Sublime_sub_account_disable?)
+            tab[:href] ="hide_menu"
+          end
+
+          if (tab[:label] == "Grades" and !!@domain_root_account.Sublime_grade_disable?) || (tab[:label] == "Outcomes" and !!@domain_root_account.Sublime_outcomes_disable?)
+            tab[:href] ="hide_menu"
+          end
+
+          if (tab[:label] == "Grading Schemes" and !!@domain_root_account.Sublime_grade_disable?)
+            tab[:href] ="hide_menu"
+          end
+          #Plugin settings end
+
             if FileTest.exist?("#{RAILS_ROOT}/public/images/#{tab[:css_class]}.png")
               link_icon =  tab[:css_class]
             else
               link_icon = "missing"
             end
+
+           unless tab[:href] == "hide_menu"
             html << "<li class='section #{"section-tab-hidden" if hide }'>" + "<a href='"+path+"' class='"+class_name+"'> "+image_tag("#{link_icon}.png",:style => 'padding: 0px 10px 0px 0px;' ) + tab[:label] + "</a>" + "</li>" if tab[:href]
-          #end
+           end
+
         end
         html << "</ul></nav>"
         html.join("")
@@ -915,7 +932,7 @@ module ApplicationHelper
   def add_class_view_crumbs
     @skip_crumb = true
     if @context.is_a?(Course) and params[:module_item_id].present?
-      add_crumb("Classes",named_context_url(@context, :context_context_modules_url))
+      add_crumb(@context.feature_enabled?(:flipped_classes) ?  "Classes" : "Modules",named_context_url(@context, :context_context_modules_url))
       content_tag = ContentTag.find(params[:module_item_id])
       @context_module = content_tag.context_module
       add_crumb(@context_module.name,course_context_module_url(@context,@context_module))

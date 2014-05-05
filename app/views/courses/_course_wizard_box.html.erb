@@ -21,7 +21,7 @@
           </div>
         </li>
       <% end %>
-      <% if can_do @context, @current_user, :manage_students %>
+      <% if can_do @context, @current_user, :manage_students && !@domain_root_account.Sublime_add_user_disable? %>
         <li class="option students_step <%=  'completed' unless @context.students.first.nil? %>">
           <a href="<%= course_users_path(course_id: @context) %>" class="header icon-group-new"><%= t('links.students', %{Add Students to the Course}) %></a>
           <div class="details" style="display: none;">

@@ -45,16 +45,20 @@ require([
       errorData = {};
 
       // Email errors
-      if(data.pseudonym.unique_id){
-        errorList = [];
+      if(data.pseudonym){
+          if(data.pseudonym.unique_id){
+            errorList = [];
 
-        $.each(data.pseudonym.unique_id, function(i){
-          if(this.message){
-            errorList.push(this.message);
+            $.each(data.pseudonym.unique_id, function(i){
+              if(this.message){
+                errorList.push(this.message);
+              }
+            });
+
+            errorData['unique_id'] = errorList.join(', ');
           }
-        });
-
-        errorData['unique_id'] = errorList.join(', ');
+      }else{
+          errorData['unique_id'] = data.course_limit
       }
 
       $(this).formErrors(errorData);

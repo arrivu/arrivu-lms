@@ -3146,6 +3146,7 @@ en-GB:
       add_item: "Add item"
       add_module: "Create a module"
       add_module_first: "Add a new module"
+      add_class_first: "Add a new class"
       update: "Update module"
     confirm: 
       delete: "Are you sure you want to delete this module?"
@@ -3155,25 +3156,32 @@ en-GB:
       assignment_points_possible: "out of %{points_possible}"
       buttons: 
         add_module: "Add module"
+        add_class: "Add class"
         add_prerequisite: "Add prerequisite"
       criterion_for_assignment: "For %{assignment} users must %{select_criterion}"
       headings: 
         add_prerequisite: "Add prerequisite to %{name}"
         course_modules: "Course modules"
+        course_classes: "Course Classes"
         student_progress: "Module progress by student"
         student_progress_for_module: "Student progress for %{module}"
         students_completed: "Students who have completed the module"
+        students_completed_class: "Students who have completed the class"
         students_in_progress: "Students who are working on the module"
+        students_in_progress_class: "Students who are Working on the Class"
         students_locked: "Students who haven't unlocked the module"
+        students_locked_class: "Students who haven't unlocked the class"
         students_unlocked: "Students who have unlocked (but not started) the module"
+        students_unlocked_class: "Students who have unlocked (but not started) the class"
       help: 
         create: |-
-            Course modules let you organise your assignments, pages, files, etc. into smaller sections or units. Modules could be centred around a theme, focused on a specific topic, or even just grouped chronologically.
+            "%{name_module_or_class}" let you organise your assignments, pages, files, etc. into smaller sections or units. "%{name_module_or_class}" could be centred around a theme, focused on a specific topic, or even just grouped chronologically.
             
-            You can also sequence modules by defining criteria and prerequisites for each module. Students won't be able to access modules until they have unlocked all their prerequisites. That way you can prevent students from accessing certain content or files until they have, for example, achieved at least 75% on a review quiz.
+            You can also sequence "%{name_module_or_class}" by defining criteria and prerequisites for each "%{name_module_or_class}". Students won't be able to access "%{name_module_or_class}" until they have unlocked all their prerequisites. That way you can prevent students from accessing certain content or files until they have, for example, achieved at least 75% on a review quiz.
             
-            To start organising your course into modules, click the "%{button}" button to the right.
+            To start organising your course into "%{name_module_or_class}", click the "%{button}" button to the right.
         no_modules: "No modules have been defined for this course."
+        no_classes: "No classes have been defined for this course."
       images: 
         alt: 
           min_score: "minimum score"
@@ -3193,13 +3201,13 @@ en-GB:
           zero: "Don't indent"
       key: 
         description: 
-          delete: "Delete current module/item"
-          edit: "Edit module/item"
+          delete: "Delete current "%{name_module_or_class}"/item"
+          edit: "Edit "%{name_module_or_class}"/item"
           indent: "Indent current item"
-          new: "New module"
-          next: "Next module/item"
+          new: "New "%{name_module_or_class}""
+          next: "Next "%{name_module_or_class}"/item"
           outdent: "Outdent current item"
-          previous: "Previous module/item"
+          previous: "Previous "%{name_module_or_class}"/item"
       keycode_descriptions: 
         next_module_item: "Select next module or module item"
         previous_module_item: "Select previous module or module item"
@@ -3238,7 +3246,8 @@ en-GB:
       module: module
       module_details: "Modules are shown in sequential order, so only modules that are above %{name} can be set as prerequisites."
       module_name: "Module name"
-      modules_keyboard_hint: "To change the order of the course modules and module items, first turn the cursor off on your screen reader. Insert-z in JAWS. Press tab to select the first module. Press up and down to choose a module or module item. Press space to select the module or module item to start dragging. Then press up and down to select a destination. Then press space a second time to drop selection after destination."
+      class_name: "Class name"
+      modules_keyboard_hint: "To change the order of the "%{name_module_or_class}" and "%{name_module_or_class}" items, first turn the cursor off on your screen reader. Insert-z in JAWS. Press tab to select the first "%{name_module_or_class}". Press up and down to choose a "%{name_module_or_class}" or "%{name_module_or_class}" item. Press space to select the "%{name_module_or_class}" or "%{name_module_or_class}" item to start dragging. Then press up and down to select a destination. Then press space a second time to drop selection after destination."
       must_complete_prerequisites: "They must complete"
       no_preprequisites: "No prerequisites defined"
       no_requirements: "No requirements defined"
@@ -3253,14 +3262,17 @@ en-GB:
         must_view: "view the item"
       select_module: 
         instructions: "Select module"
+        instructions_class: "Select Class"
         name: "the class, %{module}"
       select_prerequisite: "Select the type of prerequisite. Students cannot see a module until all prerequisites are satisfied."
       student_name: "Student name"
       table_headings: 
         module: Module
+        class :Class
         state: State
       titles: 
         student_progression: "Module progression by student"
+        student_progression_class: "Class progression by student"
     context_module: 
       context_module: 
         draft: (Draft)
@@ -3298,6 +3310,7 @@ en-GB:
     index: 
       titles: 
         course_modules: "Course modules"
+        course_classes: "Course classes"
     module_empty: "There are no items in the module \"%{module}\""
     module_item: 
       drag_to_reorder: "Drag to reorder or move item to another module"
@@ -6788,6 +6801,7 @@ en-GB:
       last_error: "Last error"
   labels: 
     lock_module_until: "lock module until a given date"
+    lock_class_until: "lock class until a given date"
   layouts: 
     application: 
       instructure_description: "Arrivu LMS, makers of the  learning management system"
