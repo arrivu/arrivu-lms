@@ -114,6 +114,8 @@ define([
 
   $(document).ready(function() {
     var $add_section_form = $("#add_section_form"),
+        $upload_image_form   = $("#upload_image_form"),
+        $upload_back_ground_image_form = $("#upload_background_image_form"),
         $edit_section_form = $("#edit_section_form"),
         $course_form = $("#course_form"),
         $enrollment_dialog = $("#enrollment_dialog"),
@@ -501,8 +503,78 @@ define([
               $(this).parent(".report_dialog").dialog('close');
           }
       });
+      //arrivu changes
+      $("#tab-images").find(".upload_new_image_link").click(function(){
+          $("#upload_image_form").toggle()
+      });
+      $("#tab-images").find(".upload_new_background_image_link").click(function(){
+          $("#upload_background_image_form").toggle()
+      });
+      $upload_image_form.formSubmit({
+          fileUpload: true,
+          preparedFileUpload: true,
+          singleFile: true,
+          object_name: 'attachment',
+          context_code: $("#editor_tabs .context_code").text(),
+          folder_id: function() {
+              return $(this).find("[name='attachment[folder_id]']").val();
+          },
+          upload_only: true,
+          processData: function(data) {
+              data['attachment[display_name]'] = $upload_image_form.find(".file_name").val();
+              return data;
+          },
+          beforeSubmit: function(data) {
+              $upload_image_form.find(".uploading").slideDown();
+              var val= $("#upload_image_form").find("#attachment_uploaded_data").val() ;
+              if(val === ""){
+                  $upload_image_form.find(".uploading").slideUp();
+                  alert("Please choose a file to upload");
 
+              }
+          },
+          success: function(data){
+              course_id = $("#upload_background_image_form").find(".uploading").attr('id'),
+                  course_image = $('#course_image');
+              course_image.attr('src', "/courses/"+course_id+"/files/"+ data.attachment.id +"/preview");
+              $upload_image_form.find(".uploading").hide();
+          },
+          error: function(data) {
+              $upload_image_form.find(".uploading").slideUp();
 
+          }
 
+      });
+      $upload_back_ground_image_form.formSubmit({
+          fileUpload: true,
+          preparedFileUpload: true,
+          singleFile: true,
+          object_name: 'attachment',
+          context_code: $("#editor_tabs .context_code").text(),
+          folder_id: function() {
+              return $(this).find("[name='attachment[folder_id]']").val();
+          },
+          upload_only: true,
+          processData: function(data) {
+              data['attachment[display_name]'] =  $upload_back_ground_image_form.find(".file_name").val();
+              return data;
+          },
+          beforeSubmit: function(data) {
+              $upload_back_ground_image_form.find(".uploading").slideDown();
+              var val=$("#upload_background_image_form").find("#attachment_uploaded_data").val() ;
+              if(val === ""){
+                  $upload_back_ground_image_form.find(".uploading").slideUp();
+                  alert("Please choose a file to upload");
+              }
+          },
+          success: function(data){
+              course_id = $("#upload_background_image_form").find(".uploading").attr('id');
+              course_background_image = $('#course_background_image');
+              course_background_image.attr('src', "/courses/"+course_id+"/files/"+ data.attachment.id +"/preview");
+              $upload_back_ground_image_form.find(".uploading").hide();
+
+          }
+      });
+  //end of arrivu chnages
   });
 });

@@ -1,0 +1,59 @@
+{{#if popular_course}}
+<div class="span3 content-box resource" style="float: left;height: 389px;left: 100px;" id="is_a_popular_course" data-id="{{popular_id}}">
+    <div class="ribbon-wrapper">
+        <div class="ribbon-wrapper-green"><div class="ribbon-green">Popular Course</div></div>
+    </div>
+{{else}}
+<div class="span3 content-box resource" style="float: left;height: 410px;left: 100px;" id="is_not_a_popular_course" >
+{{/if}}
+
+    <div class="type-tag-positioner" style="background-image: url('{{course_background_image}}')">
+        <img alt="Course_image" class="course-badge img-circle" src="{{course_image}}" style="padding:5px;">
+        <div class="type ribbon1" style="background-color: darkblue;">
+            <span>Categories</span>
+        </div>
+    </div>
+    <div class="details" data-id="{{id}}" style="padding: 13.5em 18px 2em 15px;color: #005580">
+        <h2>
+            {{course_name}}
+        </h2>
+        <table style="margin-top: 23px;color:#0F0D0D;;font-weight: 100;">
+            <tr>
+                <td style="padding-left: 12px;">
+                    <img src="images/icon-book.png">
+                </td>
+                <td>
+
+                </td>
+                <td style="padding-left: 49px;">
+                    <img src="images/icon-user.png">
+                </td>
+                <td style="padding-left:2px">
+                    {{users_count}}
+                </td>
+                <td style="padding-left: 49px;">
+                    <img src="images/icon-tag.png">
+                </td>
+                <td style="padding-left: 2px">
+                    {{tags_count}}
+                </td>
+            </tr>
+        </table>
+        <ul class="tags" style="list-style-type: none;">
+            {{#each course_tags}}
+                <li>
+                    <a href="#"><b>{{tag_name}}</b>
+                        <span>{{each_tag_count}}</span>
+                    </a>
+
+                </li>
+            {{/each}}
+
+        </ul>
+
+        <p class="desc" style="height:36px">
+            {{course_short_decription}}
+        </p>
+        </div>
+    </div>
+</div>

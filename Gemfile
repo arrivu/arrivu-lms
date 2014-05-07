@@ -1,5 +1,8 @@
 source 'http://rubygems.org/'
 
+require File.expand_path("../config/e_learning", __FILE__)
+puts "ELEARNING: #{ELEARNING}"
+
 # this has to use 1.8.7 hash syntax to not raise a parser exception on 1.8.7
 if RUBY_VERSION == "2.0.0"
   warn "Ruby 2.0 support is untested"

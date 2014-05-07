@@ -89,7 +89,11 @@
       </tr><tr>
         <td><%= f.label :enrollment_term_id, :en => "Enrollment Term" %></td>
         <td><%= f.select :enrollment_term_id, @root_account.enrollment_terms.active.order(EnrollmentTerm.nulls(:first, :start_at)).map{|t| [t.name, t.id] }, :selected => @term && @term.id %></td>
-      </tr><tr>
+      </tr>
+      <% if ELEARNING %>
+          <%= render :partial => 'accounts/course_taggings'  %>
+      <% end %>
+      <tr>
         <td colspan="2">
           <div class="button-container">
             <button type="button" class="btn dialog_closer"><%= t("#buttons.cancel", "Cancel") %></button>

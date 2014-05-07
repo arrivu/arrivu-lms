@@ -1,0 +1,40 @@
+<fieldset>
+ <table>
+    <tr>
+      <td>
+        <label style="width: 76px;margin-left: 54px"  for="course_name"> Name</label>
+      </td>
+      <td>
+        <input type="text" style="width: 137px;margin-left: 56px;margin-bottom: 12PX;" class="text_field" id="course_price" value="{{ENV.course_name}}" name="course_price">
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label style="width: 76px;margin-left: 54px"  for="course_price"> Price</label>
+      </td>
+      <td>
+        <input type="text" style="width: 137px;margin-left: 56px;margin-bottom: 12PX;" class="text_field" id="course_price" value="{{price}}" name="course_price">
+      </td>
+    </tr>
+    <tr>
+      <td>
+         <label style="width:100px;margin-left: 50px;"  for="start_date"> Start Date</label>
+      </td>
+      <td>
+        <div class="controls">
+          <input type="text" style="width: 100px;margin-left: -125px;margin-bottom: 10PX;" class ="date_field" name="start_date" id="start_date" value={{start_at}}>
+         </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label style="width:100px;margin-left: 50px;"  for="start_date"> End Date</label>
+      </td>
+      <td>
+        <div class="controls">
+          <input type="text" style="width: 100px;margin-left: -125px;margin-bottom: 11PX;" class="date_field" name="end_date" id="end_date" value="{{end_at}}" >
+        </div>
+      </td>
+    </tr>
+  </table>
+</fieldset>

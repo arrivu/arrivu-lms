@@ -209,7 +209,7 @@ class CoursesController < ApplicationController
 
   include Api::V1::Course
   include Api::V1::Progress
-
+  include TagsHelper
   # @API List your courses
   # Returns the list of active courses for the current user.
   #
@@ -431,6 +431,9 @@ class CoursesController < ApplicationController
         if @course.save
           Auditors::Course.record_created(@course, @current_user, changes)
           @course.enroll_user(@current_user, 'TeacherEnrollment', :enrollment_state => 'active') if params[:enroll_me].to_s == 'true'
+          if ELEARNING
+            tag_list(params[:tag_tokens], @course, @current_user)  unless params[:tag_tokens].nil?
+          end
           # offer updates the workflow state, saving the record without doing validation callbacks
           @course.offer if api_request? and params[:offer].present?
           format.html { redirect_to @course }
@@ -808,6 +811,11 @@ class CoursesController < ApplicationController
   #   }
   def settings
     get_context
+    if ELEARNING
+      if params[:course_image_upload]
+        add_course_image
+      end
+    end
     last_user_access_course_report
     if authorized_action(@context, @current_user, :read_as_admin)
       if api_request?
@@ -816,6 +824,9 @@ class CoursesController < ApplicationController
       end
 
       load_all_contexts(:context => @context)
+      if ELEARNING
+        @course_tags = @context.tags.map(&:attributes).to_json(:except => ["account_id","created_at","updated_at"])
+      end
 
       @all_roles = Role.custom_roles_and_counts_for_course(@context, @current_user, true)
 
@@ -1654,6 +1665,9 @@ class CoursesController < ApplicationController
         changes = changed_settings(@course.changes, @course.settings, old_settings)
 
         if @course.save
+          if ELEARNING
+            tag_list(params[:tag_tokens], @course, @current_user)  unless params[:tag_tokens].nil?
+          end
           Auditors::Course.record_updated(@course, @current_user, changes)
           @current_user.touch
           if params[:update_default_pages]
@@ -1863,5 +1877,108 @@ class CoursesController < ApplicationController
       end
     end
   end
- end
+
+  #arrivu changes
+  def add_course_image
+    if (folder_id = params[:attachment].delete(:folder_id)) && folder_id.present?
+      @folder = @context.folders.active.find_by_id(folder_id)
+    end
+    @folder ||= Folder.unfiled_folder(@context)
+    params[:attachment][:uploaded_data] ||= params[:attachment_uploaded_data]
+    params[:attachment][:uploaded_data] ||= params[:file]
+    params[:attachment][:user] = @current_user
+    params[:attachment].delete :context_id
+    params[:attachment].delete :context_type
+    duplicate_handling = params.delete :duplicate_handling
+    @attachment ||= @context.attachments.build
+    if authorized_action(@attachment, @current_user, :create)
+      get_quota
+      return if (params[:check_quota_after].nil? || params[:check_quota_after] == '1') &&
+          quota_exceeded(named_context_url(@context, :context_files_url))
+
+      respond_to do |format|
+        @attachment.folder_id ||= @folder.id
+        @attachment.workflow_state = nil
+        @attachment.file_state = 'available'
+        success = nil
+        if params[:attachment][:uploaded_data]
+          success = @attachment.update_attributes(params[:attachment])
+          @attachment.errors.add(:base, t('errors.server_error', "Upload failed, server error, please try again.")) unless success
+        else
+          @attachment.errors.add(:base, t('errors.missing_field', "Upload failed, expected form field missing"))
+        end
+        deleted_attachments = @attachment.handle_duplicates(duplicate_handling)
+        if success
+          if (params[:course_image_upload] == "back_ground_image")
+            if @context.course_image.nil?
+              @course_image = CourseImage.new(account_id: @domain_root_account.id,course_id: @context.id,course_back_ground_image_attachment_id: @attachment.id)
+            elsif @context.course_image.course_back_ground_image_attachment_id.nil?
+              @background_image =CourseImage.find(@context.course_image.id)
+              @course_image = @background_image.update_attributes(:course_back_ground_image_attachment_id => @attachment.id)
+            else
+              @background_image =CourseImage.find(@context.course_image.id)
+              @prev_attachment = Attachment.find(@context.course_image.course_back_ground_image_attachment_id)
+              if authorized_action(@attachment, @current_user, :delete)
+                @course_image = @background_image.update_attributes(:course_back_ground_image_attachment_id => @attachment.id)
+                @prev_attachment.delete
+              end
+            end
+          elsif(params[:course_image_upload] == "image")
+            if @context.course_image.nil?
+              @course_image = CourseImage.new(account_id: @domain_root_account.id,course_id: @context.id,course_image_attachment_id: @attachment.id)
+            elsif @context.course_image.course_image_attachment_id.nil?
+              @image =CourseImage.find(@context.course_image.id)
+              @course_image = @image.update_attributes(:course_image_attachment_id => @attachment.id)
+            else
+              @image =CourseImage.find(@context.course_image.id)
+              @prev_attachment = Attachment.find(@context.course_image.course_image_attachment_id)
+              if authorized_action(@attachment, @current_user, :delete)
+                @course_image = @image.update_attributes(:course_image_attachment_id => @attachment.id)
+                @prev_attachment.delete
+              end
+            end
+          end
+          if @context.course_image.nil?
+            @course_image.save
+          end
+          format.html { return_to(params[:return_to], named_context_url(@context, :context_files_url)) }
+          format.json do
+            render_attachment_json(@attachment, deleted_attachments, @folder)
+          end
+          format.text do
+            render_attachment_json(@attachment, deleted_attachments, @folder)
+          end
+        else
+          format.html { render :action => "new" }
+          format.json { render :json => @attachment.errors }
+          format.text { render :json => @attachment.errors }
+        end
+      end
+    end
+  end
+
+
+  def render_attachment_json(attachment, deleted_attachments, folder = attachment.folder)
+    json = {
+        :attachment => attachment.as_json(
+            allow: :uuid,
+            methods: [:uuid,:readable_size,:mime_class,:currently_locked,:scribdable?,:thumbnail_url],
+            permissions: {user: @current_user, session: session},
+            include_root: false
+        ),
+        :deleted_attachment_ids => deleted_attachments.map(&:id)
+    }
+    if folder.name == 'profile pictures'
+      json[:avatar] = avatar_json(@current_user, attachment, { :type => 'attachment' })
+    end
+
+    render :json => json, :as_text => true
+  end
+end
+#end of arrivu chnages
+
+
+
+
+
 

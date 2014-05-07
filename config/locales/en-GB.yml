@@ -3175,11 +3175,11 @@ en-GB:
         students_unlocked_class: "Students who have unlocked (but not started) the class"
       help: 
         create: |-
-            "%{name_module_or_class}" let you organise your assignments, pages, files, etc. into smaller sections or units. "%{name_module_or_class}" could be centred around a theme, focused on a specific topic, or even just grouped chronologically.
+            %{name_module_or_class} let you organise your assignments, pages, files, etc. into smaller sections or units. %{name_module_or_class} could be centred around a theme, focused on a specific topic, or even just grouped chronologically.
             
-            You can also sequence "%{name_module_or_class}" by defining criteria and prerequisites for each "%{name_module_or_class}". Students won't be able to access "%{name_module_or_class}" until they have unlocked all their prerequisites. That way you can prevent students from accessing certain content or files until they have, for example, achieved at least 75% on a review quiz.
+            You can also sequence %{name_module_or_class} by defining criteria and prerequisites for each %{name_module_or_class}. Students won't be able to access %{name_module_or_class} until they have unlocked all their prerequisites. That way you can prevent students from accessing certain content or files until they have, for example, achieved at least 75% on a review quiz.
             
-            To start organising your course into "%{name_module_or_class}", click the "%{button}" button to the right.
+            To start organising your course into %{name_module_or_class}, click the "%{button}" button to the right.
         no_modules: "No modules have been defined for this course."
         no_classes: "No classes have been defined for this course."
       images: 
@@ -3201,13 +3201,13 @@ en-GB:
           zero: "Don't indent"
       key: 
         description: 
-          delete: "Delete current "%{name_module_or_class}"/item"
-          edit: "Edit "%{name_module_or_class}"/item"
+          delete: "Delete current %{name_module_or_class} /item"
+          edit: "Edit %{name_module_or_class}/item"
           indent: "Indent current item"
-          new: "New "%{name_module_or_class}""
-          next: "Next "%{name_module_or_class}"/item"
+          new: "New %{name_module_or_class}"
+          next: "Next %{name_module_or_class}/item"
           outdent: "Outdent current item"
-          previous: "Previous "%{name_module_or_class}"/item"
+          previous: "Previous %{name_module_or_class}/item"
       keycode_descriptions: 
         next_module_item: "Select next module or module item"
         previous_module_item: "Select previous module or module item"
@@ -3247,7 +3247,7 @@ en-GB:
       module_details: "Modules are shown in sequential order, so only modules that are above %{name} can be set as prerequisites."
       module_name: "Module name"
       class_name: "Class name"
-      modules_keyboard_hint: "To change the order of the "%{name_module_or_class}" and "%{name_module_or_class}" items, first turn the cursor off on your screen reader. Insert-z in JAWS. Press tab to select the first "%{name_module_or_class}". Press up and down to choose a "%{name_module_or_class}" or "%{name_module_or_class}" item. Press space to select the "%{name_module_or_class}" or "%{name_module_or_class}" item to start dragging. Then press up and down to select a destination. Then press space a second time to drop selection after destination."
+      modules_keyboard_hint: "To change the order of the %{name_module_or_class} and %{name_module_or_class} items, first turn the cursor off on your screen reader. Insert-z in JAWS. Press tab to select the first %{name_module_or_class}. Press up and down to choose a %{name_module_or_class} or %{name_module_or_class} item. Press space to select the %{name_module_or_class} or %{name_module_or_class} item to start dragging. Then press up and down to select a destination. Then press space a second time to drop selection after destination."
       must_complete_prerequisites: "They must complete"
       no_preprequisites: "No prerequisites defined"
       no_requirements: "No requirements defined"
@@ -3268,7 +3268,7 @@ en-GB:
       student_name: "Student name"
       table_headings: 
         module: Module
-        class :Class
+        class: Class
         state: State
       titles: 
         student_progression: "Module progression by student"

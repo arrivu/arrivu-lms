@@ -1,0 +1,80 @@
+
+<div id="tab-images">
+  <table>
+   <tr>
+      <td>
+        <div style="margin-left: 10px;">
+          <div><%= "Image Preview:  " %></div>
+        </div>
+      </td>
+     <td>
+        <% if @context.course_image.nil? %>
+           <img id="course_image" src="/images/course_image.jpg" style="width: 200px; min-height: 31px; max-height: 126px;margin-left: 79px;" class="thumbnail">
+        <% elsif Attachment.exists?(@context.course_image.course_image_attachment_id) == true %>
+          <img id="course_image" src="<%= course_image_url(image_url = true) %>" style="width: 200px; min-height: 31px; max-height: 126px;margin-left: 79px;" class="thumbnail">
+        <% else %>
+           <img id="course_image" src="/images/course_image.jpg" style="width: 200px; min-height: 31px; max-height: 126px;margin-left: 79px;" class="thumbnail">
+        <% end %>
+     </td>
+   </tr>
+    <tr>
+      <td>
+        <div style="margin-left: 10px;">
+          <div><%= "Image :  " %></div>
+        </div>
+      </td>
+      <td>
+         <div><a href="#" class="upload_new_image_link" style="padding-top:2px;margin-right:10px;margin-left: 77px"><%= t('links.upload_image', %{Upload a new image}) %></a></div>
+      </td>
+    </tr>
+  </table>
+  <%= form_for :attachment, :url => context_url(@context,:course_image_upload=>"image"), :html => {:method=> "put",:id => "upload_image_form",:style => "display: none; margin-left:189px;" , :multipart => true} do |f| %>
+      <input type="hidden" name="return_to" value="<%= request.url %>"/>
+      <%= f.file_field :uploaded_data, :class => "file_name", :size => 20 %>
+      <div class="uploading" id ="<%=@context.id %>" style="display: none; text-align: center;  margin-right:189px;">
+        <%= image_tag "ajax-loader-bar.gif", :alt => t('images.alt.loading', "Loading...") %>
+      </div>
+      <div class="button-container">
+        <button class="btn " type="submit"><%= t('buttons.upload', %{Upload}) %></button>
+      </div>
+  <% end %>
+  <table>
+    <tr>
+      <td>
+        <div style="margin-left: 10px;">
+          <div><%= "Background Image Preview:  " %></div>
+        </div>
+      </td>
+      <td>
+       <% if @context.course_image.nil? %>
+            <img id="course_background_image" src="/images/course_background.jpg " style="width: 200px; min-height: 31px; max-height: 126px" class="thumbnail">
+        <% elsif  Attachment.exists?(@context.course_image.course_back_ground_image_attachment_id) == true  %>
+          <img id="course_background_image" src="<%= course_image_url(image_url = false) %>" style="width: 200px; min-height: 31px; max-height: 126px" class="thumbnail">
+        <% else %>
+          <img id="course_background_image" src="/images/course_background.jpg " style="width: 200px; min-height: 31px; max-height: 126px" class="thumbnail">
+        <% end %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div style="margin-left: 10px;">
+          <div><%= "Background Image :  " %></div>
+        </div>
+      </td>
+      <td>
+        <div><a href="#" class="upload_new_background_image_link" style="padding-top:2px;margin-right:10px"><%= t('links.upload_image', %{Upload a new background image}) %></a></div>
+      </td>
+    </tr>
+  </table>
+  <%= form_for :attachment, :url => context_url(@context,:course_image_upload =>"back_ground_image"), :html => {:method=> "put",:id => "upload_background_image_form", :style => "display: none; margin-left:189px;", :multipart => true} do |f| %>
+      <input type="hidden" name="return_to" value="<%= request.url %>"/>
+      <%= f.file_field :uploaded_data, :class => "file_name", :size => 20 %>
+      <div class="uploading" id ="<%=@context.id %>" style="display: none; text-align: center; margin-right:189px;">
+        <%= image_tag "ajax-loader-bar.gif", :alt => t('images.alt.loading', "Loading...") %>
+      </div>
+      <div class="button-container">
+        <button class="btn " type="submit"><%= t('buttons.upload', %{Upload}) %></button>
+      </div>
+  <% end %>
+
+</div>

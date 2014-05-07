@@ -66,6 +66,9 @@ class Account < ActiveRecord::Base
   has_many :roles
   has_many :all_roles, :class_name => 'Role', :foreign_key => 'root_account_id'
   has_many :progresses, :as => :context
+  has_one :account_header
+  has_many :knowledge_partners
+  has_many :account_sliders
   def inherited_assessment_question_banks(include_self = false, *additional_contexts)
     sql = []
     conds = []

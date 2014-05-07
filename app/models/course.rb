@@ -24,7 +24,7 @@ class Course < ActiveRecord::Base
   include Workflow
   include TextHelper
   include HtmlTextHelper
-
+  acts_as_taggable_on :tags
   acts_as_tagger
   acts_as_commentable
   attr_accessible :name,
@@ -117,7 +117,12 @@ class Course < ActiveRecord::Base
   has_many :student_view_enrollments, :class_name => 'StudentViewEnrollment', :conditions => ['enrollments.workflow_state != ?', 'deleted'], :include => :user
   has_many :participating_typical_users, :through => :typical_current_enrollments, :source => :user
   has_many :custom_gradebook_columns, :dependent => :destroy, :order => 'custom_gradebook_columns.position, custom_gradebook_columns.title'
-
+  #arrivu changes
+  has_many :course_pricings
+  has_one :course_description
+  has_one :course_image
+  has_one :popular_course
+  #arrivu changes
   include LearningOutcomeContext
   include RubricContext
 

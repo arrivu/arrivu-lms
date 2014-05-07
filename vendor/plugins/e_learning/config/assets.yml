@@ -1,0 +1,5 @@
+stylesheets:
+  jcontent:
+    - public/stylesheets/compiled/plugins/e_learning/jcontent.css
+  course_box:
+    - public/stylesheets/compiled/plugins/e_learning/course_box.css

@@ -1,0 +1,24 @@
+<% jammit_css :token_input
+%>
+
+<fieldset>
+  <div class="control-group">
+<tr><td>
+     <label for="course_tag" class="control-label"> Add Tags:</label></td>
+   <div class="controls">
+     <td><input  type="text"
+             class="token_input"
+             id="course_tag_tokens"
+             name="tag_tokens"
+             data-pre= <%= @course_tags %> ></td>
+
+    </div>
+   </tr>
+  </div>
+
+</fieldset>
+<style>
+    ul.token-input{
+        width:200px;
+    }
+</style>

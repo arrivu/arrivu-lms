@@ -1,0 +1,29 @@
+
+<form enctype="multipart/form-data" id="upload_account_sliders" style="margin-top: 21px;" action="{{ENV.add_image_url}}" method="post"  title="{{#t "titles.upload_account_sliders"}}Upload Sliders{{/t}}">
+  <input type="hidden" name='authenticity_token' value="{{ENV.AUTHENTICITY_TOKEN}}">
+  <table>
+    <tr>
+       <td>
+         <label style="width: 151px;margin-left: 102px;margin-bottom: -21px;" > Add Account Sliders</label>
+       </td>
+       <td>
+         <input type="file" id="accountslider_uploaded_data"  name="accountslider[uploaded_data]" style="margin-top: 29px;" />
+       </td>
+    </tr>
+    <tr>
+      <td>
+          <button type="submit" class="btn btn-small" id="add_account_slider">
+              {{#t "butons.add_picture_file"}}Add File{{/t}}
+          </button>
+      </td>
+    </tr>
+  </table>
+</form>
+<html>
+<body>
+<hr style="height: 5px;">
+</body>
+</html>
+<div id ="all_sliders">
+
+</div>

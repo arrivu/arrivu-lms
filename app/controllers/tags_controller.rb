@@ -3,7 +3,7 @@ class TagsController < ApplicationController
 
 
 
-  def discussion_topic_tags
+  def context_tags
     respond_to do |format|
       format.html
       format.json { render json: tag_tokens(params[:q]) }

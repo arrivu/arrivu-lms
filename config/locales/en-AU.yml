@@ -3153,7 +3153,7 @@ en-AU:
         students_unlocked_class: "Students who have unlocked (but not started) the class"
       help: 
         create: |-
-            "%{name_module_or_class}" let you organise your assignments, pages, files, etc. into smaller sections or units. "%{name_module_or_class}" could be centred around a theme, focused on a specific topic, or even just grouped chronologically.
+            %{name_module_or_class} let you organise your assignments, pages, files, etc. into smaller sections or units. "%{name_module_or_class}" could be centred around a theme, focused on a specific topic, or even just grouped chronologically.
 
             You can also sequence "%{name_module_or_class}" by defining criteria and prerequisites for each "%{name_module_or_class}". Students won't be able to access "%{name_module_or_class}" until they have unlocked all their prerequisites. That way you can prevent students from accessing certain content or files until they have, for example, achieved at least 75% on a review quiz.
 
@@ -3179,13 +3179,13 @@ en-AU:
           zero: "Don't Indent"
       key: 
         description: 
-          delete: "Delete Current "%{name_module_or_class}"/Item"
-          edit: "Edit "%{name_module_or_class}"/Item"
+          delete: "Delete Current %{name_module_or_class} /Item"
+          edit: "Edit %{name_module_or_class}/Item"
           indent: "Indent Current Item"
-          new: "New "%{name_module_or_class}""
-          next: "Next "%{name_module_or_class}"/Item"
+          new: "New %{name_module_or_class}"
+          next: "Next %{name_module_or_class}/Item"
           outdent: "Outdent Current Item"
-          previous: "Previous "%{name_module_or_class}"/Item"
+          previous: "Previous %{name_module_or_class}/Item"
       keycode_descriptions: 
         next_module_item: "Select next module or module item"
         previous_module_item: "Select previous module or module item"

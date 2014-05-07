@@ -432,12 +432,18 @@ routes.draw do
     match 'student_view' => 'courses#leave_student_view', :as => :student_view, :via => :delete
     match 'test_student' => 'courses#reset_test_student', :as => :test_student, :via => :delete
     match 'content_migrations' => 'content_migrations#index', :as => :content_migrations, :via => :get
+    #Arrivu Changes
     resources :context_module_groups,:path => :module_groups do
       match 'reorder' => 'context_module_groups#reorder_items', :as => :reorder, :via => :post
       collection do
         post :reorder
       end
     end
+    if ELEARNING
+      resources :course_pricings
+      resources :course_descriptions
+    end
+    #Arrivu Changes
   end
 
   match 'quiz_statistics/:quiz_statistics_id/files/:file_id/download' => 'files#show', :as => :quiz_statistics_download, :download => '1'
@@ -540,6 +546,14 @@ routes.draw do
   end
 
   resources :accounts do
+    #arrivu changes
+    if ELEARNING
+      match '/add_logo' => 'home_pages#add_logo' ,:as => :add_logo ,:via => :put
+      resources :knowledge_partners
+      resources :learners_reviews
+      resources :sliders
+    end
+    #arrivu changes
     match 'settings' => 'accounts#settings', :as => :settings
     match 'admin_tools' => 'accounts#admin_tools', :as => :admin_tools
     match 'account_users' => 'accounts#add_account_user', :as => :add_account_user, :via => :post
@@ -732,11 +746,17 @@ routes.draw do
   resource :pseudonym_session
 
   # dashboard_url is / , not /dashboard
-  match '' => 'users#user_dashboard', :as => :dashboard, :via => :get
+  match 'dashboard' => 'users#user_dashboard', :as => :dashboard, :via => :get
   match 'dashboard-sidebar' => 'users#dashboard_sidebar', :as => :dashboard_sidebar, :via => :get
   match 'toggle_dashboard' => 'users#toggle_dashboard', :as => :toggle_dashboard, :via => :post
   match 'styleguide' => 'info#styleguide', :as => :styleguide, :via => :get
   match 'old_styleguide' => 'info#old_styleguide', :as => :old_styleguide, :via => :get
+  if ELEARNING
+    root :to => 'home_pages#index', :as => :root, :via => :get
+  else
+    # dashboard_url is / , not /dashboard
+    root :to => 'users#user_dashboard', :as => :root, :via => :get
+  end
   root :to => 'users#user_dashboard', :as => :root, :via => :get
   match 'logo_root' => 'users#logo_root',  :as => :logo_root ,:via => :get
   # backwards compatibility with the old /dashboard url
@@ -1098,6 +1118,69 @@ routes.draw do
       ef_routes("course")
       ef_routes("group")
     end
+
+    #arrivu changes
+    scope(:controller => :course_pricings) do
+      def ef_routes(context)
+        get "#{context}s/:#{context}_id/course_pricings", :action => :index, :path_name => "#{context}_course_pricings"
+        post "#{context}s/:#{context}_id/course_pricings", :action => :create, :path_name => "#{context}_course_pricings_create"
+        put "#{context}s/:#{context}_id/course_pricings/:course_pricings_id", :action => :update, :path_name => "#{context}_course_pricings_update"
+        delete "#{context}s/:#{context}_id/course_pricings/:course_pricings_id", :action => :destroy, :path_name => "#{context}_course_pricings_delete"
+      end
+      ef_routes("course")
+    end
+
+    scope(:controller => :knowledge_partners) do
+      def et_routes(context)
+        get "#{context}s/:#{context}_id/knowledge_partners", :action => :index, :path_name => "#{context}_knowledge_partners"
+        post "#{context}s/:#{context}_id/knowledge_partners", :action => :create, :path_name => "#{context}_knowledge_partners_create"
+        put "#{context}s/:#{context}_id/knowledge_partners/:knowledge_partners_id", :action => :update, :path_name => "#{context}_knowledge_partners_update"
+        delete "#{context}s/:#{context}_id/knowledge_partners/:knowledge_partners_id", :action => :destroy, :path_name => "#{context}_knowledge_partners_delete"
+      end
+      et_routes("account")
+    end
+
+
+    scope(:controller => :learners_reviews) do
+      def et_routes(context)
+        get "#{context}s/:#{context}_id/learners_reviews", :action => :index, :path_name => "#{context}_learners_reviews"
+        post "#{context}s/:#{context}_id/learners_reviews", :action => :create, :path_name => "#{context}_learners_reviews_create"
+        put "#{context}s/:#{context}_id/learners_reviews/:learners_reviews_id", :action => :update, :path_name => "#{context}_learners_reviews_update"
+        delete "#{context}s/:#{context}_id/learners_reviews/:learners_reviews_id", :action => :destroy, :path_name => "#{context}_learners_reviews_delete"
+      end
+      et_routes("account")
+    end
+
+    scope(:controller => :sliders) do
+      def et_routes(context)
+        get "#{context}s/:#{context}_id/sliders", :action => :index, :path_name => "#{context}_sliders"
+        post "#{context}s/:#{context}_id/sliders", :action => :create, :path_name => "#{context}_sliders_create"
+        put "#{context}s/:#{context}_id/sliders/:sliders_id", :action => :update, :path_name => "#{context}_sliders_update"
+        delete "#{context}s/:#{context}_id/sliders/:sliders_id", :action => :destroy, :path_name => "#{context}_sliders_delete"
+      end
+      et_routes("account")
+    end
+
+    scope(:controller => :popular_courses) do
+      def et_routes(context)
+        get "#{context}s/:#{context}_id/popular_courses", :action => :index, :path_name => "#{context}_popular_courses"
+        post "#{context}s/:#{context}_id/popular_courses", :action => :create, :path_name => "#{context}_popular_courses_create"
+        put "#{context}s/:#{context}_id/popular_courses/:popular_courses_id", :action => :update, :path_name => "#{context}_popular_courses_update"
+        delete "#{context}s/:#{context}_id/popular_courses/:popular_courses_id", :action => :destroy, :path_name => "#{context}_popular_courses_delete"
+      end
+      et_routes("account")
+    end
+
+    #scope(:controller => :course_descriptions) do
+    #  def ef_routes(context)
+    #    get "#{context}s/:#{context}_id/course_descriptions", :action => :index, :path_name => "#{context}_course_descriptions"
+    #    post "#{context}s/:#{context}_id/course_descriptions", :action => :create, :path_name => "#{context}_course_descriptions_create"
+    #    put "#{context}s/:#{context}_id/course_descriptions/:course_descriptions_id", :action => :update, :path_name => "#{context}_course_descriptions_update"
+    #    delete "#{context}s/:#{context}_id/course_descriptions/:course_descriptions_id", :action => :destroy, :path_name => "#{context}_course_pricings_delete"
+    #  end
+    #  ef_routes("course")
+    #end
+    # arrivu changes end
 
     scope(:controller => :sis_imports_api) do
       post 'accounts/:account_id/sis_imports', :action => :create
@@ -1582,10 +1665,14 @@ routes.draw do
   end
 
   match '/assets/:package.:extension' => 'jammit#package', :as => :jammit if defined?(Jammit)
+  if ELEARNING
+    match '/context_tags' => 'tags#context_tags'
+    resources :home_pages
+  end
   resources :omniauth_links
   match '/auth/:provider/callback' => 'authentication#create'
   get '/auth/failure' => 'authentication#auth_failure'
-  match '/discussion_topic_tags' => 'tags#discussion_topic_tags'
+  match '/context_tags' => 'tags#context_tags'
   get '/list_collections' =>'videos#list_collections'
   get '/get_collection/:collection_id' =>'videos#get_collection'
   match '/rr/:short_url_code' => 'referrals#referree_register',:as => :rr

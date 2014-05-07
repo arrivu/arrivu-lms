@@ -1,0 +1,29 @@
+<div id ="header_logo_dialog" style="display:none;">
+<%= form_for :header_logo,:url => account_add_logo_url(@account ||= @domain_root_account),:html => {:method=> "put",:id => "upload_header_logo_form",:style => " margin-left:189px;" , :multipart => true} do |f| %>
+  <table>
+    <tr>
+      <td>
+        <div id="label_id" rel ="<%=@domain_root_account.id %>" style="margin-left: -70px;margin-right:40px"><%= "Add Logo:  " %></div>
+      </td>
+      <td>
+        <input type="hidden" name="return_to"/>
+        <%= f.file_field :uploaded_data, :class => "file_name", :size => 20 %>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <div class="uploading"  style="display: none; text-align: center;  margin-right:189px;">
+         <%= image_tag "ajax-loader-bar.gif", :alt => t('images.alt.loading', "Loading...") %>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div class="button-container">
+          <button class="btn " type="submit"><%= "Submit" %></button>
+        </div>
+      </td>
+    </tr>
+  </table>
+<% end %>
+</div>

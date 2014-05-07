@@ -1,0 +1,38 @@
+
+<form enctype="multipart/form-data" id="upload_knowledge_partners" style="margin-top: 21px;" action="{{ENV.add_knowledge_partners_url}}"
+      method="post"  title="{{#t "titles.upload_knowledge_partner_logo"}}Upload KnowledgePartner Logo{{/t}}">
+    <input type="hidden" name='authenticity_token' value="{{ENV.AUTHENTICITY_TOKEN}}">
+    <table>
+        <tr>
+            <td>
+                <label style="width: 151px;margin-left: 102px;margin-bottom: -21px;" > Add knowledge partner</label>
+            </td>
+            <td>
+                <input type="file" id="knowledge_partner_uploaded_data"  name="knowledge_partner[uploaded_data]" style="margin-top: 29px;" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label style="width: 151px;margin-left: 102px;margin-bottom: 112px;" > Partners Info</label>
+            </td>
+            <td>
+                <textarea id="knowledge_partner_info"  name="knowledge_partner_info" cols="70" rows="10" style="width:250px"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button type="submit" class="btn btn-small" id="add_knowledge_partner">
+                    {{#t "butons.add_picture_file"}}Add File{{/t}}
+                </button>
+            </td>
+        </tr>
+    </table>
+</form>
+<html>
+<body>
+<hr style="height: 5px;">
+</body>
+</html>
+<div id ="all_knowledge_partners">
+
+</div>

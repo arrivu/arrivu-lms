@@ -96,6 +96,20 @@ module CoursesHelper
   def skip_custom_role?(cr)
     cr[:count] == 0 && cr[:workflow_state] == 'inactive'
   end
-
+  #arrivu changes
+  def course_image_url(image_url)
+    if image_url == true
+      if  Attachment.exists?(@context.course_image.course_image_attachment_id) == true
+        @thumbnail = Attachment.find(@context.course_image.course_image_attachment_id).thumbnail
+        @logo_url = "/images/thumbnails/show/#{@thumbnail.id}/#{@thumbnail.uuid}"
+      end
+    elsif image_url == false
+      if Attachment.exists?(@context.course_image.course_back_ground_image_attachment_id) == true
+        @thumbnail = Attachment.find(@context.course_image.course_back_ground_image_attachment_id).thumbnail
+        @logo_url = "/images/thumbnails/show/#{@thumbnail.id}/#{@thumbnail.uuid}"
+      end
+    end
+  end
+  #end of arrivu changes
 
 end

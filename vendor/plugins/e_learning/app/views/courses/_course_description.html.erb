@@ -1,0 +1,61 @@
+<div id="tab-description">
+    <div id="course_description" path="<%= course_course_descriptions_path(@context)%> ">
+        <table>
+            <tr>
+               <td>
+                 <h3><%= "Short Description" %></h3>
+               </td>
+            </tr>
+            <tr>
+               <td>
+                 <textarea rows="10" cols="240" id="short_description" name="short_description_txt" style="width: 300px;"><%= @context.course_description.short_description  if @context.course_description != nil %></textarea>
+               </td>
+            </tr>
+            <tr>
+               <td>
+                 <h3><%= "Description" %></h3>
+               </td>
+            </tr>
+            <tr>
+               <td>
+                 <textarea rows="10" cols="240" id="long_description" name="long_description_txt" style="width: 400px;"><%= @context.course_description.long_description if @context.course_description != nil %></textarea>
+               </td>
+            </tr>
+            <tr>
+               <td>
+                 <button id ="add_course_description" class="btn btn-primary" style= "margin-left: 117px;;margin-top: 21px;"
+                 type="submit"><i class="icon-add"></i> <%= t('buttons.add_section', %{Submit Description}) %></button>
+               </td>
+            </tr>
+        </table>
+    </div>
+ </div>
+
+<%js_block do %>
+    <script type="text/javascript">
+        require([
+            'jquery' /* $ */,
+            'jquery.disableWhileLoading'
+        ],function($){
+            $("#add_course_description").click(function(){
+              $("#content").disableWhileLoading($.ajax({
+                type:'POST',
+                url:$("#course_description").attr('path'),
+                data: {
+                       'short_description': $("#short_description").val(),
+                       'long_description' : $("#long_description").val()
+                },
+                success: function(data){
+                  $.flashMessage('Course Description Saved')
+                },
+                error: function(data){
+                 if ($("#short_description").val() == "" ||  $("#long_description").val() == ""){
+                    $.flashMessage('Enter Both Descriptions')
+                 }
+                }
+               })
+              );
+            });
+        });
+    </script>
+<%end %>
