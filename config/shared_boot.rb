@@ -74,6 +74,9 @@ config.autoload_paths += %W(#{Rails.root}/app/middleware
 if CANVAS_RAILS2
   config.middleware.insert_before(ActionController::Base.session_store, 'LoadAccount')
   config.middleware.insert_before(ActionController::Base.session_store, 'SessionsTimeout')
+  #arrivu changes
+  config.gem 'ancestry'
+  #arrivu changes
 else
   # we don't know what middleware to make SessionsTimeout follow until after
   # we've loaded config/initializers/session_store.rb

@@ -3,3 +3,5 @@ stylesheets:
     - public/stylesheets/compiled/plugins/e_learning/jcontent.css
   course_box:
     - public/stylesheets/compiled/plugins/e_learning/course_box.css
+  jquery_minicolors:
+    - public/stylesheets/compiled/jquery_minicolors.css

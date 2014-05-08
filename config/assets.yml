@@ -200,5 +200,6 @@ stylesheets:
     - public/stylesheets/compiled/token_input.css
   flip_classes:
     - public/stylesheets/compiled/flip_classes.css
-
+  jquery_minicolors:
+    - public/stylesheets/compiled/jquery_minicolors.css
   <%= plugin_assets.anchors_yml %>

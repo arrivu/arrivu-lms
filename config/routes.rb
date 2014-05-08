@@ -250,7 +250,11 @@ routes.draw do
         post :update_submission
       end
     end
-
+    #arrivu changes
+    if ELEARNING
+      resource :topics
+    end
+    #arrivu changes
     resource :gradebook2, :controller => :gradebook2
     match 'screenreader_gradebook' => 'gradebook2#screenreader'
 
@@ -577,7 +581,9 @@ routes.draw do
         delete :remove_role
       end
     end
-
+    #arrivu changes
+    resources :topics
+    #arrivu changes
     resources :terms
     resources :sub_accounts
 
@@ -1120,6 +1126,15 @@ routes.draw do
     end
 
     #arrivu changes
+
+    scope(:controller => :topics) do
+      def et_routes(context)
+        get "#{context}s/:#{context}_id/topics", :action => :index, :path_name => "#{context}_topics"
+        post "#{context}s/:#{context}_id/topics", :action => :create, :path_name => "#{context}_topics_create"
+      end
+      et_routes("account")
+    end
+
     scope(:controller => :course_pricings) do
       def ef_routes(context)
         get "#{context}s/:#{context}_id/course_pricings", :action => :index, :path_name => "#{context}_course_pricings"

@@ -93,6 +93,12 @@
       <% if ELEARNING %>
           <%= render :partial => 'accounts/course_taggings'  %>
       <% end %>
+      <% if ELEARNING %>
+          <tr>
+            <td><%= f.label :topic_id, :en => "Course Topic" %></td>
+            <td><%= f.select :topic_id, @account.collection_for_parent_select, :selected => @topic && @topic.id %></td>
+          </tr>
+      <% end %>
       <tr>
         <td colspan="2">
           <div class="button-container">

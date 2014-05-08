@@ -340,3 +340,4 @@ gem 'acts_as_commentable', '2.1.1'
 
 gem 'subdomain-fu', '0.5.4'
 gem 'rack-cors', :require => 'rack/cors'
+gem 'ancestry'
