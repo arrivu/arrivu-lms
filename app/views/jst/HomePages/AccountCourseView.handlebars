@@ -1,17 +1,22 @@
 {{#if popular_course}}
-<div class="span3 content-box resource" style="float: left;height: 389px;left: 100px;" id="is_a_popular_course" data-id="{{popular_id}}">
+<div class="span3 content-box resource" style="float: left;height: 410px;left: 100px;" id="is_a_popular_course" data-id="{{popular_id}}">
     <div class="ribbon-wrapper">
         <div class="ribbon-wrapper-green"><div class="ribbon-green">Popular Course</div></div>
     </div>
 {{else}}
 <div class="span3 content-box resource" style="float: left;height: 410px;left: 100px;" id="is_not_a_popular_course" >
 {{/if}}
-
-    <div class="type-tag-positioner" style="background-image: url('{{course_background_image}}')">
-        <img alt="Course_image" class="course-badge img-circle" src="{{course_image}}" style="padding:5px;">
-        <div class="type ribbon1" style="background-color: darkblue;">
-            <span>Categories</span>
+    {{#if has_course_image}}
+        <div class="type-tag-positioner" style="background-image: url('{{course_background_image}}')">
+            <img alt="Course_image" class="course-badge img-circle" src="{{course_image}}" style="padding:5px;">
+    {{else}}
+          <div class="type-tag-positioner" style="">
+    {{/if}}
+    {{#each course_topic_details}}
+        <div class="type ribbon1" style="background-color: {{topic_color}};">
+            <span>{{topic_name}}</span>
         </div>
+    {{/each}}
     </div>
     <div class="details" data-id="{{id}}" style="padding: 13.5em 18px 2em 15px;color: #005580">
         <h2>
