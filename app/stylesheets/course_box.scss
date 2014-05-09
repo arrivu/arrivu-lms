@@ -316,6 +316,7 @@
   margin: 0 -1.25em 0 -1.25em;
   width: 104%;
   border-collapse: separate;
+  background: url(/images/pattern-bg.png);
   .resource-row {
     display: table-row;
     border-collapse: collapse;
@@ -697,4 +698,21 @@ a.thumbnail:hover {
 
 .knowledge_partners_item{
   list-style: none ;
+}
+
+.secondary-content {
+  height: 100%;
+  width: 100%;
+  padding: 0px 0px;
+  background-size: 100% 100%;
+  background: #F7DB6C;
+//  background: url(/images/arrow_bg.png);
+}
+
+.banner{
+  margin-left:30px;
+  margin-top: 0px;
+  padding-right: 115px;
+  text-align:center;
+  padding-top: 7px;
 }

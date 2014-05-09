@@ -203,9 +203,9 @@ stylesheets:
   jquery_minicolors:
     - public/stylesheets/compiled/jquery_minicolors.css
   jcontent:
-    - public/stylesheets/compiled/plugins/e_learning/jcontent.css
+    - public/stylesheets/compiled/jcontent.css
   course_box:
-    - public/stylesheets/compiled/plugins/e_learning/course_box.css
+    - public/stylesheets/compiled/course_box.css
   jquery_minicolors:
     - public/stylesheets/compiled/jquery_minicolors.css
   <%= plugin_assets.anchors_yml %>

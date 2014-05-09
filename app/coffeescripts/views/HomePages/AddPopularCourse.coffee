@@ -6,11 +6,14 @@ define [
   'compiled/models/PopularCourse'
   'compiled/collections/PopularCoursesCollection'
   'compiled/views/HomePages/AccountCourseCollectionView'
+  'compiled/views/HomePages/PopularCourseCollectionView'
   'compiled/views/ValidatedFormView'
   'jquery.disableWhileLoading'
   'jqueryui/jquery.jcontent.0.8',
   'jqueryui/jquery.easing.1.3'
-], ($,I18n,htmlEscape, template,PopularCoure,PopularCoursesCollection,AccountCourseCollectionView,ValidatedFormView) ->
+  'jquery.disableWhileLoading'
+], ($,I18n,htmlEscape, template,PopularCoure,PopularCoursesCollection,AccountCourseCollectionView,PopularCourseCollectionView,
+    ValidatedFormView) ->
 
   class AddPopularCourse extends ValidatedFormView
     template: template
@@ -28,17 +31,27 @@ define [
         title: 'Add Popular Course'
         width:  1200
         height: 600
+        disableWhileLoading: true
         close: => @$el.remove()
       @showallAccountCourses()
+#      loadingDfd = new $.Deferred()
+#      $("#all_courses").disableWhileLoading loadingDfd
+
+    showPopularCourseonIndexPage: =>
+      popularCourseCollection = new PopularCoursesCollection
+      popularCourseCollectionView = new PopularCourseCollectionView
+        collection: popularCourseCollection
+        el: '#popular_course_div'
+      popularCourseCollectionView.collection.fetch()
+      popularCourseCollectionView.render()
 
     showallAccountCourses: =>
       popularCourseCollection = new PopularCoursesCollection
       accountCourseCollectionView = new AccountCourseCollectionView
         collection: popularCourseCollection
         el: '#all_courses'
-      console.log(accountCourseCollectionView.collection)
-      accountCourseCollectionView.collection.fetch()
-      accountCourseCollectionView.render()
+      dfd = accountCourseCollectionView.collection.fetch()
+      accountCourseCollectionView.$el.disableWhileLoading dfd
 
     onSaveFail: (xhr) =>
       super
@@ -84,8 +97,10 @@ define [
               @$el.disableWhileLoading($.ajaxJSON url, 'DELETE',data, onSuccessdelete,onError)
               dialog.dialog 'close'
               @showallAccountCourses()
+              @showPopularCourseonIndexPage()
           ]
       else
         url = "api/v1/accounts/"+ENV.account_id+"/popular_courses"
         @$el.disableWhileLoading($.ajaxJSON url,'POST',data, onSuccess,onError)
         @showallAccountCourses()
+        @showPopularCourseonIndexPage()

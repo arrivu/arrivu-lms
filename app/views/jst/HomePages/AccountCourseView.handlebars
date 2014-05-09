@@ -13,9 +13,15 @@
           <div class="type-tag-positioner" style="">
     {{/if}}
     {{#each course_topic_details}}
-        <div class="type ribbon1" style="background-color: {{topic_color}};">
-            <span>{{topic_name}}</span>
-        </div>
+        {{#if has_topic}}
+                <div class="type ribbon1" style="background-color: {{topic_color}};">
+                    <span>{{topic_name}}</span>
+                </div>
+        {{else}}
+                <div class="type ribbon1" style="background-color: #228b22">
+                    <span>others</span>
+                </div>
+        {{/if}}
     {{/each}}
     </div>
     <div class="details" data-id="{{id}}" style="padding: 13.5em 18px 2em 15px;color: #005580">
