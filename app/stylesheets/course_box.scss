@@ -440,7 +440,7 @@
   border: 1px solid #ddd;
   left:  150px;
   clear: none;
-  margin: 0px 55px 7px 0px;
+  margin: 0px 55px 46px 0px;
   overflow: visible;
   &:hover {
     -webkit-transition: all 0.25s;
@@ -697,4 +697,10 @@ a.thumbnail:hover {
 
 .knowledge_partners_item{
   list-style: none ;
+}
+
+.resource:hover {
+  -moz-box-shadow: 0 0 5px rgba(0,0,0,0.5);
+  -webkit-box-shadow: 0 0 5px rgba(0,0,0,0.5);
+  box-shadow: 0 0 5px rgba(0,0,0,0.5);
 }

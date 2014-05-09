@@ -1,0 +1,9 @@
+<div id="sidebar">
+    <ul>
+        <li><a href="#" class="selected_topic topic_list_top topic" data-id="0">All Topics</a></li>
+        {{#each topics_collection}}
+            <li><a href="#" class="topic" data-id="{{this.attributes.id}}">{{this.attributes.name}}</a></li>
+        {{/each}}
+        <li><a href="#" class="topic_list_bottom"></a></li>
+    </ul>
+</div>

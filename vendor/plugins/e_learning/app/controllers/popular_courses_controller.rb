@@ -4,7 +4,11 @@ class PopularCoursesController < ApplicationController
     #account courses list
     respond_to do |format|
       @courses = []
-      @account_courses = @domain_root_account.courses.active
+      if  params[:topic_id].present? and params[:topic_id].to_i != 0
+        @account_courses = @domain_root_account.courses.not_deleted.find_all_by_topic_id(params[:topic_id])
+      else
+        @account_courses = @domain_root_account.courses.not_deleted
+      end
       @account_courses.each_with_index do |course, idx|
         @teachers = course.teacher_enrollments
         @teacher_desc = instructure_details(course)
@@ -36,7 +40,7 @@ class PopularCoursesController < ApplicationController
         end
         if course.course_description
           @course_desc = CourseDescription.find(course.id) rescue nil
-          @short_course_desc = truncate_text(@course_desc.long_description, :length =>40)
+          @short_course_desc = truncate_text(@course_desc.long_description, :length =>40) unless @course_desc.nil?
         end
         image_attachment = Attachment.find(@course_image.course_image_attachment_id) rescue nil
         background_image_attchment = Attachment.find(@course_image.course_back_ground_image_attachment_id) rescue nil
