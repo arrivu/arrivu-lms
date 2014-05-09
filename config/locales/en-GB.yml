@@ -5449,11 +5449,11 @@ en-GB:
   #arrivu changes
   home_pages:
     index_view:
-      add_popular_course: "Add Popular Course"
-      add_knowledge_partners: "Add Knowledge Partners"
+      manage_popular_course: "Manage Popular Course"
+      manage_knowledge_partners: "Manage Knowledge Partners"
       add_learner_reviews: "Add Learner Reviews"
       learner_review_saved_message: "Learners Reviews saved successfully"
-      add_account_sliders: "Add Account Sliders"
+      manage_account_sliders: "Add Sliders"
     AddAccountSlider:
       delete: "Delete Sliders"
       account_slider_deleted_message: "Account Sliders deleted successfully!"
@@ -5469,7 +5469,7 @@ en-GB:
   course_pricings:
     delete : "Delete Price of"
     course_price_deleted_message: "Price deleted successfully!"
-    #arrivu changes
+  #arrivu changes
 
   facebook: 
     authorization_required: "Only authorised users can access that page"

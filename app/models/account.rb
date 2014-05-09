@@ -91,6 +91,9 @@ class Account < ActiveRecord::Base
   has_many :alerts, :as => :context, :include => :criteria
   has_many :user_account_associations
   has_many :report_snapshots
+  #arrivu changes
+  has_many :topics
+  #arrivu changes
   has_one :terms_and_condition
   before_validation :verify_unique_sis_source_id
   before_save :ensure_defaults
@@ -388,6 +391,20 @@ class Account < ActiveRecord::Base
     end
     res
   end
+
+  def collection_for_parent_select()
+    @topics = ancestry_options(Topic.arrange(:order => :created_at )) {|i|  ("&nbsp;&nbsp;" * i.depth ).html_safe + i.name }
+  end
+
+  def ancestry_options(items)
+    result = []
+    items.map do |item, sub_items|
+      result << [yield(item), item.id]
+      result += ancestry_options(sub_items) {|i|  ("&nbsp;&nbsp;" * i.depth ).html_safe + i.name }
+    end
+    result
+  end
+
 
   def users_visible_to(user)
     self.grants_right?(user, nil, :read) ? self.all_users : self.all_users.none

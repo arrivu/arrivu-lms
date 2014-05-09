@@ -12,10 +12,29 @@ define([
   'tinymce.editor_box', // editorBox
   'vendor/date', // Date.parse
   'vendor/jquery.scrollTo', // /\.scrollTo/
-  'jqueryui/tabs' // /\.tabs/
+  'jqueryui/tabs', // /\.tabs/
+  'jquery.minicolors'
 ], function(I18n, $) {
 
   $(document).ready(function() {
+      $('#hue-demo').minicolors({
+          control: $(this).attr('data-control') || 'hue',
+          defaultValue: $(this).attr('data-defaultValue') || '',
+          inline: $(this).attr('data-inline') === 'true',
+          letterCase: $(this).attr('data-letterCase') || 'lowercase',
+          opacity: $(this).attr('data-opacity'),
+          position: $(this).attr('data-position') || 'bottom left',
+          change: function(hex, opacity) {
+              var log;
+              try {
+                  log = hex ? hex : 'transparent';
+                  if( opacity ) log += ', ' + opacity;
+                  console.log(log);
+              } catch(e) {}
+          },
+          theme: 'default'
+      });
+
     $("#account_settings").submit(function() {
       var $this = $(this);
       $(".ip_filter .value").each(function() {

@@ -67,9 +67,11 @@ class Course < ActiveRecord::Base
                   :hide_distribution_graphs,
                   :lock_all_announcements,
                   :public_syllabus,
-  #               arrivu changes for course section privilege for students
+  #               arrivu changes
+                  :topic_name,
+                  :topic_id,
                   :section_privilege_to_students
-  #               end of arrivu changes for course section privilege for students
+  #               end of arrivu changes
 
   serialize :tab_configuration
   serialize :settings, Hash
@@ -186,6 +188,9 @@ class Course < ActiveRecord::Base
   attr_accessor :import_source
   has_many :zip_file_imports, :as => :context
   has_many :content_participation_counts, :as => :context, :dependent => :destroy
+  #arrivu changes
+  belongs_to :topic
+  #arrivu changes
   has_many :comment
   include Profile::Association
 

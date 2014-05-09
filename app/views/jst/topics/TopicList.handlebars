@@ -1,0 +1,75 @@
+<td nowrap="nowrap"
+    class="topic" data-id="{{id}}">
+
+    <ul class="ig-list" id="group_1" style="height: 21px;">
+        <li>
+            {{#if is_child}}
+            <div class="ig-row" style="width: 600px;margin-left: 30px;height: 25px;">
+            {{else}}
+                {{#if is_sub_child}}
+                <div class="ig-row" style="width: 600px;margin-left: 60px;height: 25px;">
+                {{else}}
+                <div class="ig-row" style="width: 600px;height: 25px;">
+                {{/if}}
+            {{/if}}
+            <div style="margin-left: 7px; margin-top: 2px;">
+                <b>{{name}}</b>
+
+                <div style="float: right; margin-right: 5px;">
+                    {{#if is_sub_child}}
+                        <a title="Manage Topic" class="al-trigger al-trigger-gray" role="button" aria-haspopup="true" aria-owns="content-1" aria-label="Settings" href="#">
+                            <i class="icon-settings"></i>
+                            <i class="icon-mini-arrow-down"></i>
+                        </a>
+                        <ul class="al-options">
+                            <li>
+                                <a href="#"
+                                   class="edit_topic_link"
+                                   title="Edit Topic"
+                                   data-edit-topic={{id}}
+                                        ><i class="icon-edit" style="display: inline-table;">Edit</i></a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                   class="delete_topic_link"
+                                   title="Delete Topic"
+                                   data-delete-topic={{id}}
+                                        ><i class="icon-trash" style="display: inline-table;">Delete</i></a>
+                            </li>
+                        </ul>
+                    {{else}}
+                        <a title="Manage Topic" class="al-trigger al-trigger-gray" role="button" aria-haspopup="true" aria-owns="content-1" aria-label="Settings" href="#">
+                            <i class="icon-settings"></i>
+                            <i class="icon-mini-arrow-down"></i>
+                        </a>
+
+                        <ul class="al-options">
+                            <li>
+                                <a href="#"
+                                   class="add_sub_topic_link links text-right"
+                                   title="Add Sub Topic"
+                                   data-add-sub-topic={{id}}
+                                        ><i class="icon-add" style="display: inline-table;">Add Sub Topic</i></a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                   class="edit_topic_link"
+                                   title="Edit Topic"
+                                   data-edit-topic={{id}}
+                                        ><i class="icon-edit" style="display: inline-table;">Edit</i></a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                   class="delete_topic_link"
+                                   title="Delete Topic"
+                                   data-delete-topic={{id}}
+                                        ><i class="icon-trash" style="display: inline-table;">Delete</i></a>
+                            </li>
+                        </ul>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+        </li>
+    </ul>
+</td>

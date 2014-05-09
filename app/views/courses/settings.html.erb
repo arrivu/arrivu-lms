@@ -94,6 +94,15 @@
       <td><%= link_to @context.root_account.name, account_url(@context.root_account.id)  %></td>
       <% end %>
       </tr><tr>
+      <!--arrivu changes-->
+      <% if ELEARNING %>
+          <td class="form-label"><%= f.blabel :topic_id, :en => "Course Topic" %></td>
+          <td>
+
+      <% end %>
+    </tr>
+      <tr>
+        <!--arrivu changes-->
       <td class="form-label"><%= f.blabel :account_id, :en => "Department" %></td>
       <td>
           <span class="course_form">
