@@ -1171,15 +1171,9 @@ routes.draw do
       et_routes("account")
     end
 
-    #scope(:controller => :course_descriptions) do
-    #  def ef_routes(context)
-    #    get "#{context}s/:#{context}_id/course_descriptions", :action => :index, :path_name => "#{context}_course_descriptions"
-    #    post "#{context}s/:#{context}_id/course_descriptions", :action => :create, :path_name => "#{context}_course_descriptions_create"
-    #    put "#{context}s/:#{context}_id/course_descriptions/:course_descriptions_id", :action => :update, :path_name => "#{context}_course_descriptions_update"
-    #    delete "#{context}s/:#{context}_id/course_descriptions/:course_descriptions_id", :action => :destroy, :path_name => "#{context}_course_pricings_delete"
-    #  end
-    #  ef_routes("course")
-    #end
+    scope(:controller => :libraries) do
+        get "libraries", :action => :index, :path_name => 'libraries'
+    end
     # arrivu changes end
 
     scope(:controller => :sis_imports_api) do
@@ -1668,6 +1662,7 @@ routes.draw do
   if ELEARNING
     match '/context_tags' => 'tags#context_tags'
     resources :home_pages
+    resources :libraries
   end
   resources :omniauth_links
   match '/auth/:provider/callback' => 'authentication#create'

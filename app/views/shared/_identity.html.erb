@@ -1,12 +1,16 @@
-<ul id="identity">
+<ul id="identity"
+    <% unless @current_user  %>
+    style="margin-top: 22px;border-radius: 10px;margin-right: 50px;"
+    <% end  %>
+    >
   <% if !@current_user %>
-    <% if !@domain_root_account || @domain_root_account == Account.default %>
+      <li><%= link_to "Course Library", libraries_path%></li>
+      <li>|</li>
       <li><%= link_to t('links.sign_up_as_teacher', "Sign Up as a Teacher"), register_path %></li>
+       <li>|</li>
       <li><%= link_to "Log In", login_path %></li>
-    <% else %>
-      <li><%= link_to t('links.log_in', "Log In"), login_path %></li>
-    <% end %>
   <% else %>
+      <li><%= link_to "Course Library", libraries_path%></li>
     <% if @real_current_user && @real_current_user != @current_user %>
       <li class="user_name"><%= link_to t('masquerading.as', "As: *%{user_name}*", :user_name => @current_user.short_name, :wrapper => '<span class="emphasize-name">\1</span>'), user_profile_path(@current_user) %></li>
     <% else %>

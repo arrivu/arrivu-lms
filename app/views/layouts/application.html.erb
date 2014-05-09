@@ -42,22 +42,21 @@
     <a href="#content" id="skip_navigation_link"><%= t 'links.skip_to_content', "Skip To Content" %></a>
     <%if ELEARNING %>
         <% if !@domain_root_account.account_header.nil? && @current_pseudonym == nil &&  Attachment.exists?(@domain_root_account.account_header.header_logo_url) == true %>
-            <a  href="<%= root_url %>"><img class="logo" style="width: 160px;height: 40px;left: 14px;bottom: -26px;position: absolute;"
+            <a  href="<%= root_url %>"><img class="logo" style="width: 174px;height: 63px;left: 2px;bottom: -40px;position: absolute;"
                                             src= <%= header_logo_image %>></a>
         <% elsif @current_pseudonym!= nil %>
             <% if can_do((@account ||= @domain_root_account), @current_user, :manage_account_settings) %>
+                <a href="#" id="upload_logo_link"  style="width: 160px;height: 42px;left: 182px;bottom: 30px;position: absolute;z-index: 1;"><%= "↓ Upload logo" %></a>
                 <% if @domain_root_account.account_header.nil? || Attachment.exists?(@domain_root_account.account_header.header_logo_url) == false %>
-                    <a href="#" id="upload_logo_link"  style="width: 160px;height: 40px;left: 14px;bottom: 30px;position: absolute;z-index: 1;"><%= "↓ Upload logo" %></a>
                     <a id="header-logo" href="<%= root_url %>"><%= t 'links.dashboard', "My Dashboard" %></a>
                 <% else %>
-                    <a href="#" id="upload_logo_link"  style="width: 160px;height: 40px;left: 14px;bottom: 30px;position: absolute;z-index: 1;"><%= "↓ Upload logo" %></a>
-                    <a  href="<%= root_url %>"><img class="logo" style="width: 160px;height: 40px;left: 14px;bottom: 4px;position: absolute;"
+                    <a  href="<%= root_url %>"><img class="logo" style="width: 174px;height: 66px;left: 2px;bottom: 2px;position: absolute;"
                                                     src= <%= header_logo_image %>></a>
                 <% end %>
-            <% elsif @domain_root_account.account_header.nil? || Attachment.exists?(@domain_root_account.account_header.header_logo_url) == false %>
+            <% elsif (@account ||= @domain_root_account).account_header.nil? || Attachment.exists?(@domain_root_account.account_header.header_logo_url) == false %>
                 <a id="header-logo" href="<%= root_url %>"><%= t 'links.dashboard', "My Dashboard" %></a>
             <% else %>
-                <a  href="<%= root_url %>"><img class="logo" style="width: 160px;height: 40px;left: 14px;bottom: 4px;position: absolute;"
+                <a  href="<%= root_url %>"><img class="logo" style="width: 174px;height: 66px;left: 2px;bottom: 2px;position: absolute;"
                                                 src= <%= header_logo_image %>></a>
             <% end %>
         <% else  %>

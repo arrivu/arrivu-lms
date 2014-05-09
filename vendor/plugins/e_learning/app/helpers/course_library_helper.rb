@@ -1,0 +1,2 @@
+module CourseLibraryHelper
+end
