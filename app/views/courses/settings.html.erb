@@ -345,10 +345,10 @@
                 <% end %>
               </select>
             <% else %>
-              <%= @context.topic.name %>
+              <%= @context.topic.name if @context.topic%>
             <% end %>
           </span>
-            <span class="course_info topic_name"><%= @context.topic.name %></span>
+            <span class="course_info topic_name"><%= @context.topic.name if @context.topic %></span>
           </td>
       <% end %>
     </tr>
