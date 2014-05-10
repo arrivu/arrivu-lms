@@ -14,11 +14,6 @@ class PopularCoursesController < ApplicationController
         @teacher_desc = instructure_details(course)
         @course_image = course.course_image
         @course_topic = course_topic(course)
-        if @course_topic.empty?
-          @has_topic = false
-        else
-          @has_topic = true
-        end
         if@course_image.nil?
           @has_course_image = false
         else
@@ -29,7 +24,6 @@ class PopularCoursesController < ApplicationController
         else
           @course_tags_count = course.tags.count
         end
-
         @users_count = course.users.count
         @course_tags = tag_details(course)
         if course.popular_course
@@ -39,8 +33,10 @@ class PopularCoursesController < ApplicationController
           @popular_course = false
         end
         if course.course_description
-          @course_desc = CourseDescription.find(course.id) rescue nil
-          @short_course_desc = truncate_text(@course_desc.long_description, :length =>40) unless @course_desc.nil?
+          @course_desc = CourseDescription.find(course.course_description.id) rescue nil
+          @short_course_desc = @course_desc.long_description
+        else
+          @short_course_desc = []
         end
         image_attachment = Attachment.find(@course_image.course_image_attachment_id) rescue nil
         background_image_attchment = Attachment.find(@course_image.course_back_ground_image_attachment_id) rescue nil
@@ -59,7 +55,6 @@ class PopularCoursesController < ApplicationController
           json[:profile_data] =  @teacher_desc
           json[:has_course_image] = @has_course_image
           json[:course_topic_details] = @course_topic
-          json[:has_course_topic] = @has_topic
         end
         @courses << @course_json
       end
@@ -118,10 +113,16 @@ class PopularCoursesController < ApplicationController
   def course_topic(course)
     @course_topic = []
     @topic = course.topic
-    if @topic
+    if @topic.nil?
+      @topic_json = api_json(course,@current_user, session, API_USER_JSON_OPTS).tap do |json|
+        json[:has_topic] = false
+      end
+      @course_topic <<@topic_json
+    else
     @topic_json = api_json(course,@current_user, session, API_USER_JSON_OPTS).tap do |json|
       json[:topic_name] = @topic.name
       json[:topic_color] = @topic.color
+      json[:has_topic] = true
     end
     @course_topic <<@topic_json
     end

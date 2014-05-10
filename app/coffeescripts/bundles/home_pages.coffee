@@ -1,4 +1,5 @@
 require [
+  'jquery'
   'compiled/views/HomePages/IndexView'
   'compiled/collections/AccountSlidersCollection'
   'compiled/collections/PopularCoursesCollection'
@@ -9,7 +10,8 @@ require [
   'compiled/views/HomePages/KnowledgePartnerCollectionView'
   'jqueryui/jquery.jcontent.0.8'
   'jqueryui/jquery.easing.1.3'
-], (IndexView,AccountSliderCollection,PopularCoursesCollection,AccountSliderCollectionView,AccountStatisticsView,
+  'jquery.disableWhileLoading'
+], ($,IndexView,AccountSliderCollection,PopularCoursesCollection,AccountSliderCollectionView,AccountStatisticsView,
     PopularCourseCollectionView,KnowledgePartnersCollection,KnowledgePartnerCollectionView) ->
 
   # Collections
