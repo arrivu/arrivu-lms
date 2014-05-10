@@ -5369,6 +5369,7 @@ en-AU:
       add_learner_reviews: "Add Learner Reviews"
       learner_review_saved_message: "Learners Reviews saved successfully"
       manage_account_sliders: "Add Sliders"
+      manage_learner_review: "Manage Learner Review"
     AddAccountSlider:
       delete: "Delete Sliders"
       account_slider_deleted_message: "Account Sliders deleted successfully!"
