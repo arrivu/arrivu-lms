@@ -1679,7 +1679,9 @@ class CoursesController < ApplicationController
             if api_request?
               render :json => course_json(@course, @current_user, session, [:hide_final_grades], nil)
             else
-             render :json => @course.as_json(:methods => [:readable_license, :quota, :account_name, :term_name, :grading_standard_title, :storage_quota_mb]), :status => :ok
+            #arrivu changes
+             render :json => @course.as_json(:methods => [:readable_license, :quota, :account_name, :term_name, :grading_standard_title, :storage_quota_mb, :topic_name]), :status => :ok
+            #arrivu changes
             end
           end
         else

@@ -2724,6 +2724,11 @@ class Course < ActiveRecord::Base
   def term_name
     self.enrollment_term.name rescue nil
   end
+  #arrivu changes
+  def topic_name
+    self.topic.name rescue nil
+  end
+  #arrivu changes
 
   def enable_user_notes
     root_account.enable_user_notes rescue false
