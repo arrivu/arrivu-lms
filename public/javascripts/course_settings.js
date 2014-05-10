@@ -309,7 +309,9 @@ define([
       },
       beforeSubmit: function(data) {
         $(this).loadingImage().removeClass('editing');
-        $(this).find(".readable_license,.account_name,.term_name,.grading_scheme_set").text("...");
+        // arrivu changes
+        $(this).find(".readable_license,.account_name,.term_name,.grading_scheme_set,.topic_name").text("...");
+        // arrivu changes
         $(this).find(".storage_quota_mb").text(data['course[storage_quota_mb]']);
         $(".course_form_more_options").hide();
       },
