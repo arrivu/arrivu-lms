@@ -1,0 +1,17 @@
+<% @body_classes << "gradebook2 full-width"
+@show_left_side = false
+%>
+<div
+<% if @context_bg_image_url %>
+    style="background-image: url("<%= @context_bg_image_url %>")"
+  <% end  %>
+  >
+</div>
+
+<% if @context.course_image.nil? %>
+    <img id="course_image" src="/images/course_image.jpg" style="width: 200px; min-height: 31px; max-height: 126px;margin-left: 79px;" >
+<% elsif Attachment.exists?(@context.course_image.course_image_attachment_id) == true %>
+    <img id="course_image" src="<%= course_image_url(image_url = true) %>" style="width: 200px; min-height: 31px; max-height: 126px;margin-left: 79px;" >
+<% else %>
+    <img id="course_image" src="/images/course_image.jpg" style="width: 200px; min-height: 31px; max-height: 126px;margin-left: 79px;" >
+<% end %>
