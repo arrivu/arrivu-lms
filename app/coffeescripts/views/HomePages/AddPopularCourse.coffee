@@ -93,7 +93,6 @@ define [
             text: 'Delete'
             click: =>
               url = "api/v1/accounts/"+ENV.account_id+"/popular_courses/"+ id
-              console.log(url)
               @$el.disableWhileLoading($.ajaxJSON url, 'DELETE',data, onSuccessdelete,onError)
               dialog.dialog 'close'
               @showallAccountCourses()

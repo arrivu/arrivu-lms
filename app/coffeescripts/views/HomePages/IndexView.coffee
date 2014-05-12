@@ -27,6 +27,7 @@ define [
       'click #add_account_sliders' : 'addAccountSlider'
       'click #add_popular_courses' : 'addPopularCourse'
       'click #add_knowledge_partners': 'addKnowledgePartner'
+      'click .details':'movetocourselibrary'
 
     addAccountSlider: ->
       newAccountSliderView = new AccountSlider
@@ -46,5 +47,6 @@ define [
         model: newaddKnowledgePartner
       @addknowledgePartnerView.render()
 
-
-
+    movetocourselibrary:(event)->
+      popular_item = this.$(event.currentTarget).attr('id')
+      location.href = "#{location.protocol}//#{location.host}/libraries/"+popular_item

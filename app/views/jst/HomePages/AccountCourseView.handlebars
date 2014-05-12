@@ -1,29 +1,29 @@
 {{#if popular_course}}
-<div class="span3 content-box resource" style="float: left;height: 410px;left: 100px;" id="is_a_popular_course" data-id="{{popular_id}}">
-    <div class="ribbon-wrapper">
-        <div class="ribbon-wrapper-green"><div class="ribbon-green">Popular</div></div>
-    </div>
+    <div class="span3 content-box resource" style="float: left;height: 410px;left: 100px;" id="is_a_popular_course" data-id="{{popular_id}}">
+        <div class="ribbon-wrapper">
+            <div class="ribbon-wrapper-green"><div class="ribbon-green">Popular</div></div>
+        </div>
 {{else}}
-<div class="span3 content-box resource" style="float: left;height: 410px;left: 100px;" id="is_not_a_popular_course" >
+    <div class="span3 content-box resource" style="float: left;height: 410px;left: 100px;" id="is_not_a_popular_course" >
 {{/if}}
-    {{#if has_course_image}}
-        <div class="type-tag-positioner" style="background-image: url('{{course_background_image}}')">
-            <img alt="Course_image" class="course-badge img-circle" src="{{course_image}}" style="padding:5px;">
+{{#if has_course_image}}
+    <div class="type-tag-positioner" style="background-image: url('{{course_background_image}}')">
+        <img alt="Course_image" class="course-badge img-circle" src="{{course_image}}" style="padding:5px;">
+{{else}}
+    <div class="type-tag-positioner" style="">
+{{/if}}
+{{#each course_topic_details}}
+    {{#if has_topic}}
+            <div class="type ribbon1" style="background-color: {{topic_color}};">
+                <span>{{topic_name}}</span>
+            </div>
     {{else}}
-          <div class="type-tag-positioner" style="">
+            <div class="type ribbon1" style="background-color: #228b22">
+                <span>others</span>
+            </div>
     {{/if}}
-    {{#each course_topic_details}}
-        {{#if has_topic}}
-                <div class="type ribbon1" style="background-color: {{topic_color}};">
-                    <span>{{topic_name}}</span>
-                </div>
-        {{else}}
-                <div class="type ribbon1" style="background-color: #228b22">
-                    <span>others</span>
-                </div>
-        {{/if}}
-    {{/each}}
-    </div>
+{{/each}}
+</div>
     <div class="details" data-id="{{id}}" style="padding: 13.5em 18px 2em 15px;color: #005580">
         <h2>
             {{course_name}}
@@ -65,6 +65,6 @@
         <p class="desc" style="height:36px">
             {{course_short_decription}}
         </p>
-        </div>
     </div>
+</div>
 </div>
