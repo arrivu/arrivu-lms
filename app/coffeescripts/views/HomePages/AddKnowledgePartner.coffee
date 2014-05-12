@@ -7,8 +7,10 @@ define [
   'compiled/models/KnowledgePartner'
   'compiled/collections/KnowledgePartnersCollection'
   'compiled/views/HomePages/TotalKnowledgePartnerCollectionView'
+  'compiled/views/HomePages/KnowledgePartnerCollectionView'
   'compiled/jquery/fixDialogButtons'
-], ({View},$,I18n,htmlEscape, template,KnowledgePartner,KnowledgePartnerCollection,TotalKnowledgePartnerCollectionView) ->
+], ({View},$,I18n,htmlEscape, template,KnowledgePartner,KnowledgePartnerCollection,TotalKnowledgePartnerCollectionView,
+    KnowledgePartnerCollectionView) ->
 
   class AddKnowledgePartner extends View
     template: template
@@ -28,8 +30,15 @@ define [
         close: => @$el.remove()
       @show_all_knowledge_partners()
 
+    show_all_partners_on_indexpage: =>
+      knowledgePartnerCollection = new KnowledgePartnerCollection
+      knowledgeprtnerCollectionIndexView = new KnowledgePartnerCollectionView
+        collection: knowledgePartnerCollection
+        el: "#knowledge_partners_div"
+      knowledgeprtnerCollectionIndexView.collection.fetch()
+      knowledgeprtnerCollectionIndexView.render()
+
     show_all_knowledge_partners: =>
-      console.log('show all inside knowledge partner')
       knowledgePartnerCollection = new KnowledgePartnerCollection
       totalKnowledgePartnerCollectionView = new TotalKnowledgePartnerCollectionView
         collection: knowledgePartnerCollection
@@ -66,6 +75,7 @@ define [
             $.ajaxJSON url, 'DELETE',{}, ondeleteSuccess,onError
             dialog.dialog 'close'
             @show_all_knowledge_partners()
+            @show_all_partners_on_indexpage()
         ]
 
     ondeleteSuccess = (event) ->

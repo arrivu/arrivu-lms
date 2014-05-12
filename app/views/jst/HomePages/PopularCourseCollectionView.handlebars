@@ -1,6 +1,17 @@
-<div class="secondary-content">
+{{#unless ENV.show_banner}}
+<a href="#" id="add_popular_courses" style="margin-left:  1122px" class="edit_letter_grades_link">
+    {{#if ENV.PERMISSIONS.user_logged_in}}
+        {{#if ENV.PERMISSIONS.enable_links}}
+            {{#t "manage_popular_course"}}Manage Popular Course{{/t}}
+        {{/if}}
+    {{/if}}
+</a>
+{{/unless}}
+{{#if ENV.show_banner}}
+<div class="secondary-content" id="popular_course_banner">
     <h1 class="banner"> Popular Courses</h1>
 </div>
+
 <a href="#" id="add_popular_courses" style="margin-left:  1122px" class="edit_letter_grades_link">
     {{#if ENV.PERMISSIONS.user_logged_in}}
       {{#if ENV.PERMISSIONS.enable_links}}
@@ -13,4 +24,8 @@
 
 </ul>
 </div>
+{{#if ENV.popular_courses_count }}
+    <a href="/libraries" style="margin-top: -30px;position: absolute;margin-left: 1146px;">See More Courses</a>
+{{/if}}
 <div class="paginatedLoadingIndicator" style="display: none"></div>
+{{/if}}

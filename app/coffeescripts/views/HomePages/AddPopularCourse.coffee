@@ -34,8 +34,7 @@ define [
         disableWhileLoading: true
         close: => @$el.remove()
       @showallAccountCourses()
-#      loadingDfd = new $.Deferred()
-#      $("#all_courses").disableWhileLoading loadingDfd
+
 
     showPopularCourseonIndexPage: =>
       popularCourseCollection = new PopularCoursesCollection

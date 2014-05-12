@@ -29,6 +29,9 @@ define [
       'click #add_knowledge_partners': 'addKnowledgePartner'
       'click .details':'movetocourselibrary'
 
+    afterRender:->
+      $("#knowledge_partners_div").css("background-image",null)
+
     addAccountSlider: ->
       newAccountSliderView = new AccountSlider
       @addAccountSliderView = new AddAccontSliders

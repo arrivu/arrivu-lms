@@ -2,6 +2,8 @@ class PopularCoursesController < ApplicationController
 
   def index
     #account courses list
+    @show_banner = false
+    @total_popular_course_count = 0
     respond_to do |format|
       @courses = []
       if  params[:topic_id].present? and params[:topic_id].to_i != 0
@@ -28,6 +30,12 @@ class PopularCoursesController < ApplicationController
         @course_tags = tag_details(course)
         if course.popular_course
           @popular_course = true
+          @total_popular_course_count += 1
+          if @total_popular_course_count >= 7
+            @show_only_six_courses = true
+          else
+            @show_only_six_courses = false
+          end
           @popular_id = course.popular_course.id
         else
           @popular_course = false
@@ -55,6 +63,7 @@ class PopularCoursesController < ApplicationController
           json[:profile_data] =  @teacher_desc
           json[:has_course_image] = @has_course_image
           json[:course_topic_details] = @course_topic
+          json[:show_only_six_courses] = @show_only_six_courses
         end
         @courses << @course_json
       end

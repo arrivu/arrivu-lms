@@ -724,3 +724,20 @@ a.thumbnail:hover {
   padding-top: 7px;
 }
 
+.knowledge-evenflow {
+  position: relative;
+  top: 0em;
+  display: table;
+  margin: 0 -1.25em 0 -1.25em;
+  width: 104%;
+  border-collapse: separate;
+  .resource-row {
+    display: table-row;
+    border-collapse: collapse;
+    .resource {
+      outline: 0px solid #dbdbdb;
+      float: none;
+      display: table-cell;
+    }
+  }
+}
