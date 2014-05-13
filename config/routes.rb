@@ -1677,7 +1677,17 @@ routes.draw do
   if ELEARNING
     match '/context_tags' => 'tags#context_tags'
     resources :home_pages
-    resources :libraries
+    resources :libraries do
+      match 'enroll' => 'libraries#enrollment', :as => :enrollments
+    end
+    match 'payment_confirm',:to => 'libraries#payment_confirm'
+    resources :payments, only: [:show, :create, :destroy] do
+      collection do
+        get :success
+        get :cancel
+        post :notify
+      end
+    end
   end
   resources :omniauth_links
   match '/auth/:provider/callback' => 'authentication#create'

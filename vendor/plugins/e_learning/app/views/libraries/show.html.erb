@@ -1,7 +1,5 @@
 <style>
-    #content{
-        padding: 0px;
-    }
+
     .course_properties{
         display: inline;
         margin-left: 33px;
@@ -9,11 +7,11 @@
     }
     .price_box{
         float: right;
-        margin-top: -189px;
+        margin-top: -190px;
         width: 20.5%;
-        margin-right: 20px;
+        margin-right: 60px;
         background-color: white;
-        height: 200px;
+        height: 178px;
         text-align: center;
     }
 
@@ -22,8 +20,8 @@
     }
     .xleftcol3{
         float: left;
-        width: 23%;
-        margin-left: 10px;
+        width: 21%;
+        margin-left: 59px;
     }
     .xmiddlecol3 {
         overflow:hidden;
@@ -33,27 +31,27 @@
     * html .xmiddlecol3 .xinner3{width:100%;}
 
     .xrightcol3 {
-        float:right;
-        width: 22.5%;
-        position:relative;
+        float: right;
+        width: 21.3%;
+        position: relative;
         margin-left: 55px;
         height: 301px;
-        background: lightblue;
-        margin-right: 10px;
+        margin-right: 59px;
     }
-   .xinner3{margin-left: 18px;
+   .xinner3{margin-left: 30px;
    }
    .course_module_item{
        padding: 14px;
-       background-color: #f0f0f0;
-       margin-bottom: 3px;
+       background: #f6f5ed;
+       box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+       margin-bottom: 6px;
        list-style: none;
    }
     .course_module_item:hover{
-        border-left: 3px solid lightskyblue;
+        border-left: 3px solid #008fd6;
     }
     .default_hover_style{
-        border-left: 3px solid lightskyblue;
+        border-left: 3px solid #008fd6;
     }
     .left{
         float: left;
@@ -62,11 +60,33 @@
         margin-left: 21px;
         margin-right: 5px;
     }
-    .instructor-bio:hover{
+    .instructor-bio:hover {
         -moz-box-shadow: 0 0 10px #ccc;
         -webkit-box-shadow: 0 0 10px #ccc;
         box-shadow: 0 0 10px #ccc;
     }
+    .comment_box:hover{
+        -moz-box-shadow: 0 0 10px #ccc;
+        -webkit-box-shadow: 0 0 10px #ccc;
+        box-shadow: 0 0 10px #ccc;
+    }
+   .comment{
+       padding: 17px;
+       margin-bottom: 10px;
+       background: #f6f5ed;
+       box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+   }
+    .left_bottom_border{
+        order-bottom: 1px solid lightgray;
+        border-left: 1px solid lightgray;
+        border-radius: 3px;
+    }
+   .price_box_on_model{
+       text-align: center;
+       width: 300px;
+       height: 70px;
+       margin-left: 128px;
+   }
 </style>
 <% @body_classes << "gradebook2 full-width"
 @show_left_side = false
@@ -75,16 +95,19 @@
 <% if @context_bg_image_url %>
     style="background-image: url('<%= @context_bg_image_url %>');background-size: 100% auto;height: 250px;"
 <% else  %>
-    style="background-image: url('/images/pattern-bg.png');height: 250px;border-bottom: 1px solid lightgrey;"
+    style="background: #f6f5ed;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);;height: 250px;"
 <% end  %>
 >
-  <div style="width: 20%;padding-top: 19px;padding-left: 21px;">
+  <div style="width: 20%;padding-top: 19px;padding-left: 60px;">
     <% if @context_image_url  %>
         <%= image_tag @context_image_url ,:class=> "thumbnail"%>
+    <% else %>
+        <div style="width: 280px;height: 207px;"></div>
     <% end %>
   </div>
-<div style="width: 75%;float: right;margin-top: -185px;">
-  <div style="width: 685px;font-size: 23px;
+<div style="width: 72.5%;float: right;margin-top: -185px;">
+  <div style="width: 600px;font-size: 23px;
           font-weight: bold;">
         <%= @context.name %>
   </div>
@@ -115,15 +138,22 @@
   <div class="price_box thumbnail">
     <div style="font-size: 18px;margin-top: 36px;">Cost per enrollment:</div>
     <div style="font-size: 18px;margin-top: 10px;font-weight: bold;
-            color: darkgreen;"><%= @course_pricing.nil? ? "Free" : "$#{@course_pricing}" %></div>
-    <div style="margin-top: 20px;"> <button class="btn btn-primary btn-large" type="button" style="border-radius: 0px;">Take This Course</button></div>
+            color: darkgreen;"><%= @course_pricing.nil? ? "Free" : "$#{@course_pricing.price}" %></div>
+    <div style="margin-top: 20px;">
+     <%if can_do(@context, @current_user, :read)  %>
+          <%= link_to "Go to class" ,course_path(@context) ,:class =>"btn btn-primary btn-large" ,:style=> "border-radius: 0px;"%>
+     <% else  %>
+          <button class="btn btn-primary btn-large element_toggler" aria-controls="enrollment_dialog"  type="button" style="border-radius: 0px;">Take This Course</button>
+     <% end  %>
+    </div>
   </div>
 </div>
 
 <div class="xouter3">
   <div class="xleftcol3">
+    <h1>Instructors</h1>
     <% @context.teachers.each do |teacher| %>
-    <div class="instructor-bio" style="max-height: none;border-bottom: 1px solid lightgray;border-right: 1px solid lightgray;
+    <div class="instructor-bio comment comment_box" style="max-height: none;border-bottom: 1px solid lightgray;border-right: 1px solid lightgray;
             border-radius: 4px;">
       <img src=<%= teacher.avatar_url ? teacher.avatar_url : "http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&f=y" %> width="100" height="100" class="left img-circle" alt="<%= teacher.name%>">
       <h3 class="last emboss-light"><%= teacher.name%></h3>
@@ -141,12 +171,33 @@
 
   </div>
   <div class="xrightcol3">
-    <p>This is the rightcol : </p>
+    <h1>Reviews</h1>
+    <% @comments.each do |comment| %>
+        <table>
+          <div  class="comment left_bottom_border" id="comment_<%= comment ? comment.id : "{{ blank }}" %>" style="<%= hidden unless comment %>">
+            <div style="float: left;" class="user_name">
+
+              <% if service_enabled?(:avatars) %>
+                  <%= avatar(comment.user_id) %>
+              <% end  %>
+              <%= comment.user_name rescue nbsp %></div>
+            &nbsp;<%= comment.user.name  %>
+            <br> &nbsp;
+
+            <span class="created_at" style="color: #888; font-size: 0.8em;">
+                  <%= datetime_string(comment.updated_at) rescue nbsp %></span>
+            <div class="clear" style="border-top: 1px solid #ccc;"></div>
+           <p><%= comment.comment  %></p>
+          </div>
+
+        </table>
+    <%end %>
   </div>
   <div class="xmiddlecol3">
     <div class="xinner3">
-    <h1>Full course description</h1>
-      <div style="font-size: 14px;">
+    <h1 style="border-bottom: 1px solid lightgray;" y>Full course description</h1>
+      <div style="font-size: 16px;
+              line-height: 1.5;">
         <%= @context.course_description.try(:long_description) %>
       </div>
       <hr/>
@@ -162,3 +213,23 @@
     </div>
   </div>
 </div>
+<div class="clear" style="border-top: 1px solid #ccc;margin-top: 50px;"></div>
+
+<form action="<%=library_enrollments_path(@context)%>" id="enrollment_dialog" data-turn-into-dialog='{"width":600,"height":600,"modal":true}' style="display:none"
+      title="<%= @context.name %>">
+  <p> You are enrolling in,<b><%= @context.name %> </b> as a student.</p>
+  <br/>
+  <div class="price_box_on_model thumbnail">
+    <div style="font-size: 18px;margin-top: 10px;">Cost per enrollment:</div>
+    <div style="font-size: 18px;margin-top: 10px;font-weight: bold;
+            color: darkgreen;"><%= @course_pricing.nil? ? "Free" : "$#{@course_pricing.price}" %></div>
+  </div>
+  <br/>
+  <% if @current_user %>
+    <p>You are currently signed in as <b><%= @current_user.name %></b>. </p>
+  <% end %>
+  <div class="button-container">
+    <button type="submit" id="course_enrollment" class="btn btn-primary">Enroll in course</button>
+    <a class="btn dialog_closer">cancel</a>
+  </div>
+</form>

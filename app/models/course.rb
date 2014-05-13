@@ -124,6 +124,7 @@ class Course < ActiveRecord::Base
   has_one :course_description
   has_one :course_image
   has_one :popular_course
+  has_many :payments
   #arrivu changes
   include LearningOutcomeContext
   include RubricContext

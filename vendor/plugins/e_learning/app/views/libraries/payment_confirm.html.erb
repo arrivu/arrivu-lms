@@ -1,0 +1,20 @@
+ <h3 style="text-align: center;">Order Details</h3>
+<table class="table table-bordered table-striped">
+<thead style="background-color: #047fdb;color:white"><th></th><th>Title</th><th>Description</th><th>Quantity</th><th>Price</th></thead>
+  <tr ><td width="20%" style="text-align: center;">
+    <% if @context_image_url %>
+        <%= image_tag @context_image_url ,:class=> "thumbnail" , :style=>"width:310px;height:175px;"%>
+    <% end  %>
+  </td>
+    <td><%= @context.name%></td><td><%= @context.course_description.try(:short_description)%></td><td>1</td><td><%= number_to_currency(@course_pricing.price.to_i, :precision => 2,:delimiter => ',')%></td></tr>
+  <tr><td colspan="5" style="text-align: center;">
+  <% @grouped_payments.each do |payments| %>
+        <% payment = payments.first %>
+        <%= content_tag :section, :class => payment.ux_type do %>
+            <div class="boxes">
+              <%= render payments %>
+            </div>
+        <% end %>
+    <% end %></td></tr>
+</table>
+

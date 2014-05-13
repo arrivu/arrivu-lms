@@ -144,6 +144,9 @@ class User < ActiveRecord::Base
   has_many :notification_policies, through: :communication_channels
   has_one :communication_channel, :conditions => ["workflow_state<>'retired'"], :order => 'position'
   has_many :enrollments, :dependent => :destroy
+  #Arrivu changes
+  has_many :payments
+  #Arrivu changes
 
   if CANVAS_RAILS2
     has_many :current_enrollments, :class_name => 'Enrollment', :include => [:course, :course_section], :conditions => enrollment_conditions(:active), :order => 'enrollments.created_at'
