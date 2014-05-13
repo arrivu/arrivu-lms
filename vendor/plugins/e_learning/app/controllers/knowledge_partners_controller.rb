@@ -5,7 +5,7 @@ class KnowledgePartnersController < ApplicationController
   def index
     respond_to do |format|
       @knowledge_partners = []
-      @account_knowledge_partners = @domain_root_account.knowledge_partners
+      @account_knowledge_partners = @domain_root_account.knowledge_partners.limit(3)
       @account_knowledge_partners.each_with_index do |knowledge_partner, idx|
         attachment = Attachment.find(knowledge_partner.knowledge_partners_attachment_id)
         @knowledge_partner_json =   api_json(attachment, @current_user, session, API_USER_JSON_OPTS).tap do |json|
@@ -17,7 +17,6 @@ class KnowledgePartnersController < ApplicationController
       end
       format.json {render :json => @knowledge_partners.to_json}
     end
-
   end
 
   def create
