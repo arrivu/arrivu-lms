@@ -11,8 +11,8 @@ class HomePagesController < ApplicationController
     js_env :Account_Statistics => {
           users_count: @domain_root_account.users.count,
           courses_count: @domain_root_account.courses.count,
-          #modules_count:
-          #topics_count:
+          modules_count:total_account_modules_count,
+          topics_count:@domain_root_account.topics.count
 
     }
     js_env :account_has_sliders => @domain_root_account.account_sliders.count > 0
@@ -102,5 +102,15 @@ class HomePagesController < ApplicationController
 
     render :json => json, :as_text => true
   end
+
+  def total_account_modules_count
+    @account_modules = 0
+    @account_courses = @domain_root_account.courses
+      @account_courses.each do  |course|
+        @modules_count = course.context_modules.size if course.context_modules
+        @account_modules += @modules_count
+      end
+    @account_modules
+    end
 
 end

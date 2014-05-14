@@ -35,7 +35,6 @@ define [
         close: => @$el.remove()
       @showallAccountCourses()
 
-
     showPopularCourseonIndexPage: =>
       popularCourseCollection = new PopularCoursesCollection
       popularCourseCollectionView = new PopularCourseCollectionView

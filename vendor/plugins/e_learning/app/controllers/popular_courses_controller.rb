@@ -16,17 +16,21 @@ class PopularCoursesController < ApplicationController
         @teacher_desc = instructure_details(course)
         @course_image = course.course_image
         @course_topic = course_topic(course)
+        @course_pricing = CoursePricing.where('course_id = ? AND DATE(?) BETWEEN start_at AND end_at', course.id, Date.today).first
+        @course_modules = course.context_modules.nil? ? false :  course.context_modules.size if course.context_modules
+        if @course_pricing.nil?
+          @show_course_price = false
+        else
+          @show_course_price = true
+          @course_pricing
+        end
         if@course_image.nil?
           @has_course_image = false
         else
           @has_course_image = true
         end
-        if course.tags.nil?
-          @course_tags_count = 0
-        else
-          @course_tags_count = course.tags.count
-        end
-        @users_count = course.users.count
+        @course_tags_count = course.tags.count.nil? ? 'false' : course.tags.count if course.tags
+        @users_count = course.student_enrollments.count.nil? ? "false" : course.student_enrollments.count
         @course_tags = tag_details(course)
         if course.popular_course
           @popular_course = true
@@ -42,9 +46,9 @@ class PopularCoursesController < ApplicationController
         end
         if course.course_description
           @course_desc = CourseDescription.find(course.course_description.id) rescue nil
-          @short_course_desc = @course_desc.long_description
+          @short_course_desc = @course_desc.short_description
         else
-          @short_course_desc = []
+          @short_course_desc = ""
         end
         image_attachment = Attachment.find(@course_image.course_image_attachment_id) rescue nil
         background_image_attchment = Attachment.find(@course_image.course_back_ground_image_attachment_id) rescue nil
@@ -64,6 +68,9 @@ class PopularCoursesController < ApplicationController
           json[:has_course_image] = @has_course_image
           json[:course_topic_details] = @course_topic
           json[:show_only_six_courses] = @show_only_six_courses
+          json[:show_course_price] =  @show_course_price
+          json[:course_price] = @course_pricing
+          json[:course_modules] = @course_modules
         end
         @courses << @course_json
       end
@@ -84,18 +91,21 @@ class PopularCoursesController < ApplicationController
     @teachers.each do |teacher|
       @user_id = User.find(teacher.user_id)
       if @user_id.profile.bio !=nil && @user_id.profile.title !=nil
-        @profile = truncate_text(@user_id.profile.bio,:length => 30)
-
+        @profile = @user_id.profile.bio
         if @user_id.avatar_image_url.nil?
           @profile_pict = "/images/User.png"
         else
           @profile_pict = @user_id.avatar_image_url
         end
-      end
         @instructue_json =   api_json(course,@current_user, session, API_USER_JSON_OPTS).tap do |json|
           json[:teacher_desc] = @profile
           json[:teacher_image] = @profile_pict
         end
+      else
+        @instructue_json =   api_json(course,@current_user, session, API_USER_JSON_OPTS).tap do |json|
+          json[:teacher_desc] = false
+        end
+      end
       @instructure_details << @instructue_json
     end
     end

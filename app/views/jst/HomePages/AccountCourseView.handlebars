@@ -1,13 +1,13 @@
 {{#if popular_course}}
-    <div class="span3 content-box resource" style="float: left;height: 410px;left: 100px;" id="is_a_popular_course" data-id="{{popular_id}}">
+    <div class="span3 content-box resource" style="float: left;height: 410px;left: 45px;width: 278px;" id="is_a_popular_course" data-id="{{popular_id}}">
         <div class="ribbon-wrapper">
             <div class="ribbon-wrapper-green"><div class="ribbon-green">Popular</div></div>
         </div>
 {{else}}
-    <div class="span3 content-box resource" style="float: left;height: 410px;left: 100px;" id="is_not_a_popular_course" >
+    <div class="span3 content-box resource" style="float: left;height: 410px;left: 45px;width: 278px;" id="is_not_a_popular_course" >
 {{/if}}
 {{#if has_course_image}}
-    <div class="type-tag-positioner" style="background-image: url('{{course_background_image}}')">
+    <div class="type-tag-positioner" style="background-image: url('{{course_background_image}}');;background-size: cover;">
         <img alt="Course_image" class="course-badge img-circle" src="{{course_image}}" style="padding:5px;">
 {{else}}
     <div class="type-tag-positioner" style="">
@@ -24,30 +24,51 @@
     {{/if}}
 {{/each}}
 </div>
-    <div class="details" data-id="{{id}}" style="padding: 13.5em 18px 2em 15px;color: #005580">
+    <div class="details" data-id="{{id}}" id="{{id}}" style="padding: 13.5em 18px 2em 15px;color: #005580">
         <h2>
             {{course_name}}
         </h2>
         <table style="margin-top: 23px;color:#0F0D0D;;font-weight: 100;">
             <tr>
-                <td style="padding-left: 12px;">
-                    <a class="icon-module"></a>
-                </td>
-                <td>
-
-                </td>
-                <td style="padding-left: 49px;">
-                    <a class="icon-user"></a>
-                </td>
-                <td style="padding-left:2px">
-                    {{users_count}}
-                </td>
-                <td style="padding-left: 49px;">
-                    <a class="icon-tag"></a>
-                </td>
-                <td style="padding-left: 2px">
-                    {{tags_count}}
-                </td>
+                {{#if show_course_price}}
+                    <td>
+                        <img src="/images/icon-price.jpg" style="width:16px;height:16px;padding-left:22px;padding-right: 30px;">
+                    </td>
+                    <td>
+                        {{course_price}}
+                    </td>
+                {{else}}
+                    <td style="padding-left:14px;padding-right: 15px;">
+                        Free
+                    </td>
+                {{/if}}
+                {{#if course_modules}}
+                    <td style="padding-left: 14px;">
+                        <a class="icon-module"></a>
+                    </td>
+                    <td>
+                        {{course_modules}}
+                    </td>
+                {{/if}}
+                {{#if users_count}}
+                    <td style="padding-left: 30px;">
+                        <a class="icon-user"></a>
+                    </td>
+                    <td style="padding-left:2px">
+                        {{users_count}}
+                        <span
+                            data-tooltip title="Course has {{users_count}} users">
+                        </span>
+                    </td>
+                {{/if}}
+                {{#if tags_count}}
+                    <td style="padding-left: 32px;">
+                        <a class="icon-tag"></a>
+                    </td>
+                    <td style="padding-left: 2px">
+                        {{tags_count}}
+                    </td>
+                {{/if}}
             </tr>
         </table>
         <ul class="tags" style="list-style-type: none;">
@@ -61,9 +82,8 @@
             {{/each}}
 
         </ul>
-
-        <p class="desc" style="height:36px">
-            {{course_short_decription}}
+        <p class="desc" style="height:42px">
+            {{{ truncate course_short_decription 85 }}}
         </p>
     </div>
 </div>
