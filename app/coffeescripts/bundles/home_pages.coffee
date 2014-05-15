@@ -1,5 +1,4 @@
 require [
-  'jquery'
   'compiled/views/HomePages/IndexView'
   'compiled/collections/AccountSlidersCollection'
   'compiled/collections/PopularCoursesCollection'
@@ -8,10 +7,9 @@ require [
   'compiled/views/HomePages/PopularCourseCollectionView'
   'compiled/collections/KnowledgePartnersCollection'
   'compiled/views/HomePages/KnowledgePartnerCollectionView'
-  'jqueryui/jquery.jcontent.0.8'
-  'jqueryui/jquery.easing.1.3'
   'jquery.disableWhileLoading'
-], ($,IndexView,AccountSliderCollection,PopularCoursesCollection,AccountSliderCollectionView,AccountStatisticsView,
+  'slider'
+], (IndexView,AccountSliderCollection,PopularCoursesCollection,AccountSliderCollectionView,AccountStatisticsView,
     PopularCourseCollectionView,KnowledgePartnersCollection,KnowledgePartnerCollectionView) ->
 
   # Collections
@@ -56,8 +54,23 @@ require [
         duration: 500
         width:229
         height:46
+
+      if $("#popular_course_div").find("#popular_course_on_index_page").length == 0
+        $("#popular_course_div").css('background-image','url()')
+        $("#popular_course_banner").hide()
+        $("#more_courses").hide()
+        $("#popular_course_paginating").hide()
+      if $("#popular_course_div").find("#popular_course_on_index_page").length > 0
+        $("#popular_course_div").css('background-image','url("/images/pattern-bg.png")')
+        $("#popular_course_banner").show()
+        $("#more_courses").show()
+        $("#popular_course_paginating").show()
   )
-  popularCourseCollection.fetch()
-  knowledgePartnerCollection.fetch()
+  knowledgePartnerCollection.fetch(
+    success: ->
+      if $("#knowledge_partners_div").find("#knowledge_partner_on_index_page").length == 0
+        $("#knowledge_partner_banner").hide();
+        $("#more_partners").hide();
+  )
 
 

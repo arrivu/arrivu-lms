@@ -1,7 +1,8 @@
+<div id="hide_banner">
 <div class="secondary-content" id="popular_course_banner">
     <h1 class="banner"> Popular Courses</h1>
 </div>
-
+</div>
 <a href="#" id="add_popular_courses" style="margin-left:  1122px" class="edit_letter_grades_link">
     {{#if ENV.PERMISSIONS.user_logged_in}}
       {{#if ENV.PERMISSIONS.enable_links}}
@@ -10,11 +11,11 @@
     {{/if}}
 </a>
 <div class="resource-row" style="margin-top: 100px;">
-<ul class="collectionViewItems " style="list-style-type: none;margin-top: 39px;">
+<ul class="collectionViewItems " style="list-style-type: none;">
 
 </ul>
 </div>
-
-    <a href="/libraries" class="browseourcoursessmall" style="margin-top: -37px;position: absolute;margin-left: 1146px;">See More Courses</a>
-
-<div class="paginatedLoadingIndicator" style="display: none"></div>
+{{#if ENV.popular_courses_count}}
+  <a href="/libraries" id="more_courses" class="browseourcoursessmall" style="margin-top: -37px;position: absolute;margin-left: 1146px;">See More Courses</a>
+{{/if}}
+<div class="paginatedLoadingIndicator" id="popular_course_paginating" style="display: none"></div>

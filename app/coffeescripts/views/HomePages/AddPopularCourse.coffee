@@ -78,7 +78,6 @@ define [
           account_id: ENV.account_id
       if this.$(event.currentTarget.firstElementChild).attr('id') == "is_a_popular_course"
         popular_id = this.$(event.currentTarget.firstElementChild).attr('data-id')
-        console.log(popular_id)
         deletemsg = "Are you sure want to remove this Course from Popular Courses?"
         dialog = $("<div>#{deletemsg}</div>").dialog
           modal: true,
@@ -93,11 +92,21 @@ define [
               url = "api/v1/accounts/"+ENV.account_id+"/popular_courses/"+ id
               @$el.disableWhileLoading($.ajaxJSON url, 'DELETE',data, onSuccessdelete,onError)
               dialog.dialog 'close'
+              if $("#popular_course_div").find("#popular_course_on_index_page").length == 1
+                $("#popular_course_div").css('background-image','url()')
+                $("#popular_course_banner").hide()
+                @showallAccountCourses()
+                $(".resource-row").hide()
+                $("#more_courses").hide()
+                $("#popular_course_paginating").hide()
+              if $("#popular_course_div").find("#popular_course_on_index_page").length > 1
+                @showPopularCourseonIndexPage()
+                @showallAccountCourses()
               @showallAccountCourses()
-              @showPopularCourseonIndexPage()
           ]
       else
         url = "api/v1/accounts/"+ENV.account_id+"/popular_courses"
         @$el.disableWhileLoading($.ajaxJSON url,'POST',data, onSuccess,onError)
+        $("#popular_course_div").css('background-image','url("/images/pattern-bg.png")');
         @showallAccountCourses()
         @showPopularCourseonIndexPage()

@@ -20,6 +20,7 @@ class PopularCoursesController < ApplicationController
         @course_modules = course.context_modules.nil? ? false :  course.context_modules.size if course.context_modules
         if @course_pricing.nil?
           @show_course_price = false
+
         else
           @show_course_price = true
           @course_pricing
@@ -71,12 +72,12 @@ class PopularCoursesController < ApplicationController
           json[:show_course_price] =  @show_course_price
           json[:course_price] = @course_pricing
           json[:course_modules] = @course_modules
+          json[:popular_course_count] = @popular_course_count
         end
         @courses << @course_json
       end
       format.json {render :json => @courses.to_json}
-
-      end
+    end
   end
 
   def instructure_details(course)
