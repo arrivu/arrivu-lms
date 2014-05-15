@@ -7,16 +7,20 @@ require [
   'compiled/views/HomePages/PopularCourseCollectionView'
   'compiled/collections/KnowledgePartnersCollection'
   'compiled/views/HomePages/KnowledgePartnerCollectionView'
+  'compiled/views/HomePages/LearnersReviewsCollectionView'
+  'compiled/collections/LearnerReviewCollection'
   'jquery.disableWhileLoading'
   'slider'
 ], (IndexView,AccountSliderCollection,PopularCoursesCollection,AccountSliderCollectionView,AccountStatisticsView,
-    PopularCourseCollectionView,KnowledgePartnersCollection,KnowledgePartnerCollectionView) ->
+    PopularCourseCollectionView,KnowledgePartnersCollection,KnowledgePartnerCollectionView,LearnerReviewCollectionView
+    LearnerReviewCollection) ->
 
   # Collections
 
   accountSliderCollection = new AccountSliderCollection
   popularCourseCollection = new PopularCoursesCollection
   knowledgePartnerCollection = new KnowledgePartnersCollection
+  learnerReviewCollection = new LearnerReviewCollection
 
   # Views
   accountSliderCollectionView = new AccountSliderCollectionView
@@ -26,12 +30,15 @@ require [
     collection: popularCourseCollection
   knowledgePartnerCollectionView = new KnowledgePartnerCollectionView
     collection: knowledgePartnerCollection
+  learnerReviewCollectionView = new  LearnerReviewCollectionView
+   collection:learnerReviewCollection
 
   @app = new IndexView
     accountSliderCollectionView: accountSliderCollectionView
     accountStatisticsView: accountStatisticsView
     popularCourseCollectionView: popularCourseCollectionView
     knowledgePartnerCollectionView: knowledgePartnerCollectionView
+    learnerReviewCollectionView: learnerReviewCollectionView
     el: '#content'
 
   @app.render()
@@ -72,5 +79,6 @@ require [
         $("#knowledge_partner_banner").hide();
         $("#more_partners").hide();
   )
+  learnerReviewCollection.fetch()
 
 
