@@ -20,5 +20,10 @@ define([
             pause: 1500,
             pause_on_hover: true});
 
+        if ($("#popular_course_div").find("#popular_course_on_index_page").length == 0)
+            $("#popular_course_banner").hide();
+            $(".browseourcoursessmall").hide();
+
+
     });
 });

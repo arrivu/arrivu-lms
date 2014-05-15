@@ -31,6 +31,8 @@ define [
       @show_all_knowledge_partners()
 
     show_all_partners_on_indexpage: =>
+      if $("#knowledge_partner_on_index_page").length == 1
+        $(".thumbnail").hide()
       knowledgePartnerCollection = new KnowledgePartnerCollection
       knowledgeprtnerCollectionIndexView = new KnowledgePartnerCollectionView
         collection: knowledgePartnerCollection
@@ -74,8 +76,14 @@ define [
             url = "api/v1/accounts/"+ENV.account_id+"/knowledge_partners/"+delete_knowledge_partner_item.id
             $.ajaxJSON url, 'DELETE',{}, ondeleteSuccess,onError
             dialog.dialog 'close'
+            if $("#knowledge_partners_div").find("#knowledge_partner_on_index_page").length == 1
+              @show_all_knowledge_partners()
+              $("#knowledge_partner_banner").hide()
+              $("#more_partners").hide()
+             else
+              @show_all_knowledge_partners()
+              @show_all_partners_on_indexpage()
             @show_all_knowledge_partners()
-            @show_all_partners_on_indexpage()
         ]
 
     ondeleteSuccess = (event) ->

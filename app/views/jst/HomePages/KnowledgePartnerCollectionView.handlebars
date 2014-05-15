@@ -1,19 +1,8 @@
-{{#unless ENV.show_knowledge_banner}}
-    <a href="#" id="add_knowledge_partners" style="margin-left: 1123px" class="edit_letter_grades_link">
-        {{#if ENV.PERMISSIONS.user_logged_in}}
-            {{#if ENV.PERMISSIONS.enable_links}}
-                {{#t "manage_knowledge_partners"}}Manage Knowledge Partners{{/t}}
-            {{/if}}
-        {{/if}}
-    </a>
-
-{{/unless}}
-{{#if ENV.show_knowledge_banner}}
-<div class="secondary-content">
+<div class="secondary-content" id="knowledge_partner_banner">
     <h1 class="banner"> Knowledge partners</h1>
 </div>
 <div id="add_link" style="margin-bottom: -18px;z-index:1;font-size: 14px;font-style: oblique;margin-left: -154px;">
-    <a href="#" id="add_knowledge_partners" style="margin-left: 1123px" class="edit_letter_grades_link">
+    <a href="#" id="add_knowledge_partners" style="margin-left: 1239px" class="edit_letter_grades_link">
         {{#if ENV.PERMISSIONS.user_logged_in}}
             {{#if ENV.PERMISSIONS.enable_links}}
                 {{#t "manage_knowledge_partners"}}Manage Knowledge Partners{{/t}}
@@ -24,6 +13,5 @@
 <div class="span12 offset1 collectionViewItems" style="margin-top: 30px;margin-bottom: 21px">
 
 </div>
-     <a href="" class="browseourcoursessmall" style="margin-top: -6px;position: relative;margin-left: 1171px;">See More Partners</a>
-<div class="paginatedLoadingIndicator" style="display: none"></div>
-{{/if}}
+     <a href="" id="more_partners" class="browseourcoursessmall" style="margin-top: -6px;position: relative;margin-left: 1171px;">See More Partners</a>
+<div class="paginatedLoadingIndicator" id="knowledge_partner_paginating" style="display: none"></div>
