@@ -1679,8 +1679,10 @@ routes.draw do
     resources :home_pages
     resources :libraries do
       match 'enroll' => 'libraries#enrollment', :as => :enrollments
+      get 'payment_complete' => 'libraries#payment_complete', :as => :payment_complete
+      post 'create_user' => 'libraries#create_user', :as => :create_user
     end
-    match 'payment_confirm',:to => 'libraries#payment_confirm'
+    match 'payment_confirm/:course_id',:to => 'libraries#payment_confirm', :as => :payment_confirm
     resources :payments, only: [:show, :create, :destroy] do
       collection do
         get :success

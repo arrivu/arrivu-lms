@@ -28,7 +28,7 @@ class PaymentsController < ApplicationController
       payment.complete!(params[:PayerID])
       flash[:notice] = 'Payment Transaction Completed'
       #payment_url(payment.identifier)
-      redirect_to enrolled_courses_path
+      redirect_to library_payment_complete_path(payment.course,payment_id: payment.id)
       return
     end
   end
@@ -36,8 +36,8 @@ class PaymentsController < ApplicationController
   def cancel
     handle_callback do |payment|
       payment.cancel!
-      flash[:warn] = 'Payment Request Canceled'
-      root_url
+      flash[:info] = 'Payment Request Canceled'
+      redirect_to root_path
     end
   end
 

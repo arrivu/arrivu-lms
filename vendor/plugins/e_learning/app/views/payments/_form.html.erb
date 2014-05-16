@@ -1,11 +1,11 @@
 <%= form_for payment do |f| %>
-  <%= f.hidden_field :amount,:value=> @event.course.price %>
-  <%= f.hidden_field :event_id,:value=> @event.id %>
-  <%= f.hidden_field :user_id,:value=> current_user.id %>
+  <%= f.hidden_field :amount,:value=> @course_pricing.price.to_i %>
+  <%= f.hidden_field :course_id,:value=> @context.id %>
+  <%= f.hidden_field :user_id,:value=> @current_user.id %>
   <%= f.hidden_field :digital ,:value=> true%>
   <%= f.hidden_field :recurring,:value=> false %>
   <%= f.hidden_field :popup,:value=> false %>
-  <%= f.hidden_field :title,:value=> @event.title %>
-  <%= f.hidden_field :description,:value=> @event.description %>
+  <%= f.hidden_field :title,:value=> @context.name %>
+  <%= f.hidden_field :description,:value=> @context.course_description.try(:short_description) %>
   <%= f.submit 'Confirm', :class=>"btn btn-primary" %>
 <% end %>

@@ -87,6 +87,7 @@
        height: 70px;
        margin-left: 128px;
    }
+
 </style>
 <% @body_classes << "gradebook2 full-width"
 @show_left_side = false
@@ -101,7 +102,7 @@
 >
   <div style="width: 20%;padding-top: 19px;padding-left: 60px;">
     <% if @context_image_url  %>
-        <%= image_tag @context_image_url ,:class=> "thumbnail"%>
+        <%= image_tag @context_image_url ,:class=> "thumbnail" ,:style => "width: 275px;height: 181px;"%>
     <% else %>
         <div style="width: 280px;height: 207px;"></div>
     <% end %>
@@ -204,7 +205,7 @@
 
       <h1>Course Modules</h1>
       <ul style="margin: 0px;">
-        <% @context.context_modules.each_with_index do |context_modules, idx |  %>
+        <% @context.context_modules.active.each_with_index do |context_modules, idx |  %>
         <li class="course_module_item <%= idx == 0 ? 'default_hover_style' : "" %> ">
           <%= context_modules.name %>
         </li>
@@ -227,9 +228,157 @@
   <br/>
   <% if @current_user %>
     <p>You are currently signed in as <b><%= @current_user.name %></b>. </p>
+   <% else  %>
+      <p>Please enter your email address:</p>
+   <div id="login_url" style="margin-left: 128px;" rel="<%= login_path(:nonldap => (@domain_root_account && !@domain_root_account.ldap_authentication?).presence) %>">
+        <div class="control-group" id="email_info" rel="<%= library_create_user_path(@context) %>">
+          <label class="control-label" for="student_email">Email</label>
+          <div class="controls">
+            <input type="email" id="student_email" name="pseudonym[unique_id]" required="required" >
+          </div>
+        </div>
+        <div class="control-group" id="initial_action">
+          <div class="controls">
+            <label class="radio">
+              <input type="radio" name="initial_action" value="create">
+              I am a new user
+            </label>
+            <label class="radio">
+              <input type="radio" name="initial_action" value="log_in">
+              I already have a <%=@domain_root_account.name  %> login
+            </label>
+          </div>
+        </div>
+        <div class="user_info" id="log_in_user_info" style="display: none;">
+          <div class="control-group">
+            <label class="control-label" for="student_password">Password</label>
+            <div class="controls">
+              <input type="password" id="student_password" name="pseudonym[password]" required="required">
+            </div>
+          </div>
+        </div>
+        <div class="user_info" id="create_user_info" style="display: none;">
+          <div class="control-group">
+            <label class="control-label" for="student_name">Full Name</label>
+            <div class="controls">
+              <input type="text" id="student_name" name="user[name]" required="required">
+            </div>
+          </div>
+          <div class="control-group">
+            <div class="controls">
+              <label class="checkbox">
+                <input id="terms_of_use" type="checkbox" name="user[terms_of_use]" value="1" required="required" >
+                You agree to the <a href="<%= @domain_root_account.terms_of_use_url %>" target="_blank" class="external"><span>terms of use</span><span class="ui-icon ui-icon-extlink ui-icon-inline" title="Links to an external site."></span></a> and the <a href="//www.arrivulms.com/code-of-conduct" target="_new">code of conduct</a>.
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="control-group embedded-footer">
+          <a href="<%= @domain_root_account.privacy_policy_url %>" target="_blank" class="footer-info external"><span>View Privacy Policy</span><span class="ui-icon ui-icon-extlink ui-icon-inline" title="Links to an external site."></span></a>
+          <div class="controls">
+            <button class="btn btn-primary" style="visibility: hidden" id="submit_button" type="submit">Next</button>
+          </div>
+        </div>
+    </div>
   <% end %>
   <div class="button-container">
+    <% if @current_user %>
     <button type="submit" id="course_enrollment" class="btn btn-primary">Enroll in course</button>
+    <% end %>
     <a class="btn dialog_closer">cancel</a>
   </div>
 </form>
+
+<% js_block do %>
+    <script type="text/javascript">
+        require([
+            'jquery' /* $ */,
+            'jquery.instructure_forms' /* formSubmit */,
+            'jqueryui/dialog',
+            'jquery.disableWhileLoading'
+        ], function($) {
+            var clicked_create;
+            $('input:radio[name="initial_action"]').change(
+                    function(){
+                        if ($(this).is(':checked') && $(this).val() == 'create') {
+                            $("#create_user_info").show();
+                            $("#log_in_user_info").hide();
+                            clicked_create= 1;
+                        }else{
+                            $("#create_user_info").hide();
+                            $("#log_in_user_info").show();
+                            clicked_create= 0;
+                        }
+                    });
+            $("#submit_button").click(function() {
+                var $this = $(this);
+                if (clicked_create == 1){
+//                    validation
+
+                    if ($('#student_email').val() == ""){
+                        result = $('#student_email').validateForm({required: ['pseudonym[unique_id]']});
+                        return false;
+                    }
+
+                    if ($('#student_name').val() == ""){
+                        result = $('#student_name').validateForm({required: ['user[name]']});
+                        return false;
+                    }
+
+                    if (!$('#terms_of_use').is(":checked")){
+                        result = $('#terms_of_use').validateForm({required: ['user[terms_of_use]']});
+                        return false;
+                    }
+
+//                    validation
+
+                    $("#enrollment_dialog").disableWhileLoading($.ajax({
+                        type: 'POST',
+                        url: $("#email_info").attr('rel'),
+                        data: {pseudonym: {unique_id: $("#student_email").val()},user: {name: $("#student_name").val()} },
+                        success: function(res){
+                            $.flashMessage('User account created successfully!')
+
+
+                        },
+                        error: function(res){
+                            result = $('#student_email').validateForm({email_already_taken: ['pseudonym[unique_id]']});
+
+                        }
+                    })
+                    );
+
+                }else if (clicked_create == 0){
+                    //                    validation
+                    if ($('#student_email').val() == ""){
+                        result = $('#student_email').validateForm({required: ['pseudonym[unique_id]']});
+                        return false;
+                    }
+
+                    if ($('#student_password').val() == ""){
+                        result = $('#student_password').validateForm({required: ['pseudonym[password]']});
+                        return false;
+                    }
+//                    validation
+
+                    $("#enrollment_dialog").disableWhileLoading($.ajax({
+                        type: 'POST',
+                        url: $("#login_url").attr('rel'),
+                        data: {pseudonym_session: {unique_id: $("#student_email").val(),password: $("#student_password").val() ,remember_me: 0} },
+                        success: function(res){
+                            $.flashMessage('You have logged in successfully!')
+                            window.location.href = $("#enrollment_dialog").attr( 'action' );
+
+                        },
+                        error: function(res){
+                            $.flashMessage('Your name password is worong')
+                        }
+                    })
+                    );
+                }
+
+
+            });
+        });
+    </script>
+<% end %>
