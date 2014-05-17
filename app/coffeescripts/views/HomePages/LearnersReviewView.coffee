@@ -8,8 +8,9 @@ define [
 
     template: template
     tagName: 'li'
-    className: 'learners_review_item'
+    className: 'learner_review_item'
 
     afterRender: ->
       @$el.attr('id', 'learners_review_' + @model.get('id'))
+      @$el.css('display','inline-block')
       this

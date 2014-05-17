@@ -147,7 +147,8 @@ class PopularCoursesController < ApplicationController
     @course_topic <<@topic_json
     end
      @course_topic
-    end
+  end
+
 
   def create
     @popular_course = PopularCourse.new(course_id: params['popular_course_data']['popular_course_id'],account_id: params['popular_course_data']['account_id'])

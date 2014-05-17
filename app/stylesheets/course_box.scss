@@ -439,7 +439,6 @@
 .content-box {
   background-color: #fff;
   border: 1px solid #ddd;
-  left:  150px;
   clear: none;
   margin: 0px 55px 46px 0px;
   overflow: visible;
@@ -765,6 +764,37 @@ a.thumbnail:hover {
     background: #22aae0;
   }
 }
+
+.thumbnail .caption {
+  padding: 9px;
+  color: #555;
+  text-align: center;
+}
+
+.review-evenflow {
+  position: relative;
+  top: 0em;
+  display: table;
+  margin: 0 -1.25em 0 -1.25em;
+  width: 104%;
+  border-collapse: separate;
+  .resource-row {
+    display: table-row;
+    border-collapse: collapse;
+    .resource {
+      outline: 0px solid #dbdbdb;
+      float: none;
+      display: table-cell;
+    }
+  }
+}
+.comment-user-name{
+  text-align: center;
+  padding-top: 40px;
+  font-style: italic;
+  font-weight: 700;
+}
 .margin_bottom{
   margin-bottom: 10px;
+
 }

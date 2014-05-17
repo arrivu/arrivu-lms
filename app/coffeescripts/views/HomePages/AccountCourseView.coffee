@@ -12,4 +12,5 @@ define [
 
     afterRender: ->
       @$el.attr('id', 'popular_course_' + @model.get('id'))
+      @$el.css('display', 'inline-block')
       this

@@ -24,6 +24,13 @@ define([
             $("#popular_course_banner").hide();
             $(".browseourcoursessmall").hide();
 
+        $("div.author_slider_index_view").jContent({orientation: 'horizontal',
+            easing: 'easeOutCirc',
+            duration: 500,
+            direction: 'next', //or 'prev'
+            width:229,
+            circle: true,
+            height:46});
 
     });
 });

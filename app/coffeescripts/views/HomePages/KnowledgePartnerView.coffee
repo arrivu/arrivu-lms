@@ -8,8 +8,10 @@ define [
 
     template: template
     tagName: 'li'
-    className: 'knowledge_partners_item span3'
+    className: 'knowledge_partners_item'
 
     afterRender: ->
       @$el.attr('id', 'knowledge_partner_' + @model.get('id'))
+      @$el.css('display','inline-block')
+      @$el.css('width','279px','margin-top','21px')
       this

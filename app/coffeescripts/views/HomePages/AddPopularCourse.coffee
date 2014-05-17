@@ -11,7 +11,6 @@ define [
   'jquery.disableWhileLoading'
   'jqueryui/jquery.jcontent.0.8',
   'jqueryui/jquery.easing.1.3'
-  'jquery.disableWhileLoading'
 ], ($,I18n,htmlEscape, template,PopularCoure,PopularCoursesCollection,AccountCourseCollectionView,PopularCourseCollectionView,
     ValidatedFormView) ->
 
@@ -29,7 +28,7 @@ define [
       super
       @$el.dialog
         title: 'Add Popular Course'
-        width:  1200
+        width:  1300
         height: 600
         disableWhileLoading: true
         close: => @$el.remove()
