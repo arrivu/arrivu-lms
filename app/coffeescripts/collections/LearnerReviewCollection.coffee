@@ -3,5 +3,5 @@ define [
   'compiled/models/LearnerReview'
 ], (PaginatedCollection, LearnerReview) ->
 
-  class KnowledgePartnersCollection extends PaginatedCollection
+  class LearnerReviewCollection extends PaginatedCollection
     model: LearnerReview

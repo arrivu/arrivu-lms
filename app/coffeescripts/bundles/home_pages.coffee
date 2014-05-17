@@ -31,7 +31,7 @@ require [
   knowledgePartnerCollectionView = new KnowledgePartnerCollectionView
     collection: knowledgePartnerCollection
   learnerReviewCollectionView = new  LearnerReviewCollectionView
-   collection:learnerReviewCollection
+    collection:learnerReviewCollection
 
   @app = new IndexView
     accountSliderCollectionView: accountSliderCollectionView

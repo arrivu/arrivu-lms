@@ -7,13 +7,14 @@ define [
   'compiled/models/AccountSlider'
   'compiled/models/PopularCourse'
   'compiled/models/KnowledgePartner'
+  'compiled/models/LearnerReview'
   'compiled/collections/AccountSlidersCollection'
   'compiled/views/HomePages/AccountSliderCollectionView'
   'compiled/views/HomePages/AddPopularCourse'
-  'jqueryui/jquery.jcontent.0.8'
-  'jqueryui/jquery.easing.1.3'
+  'compiled/views/HomePages/LearnersReviewsCollectionView'
 ], ($, I18n, template, AddAccontSliders,AddknowledgePartner, AccountSlider, PopularCourse,KnowledgePartner
-    AccountSliderCollection,AccountSliderCollectionView,AddPopularCourse) ->
+    LearnerReview,AccountSliderCollection,AccountSliderCollectionView,AddPopularCourse,LearnersReviewsCollectionView,
+    AddLearnersReview) ->
 
   class IndexView extends Backbone.View
 
@@ -21,6 +22,7 @@ define [
     @child 'accountStatisticsView', '[data-view=accountStatistics]'
     @child 'popularCourseCollectionView', '[data-view=popularCourses]'
     @child 'knowledgePartnerCollectionView', '[data-view=knowledgePartners]'
+    @child 'learnerReviewCollectionView','[data-view=learnersReviews]'
 
     template: template
 
@@ -30,13 +32,6 @@ define [
       'click #add_knowledge_partners': 'addKnowledgePartner'
       'click .details':'movetocourselibrary'
 
-    afterRender:->
-      $("div.author_slider_index_view").jContent
-        orientation: "horizontal"
-        easing: "easeOutCirc"
-        duration: 500
-        width:229
-        height:46
 
     addAccountSlider: ->
       newAccountSliderView = new AccountSlider

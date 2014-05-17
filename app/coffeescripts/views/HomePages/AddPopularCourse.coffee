@@ -11,7 +11,6 @@ define [
   'jquery.disableWhileLoading'
   'jqueryui/jquery.jcontent.0.8',
   'jqueryui/jquery.easing.1.3'
-  'jquery.disableWhileLoading'
 ], ($,I18n,htmlEscape, template,PopularCoure,PopularCoursesCollection,AccountCourseCollectionView,PopularCourseCollectionView,
     ValidatedFormView) ->
 

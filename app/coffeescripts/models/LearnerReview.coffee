@@ -2,7 +2,7 @@ define [
   'Backbone'
   'underscore'
 ], ({Model}, _) ->
-  class KnowledgePartner extends Model
+  class LearnerReview extends Model
 
     resourceName: "learners_reviews"
 
