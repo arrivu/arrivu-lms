@@ -1,10 +1,10 @@
 {{#if popular_course}}
-    <div class="span3 content-box resource" style="float: left;height: 410px;left: 45px;width: 278px;" id="is_a_popular_course" data-id="{{popular_id}}">
+    <div class="span3 content-box resource" style="float: left;height: 410px;width: 322px;" id="is_a_popular_course" data-id="{{popular_id}}">
         <div class="ribbon-wrapper">
             <div class="ribbon-wrapper-green"><div class="ribbon-green">Popular</div></div>
         </div>
 {{else}}
-    <div class="span3 content-box resource" style="float: left;height: 410px;left: 45px;width: 278px;" id="is_not_a_popular_course" >
+    <div class="span3 content-box resource" style="float: left;height: 410px;width: 322px;" id="is_not_a_popular_course" >
 {{/if}}
 {{#if has_course_image}}
     <div class="type-tag-positioner" style="background-image: url('{{course_background_image}}');;background-size: cover;">
@@ -85,6 +85,21 @@
         <p class="desc" style="height:42px">
             {{{ truncate course_short_decription 85 }}}
         </p>
+        <hr>
+        <div class="author_slider_index_view" style="width:229px;height:67px;margin-top: -1px;left: 15px;position:relative;margin-bottom: -11px">
+            <a title="" href="#" class="prev" style="margin-top: 2px;margin-left: -34px;"></a>
+            <div class="slides" style="width:229px;height:46px;margin-top: -35px;overflow: hidden;position: relative;float:left;text-align: center;text-indent: 10px;">
+                {{#each profile_data }}
+                    {{#if teacher_desc}}
+                        <div class="items" style="width:229px;height:67px">
+                            <img src="{{teacher_image}}" style="width: 35px;margin-left: -51px;">
+                            {{{ truncate teacher_desc 20 }}}
+                        </div>
+                    {{/if}}
+                {{/each}}
+            </div>
+            <a title="" href="#" class="next" style="margin-top: -48px;margin-left:228px"></a>
+        </div>
     </div>
 </div>
 </div>

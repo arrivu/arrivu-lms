@@ -28,7 +28,7 @@ define [
       super
       @$el.dialog
         title: 'Add Popular Course'
-        width:  1200
+        width:  1300
         height: 600
         disableWhileLoading: true
         close: => @$el.remove()
