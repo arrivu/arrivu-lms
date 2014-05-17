@@ -1,48 +1,48 @@
 <%-
-  @body_classes ||= []
-  keyboard_navigation = (yield :keyboard_navigation).presence
-  left_side = nil
-  left_side_custom = nil
-  right_side = (yield :right_side).presence
-  wizard = (yield :wizard_box).presence
-  top_nav = (yield :top_nav).presence
+    @body_classes ||= []
+    keyboard_navigation = (yield :keyboard_navigation).presence
+    left_side = nil
+    left_side_custom = nil
+    right_side = (yield :right_side).presence
+    wizard = (yield :wizard_box).presence
+    top_nav = (yield :top_nav).presence
 
-  content_for :pre_html do
-    @body_class_no_headers = @headers == false
-    @show_embedded_chat = embedded_chat_visible
-    @show_fixed_bottom = (@fixed_warnings.present? || (@real_current_user && @real_current_user != @current_user)) && (!@body_class_no_headers || @outer_frame)
-    @body_classes << "no-headers" if @body_class_no_headers
-    unless (@body_classes.include? "no-headers") || (@show_left_side == false)
-      left_side = (yield :left_side).presence
-      left_side_custom = (yield :left_side_custom).presence
-      @show_left_side ||= (section_tabs.length > 0 || left_side_custom.try(:length))
+    content_for :pre_html do
+      @body_class_no_headers = @headers == false
+      @show_embedded_chat = embedded_chat_visible
+      @show_fixed_bottom = (@fixed_warnings.present? || (@real_current_user && @real_current_user != @current_user)) && (!@body_class_no_headers || @outer_frame)
+      @body_classes << "no-headers" if @body_class_no_headers
+      unless (@body_classes.include? "no-headers") || (@show_left_side == false)
+        left_side = (yield :left_side).presence
+        left_side_custom = (yield :left_side_custom).presence
+        @show_left_side ||= (section_tabs.length > 0 || left_side_custom.try(:length))
+      end
+      @body_classes << "with-left-side" if @show_left_side
+      #we dont want to render a right side unless there is actually content in it.
+      @body_classes << "with-right-side" if right_side and not right_side.strip.empty?
+      @body_classes << "padless-content" if @padless
+      @body_classes << "with-embedded-chat" if @show_embedded_chat
+      @body_classes << 'with-fixed-bottom' if @show_fixed_bottom
+      @body_classes << 'pages' if controller.js_env[:WIKI_PAGE].present?
+      @body_classes << @active_tab
     end
-    @body_classes << "with-left-side" if @show_left_side
-    #we dont want to render a right side unless there is actually content in it.
-    @body_classes << "with-right-side" if right_side and not right_side.strip.empty?
-    @body_classes << "padless-content" if @padless
-    @body_classes << "with-embedded-chat" if @show_embedded_chat
-    @body_classes << 'with-fixed-bottom' if @show_fixed_bottom
-    @body_classes << 'pages' if controller.js_env[:WIKI_PAGE].present?
-    @body_classes << @active_tab
-  end
 
 -%>
 <% content_for :head do %>
-  <%= include_common_stylesheets %>
-  <% if @eportfolio_view === true %>
-    <%= stylesheet_link_tag "compiled/instructure_eportfolio.css" %>
-  <% end %>
+    <%= include_common_stylesheets %>
+    <% if @eportfolio_view === true %>
+        <%= stylesheet_link_tag "compiled/instructure_eportfolio.css" %>
+    <% end %>
 <% end %>
 <%= render :partial => "layouts/head" %>
 <%= render :partial => 'shared/flash_notices' %>
 
-<div id="header" class="no-print <%= 'no-user' unless @current_user %>">
+<div id="header" class="no-print <%= 'no-user' unless @current_user %> <%= 'header_bottom' if @e_learning%>" >
   <div id="header-inner">
     <a href="#content" id="skip_navigation_link"><%= t 'links.skip_to_content', "Skip To Content" %></a>
     <%if ELEARNING %>
         <% if !@domain_root_account.account_header.nil? && @current_pseudonym == nil &&  Attachment.exists?(@domain_root_account.account_header.header_logo_url) == true %>
-            <a  href="<%= root_url %>"><img class="logo" style="width: 174px;height: 63px;left: 2px;bottom: -40px;position: absolute;"
+            <a  href="<%= root_url %>"><img class="logo <%= 'logo_bottom' if (@e_learning && @current_user) %>" style="width: 174px;height: 63px;left: 2px;bottom: -40px;position: absolute;"
                                             src= <%= header_logo_image %>></a>
         <% elsif @current_pseudonym!= nil %>
             <% if can_do((@account ||= @domain_root_account), @current_user, :manage_account_settings) %>
@@ -50,13 +50,14 @@
                 <% if @domain_root_account.account_header.nil? || Attachment.exists?(@domain_root_account.account_header.header_logo_url) == false %>
                     <a id="header-logo" href="<%= root_url %>"><%= t 'links.dashboard', "My Dashboard" %></a>
                 <% else %>
-                    <a  href="<%= root_url %>"><img class="logo" style="width: 174px;height: 66px;left: 2px;bottom: 2px;position: absolute;"
-                                                    src= <%= header_logo_image %>></a>
+                    <a  href="<%= root_url %>">
+                      <img class="logo <%= 'logo_bottom' if (@e_learning && @current_user) %>" style="width: 174px;height: 66px;left: 2px;bottom: 2px;position: absolute;"
+                           src= <%= header_logo_image %>></a>
                 <% end %>
             <% elsif (@account ||= @domain_root_account).account_header.nil? || Attachment.exists?(@domain_root_account.account_header.header_logo_url) == false %>
                 <a id="header-logo" href="<%= root_url %>"><%= t 'links.dashboard', "My Dashboard" %></a>
             <% else %>
-                <a  href="<%= root_url %>"><img class="logo" style="width: 174px;height: 66px;left: 2px;bottom: 2px;position: absolute;"
+                <a  href="<%= root_url %>"><img class="logo <%= 'logo_bottom' if (@e_learning && @current_user) %> " style="width: 174px;height: 66px;left: 2px;bottom: 2px;position: absolute;"
                                                 src= <%= header_logo_image %>></a>
             <% end %>
         <% else  %>
@@ -68,34 +69,34 @@
     <b id="header-logo-secondary"></b>
     <div id="topbar">
       <% if (identity = (yield :identity).presence) %>
-        <%= identity %>
+          <%= identity %>
       <% else %>
-        <%- cache_if(!@real_current_user, [@current_user || 'nobody', 'identity-15m'], :expires_in => 15.minutes) do -%>
-          <%= render(:partial => 'shared/identity') %>
-        <%- end -%>
+          <%- cache_if(!@real_current_user, [@current_user || 'nobody', 'identity-15m'], :expires_in => 15.minutes) do -%>
+              <%= render(:partial => 'shared/identity') %>
+          <%- end -%>
       <% end %>
     </div>
     <%= render(:partial => "shared/keyboard_navigation_hint") if keyboard_navigation %>
-    <% if @current_user %>
-    <ul role="navigation" id="menu" aria-label="<%= t('navigation.main', 'Main Navigation') %>">
-      <%- cache([@current_user, 'home-menu-15m'], :expires_in => 15.minutes) do -%>
-      <li id="courses_menu_item" class="menu-item">
-        <%- if show_home_menu? -%>
-          <%= render(:partial => 'shared/home_menu') %>
-        <%- else  -%>
-            <%= render(:partial => "shared/menu_courses", :locals => menu_courses_locals) %>
-        <%- end -%>
-      </li>
-      <%- end -%>
-      <!--<li id="assignments_menu_item" class="menu-item">-->
-      <%#
+    <% if @current_user && !@e_learning %>
+        <ul role="navigation" id="menu" aria-label="<%= t('navigation.main', 'Main Navigation') %>">
+          <%- cache([@current_user, 'home-menu-15m'], :expires_in => 15.minutes) do -%>
+              <li id="courses_menu_item" class="menu-item">
+                <%- if show_home_menu? -%>
+                    <%= render(:partial => 'shared/home_menu') %>
+                <%- else  -%>
+                    <%= render(:partial => "shared/menu_courses", :locals => menu_courses_locals) %>
+                <%- end -%>
+              </li>
+          <%- end -%>
+          <!--<li id="assignments_menu_item" class="menu-item">-->
+          <%#
       # this will cache the assignments menu for 3 minutes.  the way it is right now it does 3 really expensive queries every page load.
       # to do this better we would either figure a better way to find needing_submitting, needing_grading, and recently_graded
       # or use delayed_job and memcache together to compute and cache it outside of the scope of a request
       # so by just caching this stupidly for 3 minutes, if there is a new thing that should show up in the last 3 minutes, it wont show up.
       cache([@current_user, 'assignments_menu'], :expires_in => 3.minutes) do %>
-        <%# if there is anything inside the assignments drop down %>
-      <%#-
+          <%# if there is anything inside the assignments drop down %>
+          <%#-
         max_to_show = 8
         assignment_sets = {
           :assignments_needing_submitting => t('menu.assignments_needing_submitting', "To Turn In"),
@@ -106,16 +107,16 @@
         if assignment_sets.any?{ |k, v| @current_user.send(k).length > 0 }
       -%>
 
-        <!--<a href="/assignments" class="menu-item-title"><%#= t('menu.assignments', 'Assignments') %><span class="menu-item-title-icon"></span> <i class="icon-mini-arrow-down"></i></a>-->
-        <!--<div class="menu-item-drop">-->
+          <!--<a href="/assignments" class="menu-item-title"><%#= t('menu.assignments', 'Assignments') %><span class="menu-item-title-icon"></span> <i class="icon-mini-arrow-down"></i></a>-->
+          <!--<div class="menu-item-drop">-->
           <!--<table cellspacing="0">-->
-            <!--<tr>-->
-              <%# assignment_sets.each do |k,v|
+          <!--<tr>-->
+          <%# assignment_sets.each do |k,v|
                   if (set = @current_user.send("assignments_#{k}")).length > 0
 >>>>>>> a0e3b8eca34f6b9bf6f8ab76c71a61734d91426c
                     set = set[0,(max_to_show - total_shown)]
                     total_shown += set.length
-                   %><%#= render(:partial => "shared/menu_section", :locals => {
+          %><%#= render(:partial => "shared/menu_section", :locals => {
                                 :max_to_show => max_to_show,
                                 :more_link_for_over_max => assignments_path,
                                 :collection => set,
@@ -123,32 +124,32 @@
                                 :partial => "shared/menu_assignment",
                                 :key => k,
                                 :title => v })  %>
-                  <%#
+          <%#
                   end
                 end
-              %>
-            <!--</tr>-->
+          %>
+          <!--</tr>-->
           <!--</table>-->
-        <!--</div>-->
-        <%#- else #there is not anything to show in the assignments drop down  -%>
-        <!--<a href="/assignments" class="menu-item-no-drop"><%#= t('menu.assignments', 'Assignments') %></a>-->
-        <%#- end -%>
-      <%# end %>
-      </li>
-      <li id="grades_menu_item" class="menu-item">
-        <%= link_to(t('menu.grades', 'Grades'), :grades, :class=>"menu-item-no-drop") %>
-      </li>
-      <li id="calendar_menu_item" class="menu-item">
-        <a href="<%= calendar_path %>" class="menu-item-no-drop"><%= t('menu.calendar', 'Calendar') %></a>
-      </li>
-      <li id="leaderboard_menu_item" class="menu-item">
-        <%= render(:partial => 'shared/leaderboard_home_menu') %>
-      </li>
-      <!--current user login count-->
-        <!--<a href="" id="section-tabs-header-subtitle" class="ellipsis"><%#= @totalcount %></a>-->
-      <%= render :partial => 'shared/context_progression' %>
-      <%= render :partial => 'shared/user_badges' %>
-    </ul>
+          <!--</div>-->
+          <%#- else #there is not anything to show in the assignments drop down  -%>
+          <!--<a href="/assignments" class="menu-item-no-drop"><%#= t('menu.assignments', 'Assignments') %></a>-->
+          <%#- end -%>
+          <%# end %>
+          </li>
+          <li id="grades_menu_item" class="menu-item">
+            <%= link_to(t('menu.grades', 'Grades'), :grades, :class=>"menu-item-no-drop") %>
+          </li>
+          <li id="calendar_menu_item" class="menu-item">
+            <a href="<%= calendar_path %>" class="menu-item-no-drop"><%= t('menu.calendar', 'Calendar') %></a>
+          </li>
+          <li id="leaderboard_menu_item" class="menu-item">
+            <%= render(:partial => 'shared/leaderboard_home_menu') %>
+          </li>
+          <!--current user login count-->
+          <!--<a href="" id="section-tabs-header-subtitle" class="ellipsis"><%#= @totalcount %></a>-->
+          <%= render :partial => 'shared/context_progression' %>
+          <%= render :partial => 'shared/user_badges' %>
+        </ul>
     <% end %>
   </div>
 </div>
@@ -162,37 +163,37 @@
 <div id="wrapper-container">
   <div id="wrapper">
     <% if @show_left_side %>
-      <%# @left_side_list_view is temporary until we redo eportfolios %>
-      <div id="left-side" class="<% if !@no_left_side_list_view %>list-view<% end %>">
-      <% if left_side %>
-        <%= left_side %>
-      <% else %>
-        <% if @context.try(:short_name) %>
-          <div class='h1' id="section-tabs-header">
-            <%= @context.short_name %>
-            <% if @context && @context.respond_to?(:context)  %>
-              <a href="<%= url_for(@context.context) %>" id="section-tabs-header-subtitle" class="ellipsis"><%= @context.context.name %></a>
-            <% elsif @context && @context.respond_to?(:enrollment_term) && !@context.enrollment_term.default_term? %>
-              <span id="section-tabs-header-subtitle" class="ellipsis"><%= @context.enrollment_term.name %></span>
-            <% end %>
-          </div>
-        <% end %>
-        <%= section_tabs %>
-      <% end %>
-      <% if left_side_custom %>
-        <%= left_side_custom %>
-      <% end %>
-    </div>
+        <%# @left_side_list_view is temporary until we redo eportfolios %>
+        <div id="left-side" class="<% if !@no_left_side_list_view %>list-view<% end %>">
+          <% if left_side %>
+              <%= left_side %>
+          <% else %>
+              <% if @context.try(:short_name) %>
+                  <div class='h1' id="section-tabs-header">
+                    <%= @context.short_name %>
+                    <% if @context && @context.respond_to?(:context)  %>
+                        <a href="<%= url_for(@context.context) %>" id="section-tabs-header-subtitle" class="ellipsis"><%= @context.context.name %></a>
+                    <% elsif @context && @context.respond_to?(:enrollment_term) && !@context.enrollment_term.default_term? %>
+                        <span id="section-tabs-header-subtitle" class="ellipsis"><%= @context.enrollment_term.name %></span>
+                    <% end %>
+                  </div>
+              <% end %>
+              <%= section_tabs %>
+          <% end %>
+          <% if left_side_custom %>
+              <%= left_side_custom %>
+          <% end %>
+        </div>
     <% end %>
     <div id="main">
       <div id="not_right_side">
         <div id="content-wrapper">
           <%= render_crumbs %>
-	  <div id="right-side-wrapper">
-	    <aside id="right-side" role="complementary">
-	      <%= right_side %>
-	    </aside>
-	  </div>
+          <div id="right-side-wrapper">
+            <aside id="right-side" role="complementary">
+              <%= right_side %>
+            </aside>
+          </div>
           <div id="content" role="main" class="container-fluid">
             <%= yield %>
           </div>
@@ -209,57 +210,57 @@
 </div>
 
 <% if @show_embedded_chat %>
-  <%= render :partial => 'shared/embedded_chat' %>
+    <%= render :partial => 'shared/embedded_chat' %>
 <% end %>
 
 <% if @show_fixed_bottom %>
-  <%= render :partial => 'layouts/fixed_bottom' %>
+    <%= render :partial => 'layouts/fixed_bottom' %>
 <% end %>
 
 <% if wizard %>
-  <div id="wizard_spacer_box"></div>
-  <div id="wizard_box" role="dialog" tabindex="-1">
-    <div class="shadow shadow_1"></div>
-    <div class="shadow shadow_3"></div>
-    <div class="shadow shadow_5"></div>
-    <div class="wizard_content">
-      <div class="links">
-        <a href="#" class="close_wizard_link"><i class="icon-x"></i><span class="screen-reader-text"><%= t('links.close', 'Close') %></span></a>
+    <div id="wizard_spacer_box"></div>
+    <div id="wizard_box" role="dialog" tabindex="-1">
+      <div class="shadow shadow_1"></div>
+      <div class="shadow shadow_3"></div>
+      <div class="shadow shadow_5"></div>
+      <div class="wizard_content">
+        <div class="links">
+          <a href="#" class="close_wizard_link"><i class="icon-x"></i><span class="screen-reader-text"><%= t('links.close', 'Close') %></span></a>
+        </div>
+        <%= wizard %>
       </div>
-      <%= wizard %>
     </div>
-  </div>
 <% end %>
 <% if keyboard_navigation %>
-  <div id="keyboard_navigation">
-    <%= keyboard_navigation %>
-    <div class='hidden-readable' tabindex='0'>
-      <%= t('keyboard_navigation.close', 'Press comma to close this dialog') %>
+    <div id="keyboard_navigation">
+      <%= keyboard_navigation %>
+      <div class='hidden-readable' tabindex='0'>
+        <%= t('keyboard_navigation.close', 'Press comma to close this dialog') %>
+      </div>
     </div>
-  </div>
 <% end %>
-  <div style="display:none;"><!-- Everything inside of this should always stay hidden -->
-    <div id="ajax_authenticity_token"><%= form_authenticity_token %></div>
-    <% if @context && session && temp_type = session["role_#{@context.asset_string}"] %>
+<div style="display:none;"><!-- Everything inside of this should always stay hidden -->
+  <div id="ajax_authenticity_token"><%= form_authenticity_token %></div>
+  <% if @context && session && temp_type = session["role_#{@context.asset_string}"] %>
       <span id="switched_role_type" class="<%= @context.asset_string %>" data-role="<%= temp_type %>"><%= Enrollment.readable_type(temp_type) %></span>
-    <% end %>
-    <% if @page_view %>
+  <% end %>
+  <% if @page_view %>
       <a href="<%= page_view_path(@page_view.id || @page_view.temporary_id) %>" id="page_view_update_path">&nbsp;</a>
       <div id="page_view_id"><%= @page_view.id || @page_view.temporary_id %></div>
-    <% end %>
-    <div id="domain_root_account_id"><%= @domain_root_account.try(:id) %></div>
-    <% if equella_enabled? %>
+  <% end %>
+  <div id="domain_root_account_id"><%= @domain_root_account.try(:id) %></div>
+  <% if equella_enabled? %>
       <a id="equella_endpoint_url" href="<%= @equella_settings.endpoint %>">&nbsp;</a>
       <a id="equella_callback_url" href="<%= external_content_success_url('equella') %>">&nbsp;</a>
       <a id="equella_cancel_url" href="<%= external_content_cancel_url('equella') %>">&nbsp;</a>
       <a id="equella_action" href="<%= @equella_settings.default_action %>">&nbsp;</a>
       <% if @equella_settings.teaser %>
-        <div id="equella_teaser"><%= @equella_settings.teaser %></div>
+          <div id="equella_teaser"><%= @equella_settings.teaser %></div>
       <% end %>
-    <% end %>
-  </div>
+  <% end %>
+</div>
 <% cache('global_dialogs_render') do %>
-  <%= render :partial => "shared/global_dialogs" %>
+    <%= render :partial => "shared/global_dialogs" %>
 <% end %>
 <div id='aria_alerts' class='hide-text affix' role="alert" aria-live="assertive"></div>
 <%= render :partial => 'layouts/foot', :locals => { :include_common_bundle => true } %>
