@@ -85,14 +85,14 @@ class CommunicationChannel < ActiveRecord::Base
     p.to { self }
     p.whenever { |record|
       @send_confirmation and
-      (record.workflow_state == 'active' || 
+      (record.workflow_state == 'active' ||
         (record.workflow_state == 'unconfirmed' and (self.user.pre_registered? || self.user.creation_pending?))) and
       self.path_type == TYPE_EMAIL
     }
 
     p.dispatch :confirm_email_communication_channel
     p.to { self }
-    p.whenever { |record| 
+    p.whenever { |record|
       @send_confirmation and
       record.workflow_state == 'unconfirmed' and self.user.registered? and
       self.path_type == TYPE_EMAIL
@@ -164,14 +164,14 @@ class CommunicationChannel < ActiveRecord::Base
       self.path
     end
   end
-  
+
   def forgot_password!
     @request_password = true
     set_confirmation_code(true)
     self.save!
     @request_password = false
   end
-  
+
   def send_confirmation!(root_account)
     @send_confirmation = true
     @root_account = root_account
@@ -179,7 +179,7 @@ class CommunicationChannel < ActiveRecord::Base
     @root_account = nil
     @send_confirmation = false
   end
-  
+
   def send_merge_notification!
     @send_merge_notification = true
     self.save!
@@ -196,7 +196,7 @@ class CommunicationChannel < ActiveRecord::Base
   # If you are creating a new communication_channel, do nothing, this just
   # works.  If you are resetting the confirmation_code, call @cc.
   # set_confirmation_code(true), or just save the record to leave the old
-  # confirmation code in place. 
+  # confirmation code in place.
   def set_confirmation_code(reset=false)
     self.confirmation_code = nil if reset
     if self.path_type == TYPE_EMAIL or self.path_type.nil?
@@ -206,7 +206,7 @@ class CommunicationChannel < ActiveRecord::Base
     end
     true
   end
-  
+
   scope :for, lambda { |context|
     case context
     when User
@@ -257,11 +257,11 @@ class CommunicationChannel < ActiveRecord::Base
 
   scope :in_state, lambda { |state| where(:workflow_state => state.to_s) }
   scope :of_type, lambda {|type| where(:path_type => type) }
-  
+
   def can_notify?
     self.notification_policies.any? { |np| np.frequency == 'never' } ? false : true
   end
-  
+
   def move_to_user(user, migrate=true)
     return unless user
     if self.pseudonym && self.pseudonym.unique_id == self.path
@@ -276,7 +276,7 @@ class CommunicationChannel < ActiveRecord::Base
       end
     end
   end
-  
+
   def consider_building_pseudonym
     if self.build_pseudonym_on_confirm && self.active?
       self.build_pseudonym_on_confirm = false
@@ -290,18 +290,18 @@ class CommunicationChannel < ActiveRecord::Base
     end
     true
   end
-  
+
   def consider_retiring
     self.retire if self.bounce_count >= RETIRE_THRESHOLD
     true
   end
-  
+
   alias_method :destroy!, :destroy
   def destroy
     self.workflow_state = 'retired'
     self.save
   end
-  
+
   workflow do
     state :unconfirmed do
       event :confirm, :transitions_to => :active do
@@ -309,11 +309,11 @@ class CommunicationChannel < ActiveRecord::Base
       end
       event :retire, :transitions_to => :retired
     end
-    
+
     state :active do
       event :retire, :transitions_to => :retired
     end
-    
+
     state :retired do
       event :re_activate, :transitions_to => :active do
         self.bounce_count = 0
@@ -328,7 +328,7 @@ class CommunicationChannel < ActiveRecord::Base
     true
   end
   protected :assert_path_type
-    
+
   def self.serialization_excludes; [:confirmation_code]; end
 
   def self.associated_shards(path)

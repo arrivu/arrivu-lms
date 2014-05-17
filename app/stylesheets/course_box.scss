@@ -711,7 +711,8 @@ a.thumbnail:hover {
   width: 100%;
   padding: 0px 0px;
   background-size: 100% 100%;
-  background: #F7DB6C;
+  background: #f6f5ed;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
 //  background: url(/images/arrow_bg.png);
 }
 
@@ -762,6 +763,7 @@ a.thumbnail:hover {
   &:hover {
     background: #22aae0;
   }
+<<<<<<< HEAD
 }
 
 .thumbnail .caption {
@@ -792,4 +794,8 @@ a.thumbnail:hover {
   padding-top: 40px;
   font-style: italic;
   font-weight: 700;
+=======
+.margin_bottom{
+  margin-bottom: 10px;
+>>>>>>> 12def7354d176b5a7751deb2c170d8b2656b5a87
 }
