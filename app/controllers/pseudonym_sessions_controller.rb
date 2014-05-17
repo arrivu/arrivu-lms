@@ -589,7 +589,7 @@ class PseudonymSessionsController < ApplicationController
         format.html {favourites}
 
       end
-      #format.json { render :json => pseudonym.to_json(:methods => :user_code), :status => :ok }
+      format.json { render :json => pseudonym.to_json(:methods => :user_code), :status => :ok }
     end
   end
 
