@@ -310,7 +310,8 @@
                             clicked_create= 0;
                         }
                     });
-            $("#submit_button").click(function() {
+            $("#submit_button").click(function(event) {
+                event.preventDefault();
                 var $this = $(this);
                 if (clicked_create == 1){
 //                    validation
@@ -329,20 +330,18 @@
                         result = $('#terms_of_use').validateForm({required: ['user[terms_of_use]']});
                         return false;
                     }
-
 //                    validation
-
                     $("#enrollment_dialog").disableWhileLoading($.ajax({
                         type: 'POST',
                         url: $("#email_info").attr('rel'),
                         data: {pseudonym: {unique_id: $("#student_email").val()},user: {name: $("#student_name").val()} },
                         success: function(res){
                             $.flashMessage('User account created successfully!')
-
+                            window.location.href = $("#enrollment_dialog").attr( 'action' );
 
                         },
                         error: function(res){
-                            result = $('#student_email').validateForm({email_already_taken: ['pseudonym[unique_id]']});
+                            $.flashMessage('Email already taken!')
 
                         }
                     })

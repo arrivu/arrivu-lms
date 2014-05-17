@@ -63,9 +63,7 @@ class LibrariesController < ApplicationController
   def create_user
     @course = Course.find(params[:library_id])
     @context = @domain_root_account
-    # Look for an incomplete registration with this pseudonym
     @pseudonym = @context.pseudonyms.active.custom_find_by_unique_id(params[:pseudonym][:unique_id])
-    # Setting it to nil will cause us to try and create a new one, and give user the login already exists error
     @pseudonym = nil if @pseudonym && !['creation_pending', 'pending_approval'].include?(@pseudonym.user.workflow_state)
 
     manage_user_logins = @context.grants_right?(@current_user, session, :manage_user_logins)
@@ -99,8 +97,6 @@ class LibrariesController < ApplicationController
     @user.name ||= params[:pseudonym][:unique_id]
     unless @user.registered?
       @user.workflow_state = if require_password
-                               # no email confirmation required (self_enrollment_code and password
-                               # validations will ensure everything is legit)
                                'registered'
                              elsif notify == :self_registration && @user.registration_approval_required?
                                'pending_approval'
@@ -111,12 +107,8 @@ class LibrariesController < ApplicationController
     @pseudonym ||= @user.pseudonyms.build(:account => @context)
     @pseudonym.account.email_pseudonyms = !allow_non_email_pseudonyms
     @pseudonym.require_password = require_password
-    # pre-populate the reverse association
     @pseudonym.user = @user
-    # don't require password_confirmation on api calls
     params[:pseudonym][:password_confirmation] = params[:pseudonym][:password] if api_request?
-    # don't allow password setting for new users that are not self-enrolling
-    # in a course (they need to go the email route)
     unless allow_password
       params[:pseudonym].delete(:password)
       params[:pseudonym].delete(:password_confirmation)
@@ -131,15 +123,8 @@ class LibrariesController < ApplicationController
             @user.communication_channels.build(:path_type => cc_type, :path => cc_addr)
     @cc.user = @user
     @cc.workflow_state = skip_confirmation ? 'active' : 'unconfirmed' unless @cc.workflow_state == 'confirmed'
-
+    respond_to do |format|
     if @user.valid? && @pseudonym.valid?
-      respond_to do |format|
-      # saving the user takes care of the @pseudonym and @cc, so we can't call
-      # save_without_session_maintenance directly. we don't want to auto-log-in
-      # unless the user is registered/pre_registered (if the latter, he still
-      # needs to confirm his email and set a password, otherwise he can't get
-      # back in once his session expires)
-       # automagically logged in
         PseudonymSession.new(@pseudonym).save unless @pseudonym.new_record?
       @user.save!
       message_sent = false
@@ -148,8 +133,7 @@ class LibrariesController < ApplicationController
         end
         @user.new_registration((params[:user] || {}).merge({:remote_ip  => request.remote_ip, :cookies => cookies}))
         @pseudonym.send_registration_notification!
-        format.html {redirect_to library_enrollments_path(@course)}
-    end
+        format.json {render :json => @pseudonym}
     else
       errors = {
           :errors => {
@@ -157,7 +141,8 @@ class LibrariesController < ApplicationController
               :pseudonym => @pseudonym ? @pseudonym.errors.as_json[:errors] : {}
           }
       }
-      render :json => errors, :status => :bad_request
+      format.json { render :json => errors, :status => :bad_request}
+      end
     end
   end
 
