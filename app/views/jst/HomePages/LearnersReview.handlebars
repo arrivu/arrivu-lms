@@ -1,16 +1,9 @@
-{{#if show_comment}}
-<div class="learners_review_item span3">
-    <div class="thumbnail" style="min-height: 150px;">
-        <p style="text-align: center;">
-            "{{{truncate comments 70 }}}"
-        </p>
-      <div>
-        {{#each user}}
-        <h6 class="comment-user-name">
-            -{{ name}}
-        </h6>
-        {{/each}}
-      </div>
-    </div>
+<div class="columns">
+    <blockquote class="quote-text">{{{truncate comment 100 }}}</blockquote>
+
+    <p class="quote-author"> <img class="quote-author-pic" src="{{user_avatar}}">
+    <strong>
+        {{user_name}}
+    </strong> </p>
 </div>
-{{/if}}
+

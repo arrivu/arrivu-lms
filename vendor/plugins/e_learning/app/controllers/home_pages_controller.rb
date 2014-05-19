@@ -17,7 +17,6 @@ class HomePagesController < ApplicationController
     js_env :account_has_sliders => @domain_root_account.account_sliders.count > 0
     js_env :add_knowledge_partners_url => account_knowledge_partners_path(@domain_root_account)
     js_env :popular_courses_count => true if PopularCourse.find(:all).count > 6 rescue nil
-    js_env :knowledge_partners_count => true if @domain_root_account.knowledge_partners.count >= 3 rescue nil
     js_env :show_knowledge_banner => true if @domain_root_account.knowledge_partners.count >= 1 rescue nil
   end
 
