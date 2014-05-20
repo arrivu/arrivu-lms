@@ -172,6 +172,7 @@ routes.draw do
   end
 
   concern :conferences do
+    match 'get_users_by_section' => 'conferences#get_users_from_section' , :via => :get
     resources :conferences do
       match 'join' => 'conferences#join', :as => :join
       match 'close' => 'conferences#close', :as => :close
@@ -670,6 +671,7 @@ routes.draw do
   match 'images/users/:user_id' => 'users#update_avatar_image', :as => :update_avatar_image, :via => :put
   match 'all_menu_courses' => 'users#all_menu_courses', :as => :all_menu_courses
   match 'grades' => 'users#grades', :as => :grades
+  match 'conferences' => 'conferences#get_conferences_for_user' ,:as => :conferences ,:path => 'livesessions'
   match 'login' => 'pseudonym_sessions#new', :as => :login, :via => :get
   match 'corp/login' => 'pseudonym_sessions#corp_login', :via => :get
   match 'login' => 'pseudonym_sessions#create', :via => :post
@@ -1619,6 +1621,9 @@ routes.draw do
       %w(course group).each do |context|
         prefix = "#{context}s/:#{context}_id/conferences"
         get prefix, :action => :index, :path_name => "#{context}_conferences"
+        post prefix, :action => :api_create
+        put "#{prefix}/:id", :action => :update
+        delete "#{prefix}/:id", :action => :destroy
       end
     end
 

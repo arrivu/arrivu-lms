@@ -25,6 +25,18 @@ define [
       super
       @model.on('change', @render)
 
+    afterRender: ->
+#      30 minutes (1800000 ) before enable the start button
+      current_date = new Date(ENV.current_date_time)
+      start_date = new Date(@model.start_date)
+      exact_time =  start_date - current_date
+      start_button_enable_time = exact_time - 1800000
+      if start_button_enable_time < 3600000
+        setTimeout ( ->
+          $("#" + @model.id).attr("disabled","false")
+          return
+        ), start_button_enable_time
+
     delete: (e) ->
       e.preventDefault()
       return if !confirm I18n.t('confirm.delete', "Are you sure you want to delete this conference?")

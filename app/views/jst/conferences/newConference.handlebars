@@ -41,7 +41,7 @@
       {{/if}}
     {{else}}
       {{#if permissions.initiate}}
-        <a href="{{ join_url }}" class="btn btn-small start-button" target="_blank" {{#unless id}}disabled="disabled"{{/unless}}>
+        <a href="{{ join_url }}" class="btn btn-small start-button" id={{id}} target="_blank" disabled="disabled">
           {{#t "start"}}Start{{/t}}
        </a>
       {{/if}}
