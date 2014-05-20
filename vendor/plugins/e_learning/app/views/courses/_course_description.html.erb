@@ -8,7 +8,8 @@
             </tr>
             <tr>
                <td>
-                 <textarea rows="10" cols="240" id="short_description" name="short_description_txt" style="width: 300px;"><%= @context.course_description.short_description  if @context.course_description != nil %></textarea>
+                 <textarea maxlength="350" rows="10" cols="240" id="short_description" name="short_description_txt" style="width: 300px;">
+                   <%= @context.course_description.short_description  if @context.course_description != nil %></textarea>
                </td>
             </tr>
             <tr>

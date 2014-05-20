@@ -385,7 +385,7 @@
   display: table-cell;
   text-align: left;
   margin-top: 35px;
-  min-height: 420px;
+  min-height: 200px;
 }
 
 .resource {
@@ -763,7 +763,7 @@ a.thumbnail:hover {
   &:hover {
     background: #22aae0;
   }
-<<<<<<< HEAD
+
 }
 
 .thumbnail .caption {
@@ -794,8 +794,31 @@ a.thumbnail:hover {
   padding-top: 40px;
   font-style: italic;
   font-weight: 700;
-=======
+}
+
 .margin_bottom{
   margin-bottom: 10px;
->>>>>>> 12def7354d176b5a7751deb2c170d8b2656b5a87
+}
+
+.course_desc{
+
+  height: 57px;
+  background-color: #efefef;
+  margin-left: -15px;
+  width: 107%;
+  margin-top: -1px;
+  margin-bottom: 21px;
+}
+
+.box_teacher_desc{
+  width:255px;
+  height:66px;
+  margin-top: -3px;
+  overflow: hidden;
+  position: relative;
+  float:left;
+  text-align: center;
+  text-indent: 2px;
+  margin-left:-25px
+
 }

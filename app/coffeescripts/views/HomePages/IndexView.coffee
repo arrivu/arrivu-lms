@@ -32,7 +32,6 @@ define [
       'click #add_knowledge_partners': 'addKnowledgePartner'
       'click .details':'movetocourselibrary'
 
-
     addAccountSlider: ->
       newAccountSliderView = new AccountSlider
       @addAccountSliderView = new AddAccontSliders

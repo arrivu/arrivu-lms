@@ -4,6 +4,7 @@ require [
   'compiled/views/HomePages/AccountCourseCollectionView'
   'compiled/collections/TopicCollection'
   'compiled/views/CourseLibrary/TopicsView'
+  'slider'
 ], (IndexView,PopularCoursesCollection,AccountCourseCollectionView,TopicCollection,TopicsView) ->
 
   # Collections
@@ -32,7 +33,15 @@ require [
       @topicsView.render()
   )
 
-  popularCourseCollection.fetch()
+  popularCourseCollection.fetch(
+    success:->
+      $(".popular_course_item").find("div.author_slider_index_pop_up_view").jContent
+        orientation: "horizontal"
+        easing: "easeOutCirc"
+        duration: 500
+        width:229
+        height:46
+  )
 
 
 

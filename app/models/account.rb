@@ -28,6 +28,7 @@ class Account < ActiveRecord::Base
   has_many :rewards
   #Arrivu changes
   has_one :account_domain_mapping
+  has_many :popular_courses
   #Arrivu changes
   belongs_to :parent_account, :class_name => 'Account'
   belongs_to :root_account, :class_name => 'Account'

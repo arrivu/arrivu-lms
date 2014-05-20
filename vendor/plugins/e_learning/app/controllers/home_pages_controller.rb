@@ -105,7 +105,7 @@ class HomePagesController < ApplicationController
     @account_modules = 0
     @account_courses = @domain_root_account.courses
       @account_courses.each do  |course|
-        @modules_count = course.context_modules.size if course.context_modules
+        @modules_count = course.context_modules.active.size if course.context_modules
         @account_modules += @modules_count
       end
     @account_modules

@@ -3,28 +3,29 @@ class PopularCoursesController < ApplicationController
   def index
     #account courses list
     @show_banner = false
-    @total_popular_course_count = 0
     respond_to do |format|
       @courses = []
       if  params[:topic_id].present? and params[:topic_id].to_i != 0
         @account_courses = @domain_root_account.courses.not_deleted.find_all_by_topic_id(params[:topic_id])
       else
-        @account_courses = @domain_root_account.courses.not_deleted
+        if params[:source] == 'popular'
+          @account_courses = @domain_root_account.popular_courses.limit(6)
+        else
+          @account_courses = @domain_root_account.courses.not_deleted
+        end
       end
       @account_courses.each_with_index do |course, idx|
+        if params[:source] == 'popular'
+          course = course.course
+        end
         @teachers = course.teacher_enrollments
         @teacher_desc = instructure_details(course)
         @course_image = course.course_image
         @course_topic = course_topic(course)
-        @course_pricing = CoursePricing.where('course_id = ? AND DATE(?) BETWEEN start_at AND end_at', course.id, Date.today).first
-        @course_modules = course.context_modules.nil? ? false :  course.context_modules.size if course.context_modules
-        if @course_pricing.nil?
-          @show_course_price = false
-
-        else
-          @show_course_price = true
-          @course_pricing
-        end
+        @course_popular = course.popular_course ? true : false
+        @has_teacher = course.teacher_enrollments.empty? ? false : true
+        @course_pricing = course_price(course)
+        @course_modules = course.context_modules.active.nil? ? false :  course.context_modules.active.size if course.context_modules
         if@course_image.nil?
           @has_course_image = false
         else
@@ -33,59 +34,59 @@ class PopularCoursesController < ApplicationController
         @course_tags_count = course.tags.count.nil? ? 'false' : course.tags.count if course.tags
         @users_count = course.student_enrollments.count.nil? ? "false" : course.student_enrollments.count
         @course_tags = tag_details(course)
-        if course.popular_course
-          @popular_course = true
-          @total_popular_course_count += 1
-          if @total_popular_course_count >= 7
-            @show_only_six_courses = true
-          else
-            @show_only_six_courses = false
-          end
-          @popular_id = course.popular_course.id
-        else
-          @popular_course = false
-        end
-        if course.course_description
-          @course_desc = CourseDescription.find(course.course_description.id) rescue nil
-          @short_course_desc = @course_desc.short_description
-        else
-          @short_course_desc = ""
-        end
+        @course_desc = course.course_description.try(:short_description)
         image_attachment = Attachment.find(@course_image.course_image_attachment_id) rescue nil
         background_image_attchment = Attachment.find(@course_image.course_back_ground_image_attachment_id) rescue nil
         @course_json =   api_json(course, @current_user, session, API_USER_JSON_OPTS).tap do |json|
           json[:id] = course.id
           json[:popular_id] = @popular_id
+          json[:has_teacher] = @has_teacher
           json[:course_name] = course.name
           json[:course_image] = file_download_url(image_attachment, { :verifier => image_attachment.uuid, :download => '1', :download_frd => '1' }) unless image_attachment.nil?
           json[:course_background_image] = file_download_url(background_image_attchment, { :verifier => background_image_attchment.uuid, :download => '1', :download_frd => '1' }) unless background_image_attchment.nil?
           json[:users_count] = @users_count
           json[:tags_count] = @course_tags_count
           json[:course_tags] = @course_tags
-          json[:course_short_decription] = @short_course_desc
-          json[:popular_course] = @popular_course
+          json[:course_short_decription] = @course_desc
+          json[:popular_course] = @course_popular
           json[:each_tag_count] = @each_tag_counts
           json[:profile_data] =  @teacher_desc
           json[:has_course_image] = @has_course_image
           json[:course_topic_details] = @course_topic
           json[:show_only_six_courses] = @show_only_six_courses
-          json[:show_course_price] =  @show_course_price
           json[:course_price] = @course_pricing
           json[:course_modules] = @course_modules
           json[:popular_course_count] = @popular_course_count
         end
         @courses << @course_json
       end
-      format.json {render :json => @courses.to_json}
+      @courses = Api.paginate(@courses, self, api_v1_account_popular_courses_url)
+      format.json {render :json => @courses}
     end
   end
 
+  def course_price(course)
+    @price = []
+    @course_pricing = CoursePricing.where('course_id = ? AND DATE(?) BETWEEN start_at AND end_at', course.id, Date.today).first
+    unless @course_pricing.nil?
+      @pricing_json =   api_json(course,@current_user, session, API_USER_JSON_OPTS).tap do |json|
+      json[:course_price] = @course_pricing.price.to_s
+      json[:show_price] = true
+      end
+    else
+      @pricing_json =   api_json(course,@current_user, session, API_USER_JSON_OPTS).tap do |json|
+        json[:course_price] = ""
+        json[:show_price] = false
+      end
+    end
+    @price << @pricing_json
+  end
   def instructure_details(course)
     @instructure_details = []
     @teachers = course.teacher_enrollments
     if @teachers.empty?
       @instructue_json =   api_json(course,@current_user, session, API_USER_JSON_OPTS).tap do |json|
-        json[:teacher_desc] = "No Teachers Enrolled to this Course"
+        json[:teacher_desc] = false
       end
       @instructure_details << @instructue_json
     else
@@ -100,6 +101,7 @@ class PopularCoursesController < ApplicationController
         end
         @instructue_json =   api_json(course,@current_user, session, API_USER_JSON_OPTS).tap do |json|
           json[:teacher_desc] = @profile
+          json[:teacher_name] = @user_id.name
           json[:teacher_image] = @profile_pict
         end
       else

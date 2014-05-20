@@ -18,6 +18,7 @@ define [
       clicked_topic_id = $(event.target).data('id')
       $('.topic').removeClass('selected_topic')
       $(event.target).closest('.topic').addClass('selected_topic')
+      @accountCourseCollectionView.collection.setParam('per_page', 10)
       @accountCourseCollectionView.collection.fetch({ data:{topic_id: clicked_topic_id}})
 
     movetocourselibrary:(event)->

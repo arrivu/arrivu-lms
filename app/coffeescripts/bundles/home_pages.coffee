@@ -53,14 +53,16 @@ require [
         pause: 1500
         pause_on_hover: true
   )
+  popularCourseCollection.setParam('per_page', 10)
+  popularCourseCollection.setParam('source', "popular")
   popularCourseCollection.fetch(
-    success: ->
-      $("div.author_slider_index_view").jContent
+    success:->
+      $(".popular_course_item").find("div.author_slider_index_view").jContent
         orientation: "horizontal"
         easing: "easeOutCirc"
         duration: 500
-        width:229
-        height:46
+        width:265
+        height:52
 
       if $("#popular_course_div").find("#popular_course_on_index_page").length == 0
         $("#popular_course_div").css('background-image','url()')
@@ -80,5 +82,3 @@ require [
         $("#more_partners").hide();
   )
   learnerReviewCollection.fetch()
-
-
