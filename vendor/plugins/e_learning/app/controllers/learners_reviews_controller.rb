@@ -8,6 +8,7 @@ class LearnersReviewsController < ApplicationController
             comment = course.comments.approved.first
             unless comment.nil?
              @comments =   api_json(comment, @current_user, session, API_USER_JSON_OPTS).tap do |json|
+               json[:id] = course.id
                json[:comment] = comment.comment
                json[:user_name] = comment.user.name
                json[:user_avatar] = comment.user.avatar_image_url
