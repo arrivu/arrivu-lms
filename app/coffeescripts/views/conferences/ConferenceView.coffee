@@ -26,14 +26,15 @@ define [
       @model.on('change', @render)
 
     afterRender: ->
+      conference_model = @model
 #      30 minutes (1800000 ) before enable the start button
       current_date = new Date(ENV.current_date_time)
-      start_date = new Date(@model.start_date)
+      start_date = new Date(conference_model.get('start_date'))
       exact_time =  start_date - current_date
       start_button_enable_time = exact_time - 1800000
       if start_button_enable_time < 3600000
         setTimeout ( ->
-          $("#" + @model.id).attr("disabled","false")
+          $("#" + conference_model.get('id')).css("display", "")
           return
         ), start_button_enable_time
 
