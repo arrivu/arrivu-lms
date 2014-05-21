@@ -31,6 +31,7 @@ define [
         width:  1200
         height: 600
         disableWhileLoading: true
+        position: top
         close: => @$el.remove()
       @showallAccountCourses()
 
@@ -39,7 +40,15 @@ define [
       popularCourseCollectionView = new PopularCourseCollectionView
         collection: popularCourseCollection
         el: '#popular_course_div'
-      popularCourseCollectionView.collection.fetch({ data:{source: "popular"}})
+      popularCourseCollection.setParam('source', "popular")
+      popularCourseCollectionView.collection.fetch(
+        success:->
+          if $("#popular_course_div").find("#popular_course_on_index_page").length == 0
+            $("#popular_course_div").css('background-image','url()')
+            $("#popular_course_banner").hide()
+            $("#more_courses").hide()
+            $("#popular_course_paginating").hide()
+      )
       popularCourseCollectionView.render()
 
     showallAccountCourses: =>
@@ -47,9 +56,10 @@ define [
       accountCourseCollectionView = new AccountCourseCollectionView
         collection: popularCourseCollection
         el: '#all_courses'
+      popularCourseCollection.setParam('per_page', 3)
       popularCourseCollection.setParam('source', "account_courses")
-      dfd = accountCourseCollectionView.collection.fetch()
-      accountCourseCollectionView.$el.disableWhileLoading dfd
+      accountCourseCollectionView.collection.fetch()
+      accountCourseCollectionView.render()
 
     onSaveFail: (xhr) =>
       super
@@ -102,6 +112,7 @@ define [
               if $("#popular_course_div").find("#popular_course_on_index_page").length > 1
                 @showPopularCourseonIndexPage()
                 @showallAccountCourses()
+              @showPopularCourseonIndexPage()
               @showallAccountCourses()
           ]
       else

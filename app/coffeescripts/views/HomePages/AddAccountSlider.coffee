@@ -8,6 +8,7 @@ define [
   'compiled/collections/AccountSlidersCollection'
   'compiled/views/HomePages/TotalAccountSliderCollectionView'
   'compiled/jquery/fixDialogButtons'
+  'compiled/views/ValidatedFormView'
 ], ({View},$,I18n,htmlEscape, template,AccountSlider,AccountSliderCollection,TotalAccountSliderCollectionView) ->
 
   class AddAccountSlider extends View

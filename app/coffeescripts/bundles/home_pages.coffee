@@ -69,11 +69,6 @@ require [
         $("#popular_course_banner").hide()
         $("#more_courses").hide()
         $("#popular_course_paginating").hide()
-      if $("#popular_course_div").find("#popular_course_on_index_page").length > 0
-        $("#popular_course_div").css('background-image','url("/images/pattern-bg.png")')
-        $("#popular_course_banner").show()
-        $("#more_courses").show()
-        $("#popular_course_paginating").show()
   )
   knowledgePartnerCollection.fetch(
     success: ->
@@ -81,4 +76,10 @@ require [
         $("#knowledge_partner_banner").hide();
         $("#more_partners").hide();
   )
-  learnerReviewCollection.fetch()
+  learnerReviewCollection.fetch(
+    success: ->
+      if $("#popular_courses_div").find("#learner_review_on_index_page").length == 0
+        $("#learners_review_banner").hide()
+       else
+        $("#learners_review_banner").show()
+  )

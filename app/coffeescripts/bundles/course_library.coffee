@@ -39,8 +39,8 @@ require [
         orientation: "horizontal"
         easing: "easeOutCirc"
         duration: 500
-        width:229
-        height:46
+        width:265
+        height:52
   )
 
 

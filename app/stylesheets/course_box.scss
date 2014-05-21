@@ -414,8 +414,6 @@
       color: black;
     }
     ul {
-      border: 1px #dbdbdb solid;
-      border-width: 1px 0px;
       color: #aaaaaa;
       height: 3em;
       margin: -1px 15px;
@@ -484,9 +482,6 @@
 
 }
 .resource .details ul {
-
-  border: 1px #dbdbdb solid;
-  border-width: 1px 0px;
   color: #141313;
   height: 3em;
   margin: 0px 1px;
@@ -802,12 +797,11 @@ a.thumbnail:hover {
 
 .course_desc{
 
-  height: 57px;
+  padding: 11px;
   background-color: #efefef;
   margin-left: -15px;
-  width: 107%;
-  margin-top: -1px;
-  margin-bottom: 21px;
+  width: 300px;
+
 }
 
 .box_teacher_desc{
@@ -821,4 +815,128 @@ a.thumbnail:hover {
   text-indent: 2px;
   margin-left:-25px
 
+}
+
+.course_name_div{
+  padding: 12em 18px 2em 15px;
+}
+.course_name{
+  font-weight: bold;
+  font-size: 1.35em;
+  line-height: 1.35em;
+}
+.table_align{
+  margin-top: 10px;
+  color:#0F0D0D;
+  font-weight: 100;
+}
+
+.price_image{
+  width:16px;
+  height:16px;
+  padding-left:22px;
+}
+.free{
+  padding-left:14px;
+  padding-right: 15px;
+}
+.course_mod{
+  padding-left: 14px
+}
+.user_display{
+  padding-left: 30px;
+
+}
+.user_count{
+  padding-left:2px
+}
+.tag_icon{
+  padding-left: 32px;
+}
+.tag_display{
+  padding-left: 2px
+}
+.text_display{
+  font-size: xx-small;
+  font-style: italic;
+}
+.author_slider_index_view{
+  width:260px;
+  height:33px;
+  margin-top: 12px;
+  right: -26px;
+  position:relative;
+  margin-bottom: -11px
+}
+.index_view_slides{
+  width:255px;
+  height:70px;
+  margin-top: -3px;
+  overflow: hidden;
+  position: relative;
+  float:left;
+  text-align: center;
+  text-indent: 2px;
+  margin-left:-25px;
+}
+.items{
+  text-align: left;
+  margin: 10px 0px;
+  margin-top: -2px;
+}
+
+.teacher_image{
+  float: left;
+  width:33px;
+  margin: 0px 10px 3px 0px;
+  margin-top: 16px;
+}
+.teacher_name{
+  margin-top: -15px;
+  font-weight: 700;
+  color: black;
+}
+.teacher_desc{
+  color: black;
+}
+.author_slider_index_pop_up_view{
+  width:260px;
+  height:67px;
+  margin-top: -3px;
+  left: 26px;
+  position:relative;
+  margin-bottom: -11px;
+}
+.slides_popup{
+  width:255px;
+  height:66px;
+  margin-top: -3px;
+  overflow: hidden;
+  position: relative;
+  float:left;
+  text-align: center;
+  text-indent: 2px;
+  margin-left:-25px;
+}
+
+.popu_up_teacher_image{
+  float: left;
+  width:36px;
+  margin: 5px 2px 3px 0px;
+}
+.popup_teacher_name{
+  margin-top: -13px;
+  font-weight: 700;
+  color: black;
+}
+.popup_teacher_desc{
+  color: black;
+  margin-top: -14px;
+  line-height:  17px;
+}
+
+.pop_up_items{
+  text-align: left;
+  margin: 10px 0px;
+  margin-top: 17px;
 }

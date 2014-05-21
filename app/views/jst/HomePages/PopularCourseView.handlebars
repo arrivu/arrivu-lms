@@ -1,5 +1,5 @@
 {{#unless show_only_six_courses}}
-<div class="span3 content-box resource" style="float: left;width: 322px;left: 41px;">
+<div class="span3 content-box resource" style=" float: left;width: 322px;left: 41px;">
     <div id = "popular_course_on_index_page">
     {{#if has_course_image}}
     <div class="type-tag-positioner" style="background-image: url('{{course_background_image}}');background-size: cover;">
@@ -13,34 +13,34 @@
                 <span>{{topic_name}}</span>
             </div>
          {{else}}
-            <div class="type ribbon1" style="background-color: #228b22">
+            <div class="type ribbon1" style="background-color: #228b22;">
                 <span>others</span>
             </div>
          {{/if}}
     {{/each}}
     </div>
-    <div class="details" data-id="{{id}}" id="{{id}}" style="padding: 13.5em 18px 2em 15px;color: #dd472b;font-weight: normal;">
-    <h2>
+    <div class="details course_name_div" data-id="{{id}}" id="{{id}}">
+    <h2 class="course_name">
         {{course_name}}
     </h2>
-    <table style="margin-top: 10px;color:#0F0D0D;;font-weight: 100;">
+    <table class="table_align">
     <tr>
      {{#each course_price}}
       {{#if show_price}}
         <td>
-            <img src="/images/icon-price.jpg" style="width:16px;height:16px;padding-left:22px;">
+            <img src="/images/icon-price.jpg" class="price_image">
         </td>
         <td>
             {{course_price}}
         </td>
       {{else}}
-        <td style="padding-left:14px;padding-right: 15px;">
+        <td class="free">
             Free
         </td>
       {{/if}}
      {{/each}}
         {{#if course_modules}}
-          <td style="padding-left: 14px;">
+          <td class="course_mod">
             <a class="icon-module"></a>
           </td>
           <td>
@@ -48,28 +48,27 @@
           </td>
         {{/if}}
         {{#if users_count}}
-            <td style="padding-left: 30px;">
+            <td class="user_display">
                 <a class="icon-user"></a>
             </td>
-            <td style="padding-left:2px">
+            <td class="user_count">
                 {{users_count}}
-                <span
-                  data-tooltip title="Course has {{users_count}} users">
-                </span>
             </td>
         {{/if}}
         {{#if tags_count}}
-            <td style="padding-left: 32px;">
+            <td class="tag_icon">
                 <a class="icon-tag"></a>
             </td>
-            <td style="padding-left: 2px">
+            <td class="tag_display">
                 {{tags_count}}
             </td>
         {{/if}}
     </tr>
     </table>
     {{#if course_tags}}
-    <ul class="tags" style="list-style-type: none;">
+        <hr style="margin: 6px 0px"> </hr>
+        <span class="text_display">Courses Tagged with</span>
+    <ul class="tags" style="list-style-type: none;margin-top: -8px;">
         {{#each course_tags}}
             <li>
                 <a href="#"><b>{{tag_name}}</b>
@@ -81,25 +80,23 @@
     </ul>
     {{/if}}
     {{#if course_short_decription}}
-     <p class="desc course_desc" style="margin-left: -15px;margin-top: -1px;float:left;font-size: small;">
+     <p class="desc course_desc" style="  margin-top: 3px;float:left;font-size: small;margin-left: -15px;">
          {{{ truncate course_short_decription 100 }}}
      </p>
      {{/if}}
     {{#if has_teacher}}
-    <div class="author_slider_index_view" style="width:260px;height:67px;margin-top: 12px;right: -26px;;position:relative;margin-bottom: -11px">
-        <a title="" href="#" class="prev icon-arrow-left" style="margin-top: 15px;margin-left: -45px;position: absolute;"></a>
-            <div class="slides" style="width:255px;height:52px; margin-top: -3px;overflow: hidden;position: relative;float:left;text-align: center;text-indent: 2px;margin-left:-25px">
+    <div class="author_slider_index_view">
+            <div class="index_view_slides">
         {{#each profile_data }}
             {{#if teacher_desc}}
-                   <div class="items"  style="text-align: left; margin: 10px 0px;width:54px">
-                       <div style="float: left;width:33px; margin: 0px 10px 3px 0px;"><img src={{teacher_image}}></div>
-                       <p style="margin-top: -15px;font-weight: 700;color: black;">{{teacher_name}}</p>
-                        <span style="color: black;">{{{ truncate teacher_desc 80 }}}</span>
+                   <div class="items">
+                       <div class="teacher_image" ><img src={{teacher_image}}></div>
+                       <p class="teacher_name">{{teacher_name}}</p>
+                        <span class="teacher_desc">{{{ truncate teacher_desc 80 }}}</span>
                    </div>
             {{/if}}
         {{/each}}
-            </div>
-        <a title="" href="#" class="next icon-arrow-right" style="margin-top: 16px;margin-left:246px;position: absolute;"></a>
+    </div>
     </div>
     {{/if}}
 </div>

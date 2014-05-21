@@ -1,13 +1,13 @@
 {{#if popular_course}}
-    <div class="span3 content-box resource" style="float:right;width: 300px;margin:13px;right:-10px" id="is_a_popular_course" data-id="{{popular_id}}">
+    <div class="span3 content-box resource" style="float:right;width: 300px;margin:13px;right:-10px;" id="is_a_popular_course" data-id="{{id}}">
         <div class="ribbon-wrapper">
             <div class="ribbon-wrapper-green"><div class="ribbon-green">Popular</div></div>
         </div>
 {{else}}
-    <div class="span3 content-box resource" style="float:right;width: 300px;margin:13px;right:-10px" id="is_not_a_popular_course" >
+    <div class="span3 content-box resource" style="float:right;width: 300px;margin:13px;right:-10px;" id="is_not_a_popular_course" data-id="{{id}}">
 {{/if}}
 {{#if has_course_image}}
-    <div class="type-tag-positioner" style="background-image: url('{{course_background_image}}');background-size: cover;">
+    <div class="type-tag-positioner" style="background-image: url('{{course_background_image}}');background-size: cover;text-align: start;">
         <img alt="Course_image" class="course-badge img-circle" src="{{course_image}}" style="padding:5px;">
 {{else}}
     <div class="type-tag-positioner" style="">
@@ -24,8 +24,8 @@
     {{/if}}
 {{/each}}
 </div>
-    <div class="details" data-id="{{id}}" id="{{id}}" style="padding: 13.5em 18px 2em 15px;color: #dd472b;font-weight: normal;">
-        <h2>
+    <div class="details" data-id="{{id}}" id="{{id}}" style="text-align: left;padding: 12em 18px 2em 15px;">
+        <h2 style="font-weight: bold;font-size: 1.35em;line-height: 1.35em;">
             {{course_name}}
         </h2>
         <table style="margin-top: 23px;color:#0F0D0D;;font-weight: 100;">
@@ -74,7 +74,9 @@
             </tr>
         </table>
         {{#if course_tags}}
-            <ul class="tags" style="list-style-type: none;">
+            <hr style="margin: 6px 0px"> </hr>
+            <span class="text_display">Courses Tagged with</span>
+            <ul class="tags" style="list-style-type: none;margin-top: -8px;">
                 {{#each course_tags}}
                     <li>
                         <a href="#"><b>{{tag_name}}</b>
@@ -86,26 +88,26 @@
             </ul>
         {{/if}}
         {{#if course_short_decription}}
-            <p class="desc course_desc" style="margin-left: -15px;margin-top: -1px;float:left;font-size: small;">
+            <p class="desc course_desc" style="margin-left: -15px;margin-top: 3px;float:left;font-size: small;width: 279px;">
                 {{{ truncate course_short_decription 100 }}}
             </p>
         {{/if}}
       {{#if has_teacher}}
-        <div class="author_slider_index_pop_up_view" style="width:210px;height:67px;margin-top: 12px;left: 26px;position:relative;margin-bottom: -11px">
-            <a title="" href="#" class="prev icon-arrow-left" style="margin-top: 15px;margin-left: -45px;position: absolute;"></a>
-            <div class="slides" style="width:255px;height:66px; margin-top: -3px;overflow: hidden;position: relative;float:left;text-align: center;text-indent: 2px;margin-left:-25px">
-                {{#each profile_data }}
-                    {{#if teacher_desc}}
-                        <div class="items"  style="text-align: left; margin: 10px 0px;">
-                            <div style="float: left;width:26px; margin: 0px 10px 3px 0px;"><img src={{teacher_image}}></div>
-                            <p style="margin-top: -15px;font-weight: 700;color: black;">{{teacher_name}}</p>
-                            <span style="color: black;">{{{ truncate teacher_desc 80 }}}</span>
-                        </div>
-                    {{/if}}
-                {{/each}}
-            </div>
-            <a title="" href="#" class="next icon-arrow-right" style="margin-top: 16px;margin-left:246px;position: absolute;"></a>
-        </div>
+          <div class="author_slider_index_pop_up_view">
+
+              <div class="slides_popup">
+                  {{#each profile_data }}
+                      {{#if teacher_desc}}
+                          <div class="pop_up_items">
+                              <div class="popu_up_teacher_image"><img src={{teacher_image}}></div>
+                              <p class="popup_teacher_name">{{teacher_name}}</p>
+                              <p class="popup_teacher_desc">{{{ truncate teacher_desc 80 }}}</p>
+                          </div>
+                      {{/if}}
+                  {{/each}}
+              </div>
+
+          </div>
       {{/if}}
     </div>
 </div>

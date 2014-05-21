@@ -70,7 +70,7 @@ class PopularCoursesController < ApplicationController
     @course_pricing = CoursePricing.where('course_id = ? AND DATE(?) BETWEEN start_at AND end_at', course.id, Date.today).first
     unless @course_pricing.nil?
       @pricing_json =   api_json(course,@current_user, session, API_USER_JSON_OPTS).tap do |json|
-      json[:course_price] = @course_pricing.price.to_s
+      json[:course_price] = @course_pricing.price
       json[:show_price] = true
       end
     else
@@ -83,15 +83,14 @@ class PopularCoursesController < ApplicationController
   end
   def instructure_details(course)
     @instructure_details = []
-    @teachers = course.teacher_enrollments
-    if @teachers.empty?
+    @teachers = course.teacher_enrollments.first
+    if @teachers.nil?
       @instructue_json =   api_json(course,@current_user, session, API_USER_JSON_OPTS).tap do |json|
         json[:teacher_desc] = false
       end
       @instructure_details << @instructue_json
     else
-    @teachers.each do |teacher|
-      @user_id = User.find(teacher.user_id)
+      @user_id = User.find(@teachers.user_id)
       if @user_id.profile.bio !=nil && @user_id.profile.title !=nil
         @profile = @user_id.profile.bio
         if @user_id.avatar_image_url.nil?
@@ -110,7 +109,6 @@ class PopularCoursesController < ApplicationController
         end
       end
       @instructure_details << @instructue_json
-    end
     end
     @instructure_details
   end
@@ -162,13 +160,15 @@ class PopularCoursesController < ApplicationController
   end
 
   def destroy
-    @delete_popular_course_item = PopularCourse.find(params['popular_course_data']['popular_course_id'])
+    #@delete_popular_course_item = PopularCourse.find(params['popular_course_data']['popular_course_id'])
+    @course = Course.find(params['popular_course_data']['popular_course_id'])
     respond_to do |format|
-      @delete_popular_course_item.delete
-      if @delete_popular_course_item.delete
-        format.json {render :json => @delete_popular_course_item.to_json}
+      popular_course = @course.popular_course
+      popular_course.delete
+      if popular_course.delete
+        format.json {render :json => popular_course.to_json}
       else
-        format.json { render :json => @delete_popular_course_item.errors.to_json, :status => :bad_request }
+        format.json { render :json => popular_course.errors.to_json, :status => :bad_request }
       end
     end
   end
