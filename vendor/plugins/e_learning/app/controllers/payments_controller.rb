@@ -1,4 +1,5 @@
 class PaymentsController < ApplicationController
+  before_filter :set_e_learning
   rescue_from Paypal::Exception::APIError, with: :paypal_api_error
 
   def show
