@@ -759,12 +759,8 @@ routes.draw do
   match 'toggle_dashboard' => 'users#toggle_dashboard', :as => :toggle_dashboard, :via => :post
   match 'styleguide' => 'info#styleguide', :as => :styleguide, :via => :get
   match 'old_styleguide' => 'info#old_styleguide', :as => :old_styleguide, :via => :get
-  if ELEARNING
-    root :to => 'home_pages#index', :as => :root, :via => :get
-  else
-    # dashboard_url is / , not /dashboard
-    root :to => 'users#user_dashboard', :as => :root, :via => :get
-  end
+  root :to => 'home_pages#index', :as => :home, :via => :get
+  # dashboard_url is / , not /dashboard
   root :to => 'users#user_dashboard', :as => :root, :via => :get
   match 'logo_root' => 'users#logo_root',  :as => :logo_root ,:via => :get
   # backwards compatibility with the old /dashboard url

@@ -44,7 +44,7 @@ require [
   @app.render()
   accountSliderCollection.fetch(
     success:->
-      $("div#demo1").jContent
+      $("div#account_sliders").jContent
         orientation: "horizontal"
         easing: "easeOutCirc"
         duration: 500

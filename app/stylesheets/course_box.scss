@@ -996,9 +996,32 @@ ul{
 }
 
 #add_link{
-  margin-bottom: -18px;
+  margin-bottom: -9px;
   z-index: 1;
   float: right;
-  margin-right: 30px;
+  margin-right: 12px;
+  font-weight: bold;
+}
+
+#add_popular_courses{
+  margin-left: 1152px;
+  font-weight: bold;
+}
+
+#add_account_sliders{
+  margin-left: 1139px;
+}
+
+#account_sliders{
+  margin-top: -14px;
+  margin-left: -20px;
+  width:103%;
+  height:300px
+}
+#add_account_sliders_link{
+  margin-bottom:-19px;
+  z-index:1;
+  position:absolute;
+  font-size: 14px;
   font-weight: bold;
 }
