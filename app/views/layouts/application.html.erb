@@ -42,7 +42,7 @@
     <a href="#content" id="skip_navigation_link"><%= t 'links.skip_to_content', "Skip To Content" %></a>
     <!--Arrivu changes-->
         <% if !@domain_root_account.account_header.nil?  &&  Attachment.exists?(@domain_root_account.account_header.header_logo_url) == true %>
-            <a  href="<%= root_url %>"><img class="logo <%= 'logo_bottom' if (@e_learning && @current_user) %>" style="width: 174px;height: 63px;left: 2px;bottom: 4px;position: absolute;"
+            <a  href="<%= root_url %>"><img class="logo <%= 'logo_bottom' if (@e_learning) %>" style="width: 174px;height: 63px;left: 2px;bottom: 4px;position: absolute;"
                                             src= <%= header_logo_image %>></a>
         <% else  %>
             <a id="header-logo" href="<%= logo_root_url %>" <% if @e_learning  %>style="bottom: -39px;" <% end  %>><%= t 'links.dashboard', "My Dashboard" %></a>

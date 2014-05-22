@@ -47,10 +47,10 @@ require [
       $("div#account_sliders").jContent
         orientation: "horizontal"
         easing: "easeOutCirc"
-        duration: 500
+        duration: 5000
         auto: true
         direction: "next" #or 'prev'
-        pause: 1500
+        pause: 3500
         pause_on_hover: true
   )
   popularCourseCollection.setParam('per_page', 10)
