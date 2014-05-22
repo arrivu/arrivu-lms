@@ -19,7 +19,19 @@ using payment integration.
 END
          applies_to: 'RootAccount',
          state: 'hidden',
-         root_opt_in: true
-     }
+         root_opt_in: true,
+         locking_account_id: 1
+     },
+'private_e_learning' =>
+    {
+        display_name: -> { I18n.t('features.private_e_learning', 'Private E Learning') },
+        description: -> { I18n.t('private_e_learning_description', <<END) },
+Enabling Private E Learning Provides ,Autenticated users only can see the accounts
+course content and E Learning home page and enrollment.
+END
+        applies_to: 'RootAccount',
+        state: 'allowed',
+        root_opt_in: false
+    }
 
 )

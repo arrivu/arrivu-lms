@@ -1,5 +1,8 @@
 class SlidersController < ApplicationController
   include Api::V1::Json
+  include ELearningHelper
+  before_filter :check_private_e_learning
+  before_filter :check_e_learning
   def index
     respond_to do |format|
       @sliders = []

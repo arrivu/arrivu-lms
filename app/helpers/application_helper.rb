@@ -1061,9 +1061,5 @@ ApplicationHelper
     end
   end
 
-  def set_e_learning
-    @e_learning = true
-  end
-
 end
 

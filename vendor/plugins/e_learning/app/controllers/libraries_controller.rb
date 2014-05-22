@@ -1,9 +1,11 @@
 class LibrariesController < ApplicationController
-  include HomePagesHelper
+  include ELearningHelper
 
   before_filter :require_user, :only => [:enrollment,:payment_complete,:payment_confirm,:enrollment,:enroll_and_redirect]
+  before_filter :check_private_e_learning
   before_filter :set_e_learning
   before_filter :check_e_learning
+
   def index
       js_env :context_asset_string => @domain_root_account.try(:asset_string)
   end

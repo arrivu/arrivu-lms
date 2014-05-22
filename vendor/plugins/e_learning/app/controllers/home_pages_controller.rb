@@ -1,7 +1,8 @@
 class HomePagesController < ApplicationController
-  include HomePagesHelper
+  include ELearningHelper
 
   before_filter :set_e_learning
+  before_filter :check_private_e_learning, :only => [:index]
   before_filter :check_e_learning, :only => [:index]
 
   def index

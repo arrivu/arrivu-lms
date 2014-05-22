@@ -6215,6 +6215,7 @@ en:
     draft_state: "Draft State"
     flipped_classes: "Flipped classes"
     e_learning: "E Learning"
+    private_e_learning: "Private E Learning"
     draft_state_account_disable_warning: |-
         Turning this feature off will impact existing courses. For assistance in disabling this feature, please contact
         your Canvas Success Manager.
@@ -6437,6 +6438,9 @@ en:
       Enabling E Learning Provides home pages for the domain instead of loading login page
       on the start page. Organizations can show case there course and can sell the courses
       using payment integration.
+  private_e_learning_description: |-
+      Enabling Private E Learning Provides ,Autenticated users only can see the accounts
+      course content and E Learning home page and enrollment.
   gradebook: 
     alerts: 
       no_active_students: "Sorry, there are either no active students in the course or none are gradable by you."

@@ -1,7 +1,11 @@
 source 'http://rubygems.org/'
 
 require File.expand_path("../config/e_learning", __FILE__)
-puts "ELEARNING: #{ELEARNING}"
+if ELEARNING
+  puts "e_learning plugin available"
+else
+  puts "e_learning plugin not available"
+end
 
 # this has to use 1.8.7 hash syntax to not raise a parser exception on 1.8.7
 if RUBY_VERSION == "2.0.0"

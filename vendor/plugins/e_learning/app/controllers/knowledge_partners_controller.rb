@@ -1,6 +1,8 @@
 class KnowledgePartnersController < ApplicationController
-
+  include ELearningHelper
   before_filter :require_context
+  before_filter :check_private_e_learning
+  before_filter :check_e_learning
 
   def index
     respond_to do |format|

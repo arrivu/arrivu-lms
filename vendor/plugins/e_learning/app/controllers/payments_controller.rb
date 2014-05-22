@@ -1,5 +1,10 @@
 class PaymentsController < ApplicationController
+  include ELearningHelper
+
+  before_filter :require_user
   before_filter :set_e_learning
+  before_filter :check_private_e_learning
+  before_filter :check_e_learning
   rescue_from Paypal::Exception::APIError, with: :paypal_api_error
 
   def show
@@ -49,8 +54,6 @@ class PaymentsController < ApplicationController
     @redirect_uri = yield payment
     if payment.popup?
       render :close_flow, layout: false
-    else
-      redirect_to @redirect_uri
     end
   end
 
