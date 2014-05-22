@@ -1,8 +1,11 @@
 class LibrariesController < ApplicationController
+  include HomePagesHelper
+
   before_filter :require_user, :only => [:enrollment,:payment_complete,:payment_confirm,:enrollment,:enroll_and_redirect]
   before_filter :set_e_learning
+  before_filter :check_e_learning
   def index
-    js_env :context_asset_string => @domain_root_account.try(:asset_string)
+      js_env :context_asset_string => @domain_root_account.try(:asset_string)
   end
 
   def show

@@ -247,7 +247,11 @@ class PseudonymSessionsController < ApplicationController
       if delegated_authentication_url?
         format.html { redirect_to login_url(:no_auto=>'true') }
       else
-        format.html { redirect_to login_url }
+        if (@account ||= @domain_root_account).feature_enabled?(:e_learning)
+          format.html { redirect_to root_url }
+         else
+          format.html { redirect_to login_url }
+        end
       end
       format.json { render :json => "OK".to_json, :status => :ok }
     end

@@ -1,5 +1,9 @@
 class HomePagesController < ApplicationController
+  include HomePagesHelper
+
   before_filter :set_e_learning
+  before_filter :check_e_learning, :only => [:index]
+
   def index
     js_env :add_image_url => account_sliders_path(@domain_root_account.id)
     js_env :context_asset_string => @domain_root_account.try(:asset_string)

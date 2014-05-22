@@ -1,16 +1,21 @@
+<% show_e_learning_menu = (@account ||= @domain_root_account).feature_enabled?(:e_learning) %>
 <ul id="identity"
     <% if  @e_learning %>
     style="margin-top: 22px;border-radius: 10px;margin-right: 50px;"
     <% end  %>
     >
-  <li><%= link_to "Course Library", libraries_path%></li>
+  <% if show_e_learning_menu  %>
+     <li><%= link_to "Course Library", libraries_path%></li>
+  <% end %>
   <% if !@current_user %>
       <li>|</li>
       <li><%= link_to t('links.sign_up_as_teacher', "Sign Up as a Teacher"), register_path %></li>
        <li>|</li>
       <li><%= link_to "Log In", login_path %></li>
   <% else %>
-      <li><%= link_to "Dashboard", dashboard_path%></li>
+      <% if show_e_learning_menu  %>
+        <li><%= link_to "Dashboard", dashboard_path%></li>
+      <% end %>
     <% if @real_current_user && @real_current_user != @current_user %>
       <li class="user_name"><%= link_to t('masquerading.as', "As: *%{user_name}*", :user_name => @current_user.short_name, :wrapper => '<span class="emphasize-name">\1</span>'), user_profile_path(@current_user) %></li>
     <% else %>

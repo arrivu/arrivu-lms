@@ -27,21 +27,26 @@
         <a href="<%= login_path %>" style="font-size: 1.3em;" class="btn"><%= login_message %></a>
       </div>
     <% else %>
-       <% if @domain_root_account.Sublime_social_login_enabled? %>
-          <div style="display: table;margin: 10px auto;">
-          <ul style="min-width: 480px;text-align:center;margin: 0px;">
-            <li style="list-style: none; display: inline-block; "><%= link_to image_tag("fb.png",:class => "login_img", alt: "Login with FB", :style => "width: 160px"), '/auth/facebook/' %></li>
-            <li style="list-style: none; display: inline-block; "><%= link_to image_tag("google.png", :class => "login_img", alt: "Login with Goole", :style => "width: 160px"), '/auth/google_oauth2/' %></li>
-            <li style="list-style: none; display: inline-block; "> <%= link_to image_tag("linkedin.png", :class => "login_img", alt: "Login with Linkedin", :style => "width: 160px"), '/auth/linkedin/' %></li>
+          <div class="social_login">
+          <ul class="social_login_list">
+            <% if @domain_root_account.facebook_login? %>
+                <li class="social_login_image" ><%= link_to image_tag("fb.png",:class => "login_img", alt: "Login with FB", :style => "width: 160px"), '/auth/facebook/' %></li>
+             <% end %>
+            <% if @domain_root_account.google_login? %>
+                <li class="social_login_image"><%= link_to image_tag("google.png", :class => "login_img", alt: "Login with Google", :style => "width: 160px"), '/auth/google_oauth2/' %></li>
+            <% end %>
+            <% if @domain_root_account.linkedin_login? %>
+            <li class="social_login_image"> <%= link_to image_tag("linkedin.png", :class => "login_img", alt: "Login with Linkedin", :style => "width: 160px"), '/auth/linkedin/' %></li>
+            <% end %>
           </ul>
         </div>
-
-          <div style="display: table;margin: 10px auto;">
-            <ul style="min-width: 480px;text-align:center;margin: 0px;">
-              <li style="list-style: none; display: inline-block; ">OR</li>
-            </ul>
-          </div>
-       <% end  %>
+          <% if @domain_root_account.facebook_login? || @domain_root_account.google_login? || @domain_root_account.linkedin_login? %>
+              <div style="display: table;margin: 10px auto;">
+                <ul style="min-width: 480px;text-align:center;margin: 0px;">
+                  <li class="social_login_image">OR</li>
+                </ul>
+              </div>
+          <% end  %>
       <%= form_for :pseudonym_session, :url => login_path(:nonldap => (@domain_root_account && !@domain_root_account.ldap_authentication?).presence), :html => {:id => "login_form"} do |f| %>
         <% if @domain_root_account && @domain_root_account.self_registration? && !hide_self_reg_banner %>
             <% if @domain_root_account.self_registration_type == 'observer' %>

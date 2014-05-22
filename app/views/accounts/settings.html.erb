@@ -1,4 +1,5 @@
 <%
+  e_learning_enabled = (@account ||= @domain_root_account).feature_enabled?(:e_learning)
   @active_tab = "settings"
   add_crumb t(:settings_crumb, "Settings")
   js_bundle :account_settings
@@ -70,7 +71,7 @@
             <li><a href="#tab-plugins" id="tab-plugin-link">Plugins</a></li>
         <% end %>
     <% end %>
-    <% if ELEARNING %>
+    <% if ELEARNING && e_learning_enabled %>
         <li><a href="#tab-topics" id="tab-topics-link">Course Topics</a></li>
     <% end  %>
   </ul>
@@ -979,7 +980,7 @@ Allowing Draft State here will allow teachers to enable it in their individual c
   <%= render :partial => 'accounts/plugin_settings' %>
 
 <!--arivu changes-->
-  <% if ELEARNING  %>
+  <% if ELEARNING && e_learning_enabled %>
     <div id="tab-topics">
       <%= render :partial => 'topics/add_topics'%>
     </div>

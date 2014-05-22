@@ -1,4 +1,5 @@
 <%
+   e_learning_enabled = (@account ||= @domain_root_account).feature_enabled?(:e_learning)
    content_for :page_title, join_title(t(:page_title, "Course Details"), @context.name)
    jammit_css :course_settings,:reports,:token_input
    js_bundle :course_settings
@@ -39,13 +40,13 @@
   <% if can_do @context, @current_user, :manage_feature_flags %>
       <li id="feature_flags_tab"><a href="#tab-features" id="tab-features-link"><%= t('tabs.feature_options', %{Feature Options}) %></a></li>
   <% end %>
-  <% if ELEARNING %>
+  <% if ELEARNING && e_learning_enabled %>
       <li id="images_tab"><a href="#tab-images" id="tab-images-link"><%= t('tabs.images', %{Course Images}) %></a></li></li>
   <% end %>
-  <% if ELEARNING %>
+  <% if ELEARNING && e_learning_enabled %>
       <li id="pricings_tab"><a href="#tab-pricings" id="tab-pricings-link"><%= t('tabs.pricings', %{Course Pricings}) %></a></li></li>
   <% end %>
-  <%if ELEARNING %>
+  <%if ELEARNING && e_learning_enabled %>
       <li id="description_tab"><a href="#tab-description" id="tab-descriptions-link"><%= t('tabs.description', %{Course Description}) %></a></li></li>
   <% end %>
 </ul>
@@ -326,14 +327,14 @@
         </div>
       </td>
     </tr>
-    <% if ELEARNING %>
+    <% if ELEARNING && e_learning_enabled %>
         <%= render :partial => 'accounts/course_taggings'  %>
         <tr><td>
           <br></td></tr>
     <% end %>
     <!--arrivu changes-->
     <tr>
-      <% if ELEARNING %>
+      <% if ELEARNING && e_learning_enabled %>
           <td class="form-label"><%= f.blabel :topic_id, :en => "Course Topic" %></td>
           <td>
 
@@ -643,13 +644,13 @@
   <% if can_do @context, @current_user, :manage_feature_flags %>
     <div id="tab-features"></div>
   <% end %>
-  <% if ELEARNING %>
+  <% if ELEARNING && e_learning_enabled %>
     <%=  render :partial => "courses/course_settings" %>
 <% end %>
-<% if ELEARNING %>
+<% if ELEARNING && e_learning_enabled %>
     <%=  render :partial => "courses/course_pricings" %>
 <% end %>
-<% if ELEARNING %>
+<% if ELEARNING && e_learning_enabled %>
     <%= render :partial => "courses/course_description" %>
 <% end %>
 </div><!-- end course details tab -->
