@@ -63,17 +63,6 @@ require [
         duration: 500
         width:265
         height:52
-
-      if $("#popular_course_div").find("#popular_course_on_index_page").length == 0
-        $("#popular_course_div").css('background-image','url()')
-        $("#popular_course_banner").hide()
-        $("#more_courses").hide()
-        $("#popular_course_paginating").hide()
   )
-  knowledgePartnerCollection.fetch(
-    success: ->
-      if $("#knowledge_partners_div").find("#knowledge_partner_on_index_page").length == 0
-        $("#knowledge_partner_banner").hide()
-        $("#more_partners").hide()
-  )
+  knowledgePartnerCollection.fetch()
   learnerReviewCollection.fetch()

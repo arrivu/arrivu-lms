@@ -27,6 +27,7 @@ define [
         title: 'Add knowledge Partner'
         width:  800
         height: 600
+        position: 'center'
         close: => @$el.remove()
       @show_all_knowledge_partners()
 

@@ -10,7 +10,7 @@ define [
   'compiled/views/ValidatedFormView'
   'jquery.disableWhileLoading'
   'jqueryui/jquery.jcontent.0.8',
-  'jqueryui/jquery.easing.1.3'
+  'jqueryui/jquery.easing.1.3',
 ], ($,I18n,htmlEscape, template,PopularCoure,PopularCoursesCollection,AccountCourseCollectionView,PopularCourseCollectionView,
     ValidatedFormView) ->
 
@@ -31,7 +31,7 @@ define [
         width:  1200
         height: 600
         disableWhileLoading: true
-        position: top
+        position: 'center'
         close: => @$el.remove()
       @showallAccountCourses()
 
@@ -41,14 +41,7 @@ define [
         collection: popularCourseCollection
         el: '#popular_course_div'
       popularCourseCollection.setParam('source', "popular")
-      popularCourseCollectionView.collection.fetch(
-        success:->
-          if $("#popular_course_div").find("#popular_course_on_index_page").length == 0
-            $("#popular_course_div").css('background-image','url()')
-            $("#popular_course_banner").hide()
-            $("#more_courses").hide()
-            $("#popular_course_paginating").hide()
-      )
+      popularCourseCollectionView.collection.fetch()
       popularCourseCollectionView.render()
 
     showallAccountCourses: =>
@@ -56,10 +49,11 @@ define [
       accountCourseCollectionView = new AccountCourseCollectionView
         collection: popularCourseCollection
         el: '#all_courses'
-      popularCourseCollection.setParam('per_page', 3)
+      popularCourseCollection.setParam('per_page', 6)
       popularCourseCollection.setParam('source', "account_courses")
-      accountCourseCollectionView.collection.fetch()
-      accountCourseCollectionView.render()
+      dfd = accountCourseCollectionView.collection.fetch()
+      $("#add_popular_course_form").disableWhileLoading dfd
+
 
     onSaveFail: (xhr) =>
       super
@@ -102,22 +96,14 @@ define [
               url = "api/v1/accounts/"+ENV.account_id+"/popular_courses/"+ id
               @$el.disableWhileLoading($.ajaxJSON url, 'DELETE',data, onSuccessdelete,onError)
               dialog.dialog 'close'
-              if $("#popular_course_div").find("#popular_course_on_index_page").length == 1
-                $("#popular_course_div").css('background-image','url()')
-                $("#popular_course_banner").hide()
-                @showallAccountCourses()
-                $(".resource-row").hide()
-                $("#more_courses").hide()
-                $("#popular_course_paginating").hide()
-              if $("#popular_course_div").find("#popular_course_on_index_page").length > 1
-                @showPopularCourseonIndexPage()
-                @showallAccountCourses()
+              $(event.currentTarget).find(".ribbon-wrapper-green").hide()
+              $(event.currentTarget.firstElementChild).attr('id','is_not_a_popular_course');
               @showPopularCourseonIndexPage()
-              @showallAccountCourses()
           ]
       else
         url = "api/v1/accounts/"+ENV.account_id+"/popular_courses"
         @$el.disableWhileLoading($.ajaxJSON url,'POST',data, onSuccess,onError)
         $("#popular_course_div").css('background-image','url("/images/pattern-bg.png")');
-        @showallAccountCourses()
+        $(event.currentTarget).find(".ribbon-wrapper").css('display','block');
+        $(event.currentTarget.firstElementChild).attr('id','is_a_popular_course');
         @showPopularCourseonIndexPage()

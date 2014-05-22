@@ -9,7 +9,7 @@ class LibrariesController < ApplicationController
     if params[:id].present?
       get_course_and_price(params[:id])
       get_course_images
-      @comments = @context.comments.approved.recent.paginate(:page => params[:page], :per_page => 10)
+      @comments = @context.comments.approved.recent.limit(5).paginate(:page => params[:page], :per_page => 5)
     end
   end
 
