@@ -4,7 +4,7 @@ define([
     'jqueryui/jquery.easing.1.3'
 ], function($) {
     $("document").ready(function(){
-        $("div#demo1").jContent({orientation: 'horizontal',
+        $("div#account_sliders").jContent({orientation: 'horizontal',
             easing: 'easeOutCirc',
             duration: 500,
             auto: true,

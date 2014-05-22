@@ -6214,6 +6214,7 @@ en:
     differentiated_assignments: "Differentiated Assignments"
     draft_state: "Draft State"
     flipped_classes: "Flipped classes"
+    e_learning: "E Learning"
     draft_state_account_disable_warning: |-
         Turning this feature off will impact existing courses. For assistance in disabling this feature, please contact
         your Canvas Success Manager.
@@ -6432,6 +6433,10 @@ en:
       to be restricted to a single domain. Students attempting to submit assignments or
       join collaborations on an unapproved domain will receive an error message notifying them
       that they will need to update their Google Docs integration.
+  e_learning_description: |-
+      Enabling E Learning Provides home pages for the domain instead of loading login page
+      on the start page. Organizations can show case there course and can sell the courses
+      using payment integration.
   gradebook: 
     alerts: 
       no_active_students: "Sorry, there are either no active students in the course or none are gradable by you."

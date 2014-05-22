@@ -5,7 +5,9 @@ define [
   'compiled/util/deparam'
   'jst/conferences/editConferenceForm'
   'jst/conferences/userSettingOptions'
-], ($, _, DialogBaseView, deparam, template, userSettingOptionsTemplate) ->
+  'jst/conferences/UsersList'
+  'jquery.disableWhileLoading'
+], ($, _, DialogBaseView, deparam, template, userSettingOptionsTemplate,userListTemplate) ->
 
   class EditConferenceView extends DialogBaseView
 
@@ -19,6 +21,20 @@ define [
       'click .all_users_checkbox': 'toggleAllUsers'
       'change #web_conference_long_running': 'changeLongRunning'
       'change #web_conference_conference_type': 'renderConferenceFormUserSettings'
+      "change #web_conference_course_section_id": "changeSection"
+
+    onSuccess = (data) ->
+      @$('#members_list').html(userListTemplate(
+        users: data
+      ))
+
+    onError = (data) ->
+      $.flashMessage("There is some errors while fetching users, Contact admin!")
+
+
+    changeSection: (event)->
+      $course_section_id =  event.target.value;
+      $(".form-dialog").disableWhileLoading $.ajaxJSON $("#get_users_from_section_url").attr('rel'), 'GET', {course_section_id: $course_section_id}, onSuccess, onError
 
     render: ->
       super
@@ -72,6 +88,7 @@ define [
           disable_duration_changes: ((conferenceData['long_running'] || is_editing) && conferenceData['started_at'])
           auth_token: ENV.AUTHENTICITY_TOKEN
         conferenceData: conferenceData
+        courseSections: ENV.course_sections
         users: ENV.users
         conferenceTypes: ENV.conference_type_details.map((type) ->
           {name: type.name, type: type.type, selected: (conferenceData.conference_type == type.type)}

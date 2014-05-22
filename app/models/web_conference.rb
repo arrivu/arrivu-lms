@@ -19,16 +19,17 @@
 class WebConference < ActiveRecord::Base
   include SendToStream
   include TextHelper
-  attr_accessible :title, :duration, :description, :conference_type, :user, :user_settings, :context
+  attr_accessible :title, :duration, :description, :conference_type, :user, :user_settings, :context, :start_date
   attr_readonly :context_id, :context_type
   belongs_to :context, :polymorphic => true
   has_many :web_conference_participants
+  has_many :conference_calendar_event_associations, :dependent => :destroy
   has_many :users, :through => :web_conference_participants
   has_many :invitees, :through => :web_conference_participants, :source => :user, :conditions => ['web_conference_participants.participation_type = ?', 'invitee']
   has_many :attendees, :through => :web_conference_participants, :source => :user, :conditions => ['web_conference_participants.participation_type = ?', 'attendee']
   belongs_to :user
   validates_length_of :description, :maximum => maximum_text_length, :allow_nil => true, :allow_blank => true
-  validates_presence_of :conference_type, :title, :context_id, :context_type, :user_id
+  validates_presence_of :conference_type, :title, :context_id, :context_type, :user_id, :start_date
   
   before_validation :infer_conference_details
 
@@ -415,7 +416,7 @@ class WebConference < ActiveRecord::Base
   def as_json(options={})
     url = options.delete(:url)
     join_url = options.delete(:join_url)
-    options.reverse_merge!(:only => %w(id title description conference_type duration started_at ended_at user_ids context_id context_type context_code))
+    options.reverse_merge!(:only => %w(id title description conference_type duration start_date started_at ended_at user_ids context_id context_type context_code))
     result = super(options.merge(:include_root => false, :methods => [:has_advanced_settings, :long_running, :user_settings, :recordings]))
     result['url'] = url
     result['join_url'] = join_url

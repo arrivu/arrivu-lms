@@ -901,7 +901,7 @@ a.thumbnail:hover {
   margin-bottom: -11px;
 }
 .slides_popup{
-  width:255px;
+  width:283px;
   height:66px;
   margin-top: -3px;
   overflow: hidden;
@@ -915,7 +915,7 @@ a.thumbnail:hover {
 .popu_up_teacher_image{
   float: left;
   width:36px;
-  margin: 5px 2px 3px 0px;
+  margin: 14px 13px 6px 0px;
 }
 .popup_teacher_name{
   margin-top: -13px;
@@ -924,8 +924,8 @@ a.thumbnail:hover {
 }
 .popup_teacher_desc{
   color: black;
-  margin-top: -14px;
-  line-height:  17px;
+  margin-top: -12px;
+  line-height:  16px;
 }
 
 .pop_up_items{
@@ -1138,10 +1138,33 @@ ul{
 }
 
 #add_link{
-  margin-bottom: -18px;
+  margin-bottom: -9px;
   z-index: 1;
   float: right;
-  margin-right: 30px;
+  margin-right: 12px;
+  font-weight: bold;
+}
+
+#add_popular_courses{
+  margin-left: 1152px;
+  font-weight: bold;
+}
+
+#add_account_sliders{
+  margin-left: 1139px;
+}
+
+#account_sliders{
+  margin-top: -14px;
+  margin-left: -20px;
+  width:103%;
+  height:300px
+}
+#add_account_sliders_link{
+  margin-bottom:-19px;
+  z-index:1;
+  position:absolute;
+  font-size: 14px;
   font-weight: bold;
 }
 

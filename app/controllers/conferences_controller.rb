@@ -130,12 +130,12 @@
 class ConferencesController < ApplicationController
   include Api::V1::Conferences
 
-  before_filter :require_context
+  before_filter :require_context, :except => [:get_conferences_for_user]
   add_crumb(proc{ t '#crumbs.conferences', "Conferences"}) { |c| c.send(:named_context_url, c.instance_variable_get("@context"), :context_conferences_url) }
   before_filter { |c| c.active_tab = "conferences" }
   before_filter :require_config
   before_filter :reject_student_view_student
-  before_filter :get_conference, :except => [:index, :create]
+  before_filter :get_conference, :except => [:get_conferences_for_user, :index, :create,:get_users_from_section,:api_create, :api_destroy]
 
   # @API List conferences
   # Retrieve the list of conferences for this context
@@ -155,9 +155,9 @@ class ConferencesController < ApplicationController
     return unless authorized_action(@context, @current_user, :read)
     return unless tab_enabled?(@context.class::TAB_CONFERENCES)
     return unless @current_user
-    conferences = @context.grants_right?(@current_user, :manage_content) ?
-      @context.web_conferences :
-      @current_user.web_conferences.where(context_type: @context.class.to_s, context_id: @context.id)
+    conferences = (@domain_root_account ||= @account).grants_right?(@current_user, :manage_content) ?
+        @context.web_conferences :
+        @current_user.web_conferences.where(context_type: @context.class.to_s, context_id: @context.id)
     conferences = conferences.with_config.order("created_at DESC, id DESC")
     api_request? ? api_index(conferences) : web_index(conferences)
   end
@@ -173,6 +173,9 @@ class ConferencesController < ApplicationController
     @new_conferences, @concluded_conferences = conferences.partition { |conference|
       conference.ended_at.nil?
     }
+
+    @new_conferences = @new_conferences.sort_by(&:start_date)
+    #@concluded_conferences = @concluded_conferences.sort_by(&:start_date)
     log_asset_access("conferences:#{@context.asset_string}", "conferences", "other")
     scope = @context.users
     if @context.respond_to?(:participating_typical_users)
@@ -181,11 +184,13 @@ class ConferencesController < ApplicationController
     @users = scope.where("users.id<>?", @current_user).order(User.sortable_name_order_by_clause).all.uniq
     # exposing the initial data as json embedded on page.
     js_env(
-      current_conferences: ui_conferences_json(@new_conferences, @context, @current_user, session),
-      concluded_conferences: ui_conferences_json(@concluded_conferences, @context, @current_user, session),
-      default_conference: default_conference_json(@context, @current_user, session),
-      conference_type_details: conference_types_json(WebConference.conference_types),
-      users: @users.map { |u| {:id => u.id, :name => u.last_name_first} },
+        current_conferences: ui_conferences_json(@new_conferences, @context, @current_user, session),
+        concluded_conferences: ui_conferences_json(@concluded_conferences, @context, @current_user, session),
+        default_conference: default_conference_json(@context, @current_user, session),
+        conference_type_details: conference_types_json(WebConference.conference_types),
+        users: @users.map { |u| {:id => u.id, :name => u.last_name_first} },
+        course_sections: @context.course_sections.active,
+        current_date_time: Time.now
     )
   end
   protected :web_index
@@ -205,7 +210,7 @@ class ConferencesController < ApplicationController
   end
 
   def create
-    if authorized_action(@context.web_conferences.scoped.new, @current_user, :create)
+    if authorized_action(@context.web_conferences.new, @current_user, :create)
       params[:web_conference].try(:delete, :long_running)
       @conference = @context.web_conferences.build(params[:web_conference])
       @conference.settings[:default_return_url] = named_context_url(@context, :context_url, :include_host => true)
@@ -215,9 +220,22 @@ class ConferencesController < ApplicationController
         if @conference.save
           @conference.add_initiator(@current_user)
           members.uniq.each do |u|
-            @conference.add_invitee(u)
+            if u.id != @current_user.id
+              @conference.add_invitee(u)
+            end
           end
           @conference.save
+
+          members.uniq.each do |u|
+            @event = CalendarEvent.new(:title => params[:title], :description => params[:description],
+                                       :start_at => params[:start_date], :end_at => params[:start_date])
+            @event.context_id = u.id
+            @event.context_type = @current_user.class.name
+            @event.updating_user = @current_user
+            @event.save
+            conference_calendar_event_association = @event.conference_calendar_event_associations.build(:web_conference_id => @conference.id)
+            conference_calendar_event_association.save!
+          end
           format.html { redirect_to named_context_url(@context, :context_conference_url, @conference.id) }
           format.json { render :json => WebConference.find(@conference).as_json(:permissions => {:user => @current_user, :session => session},
                                                                                 :url => named_context_url(@context, :context_conference_url, @conference)) }
@@ -229,6 +247,53 @@ class ConferencesController < ApplicationController
     end
   end
 
+  def api_create
+    if authorized_action(@context.web_conferences.new, @current_user, :create)
+      respond_to do |format|
+        @conference = WebConference.find_by_title_and_start_date(params[:title],params[:start_date].to_time)
+        #new_logger = Logger.new('log/exceptions.log')
+        #new_logger.info(params[:title]+"-"+params[:start_date]+"\n")
+        if @conference
+          #new_logger.info("existing conference\n")
+          @conference.add_invitee(User.find(params[:student_id]))
+          create_calendar_events(params[:student_id])
+        else
+          #new_logger.info("new conference\n")
+          params[:web_conference].try(:delete, :long_running)
+          @conference = @context.web_conferences.build(conference_type: params[:type],title: params[:title],
+                                                       description: params[:description],start_date: params[:start_date],
+                                                       duration: params[:duration])
+          @conference.settings[:default_return_url] = named_context_url(@context, :context_url, :include_host => true)
+          @conference.settings[:record ]= true
+          @conference.user = User.find(params[:teacher_id])
+          members = get_new_members_for_api
+
+          @conference.add_initiator(User.find(params[:teacher_id]))
+          @conference.add_invitee(User.find(params[:student_id]))
+          if @conference.save
+            create_calendar_events(params[:teacher_id])
+            create_calendar_events(params[:student_id])
+            format.json { render :json => WebConference.find(@conference).as_json(:permissions => {:user => @current_user, :session => session},
+                                                                                  :url => named_context_url(@context, :context_conference_url, @conference)) }
+          else
+            format.json { render :json => @conference.errors, :status => :bad_request }
+          end
+
+        end
+      end
+    end
+  end
+
+  def create_calendar_events(user_id)
+    @event = CalendarEvent.new(:title=>params[:title], :description=>params[:description], :start_at=> params[:start_date], :end_at=> params[:start_date])
+    @event.context_id = user_id
+    @event.context_type = "User"
+    @event.updating_user = @current_user
+    @event.save
+    conference_calendar_event_association = @event.conference_calendar_event_associations.build(:web_conference_id => @conference.id,:calendar_event_id => @event.id)
+    conference_calendar_event_association.save!
+  end
+
   def update
     if authorized_action(@conference, @current_user, :update)
       @conference.user ||= @current_user
@@ -238,10 +303,34 @@ class ConferencesController < ApplicationController
         params[:web_conference].try(:delete, :conference_type)
         if @conference.update_attributes(params[:web_conference])
           # TODO: ability to dis-invite people
-          members.uniq.each do |u|
-            @conference.add_invitee(u)
+          participant=WebConferenceParticipant.find_all_by_web_conference_id(@conference.id)
+          participant.each do |p|
+            p.destroy
+          end
+          @conference.add_initiator(@current_user)
+          @conference_users.uniq.each do |u|
+            if u.id != @current_user.id
+              @conference.add_invitee(u)
+            end
           end
           @conference.save
+
+          @conference.conference_calendar_event_associations.each do |con|
+            CalendarEvent.destroy(con.calendar_event_id)
+            ConferenceCalendarEventAssociation.destroy(con.id)
+          end
+
+          @conference_users.uniq.each do |u|
+            @event = CalendarEvent.new(:title => params[:title], :description => params[:description],
+                                       :start_at => params[:start_date], :end_at => params[:start_date])
+            @event.context_id = u.id
+            @event.context_type = @current_user.class.name
+            @event.updating_user = @current_user
+            @event.save
+            conference_calendar_event_association = @event.conference_calendar_event_associations.build(:web_conference_id => @conference.id,:calendar_event_id => @event.id)
+            conference_calendar_event_association.save!
+          end
+
           format.html { redirect_to named_context_url(@context, :context_conference_url, @conference.id) }
           format.json { render :json => @conference.as_json(:permissions => {:user => @current_user, :session => session},
                                                             :url => named_context_url(@context, :context_conference_url, @conference)) }
@@ -306,16 +395,128 @@ class ConferencesController < ApplicationController
   def destroy
     if authorized_action(@conference, @current_user, :delete)
       @conference.transaction do
-        @conference.web_conference_participants.scoped.delete_all
-        @conference.destroy
+      @conference.web_conference_participants.scoped.delete_all
+      @events = @conference.conference_calendar_event_associations
+      @events.each do |e|
+        x=CalendarEvent.find(e.calendar_event_id)
+        x.destroy
       end
+      @conference.destroy
+
+    end
       respond_to do |format|
         format.html { redirect_to named_context_url(@context, :context_conferences_url) }
         format.json { render :json => @conference }
       end
     end
+ end
+
+  def api_destroy
+    @conference = WebConference.find(params[:id])
+    if authorized_action(@conference, @current_user, :delete)
+      @events = @conference.conference_calendar_event_associations
+      @events.each do |e|
+        x=CalendarEvent.find(e.calendar_event_id)
+        x.destroy
+      end
+      @conference.destroy
+      respond_to do |format|
+        format.json { render :json => @conference }
+      end
+    end
   end
 
+  def get_users_from_section
+    if params[:course_section_id] != "0"
+      @students = CourseSection.find(params[:course_section_id]).students.active
+    else
+      @students = @context.students.active
+    end
+    respond_to do |format|
+      format.json { render :json => @students.map{|s| {:id => s.id, :name => s.last_name_first}} }
+    end
+  end
+
+  def get_new_members_for_api
+    members = [@current_user]
+    if params[:user] && params[:user] != "all"
+      ids = []
+      params[:user].each do |id|
+        ids << id.to_i
+      end
+      if params[:section_id].present?
+        section = @context.course_sections.find_by_sis_source_id(params[:section_id])
+        if !section.nil? and !section.empty?
+          members += section.users.find_all_by_find_all_by_sis_sourse_id(ids).to_a
+        end
+      else
+        members += @context.course_sections.default.first.users.find_all_by_sis_sourse_id(ids).to_a
+      end
+    else
+      if params[:section_id].present?
+        section = @context.course_sections.find_by_sis_source_id(params[:section_id])
+        if !section.nil? and !section.empty?
+          members += section.users.to_a
+        end
+      else
+        members += @context.course_sections.default.first.users.to_a
+      end
+    end
+    members - @conference.invitees
+  end
+
+  def get_conferences_for_user
+    conferences = []
+    @current_conferences_json = []
+    @concluded_conferences_json = []
+    scope = []
+
+    @web_conference_participants = @current_user.web_conference_participants.uniq
+    @web_conference_participants.each do |web_conference_participant|
+      web_conference = web_conference_participant.web_conference
+      if web_conference
+        conferences <<  web_conference
+      end
+    end
+    @current_user.web_conferences.uniq.each do |web|
+      conferences << web
+    end
+
+    @new_conferences, @concluded_conferences = conferences.partition { |conference|
+      conference.ended_at.nil?
+    }
+    @new_conferences = @new_conferences.sort_by(&:start_date)
+
+    @new_conferences.uniq.each do |new_conference|
+      @current_conferences_json <<  single_conferences_json(new_conference, new_conference.context, @current_user, session)
+    end
+
+    @concluded_conferences.uniq.each do |concluded_conference|
+      @concluded_conferences_json << single_conferences_json(concluded_conference, concluded_conference.context,
+                                                             @current_user, session)
+    end
+
+
+    conferences.each do |conference|
+      conference.context.participating_typical_users.each do |user|
+        scope << user
+      end
+    end
+
+    #@users = scope.uniq
+    #@users.delete_if{|u| u == @current_user}
+
+    js_env(
+        current_conferences: @current_conferences_json ,
+        concluded_conferences: @concluded_conferences_json ,
+        #default_conference: default_conference_json(@context, @current_user, session),
+        conference_type_details: conference_types_json(WebConference.conference_types),
+        is_for_user: true,
+        current_date_time: Time.now
+    #users: @users.map { |u| {:id => u.id, :name => u.last_name_first} }
+    #course_sections: @context.course_sections.active
+    )
+  end
   protected
 
   def require_config
@@ -332,7 +533,7 @@ class ConferencesController < ApplicationController
       params[:user].each do |id, val|
         ids << id.to_i if val == '1'
       end
-      members += @context.users.find_all_by_id(ids).to_a
+      @conference_users = @context.users.find_all_by_id(ids).to_a
     else
       members += @context.users.to_a
     end
@@ -344,3 +545,4 @@ class ConferencesController < ApplicationController
   end
   private :get_conference
 end
+

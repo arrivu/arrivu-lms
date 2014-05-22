@@ -44,7 +44,7 @@ require [
   @app.render()
   accountSliderCollection.fetch(
     success:->
-      $("div#demo1").jContent
+      $("div#account_sliders").jContent
         orientation: "horizontal"
         easing: "easeOutCirc"
         duration: 500
@@ -73,13 +73,7 @@ require [
   knowledgePartnerCollection.fetch(
     success: ->
       if $("#knowledge_partners_div").find("#knowledge_partner_on_index_page").length == 0
-        $("#knowledge_partner_banner").hide();
-        $("#more_partners").hide();
+        $("#knowledge_partner_banner").hide()
+        $("#more_partners").hide()
   )
-  learnerReviewCollection.fetch(
-    success: ->
-      if $("#popular_courses_div").find("#learner_review_on_index_page").length == 0
-        $("#learners_review_banner").hide()
-       else
-        $("#learners_review_banner").show()
-  )
+  learnerReviewCollection.fetch()

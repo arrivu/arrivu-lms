@@ -3,13 +3,12 @@
     <h1 class="banner"> Popular Courses</h1>
 </div>
 </div>
-<a href="#" id="add_popular_courses" style="margin-left:  1122px" class="edit_letter_grades_link">
-    {{#if ENV.PERMISSIONS.user_logged_in}}
-      {{#if ENV.PERMISSIONS.enable_links}}
+{{#if ENV.PERMISSIONS.enable_links}}
+<a href="#" id="add_popular_courses"  class="edit_letter_grades_link">
+    <i class="icon-settings"></i>
          {{#t "manage_popular_course"}}Manage Popular Course{{/t}}
-      {{/if}}
-    {{/if}}
 </a>
+{{/if}}
 <div class="resource-row" style="margin-top: 100px;">
 <ul class="collectionViewItems " style="list-style-type: none;text-align: center;">
 

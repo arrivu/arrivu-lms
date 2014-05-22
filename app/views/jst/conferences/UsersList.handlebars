@@ -1,0 +1,9 @@
+{{# each users}}
+    <li class="member user_{{id}}">
+        <label class="checkbox" for="user_{{id}}">
+            <input name="user[{{id}}]" type="hidden" value="0">
+            <input id="user_{{id}}" name="user[{{id}}]" type="checkbox" value="1">
+            {{name}}
+        </label>
+    </li>
+{{/each}}

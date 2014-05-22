@@ -34,6 +34,8 @@ class CalendarEvent < ActiveRecord::Base
 
 
   belongs_to :context, :polymorphic => true
+  has_many :web_conference
+  has_many :conference_calendar_event_associations
   belongs_to :user
   belongs_to :parent_event, :class_name => 'CalendarEvent', :foreign_key => :parent_calendar_event_id
   has_many :child_events, :class_name => 'CalendarEvent', :foreign_key => :parent_calendar_event_id, :conditions => "calendar_events.workflow_state <> 'deleted'"

@@ -4,6 +4,7 @@
 {{#if ENV.PERMISSIONS.enable_links}}
 <div id="add_link" style="">
     <a href="#" id="add_knowledge_partners"  class="edit_letter_grades_link">
+        <i class="icon-settings"></i>
                 {{#t "manage_knowledge_partners"}}Manage Knowledge Partners{{/t}}
     </a>
 </div>
@@ -16,4 +17,4 @@
 {{#if ENV.knowledge_partners_count}}
   <a href="" id="more_partners" class="browseourcoursessmall" style="margin-top: -6px;position: relative;margin-left: 1171px;">See More Partners</a>
 {{/if}}
-<div class="paginatedLoadingIndicator" id="knowledge_partner_paginating" style="display: none"></div>
+<div class="paginatedLoadingIndicator" id="knowledge_partner_paginating" style="display: none;margin-left: 20px"></div>

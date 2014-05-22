@@ -4,9 +4,7 @@ class HomePagesController < ApplicationController
     js_env :add_image_url => account_sliders_path(@domain_root_account.id)
     js_env :context_asset_string => @domain_root_account.try(:asset_string)
     js_env :account_id => @domain_root_account.id
-    js_env :PERMISSIONS => {
-        enable_links:  can_do((@account ||= @domain_root_account), @current_user, :manage_account_settings)
-    }
+    js_env :PERMISSIONS => { enable_links:  can_do((@account ||= @domain_root_account), @current_user, :manage_account_settings)}
     js_env :Account_Statistics => {
           users_count: @domain_root_account.users.count,
           courses_count: @domain_root_account.courses.count,

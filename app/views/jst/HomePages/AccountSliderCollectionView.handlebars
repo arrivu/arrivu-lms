@@ -1,31 +1,23 @@
-{{#if collection.length }}
-<div id="add_link" style="margin-bottom:-19px;z-index:1;position:absolute;font-size: 14px;font-style: oblique;">
-    <a href="#" id="add_account_sliders" style="margin-left: 1157px" class="edit_letter_grades_link">
-          {{#if ENV.PERMISSIONS.enable_links}}
-            {{#t "add_account_sliders"}}Add Sliders{{/t}}
-           {{/if}}
-    </a>
-</div>
-
-<div id="demo1" style="margin-top: -14px;margin-left: -20px;width:103%;height:300px">
-   <div class="slides collectionViewItems">
-
-   </div>
-</div>
-{{else}}
-    <div id="add_link" style="margin-bottom:-19px;z-index:1;position:absolute;font-size: 14px;font-style: oblique;">
-        <a href="#" id="add_account_sliders" style="margin-left: 1157px" class="edit_letter_grades_link">
-                {{#if ENV.PERMISSIONS.enable_links}}
-                    {{#t "manage_account_sliders"}}Add Sliders{{/t}}
-                {{/if}}
+{{#if ENV.PERMISSIONS.enable_links}}
+    <div id="add_account_sliders_link">
+        <a href="#" id="add_account_sliders"  class="edit_letter_grades_link">
+            <i class="icon-settings"></i>
+            {{#t "manage_account_sliders"}}Add Sliders{{/t}}
         </a>
     </div>
+{{/if}}
+{{#if collection.length }}
+    <div id="account_sliders">
+        <div class="slides collectionViewItems">
 
-    <div id="demo1" style="margin-top: -14px;margin-left: -20px;width:103%;height:300px">
+        </div>
+    </div>
+{{else}}
+    <div id="account_sliders">
         <div class="slides collectionViewItems">
             <div class="slides collectionViewItems">
                 <img src="images/default1.jpg" style="width:1500px;height:300px">
             </div>
-         </div>
+        </div>
     </div>
 {{/if}}
