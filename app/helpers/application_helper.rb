@@ -1051,9 +1051,10 @@ ApplicationHelper
   end
 
   def header_logo_image
-    unless @domain_root_account.account_header.nil?
-    if Attachment.exists?(@domain_root_account.account_header.header_logo_url) == true
-      @thumbnail = Attachment.find(@domain_root_account.account_header.header_logo_url).thumbnail
+    (@account ||= @domain_root_account)
+    unless @account.account_header.nil?
+    if Attachment.exists?(@account.account_header.header_logo_url) == true
+      @thumbnail = Attachment.find(@account.account_header.header_logo_url).thumbnail
       if @thumbnail
         @logo_url = "/images/thumbnails/show/#{@thumbnail.id}/#{@thumbnail.uuid}"
       end

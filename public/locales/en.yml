@@ -336,6 +336,7 @@ en:
       unique_id_label: "%{label}:*"
     add_user_button: "Add User"
     add_user_dialog_title: "Add a New User"
+    add_solo_teacher_dialog_title: "Get a  Solo Teacher Account"
     adding_course_message: "Adding Course..."
     adding_user_message: "Adding User..."
     additional_settings_right_side: 
@@ -12932,6 +12933,7 @@ en:
         logout: Logout
         settings: Settings
         sign_up_as_teacher: "Sign Up as a Teacher"
+        sign_up_as_solo_teacher: "Get a solo teacher account"
       masquerading: 
         as: "As: *%{user_name}*"
     inline_preview: 

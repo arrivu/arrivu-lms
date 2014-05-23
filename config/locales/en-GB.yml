@@ -310,6 +310,7 @@ en-GB:
       sortable_name_help: "This name appears in sorted lists."
     add_user_button: "Add user"
     add_user_dialog_title: "Add a new user"
+    add_solo_teacher_dialog_title: "Get a  Solo Teacher Account"
     adding_course_message: "Adding course..."
     adding_user_message: "Adding user..."
     additional_settings_right_side: 
@@ -11890,6 +11891,7 @@ en-GB:
         logout: Logout
         settings: Settings
         sign_up_as_teacher: "Sign up as a teacher"
+        sign_up_as_solo_teacher: "Get a solo teacher account"
       masquerading: 
         as: "As: *%{user_name}*"
     inline_preview: 

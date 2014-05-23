@@ -1,6 +1,6 @@
 class HomePagesController < ApplicationController
   include ELearningHelper
-
+  before_filter :require_context, :only => [:add_logo]
   before_filter :set_e_learning
   before_filter :check_private_e_learning, :only => [:index]
   before_filter :check_e_learning, :only => [:index]
@@ -34,10 +34,9 @@ class HomePagesController < ApplicationController
         elsif @account
          @folder = @account.folders.active.find_by_id(folder_id)
         else
-          @folder = @domain_root_account.folders.active.find_by_id(folder_id)
+          @folder = @account.folders.active.find_by_id(folder_id)
         end
       end
-      @account ||= @domain_root_account
       @folder ||= Folder.unfiled_folder(@account)
       params[:header_logo][:uploaded_data] ||= params[:header_logo_uploaded_data]
       params[:header_logo][:uploaded_data] ||= params[:file]
@@ -46,7 +45,7 @@ class HomePagesController < ApplicationController
       params[:header_logo].delete :context_type
       duplicate_handling = params.delete :duplicate_handling
       @attachment ||= @account.attachments.build
-      if authorized_action(@attachment, @current_user, :create)
+      if authorized_action(@context, @current_user, :manage_account_settings)
         respond_to do |format|
           @attachment.folder_id ||= @folder.id
           @attachment.workflow_state = nil
@@ -64,7 +63,7 @@ class HomePagesController < ApplicationController
               @account.build_account_header(account_id: @domain_root_account.id,header_logo_url: @attachment.id )
             else
               @prev_attachment = Attachment.find(@account.account_header.header_logo_url)
-              @prev_attachment.delete
+              @prev_attachment.destroy
               @account.account_header.update_attributes(account_id: @domain_root_account.id,header_logo_url: @attachment.id)
             end
             @account.save

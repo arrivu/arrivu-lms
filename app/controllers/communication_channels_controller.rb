@@ -390,7 +390,15 @@ class CommunicationChannelsController < ApplicationController
       @enrollment.re_send_confirmation!
     else
       @cc = params[:id].present? ? @user.communication_channels.find(params[:id]) : @user.communication_channel
-      @cc.send_confirmation!(@domain_root_account)
+      #Arrivu changes
+      #When creating users with no password and create session ,That time the users tried to sent re-send confirmation
+      #which create runtime error so checking for pseudonym_id creation
+      if @cc.pseudonym_id.nil?
+        @cc.pseudonym.send_registration_notification!
+      else
+        @cc.send_confirmation!(@domain_root_account)
+      end
+      #Arrivu changes
     end
     render :json => {:re_sent => true}
   end

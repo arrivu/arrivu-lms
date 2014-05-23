@@ -1,0 +1,105 @@
+<%js_env :ACCOUNT =>{:privacy_policy_url => (@ccount ||= @domain_root_account).privacy_policy_url }   %>
+<li><a href="#" class="solo_teacher_signup" > Get a solo teacher account </a>
+  <div style="display: none;">
+    <div id="solo_teacher_dialog" style="margin-top: 20px;
+            margin-left: 69px;">
+      <%= form_for :user, :url => account_create_solo_teacher_url(@account,for_solo_teacher_enrollment: 1), :html => {:id => "add_solo_teacher_form"} do |f| %>
+          <table class="formtable">
+            <tr>
+              <td><%= blabel :sub_account_name ,:account,:en => "Account Name" %></td>
+              <td>
+                <%= text_field :sub_account_name ,:account %>
+              </td>
+            </tr>
+            <tr>
+              <td><%= f.blabel :name, :full_name, :en => "Full Name" %></td>
+              <td>
+                <%= f.text_field :name %>
+              </td>
+            </tr>
+            <tr>
+              <td><%= blabel :pseudonym, :unique_id, :en => "Email" %></td>
+              <td><%= text_field :pseudonym, :unique_id %></td>
+            </tr>
+            <tr>
+              <td><%= f.blabel :phone, :en => "Phone" %></td>
+              <td><%= f.text_field :phone %></td>
+            </tr>
+
+                <div class="button-container">
+                  <button type="button" class="btn cancel_button"><%= t("#buttons.cancel", "Cancel") %></button>
+                  <button type="submit" class="btn btn-primary submit_button"><%= t(:add_user_button, "Add User") %></button>
+                </div>
+          </table>
+      <% end %>
+    </div>
+    </div>
+
+  <% js_block do %>
+      <script type="text/javascript">
+          require([
+              'i18n!accounts' /* I18n.t */,
+              'jquery' /* $ */,
+              'compiled/util/addPrivacyLinkToDialog',
+              'user_sortable_name',
+              'jquery.instructure_forms' /* formSubmit */,
+              'jqueryui/dialog',
+              'compiled/jquery/fixDialogButtons' /* fix dialog formatting */,
+              'compiled/jquery.rails_flash_notifications'
+          ], function(I18n, $, addPrivacyLinkToDialog) {
+
+              $(".solo_teacher_signup").click(function(event) {
+                  event.preventDefault();
+                  var $dialog = $("#solo_teacher_dialog");
+                  $dialog.dialog({
+                      title: I18n.t('add_solo_teacher_dialog_title', "Get a  Solo Teacher Account"),
+                      width: 500
+                  }).fixDialogButtons();
+                  addPrivacyLinkToDialog($dialog);
+                  $("#add_solo_teacher_form :text:visible:first").focus().select();
+              });
+              $("#add_solo_teacher_form").formSubmit({
+                  formErrors: false,
+                  required: ['user[name]','pseudonym[unique_id]','sub_account_name[account]'],
+                  beforeSubmit: function(data) {
+                      $("button").attr('disabled', true)
+                              .filter(".submit_button").text(I18n.t('adding_user_message', "Adding User..."));
+                  },
+                  success: function(data) {
+                      $.flashMessage("Your solo teacher account created and you should receive an email confirmation shortly");
+                      $("#solo_teacher_dialog").dialog('close');
+                      window.location.href = "/dashboard"
+                  },
+                  error: function(data) {
+                      $("button").attr('disabled', false)
+                              .filter(".submit_button").text(I18n.t('add_user_button', "Add User"));
+                      errorData = {};
+                      // Email errors
+                      if(data.pseudonym){
+                          if(data.pseudonym.unique_id){
+                              errorList = [];
+                              $.each(data.pseudonym.unique_id, function(i){
+                                  if(this.message){
+                                      errorList.push(this.message);
+                                  }
+                              });
+                              errorData['unique_id'] = errorList.join(', ');
+                          }
+                      }else{
+                          errorData['unique_id'] = data.course_limit
+                      }
+
+                      $(this).formErrors(errorData);
+
+                      $(this).find("button").attr('disabled', false)
+                              .filter(".submit_button").text(I18n.t('user_add_failed_message', "Adding User Failed, please try again"));
+                  }
+              });
+              $("#solo_teacher_dialog .cancel_button").click(function() {
+                  $("#solo_teacher_dialog").dialog('close');
+              });
+          });
+
+
+      </script>
+  <% end %>

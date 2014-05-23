@@ -66,8 +66,7 @@ class LibrariesController < ApplicationController
   end
 
   def create_user
-    @course = Course.find(params[:library_id])
-    @context = @domain_root_account
+    @context = (@account ||= @domain_root_account)
     @pseudonym = @context.pseudonyms.active.custom_find_by_unique_id(params[:pseudonym][:unique_id])
     @pseudonym = nil if @pseudonym && !['creation_pending', 'pending_approval'].include?(@pseudonym.user.workflow_state)
 
@@ -138,6 +137,9 @@ class LibrariesController < ApplicationController
         end
         @user.new_registration((params[:user] || {}).merge({:remote_ip  => request.remote_ip, :cookies => cookies}))
         @pseudonym.send_registration_notification!
+        if params[:for_solo_teacher_enrollment].present?
+          create_sub_account
+        end
         format.json {render :json => @pseudonym}
     else
       errors = {
@@ -149,6 +151,13 @@ class LibrariesController < ApplicationController
       format.json { render :json => errors, :status => :bad_request}
       end
     end
+  end
+
+  def create_sub_account
+    @sub_account = @context.sub_accounts.build(name: params[:sub_account_name][:account])
+    @sub_account.root_account = @context.root_account
+    @sub_account.save
+    @user.flag_as_admin(@sub_account,'AccountAdmin', false)
   end
 
   def get_course_and_price(course_id)

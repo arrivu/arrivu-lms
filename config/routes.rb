@@ -554,6 +554,7 @@ routes.draw do
     #arrivu changes
     if ELEARNING
       match '/add_logo' => 'home_pages#add_logo' ,:as => :add_logo ,:via => :put
+      post 'create_solo_teacher' => 'libraries#create_user', :as => :create_solo_teacher
       resources :knowledge_partners
       resources :learners_reviews
       resources :sliders

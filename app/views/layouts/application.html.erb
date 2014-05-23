@@ -41,7 +41,8 @@
   <div id="header-inner">
     <a href="#content" id="skip_navigation_link"><%= t 'links.skip_to_content', "Skip To Content" %></a>
     <!--Arrivu changes-->
-        <% if !@domain_root_account.account_header.nil?  &&  Attachment.exists?(@domain_root_account.account_header.header_logo_url) == true %>
+    <% @account ||=@domain_root_account  %>
+        <% if !@account.account_header.nil?  &&  Attachment.exists?(@account.account_header.header_logo_url) == true %>
             <a  href="<%= root_url %>"><img class="logo <%= 'logo_bottom' if (@e_learning) %>" style="width: 174px;height: 63px;left: 2px;bottom: 4px;position: absolute;"
                                             src= <%= header_logo_image %>></a>
         <% else  %>
@@ -62,7 +63,7 @@
       <% end %>
     </div>
     <%= render(:partial => "shared/keyboard_navigation_hint") if keyboard_navigation %>
-    <% if @current_user && !@e_learning %>
+    <% if @current_user && !@e_learning%>
         <ul role="navigation" id="menu" aria-label="<%= t('navigation.main', 'Main Navigation') %>">
           <%- cache([@current_user, 'home-menu-15m'], :expires_in => 15.minutes) do -%>
               <li id="courses_menu_item" class="menu-item">

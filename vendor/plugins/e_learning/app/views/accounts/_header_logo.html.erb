@@ -3,7 +3,7 @@
   <table>
     <tr>
       <td>
-        <div id="label_id" rel ="<%=@domain_root_account.id %>" style="margin-left: -70px;margin-right:40px"><%= "Add Logo:  " %></div>
+        <div id="label_id" rel ="<%=(@account ||= @domain_root_account).id %>" style="margin-left: -70px;margin-right:40px"><%= "Add Logo:  " %></div>
       </td>
       <td>
         <input type="hidden" name="return_to"/>

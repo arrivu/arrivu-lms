@@ -204,6 +204,8 @@ stylesheets:
     - public/stylesheets/compiled/jcontent.css
   course_box:
     - public/stylesheets/compiled/course_box.css
+  course_library:
+      - public/stylesheets/compiled/course_library.css
   topics_listing:
       - public/stylesheets/compiled/topics_listing.css
   jquery_minicolors:
