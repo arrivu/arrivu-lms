@@ -1,6 +1,8 @@
 class LibrariesController < ApplicationController
   before_filter :require_user, :only => [:enrollment,:payment_complete,:payment_confirm,:enrollment,:enroll_and_redirect]
   before_filter :set_e_learning
+  before_filter :require_context ,:only => [:course_reviews]
+
   def index
     js_env :context_asset_string => @domain_root_account.try(:asset_string)
   end
@@ -149,5 +151,29 @@ class LibrariesController < ApplicationController
   def get_course_and_price(course_id)
     @context = Course.find(course_id)
     @course_pricing = CoursePricing.where('course_id = ? AND DATE(?) BETWEEN start_at AND end_at', @context.id, Date.today).first
+  end
+
+  def course_reviews
+    @comments = @context.comments.approved.recent
+    user_image=""
+    respond_to do |format|
+      @total_comments = []
+       @comments.each do |comment|
+         @user = comment.user
+         if service_enabled?(:avatars)
+         user_image = @user.avatar_url
+         end
+          @course_comments_json =   api_json(comment, @current_user, session, API_USER_JSON_OPTS).tap do |json|
+            json[:comments_title] = comment.title
+            json[:comments] = comment.comment
+            json[:commented_user] = comment.user.name
+            json[:comment_created_at] = comment.created_at
+            json[:user_image] = user_image
+          end
+         @total_comments << @course_comments_json
+       end
+       @total_comments = Api.paginate(@total_comments, self, api_v1_course_reviews_url)
+       format.json {render :json => @total_comments}
+    end
   end
 end

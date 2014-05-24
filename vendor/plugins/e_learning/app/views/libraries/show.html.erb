@@ -1,5 +1,8 @@
+<%
+   js_bundle :course_comments
+   js_env :review_course_id =>  @context.id
+%>
 <style>
-
     .course_properties{
         display: inline;
         margin-left: 33px;
@@ -35,7 +38,6 @@
         width: 21.3%;
         position: relative;
         margin-left: 55px;
-        height: 301px;
         margin-right: 59px;
     }
    .xinner3{margin-left: 30px;
@@ -87,6 +89,73 @@
        height: 70px;
        margin-left: 128px;
    }
+   .pop_up_h3{
+      color: #994b2c;
+      float: none;
+      font-size: 18px;
+      text-align: center;
+      line-height: 30px;
+      margin-top: -12px;
+      margin-bottom: 40px;
+    }
+    .pop_up_close{
+       float: right;
+       margin-top: -44px;
+       margin-bottom: 28px;
+    }
+     .fancybox-inner{
+         padding: 0;
+         margin: 0;
+         border: 0;
+         outline: 0;
+         vertical-align: top;
+         position: relative;
+         overflow: visible!important;
+         background: #fff;
+     }
+      .user_details{
+          margin: -25px 15px 15px;
+
+      }
+      .left-col{
+          float: left;
+          position: relative;
+          border: 1px solid #666;
+          overflow: hidden;
+          box-shadow: 0 3px 11px rgba(211, 47, 47, 0.45);
+          width: 50px;
+          border-radius: 500px;
+      }
+      .right-col{
+          font-family: georgia;
+          font-size: 13px;
+          font-style: italic;
+          margin-left: 60px;
+          margin-top: 2px
+      }
+        .rating-line{
+            content: '';
+            width: 108%;
+            height: 1px;
+            background: #e5e5e5;
+            left: 0;
+            top: 50%;
+            margin-left: -40px;
+        }
+        .article{
+            margin: 16px 15px 4px;
+            color: #555;
+            padding: 20px;
+        }
+        .pop_up_li{
+            margin-bottom: 37px;
+        }
+        .user_name{
+            color: #567c1b;
+            font-family: helvetica;
+            font-style: normal;
+            cursor: pointer
+        }
 
 </style>
 <% @body_classes << "gradebook2 full-width"
@@ -174,7 +243,7 @@
   <div class="xrightcol3">
     <h1>Reviews</h1>
     <% @comments.each do |comment| %>
-        <table>
+
           <div  class="comment left_bottom_border" id="comment_<%= comment ? comment.id : "{{ blank }}" %>" style="<%= hidden unless comment %>">
             <div style="float: left;" class="user_name">
 
@@ -191,8 +260,12 @@
            <p><%= comment.comment  %></p>
           </div>
 
-        </table>
     <%end %>
+    <% if @context.comments.approved.count > 5 %>
+     <% @total_count =   @context.comments.approved.count%>
+    <a class="btn btn-primary" id="comments_review" style="margin-left: 60px;">
+      SEE ALL <%= @total_count%> REVIEWS </a>
+     <%end %>
   </div>
   <div class="xmiddlecol3">
     <div class="xinner3">
@@ -288,7 +361,6 @@
     <a class="btn dialog_closer">cancel</a>
   </div>
 </form>
-
 <% js_block do %>
     <script type="text/javascript">
         require([
@@ -375,7 +447,6 @@
                     })
                     );
                 }
-
 
             });
         });
