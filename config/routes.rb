@@ -1187,6 +1187,7 @@ routes.draw do
 
     scope(:controller => :libraries) do
         get "libraries", :action => :index, :path_name => 'libraries'
+        get "libraries/:course_id/course_reviews", :action => :course_reviews, :path_name => 'course_reviews'
     end
     # arrivu changes end
 

@@ -1,10 +1,17 @@
 {{#if popular_course}}
     <div class="span3 content-box resource" style="float:right;width: 300px;margin:13px;right:-10px;" id="is_a_popular_course" data-id="{{id}}">
         <div class="ribbon-wrapper">
-            <div class="ribbon-wrapper-green"><div class="ribbon-green">Popular</div></div>
+            <div class="ribbon-wrapper-green">
+                <div class="ribbon-green">Popular</div>
+            </div>
         </div>
 {{else}}
     <div class="span3 content-box resource" style="float:right;width: 300px;margin:13px;right:-10px;" id="is_not_a_popular_course" data-id="{{id}}">
+        <div class="ribbon-wrapper" style="display: none;">
+            <div class="ribbon-wrapper-green">
+                <div class="ribbon-green">Popular</div>
+            </div>
+        </div>
 {{/if}}
 {{#if has_course_image}}
     <div class="type-tag-positioner" style="background-image: url('{{course_background_image}}');background-size: cover;text-align: start;">
@@ -88,7 +95,7 @@
             </ul>
         {{/if}}
         {{#if course_short_decription}}
-            <p class="desc course_desc" style="margin-left: -15px;margin-top: 3px;float:left;font-size: small;width: 279px;">
+            <p class="desc course_desc" style="margin-left: -15px;margin-top: 3px;float:left;font-size: 12px;width: 279px;">
                 {{{ truncate course_short_decription 100 }}}
             </p>
         {{/if}}

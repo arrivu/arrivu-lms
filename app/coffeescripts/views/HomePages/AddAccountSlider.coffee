@@ -37,6 +37,7 @@ define [
         title: 'Add Account Slider'
         width:  800
         height: 600
+        position: 'center'
         close: => @$el.remove()
       @showallSlides()
 
