@@ -20,7 +20,7 @@ define [
     id:'add_popular_course_form'
 
     events:
-     'click .popular_course_item': 'addpopularcourse'
+      'click .popular_course_item': 'addpopularcourse'
 
     className: 'validated-form-view form-horizontal bootstrap-form'
 
