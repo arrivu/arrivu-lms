@@ -1,8 +1,8 @@
-<div id="hide_banner">
+{{#if collection.length}}
 <div class="secondary-content" id="popular_course_banner">
     <h1 class="banner"> Popular Courses</h1>
 </div>
-</div>
+{{/if}}
 {{#if ENV.PERMISSIONS.enable_links}}
 <a href="#" id="add_popular_courses"  class="edit_letter_grades_link">
     <i class="icon-settings"></i>

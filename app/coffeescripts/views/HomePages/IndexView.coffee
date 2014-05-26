@@ -43,6 +43,7 @@ define [
       @addPopularCourseView = new AddPopularCourse
         model: newpopularCourse
       @addPopularCourseView.render()
+      $(".spinner").css("top", "250px");
 
     addKnowledgePartner: ->
       newaddKnowledgePartner = new KnowledgePartner
