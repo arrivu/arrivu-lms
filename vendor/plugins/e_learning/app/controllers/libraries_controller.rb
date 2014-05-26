@@ -2,7 +2,7 @@ class LibrariesController < ApplicationController
   before_filter :require_user, :only => [:enrollment,:payment_complete,:payment_confirm,:enrollment,:enroll_and_redirect]
   before_filter :set_e_learning
   before_filter :require_context ,:only => [:course_reviews]
-
+  include ActionView::Helpers::DateHelper
   def index
     js_env :context_asset_string => @domain_root_account.try(:asset_string)
   end
@@ -160,6 +160,15 @@ class LibrariesController < ApplicationController
       @total_comments = []
        @comments.each do |comment|
          @user = comment.user
+         @createrd_time = Time.zone.parse(comment.created_at.to_s)
+         @time_in_words = (((Time.now - @createrd_time)/60)/1440).abs.to_i
+         if @time_in_words == 1
+           @days = @time_in_words.to_s + " day ago"
+         elsif @time_in_words == 0
+            @days = "today"
+         else
+           @days = @time_in_words.to_s + " days ago"
+         end
          if service_enabled?(:avatars)
          user_image = @user.avatar_url
          end
@@ -169,6 +178,7 @@ class LibrariesController < ApplicationController
             json[:commented_user] = comment.user.name
             json[:comment_created_at] = comment.created_at
             json[:user_image] = user_image
+            json[:commented_day] = @days
           end
          @total_comments << @course_comments_json
        end
