@@ -1,0 +1,125 @@
+<% jammit_css :bootstrap
+ js_bundle :login
+ login_handle_name = @domain_root_account.login_handle_name rescue AccountAuthorizationConfig.default_login_handle_name
+%>
+<div id ="login_pop_up" style="display:none">
+  <div id="only_login">
+  <%= form_for :pseudonym_session, :url => login_path(:nonldap => (@domain_root_account && !@domain_root_account.ldap_authentication?).presence), :html => {:id => "e_learning_login_form"} do |f| %>
+  <form role="form" >
+      <table>
+        <tbody><tr>
+          <td style=" width: 52%; float: left; padding: 20px; ">
+
+              <div class="form-group" style=" margin-top: 56px; margin-left: 33px; ">
+                <%=f.label :unique_id, login_handle_name %><%=f.text_field :unique_id, :class => "text", :value => params[:pseudonym_session].try(:[], :unique_id) %>
+              </div>
+              <div class="form-group" style=" margin-left: 33px; " >
+                <%= f.label :password,  "Password" %> <%=f.password_field :password, :class => "text" %>
+              </div>
+
+              <button type="submit" id="elearning_login_button" class="btn btn btn-primary">
+                Log In
+              </button>
+            <% end %>
+              <div style="margin-left: 34px;" class="top"><a id="elearning_forgot_passowrd_link" href="#">Forgot password?</a></div>
+              <br>
+
+
+          </td><td style="width:auto;background-repeat:no-repeat;background-image:url('/images/verticle_line.jpg');background-position: center;background-size: 2px 100%;">
+          <div style="margin: 90px 35px;"> <%= image_tag("or.png", :size => "50x50", :alt => "") %> </div>
+        </td>
+
+
+          <td style=" width: 15%;display: table-cell;vertical-align: middle;min-height: 181px; ">
+
+            <div style="display: table-cell;vertical-align: middle;min-height: 181px;">
+              <div class="social_login" style="display: table-cell;vertical-align: middle;min-height: 181px;">
+              <% if @domain_root_account.facebook_login? %>
+              <%=  link_to image_tag("fbook.png",:class => "login_img", alt: "")+ "Facebook", '/auth/facebook/' %>
+              <br>
+
+              <br><br>
+              <% end %>
+              <% if @domain_root_account.google_login? %>
+              <%= link_to image_tag("google.jpg", :class => "login_img", alt: "")+"Google", '/auth/google_oauth2/' %>
+              <br>
+              <br><br>
+              <%end %>
+              <% if @domain_root_account.linkedin_login? %>
+              <%= link_to image_tag("linked_in.png", :class => "login_img", alt: "")+"linked_in", '/auth/linkedin/' %>
+              <br>
+              <%end %>
+              </div>
+            </div>
+          </td>
+        </tr>
+        </tbody></table>
+
+  </form>
+  </div>
+  <!--forgot password form-->
+  <%= form_for :pseudonym_session, :url => forgot_password_path, :html => {:id => "e_learning_forgot_password_form", :style => "display: none;"} do |f| %>
+
+      <p><%= t('login_handle', "Enter your %{login_handle_name} and we'll send you a link to change your password.", :login_handle_name => login_handle_name) %></p>
+      <div>
+        <span style="margin-left: 74px;" class=" field-with-fancyplaceholder"><label  style="margin-right: 42px;"  for="pseudonym_session_unique_id_forgot"><%= login_handle_name %></label><input class="email_address text" type="text" name="pseudonym_session[unique_id_forgot]" value="<%= @unauthorized_user.email rescue '' %>" id="pseudonym_session_unique_id_forgot" /></span>
+        <button type="submit" id="request_password_button" class="btn btn-primary"><%= t('buttons.request_password', 'Request Password') %></button>
+      </div>
+
+      <div class="top" style="margin-left: 73px;"> &larr;<a id="elearning_login_link" href="#">Back to Login</a></div>
+  <% end %>
+
+</div>
+
+
+
+  <% js_block do %>
+      <script type="text/javascript">
+          require([
+              'i18n!accounts' /* I18n.t */,
+              'jquery' /* $ */,
+              'compiled/util/addPrivacyLinkToDialog',
+              'user_sortable_name',
+              'jquery.instructure_forms' /* formSubmit */,
+              'jqueryui/dialog',
+              'compiled/jquery/fixDialogButtons' /* fix dialog formatting */,
+              'compiled/jquery.rails_flash_notifications'
+          ], function(I18n, $, addPrivacyLinkToDialog) {
+
+              $("#log_in_popup").click(function(event) {
+                  event.preventDefault();
+                  var $dialog = $("#login_pop_up");
+                  $dialog.dialog({
+                      title: I18n.t('E-learning_login_pop_up', "Log In"),
+                      width: 510,
+                      poition: 'center'
+                  }).fixDialogButtons();
+                  $(".ui-dialog-buttonset").find("#request_password_button").hide();
+              });
+              $("#e_learning_login_form").formSubmit({
+                  required: ['pseudonym_session[unique_id]','pseudonym_session[password]'],
+                  beforeSubmit: function(data) {
+                      $("button").attr('disabled', true)
+                              .filter(".submit_button").text(I18n.t('logging_message', "Logging In..."));
+                  },
+                  success: function(data) {
+                      $.flashMessage("Successfully Logged IN");
+                      window.location.href ="/"
+
+                  }
+              });
+              $("#elearning_forgot_passowrd_link").click(function(event) {
+                  $("#only_login").hide();
+                  $("#e_learning_forgot_password_form").show();
+                  $(".ui-dialog-buttonset").find("#request_password_button").show();
+                  $(".ui-dialog-buttonset").find("#elearning_login_button").hide();
+              });
+              $("#elearning_login_link").click(function(event) {
+                  $("#only_login").show();
+                  $("#e_learning_forgot_password_form").hide();
+                  $(".ui-dialog-buttonset").find("#request_password_button").hide();
+                  $(".ui-dialog-buttonset").find("#elearning_login_button").show();
+              });
+              });
+          </script>
+ <% end %>

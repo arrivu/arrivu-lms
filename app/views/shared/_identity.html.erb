@@ -12,12 +12,13 @@
       <% if !@domain_root_account || @domain_root_account == Account.default %>
           <% if ELEARNING %>
               <%= render :partial => 'shared/solo_teacher_account' %>
+              <%= render :partial => 'shared/elearning_pop_up' %>
           <% end %>
        <% else  %>
         <li><%= link_to t('links.sign_up_as_teacher', "Sign Up as a Teacher"), register_path %></li>
       <% end %>
        <li>|</li>
-      <li><%= link_to "Log In", login_path %></li>
+      <li><%= link_to "Log In", login_path, :id => "log_in_popup" %></li>
   <% else %>
       <% if show_e_learning_menu  %>
         <li><%= link_to "Dashboard", dashboard_path%></li>
