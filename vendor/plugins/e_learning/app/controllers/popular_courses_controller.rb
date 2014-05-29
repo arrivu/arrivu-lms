@@ -102,6 +102,8 @@ class PopularCoursesController < ApplicationController
           json[:teacher_desc] = @profile
           json[:teacher_name] = @user_id.name
           json[:teacher_image] = @profile_pict
+          json[:teacher_id] = @teachers.user_id
+          json[:teacher_details_url] =  user_details_path(@user_id)
         end
       else
         @instructue_json =   api_json(course,@current_user, session, API_USER_JSON_OPTS).tap do |json|

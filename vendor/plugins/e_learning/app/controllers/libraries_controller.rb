@@ -7,6 +7,11 @@ class LibrariesController < ApplicationController
   before_filter :check_e_learning
   before_filter :require_context ,:only => [:course_reviews]
   include ActionView::Helpers::DateHelper
+  helper_method :total_students_count
+  helper_method :total_review_count
+  helper_method :course_enrolled_as_teacher
+  helper_method :course_image
+  helper_method :price_course
 
   def index
       js_env :context_asset_string => @domain_root_account.try(:asset_string)
@@ -15,7 +20,7 @@ class LibrariesController < ApplicationController
   def show
     if params[:id].present?
       get_course_and_price(params[:id])
-      get_course_images
+      get_course_imagesprice
       @comments = @context.comments.approved.recent.limit(5).paginate(:page => params[:page], :per_page => 5)
     end
   end
@@ -200,4 +205,74 @@ class LibrariesController < ApplicationController
        format.json {render :json => @total_comments}
     end
   end
+
+  def user_profile
+    @user_id = User.find(params[:user_id])
+
+  end
+
+  def total_students_count
+    @total_students_count = 0
+    @courses = @user_id.courses
+    @courses.each do |course|
+      @student_enrollment_count = course.student_enrollments.count
+      @total_students_count += @student_enrollment_count
+    end
+    @total_students_count
+  end
+
+  def total_review_count
+    @total_reviews_count = 0
+    @courses = @user_id.courses
+    @courses.each do |course|
+      @review_count = course.comments.approved.count
+      @total_reviews_count += @review_count
+    end
+    @total_reviews_count
+  end
+
+  def course_enrolled_as_teacher
+    enrollments = @user_id.teacher_enrollments
+    courses = []
+      enrollments.each do |enrollment|
+        course_id = enrollment.course_id
+        course = Course.find(course_id)
+         if course.workflow_state == 'available'
+          courses << course
+        end
+      end
+    courses
+  end
+
+  def course_image(course,image)
+
+    if (image[:type] == "back_ground_image")
+      if course.course_image
+        back_ground_attachment_id = course.course_image.course_back_ground_image_attachment_id
+        attachment = Attachment.find(back_ground_attachment_id)
+        back_ground_image = file_download_url(attachment, { :verifier => attachment.uuid, :download => '1', :download_frd => '1' })
+      else
+        back_ground_image = ""
+      end
+    else (image[:type] == "image")
+    if course.course_image
+      course_image_attachment_id = course.course_image.course_image_attachment_id
+      attachment = Attachment.find(course_image_attachment_id)
+      back_ground_image = file_download_url(attachment, { :verifier => attachment.uuid, :download => '1', :download_frd => '1' })
+    else
+      back_ground_image = ""
+    end
+
+    end
+  end
+
+  def price_course(course)
+    @course_pricing = CoursePricing.where('course_id = ? AND DATE(?) BETWEEN start_at AND end_at', course.id, Date.today).first
+    unless @course_pricing.nil?
+      course_price = @course_pricing.price
+    else
+      course_price = ""
+    end
+  end
+
 end

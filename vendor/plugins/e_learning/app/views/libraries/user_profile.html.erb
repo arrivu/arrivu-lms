@@ -1,0 +1,176 @@
+<%  @body_classes << "gradebook2 full-width"
+    @show_left_side = false
+    jammit_css :course_box
+ %>
+<%= form_for :user_profile, :url => user_profile_url(@user_id),:html => {:method=> "get",:id => "user_profile"} do |f| %>
+    <html>
+    <head>
+    </head>
+    <body>
+    <div class="instructor-wrapper font-os">
+      <div class="container">
+            <div class="main_div">
+              <div>
+                <div>
+                  <% if service_enabled?(:avatars) %>
+                       <img src="<%= @user_id.avatar_url %>" style= "width:80%;border-radius: 500px;">
+                  <% else %>
+                      <img src="/images/User.png" style= "width:80%;border-radius:500px">
+                  <%end %>
+                </div>
+
+                <div class="profile_link">
+                  <% @user_id.profile.links.each do |link| %>
+                    <a class= "profile_title_link" href="<%= link.url %>"><%= link.title.titleize %></a>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          <div class="teacher_main_div">
+            <div class="fx ml40 ">
+              <h1 class="teacher_description_page_name"><%= @user_id.name %></h1>
+              <h2 class="teacher_profile_title"><%= @user_id.profile.title %></h2>
+              <h3 style="margin-top: 20px;font-size: 18px;font-weight: 700;">About</h3>
+              <div style="position: relative;">
+                <div class="teacher_profile_bio" data-collapsable-text-height="400">
+                  <p><%= @user_id.profile.bio %></p>
+                </div>
+              </div>
+              <ul class="display-ul">
+                <li class="first_display_li">
+                  <div class="div_students_count">
+                    <%=total_students_count %> </div>
+                  <div class="div_students_icon">
+                    <i class="icon-user"></i>
+                    Students </div>
+                </li>
+                <li class="common_li">
+                  <div class="common_li_div_display">
+                    <%= @user_id.teacher_enrollments.count %> </div>
+                  <div class="common_li_icon_display">
+                    <i class="icon-note-dark"></i>
+                    Courses </div>
+                </li>
+                <li class="common_li">
+                  <div class="common_li_div_display">
+                    <%= total_review_count %> </div>
+                  <div class="common_li_icon_display">
+                    <i class=" icon-discussion-reply"></i>
+                    Reviews </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+    </div>
+        <div style="height:490px;">
+          <ul class="teaching_ul">
+            <li class="tab_teacher_li">
+              <a href="#teaching" data-toggle="tab">Teaching</a>
+            </li>
+          </ul>
+          <div id="teacher1">
+              <div class="evenflow">
+              <div class="resource-row">
+                 <% course_enrolled_as_teacher  %>
+                 <ul style="list-style-type: none;text-align: center">
+                   <% course_enrolled_as_teacher.each do |course| %>
+                     <li style="display: inline-block;vertical-align: top">
+                       <div class="span3 content-box resource" style="float:left;width: 322px;left:41px;">
+                         <% back_ground_image = course_image(course,:type => "back_ground_image") %>
+                            <% if back_ground_image == "" %>
+                             <div class="type-tag-positioner"  style="">
+                             <% else %>
+                             <div class="type-tag-positioner"  style="background-image: url('<%= back_ground_image %>');background-size: cover;">
+                             <% end %>
+                           <% course_image = course_image(course,:type => "image") %>
+                           <img alt="" class="<%= course_image == "" ? '' : 'course-badge img-circle' %>" src="<%= course_image  %>">
+                           <% if course.topic %>
+                               <div class="type ribbon1" style="background-color: <%= course.topic.color %>">
+                                 <span><%= course.topic.name %></span>
+                               </div>
+                           <% else %>
+                             <div class="type ribbon1" style="background-color: #228b22;">
+                               <span> others</span>
+                             </div>
+                            <%end %>
+                       </div>
+                        <div class="details course_name_div">
+                            <h2 class="course_name"><%= course.name %></h2>
+
+                         <table class="table_align">
+                           <tr>
+                             <% price = price_course(course) %>
+                             <% if price == ""  %>
+                               <td>
+                                 Free
+                               </td>
+                             <%else %>
+                               <td>
+                                 <img src="/images/icon-price.jpg" class="price_image">
+                               </td>
+                               <td>
+                                  <%= price %>
+                               </td>
+                             <% end %>
+                             <% course_modules = course.context_modules.active.nil? ? false :  course.context_modules.active.size if course.context_modules %>
+                             <% if course_modules >= 1%>
+                             <td class="course_mod">
+                               <a class="icon-module"></a>
+                             </td>
+                             <td>
+                               <%= course_modules %>
+                             </td>
+                             <% end %>
+                             <% users_count = course.student_enrollments.count.nil? ? "false" : course.student_enrollments.count %>
+                             <% if users_count >= 1 %>
+                             <td class="user_display">
+                               <a class="icon-user"></a>
+                             </td>
+                             <td class="user_count">
+                               <%= users_count %>
+                             </td>
+                             <% end %>
+                             <% tags_count = course.tags.count.nil? ? 'false' : course.tags.count if course.tags %>
+                             <% if tags_count >= 1%>
+                             <td class="tag_icon">
+                               <a class="icon-tag"></a>
+                             </td>
+                             <td class="tag_display">
+                              <%= tags_count %>
+                             </td>
+                             <% end %>
+                           </tr>
+                         </table>
+                          <hr style="margin: 6px 0px"> </hr>
+                          <span class="text_display">Course Tagged with</span>
+                          <% if course.tags %>
+                           <ul class="tags" style="list-style-type: none;margin-top: -8px;">
+                            <% tags = course.tags.limit(3) %>
+                             <% tags.each do |tag| %>
+                             <li>
+                               <a href="#"><b><%= tag.name %></b>
+                                 <span><%= ActsAsTaggableOn::Tagging.find_all_by_tag_id(tag).count %></span>
+                               </a>
+                             </li>
+                            <%end %>
+                           </ul>
+                          <%end %>
+                          <%  course_desc = course.course_description.try(:short_description) %>
+                          <% if course_desc %>
+                          <p class="desc course_desc" style="margin-top: 3px;float:left;font-size: 12px;margin-left: -15px;">
+                            <%= truncate(course_desc, length:125, omission: '...') %>
+                          </p>
+                          <% end %>
+                        </div>
+                        </div>
+                     </li>
+                   <% end %>
+                 </ul>
+               </div>
+              </div>
+          </div>
+        </div>
+    </body>
+    </html>
+<%end %>

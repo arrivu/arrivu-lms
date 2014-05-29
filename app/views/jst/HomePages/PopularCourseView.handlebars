@@ -91,8 +91,8 @@
             {{#if teacher_desc}}
                    <div class="items">
                        <div class="teacher_image" ><img src={{teacher_image}}></div>
-                       <p class="teacher_name">{{teacher_name}}</p>
-                        <span class="teacher_desc">{{{ truncate teacher_desc 80 }}}</span>
+                       <a href="{{teacher_details_url}}" id="{{teacher_id}}" class="teacher_name">{{teacher_name}}</a>
+                        <p class="teacher_desc" style="padding: 45px;margin-top: -82px;">{{{ truncate teacher_desc 80 }}}</p>
                    </div>
             {{/if}}
         {{/each}}

@@ -879,18 +879,22 @@ a.thumbnail:hover {
 }
 
 .teacher_image{
-  float: left;
   width:33px;
   margin: 0px 10px 3px 0px;
   margin-top: 16px;
 }
 .teacher_name{
-  margin-top: -15px;
+  margin-top: -54px;
   font-weight: 700;
   color: black;
+  display: inline-table;
+  margin-left: 42px;
 }
 .teacher_desc{
   color: black;
+  padding: 45px;
+  margin-top: -82px;
+  width: 85%;
 }
 .author_slider_index_pop_up_view{
   width:260px;
@@ -1146,7 +1150,7 @@ ul{
 }
 
 #add_popular_courses{
-  margin-left: 1152px;
+  margin-left: 1110px;
   font-weight: bold;
 }
 
@@ -1170,4 +1174,100 @@ ul{
 
 #add_knowledge_partners{
   margin-right: 15px;
+}
+
+.main_div{
+  width:30%;
+  float: left;
+}
+.profile_link{
+  margin-top: 20px;
+  text-align: center;
+  margin-right: 70px;
+}
+
+.profile_title_link{
+  font-family: serif;
+  font-size: large;
+}
+
+.teacher_main_div{
+  float: left;
+  width: 65%;
+}
+.teacher_description_page_name{
+  font-size: 40px;
+  margin: 0;
+}
+.teacher_profile_title{
+  font-size: 22px;
+  margin-top: 5px;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.teacher_profile_bio{
+  font-size: 18px;
+  line-height: 1.8;
+  overflow: hidden;
+  min-height: 200px;
+}
+
+.display-ul{
+  margin-top: 40px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  display: flex;
+}
+.first_display_li{
+  display: list-item;
+  text-align: -webkit-match-parent;
+  padding: 10px 20px;
+}
+.div_students_count{
+  color: #9c0;
+  font-size: 34px;
+  font-weight: 700;
+}
+.div_students_icon{
+  color: #999fa3;
+  font-size: 14px;
+  margin-top: 15px;
+}
+.common_li{
+  display: list-item;
+  text-align: -webkit-match-parent;
+  border-left: 1px solid #ccc;
+  padding: 10px 20px;
+}
+.common_li_div_display{
+  color: #d33737;
+  font-size: 34px;
+  font-weight: 700;
+}
+.common_li_icon_display{
+  color: #999fa3;
+  font-size: 14px;
+  margin-top: 15px;
+}
+.teaching_ul{
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  border-bottom: 1px solid #7b8084;
+  margin-bottom: 0;
+  padding-left: 0;
+  list-style: none;
+}
+.tab_teacher_li{
+  float: none;
+  padding-bottom: 10px;
+  font-size: 22px;
+  color: #16222d;
+  font-weight: 700;
+  margin: 0 10px;
+  display: inline-block;
+  border-bottom: 5px solid #4dba4d
 }
