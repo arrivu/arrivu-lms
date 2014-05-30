@@ -55,14 +55,6 @@ require [
   )
   popularCourseCollection.setParam('per_page', 10)
   popularCourseCollection.setParam('source', "popular")
-  popularCourseCollection.fetch(
-    success:->
-      $(".popular_course_item").find("div.author_slider_index_view").jContent
-        orientation: "horizontal"
-        easing: "easeOutCirc"
-        duration: 500
-        width:265
-        height:52
-  )
+  popularCourseCollection.fetch()
   knowledgePartnerCollection.fetch()
   learnerReviewCollection.fetch()

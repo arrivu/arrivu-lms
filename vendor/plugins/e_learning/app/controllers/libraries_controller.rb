@@ -20,7 +20,7 @@ class LibrariesController < ApplicationController
   def show
     if params[:id].present?
       get_course_and_price(params[:id])
-      get_course_imagesprice
+      get_course_images
       @comments = @context.comments.approved.recent.limit(5).paginate(:page => params[:page], :per_page => 5)
     end
   end

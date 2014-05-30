@@ -31,7 +31,7 @@ define [
       'click #add_popular_courses' : 'addPopularCourse'
       'click #add_knowledge_partners': 'addKnowledgePartner'
       'click .details':'movetocourselibrary'
-      'click .teacher_name' : 'teacher_details'
+      'click .index_view_slides' : 'teacher_details'
 
     addAccountSlider: ->
       newAccountSliderView = new AccountSlider
@@ -56,6 +56,6 @@ define [
       popular_item = this.$(event.currentTarget).attr('id')
       location.href = "#{location.protocol}//#{location.host}/libraries/"+popular_item
 
-    teacher_details:(event) ->
-#      teacher_id = this.$('.teacher_name').attr('id')
-#      location.href = "#{location.protocol}//#{location.host}/teachers/"+teacher_id
+#    teacher_details:(event) ->
+#      teacher_id = this.$(event.currentTarget).find(".teacher_name").attr('id')
+#      location.href = "#{location.protocol}//#{location.host}/users/profiles/"+teacher_id

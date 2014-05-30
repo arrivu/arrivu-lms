@@ -862,7 +862,7 @@ a.thumbnail:hover {
   margin-bottom: -11px
 }
 .index_view_slides{
-  width:255px;
+  width:300px;
   height:70px;
   margin-top: -3px;
   overflow: hidden;
@@ -870,7 +870,7 @@ a.thumbnail:hover {
   float:left;
   text-align: center;
   text-indent: 2px;
-  margin-left:-25px;
+  margin-left:-36px;
 }
 .items{
   text-align: left;
@@ -879,22 +879,25 @@ a.thumbnail:hover {
 }
 
 .teacher_image{
-  width:33px;
+  width:42px;
   margin: 0px 10px 3px 0px;
-  margin-top: 16px;
+  margin-top: 17px;
+  height: 29px
 }
 .teacher_name{
-  margin-top: -54px;
+  margin-top: -48px;
   font-weight: 700;
   color: black;
   display: inline-table;
-  margin-left: 42px;
+  margin-left: 49px;
 }
 .teacher_desc{
   color: black;
-  padding: 45px;
-  margin-top: -82px;
-  width: 85%;
+  padding: 49px;
+  width: 88%;
+  margin-top: -97px;
+  margin-left:2px;
+  line-height: 16px;
 }
 .author_slider_index_pop_up_view{
   width:260px;
@@ -905,21 +908,22 @@ a.thumbnail:hover {
   margin-bottom: -11px;
 }
 .slides_popup{
-  width:283px;
-  height:66px;
+  width:300px;
+  height:75px;
   margin-top: -3px;
   overflow: hidden;
   position: relative;
   float:left;
   text-align: center;
   text-indent: 2px;
-  margin-left:-25px;
+  margin-left:-34px;
 }
 
 .popu_up_teacher_image{
   float: left;
-  width:36px;
+  width:42px;
   margin: 14px 13px 6px 0px;
+  height: 29px
 }
 .popup_teacher_name{
   margin-top: -13px;
@@ -928,8 +932,10 @@ a.thumbnail:hover {
 }
 .popup_teacher_desc{
   color: black;
-  margin-top: -12px;
+  margin-top: -60px;
   line-height:  16px;
+  padding:53px;
+  width: 90%;
 }
 
 .pop_up_items{

@@ -143,8 +143,8 @@
                            </tr>
                          </table>
                           <hr style="margin: 6px 0px"> </hr>
-                          <span class="text_display">Course Tagged with</span>
                           <% if course.tags %>
+                          <span class="text_display">Course Tagged with</span>
                            <ul class="tags" style="list-style-type: none;margin-top: -8px;">
                             <% tags = course.tags.limit(3) %>
                              <% tags.each do |tag| %>

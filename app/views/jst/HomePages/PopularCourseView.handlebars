@@ -86,17 +86,19 @@
      {{/if}}
     {{#if has_teacher}}
     <div class="author_slider_index_view">
-            <div class="index_view_slides">
         {{#each profile_data }}
             {{#if teacher_desc}}
+                <a href="{{teacher_details_url}}" id="{{teacher_id}}">
+                <div class="index_view_slides">
                    <div class="items">
                        <div class="teacher_image" ><img src={{teacher_image}}></div>
-                       <a href="{{teacher_details_url}}" id="{{teacher_id}}" class="teacher_name">{{teacher_name}}</a>
-                        <p class="teacher_desc" style="padding: 45px;margin-top: -82px;">{{{ truncate teacher_desc 80 }}}</p>
+                       <span id="{{teacher_id}}" class="teacher_name">{{teacher_name}}</span>
+                        <p class="teacher_desc" >{{{ truncate teacher_desc 130 }}}</p>
                    </div>
+                </div>
+                </a>
             {{/if}}
         {{/each}}
-    </div>
     </div>
     {{/if}}
 </div>
