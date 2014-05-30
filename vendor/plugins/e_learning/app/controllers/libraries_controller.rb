@@ -249,16 +249,20 @@ class LibrariesController < ApplicationController
     if (image[:type] == "back_ground_image")
       if course.course_image
         back_ground_attachment_id = course.course_image.course_back_ground_image_attachment_id
-        attachment = Attachment.find(back_ground_attachment_id)
-        back_ground_image = file_download_url(attachment, { :verifier => attachment.uuid, :download => '1', :download_frd => '1' })
+        unless back_ground_attachment_id.nil?
+          attachment = Attachment.find(back_ground_attachment_id)
+          back_ground_image = file_download_url(attachment, { :verifier => attachment.uuid, :download => '1', :download_frd => '1' })
+        end
       else
         back_ground_image = ""
       end
     else (image[:type] == "image")
     if course.course_image
       course_image_attachment_id = course.course_image.course_image_attachment_id
-      attachment = Attachment.find(course_image_attachment_id)
-      back_ground_image = file_download_url(attachment, { :verifier => attachment.uuid, :download => '1', :download_frd => '1' })
+      unless course_image_attachment_id.nil?
+        attachment = Attachment.find(course_image_attachment_id)
+        back_ground_image = file_download_url(attachment, { :verifier => attachment.uuid, :download => '1', :download_frd => '1' })
+      end
     else
       back_ground_image = ""
     end

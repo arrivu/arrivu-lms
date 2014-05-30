@@ -68,6 +68,7 @@
   <div class="xleftcol3">
     <h1>Instructors</h1>
     <% @context.teachers.each do |teacher| %>
+        <a href="<%= user_details_path(teacher) %>" style="text-decoration: none;color: black">
     <div class="instructor-bio comment comment_box" style="max-height: none;border-bottom: 1px solid lightgray;border-right: 1px solid lightgray;
             border-radius: 4px;">
       <img src=<%= teacher.avatar_url ? teacher.avatar_url : "http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&f=y" %> width="100" height="100" class="left img-circle" alt="<%= teacher.name%>">
@@ -81,6 +82,7 @@
         <a href="#" class="prompt-link">More</a>
       </div>
     </div>
+        </a>
         <br/>
     <% end %>
 
@@ -106,11 +108,9 @@
           </div>
 
     <%end %>
-    <% if @context.comments.approved.count > 5 %>
      <% @total_count =   @context.comments.approved.count%>
     <a class="btn btn-primary" id="comments_review" style="margin-left: 20%;border-radius: 0px;margin-bottom: 10px;">
       SEE ALL <%= @total_count%> REVIEWS </a>
-     <%end %>
   </div>
   <div class="xmiddlecol3">
     <div class="xinner3">
