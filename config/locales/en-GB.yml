@@ -11893,7 +11893,7 @@ en-GB:
         settings: Settings
         sign_up_as_teacher: "Sign up as a teacher"
         sign_up_as_solo_teacher: "Get a solo teacher account"
-        E-learning_login_pop_up: "Log In"
+        e_learning_login_pop_up: "Log In"
       masquerading: 
         as: "As: *%{user_name}*"
     inline_preview: 

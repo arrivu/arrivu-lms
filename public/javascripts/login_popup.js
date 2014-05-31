@@ -13,7 +13,7 @@ require([
         event.preventDefault();
         var $dialog = $("#login_pop_up");
         $dialog.dialog({
-            title: I18n.t('E-learning_login_pop_up', "Log In"),
+            title: I18n.t('e_learning_login_pop_up', "Log In"),
             width: 510,
             poition: 'center'
         }).fixDialogButtons();
