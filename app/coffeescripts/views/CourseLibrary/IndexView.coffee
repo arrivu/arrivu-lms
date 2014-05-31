@@ -27,8 +27,9 @@ define [
       location.href = "#{location.protocol}//#{location.host}/libraries/"+course_item
 
     teacher_details:(event)->
+      event.stopPropagation()
       teacher_id = this.$(event.currentTarget).find(".popup_teacher_name").attr('id')
-      location.href = "#{location.protocol}//#{location.host}/users/profiles/"+teacher_id
+      location.href = "#{location.protocol}//#{location.host}/users/"+teacher_id+"/details"
 
 
 
