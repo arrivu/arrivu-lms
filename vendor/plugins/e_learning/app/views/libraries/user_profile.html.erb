@@ -76,9 +76,8 @@
                  <ul style="list-style-type: none;text-align: center">
                    <% course_enrolled_as_teacher.each do |course| %>
                      <li style="display: inline-block;vertical-align: top">
-                       <% course_path = libraries_path+"/"+(course.id).to_s %>
-                       <a href="<%= course_path %>" style="text-decoration: none;">
-                       <div class="span3 content-box resource" style="float:left;width: 322px;left:41px;">
+                       <div class="navigation_link" id="<%= course.id %>">
+                       <div class="span3 content-box resource" style="float:left;width: 322px;left:41px;padding-bottom: 0px;">
                          <% back_ground_image = course_image(course,:type => "back_ground_image") %>
                             <% if back_ground_image == "" %>
                              <div class="type-tag-positioner"  style="">
@@ -97,7 +96,7 @@
                              </div>
                             <%end %>
                        </div>
-                        <div class="details course_name_div">
+                        <div class="details course_name_div" >
                             <h2 class="course_name"><%= course.name %></h2>
 
                          <table class="table_align">
@@ -160,13 +159,13 @@
                           <%end %>
                           <%  course_desc = course.course_description.try(:short_description) %>
                           <% if course_desc %>
-                          <p class="desc course_desc" style="margin-top: 3px;float:left;font-size: 12px;margin-left: -15px;">
+                          <p class="desc course_desc" style="margin-top: 3px;float:left;font-size: 12px;margin-left: -15px;margin-bottom: 0px;">
                             <%= truncate(course_desc, length:125, omission: '...') %>
                           </p>
                           <% end %>
                         </div>
                         </div>
-                       </a>
+                       </div>
                      </li>
                    <% end %>
                  </ul>
@@ -176,4 +175,18 @@
         </div>
     </body>
     </html>
+<%end %>
+
+<%js_block do %>
+    <script type="text/javascript">
+        require([
+            'jquery' /* $ */,
+            'jquery.disableWhileLoading'
+        ],function($){
+            $(".navigation_link").click(function(event){
+                course_id = $(this).attr('id');
+               window.location.href = location.protocol+"//"+location.host+"/libraries/"+course_id;
+            });
+        });
+    </script>
 <%end %>
