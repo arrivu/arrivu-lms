@@ -891,6 +891,10 @@ a.thumbnail:hover {
   display: inline-table;
   margin-left: 49px;
 }
+.name_without_desc
+{
+  margin-top: -28px;
+}
 .teacher_desc{
   color: black;
   padding: 49px;
@@ -910,7 +914,7 @@ a.thumbnail:hover {
 .slides_popup{
   width:300px;
   height:75px;
-  margin-top: -3px;
+  margin-top: 8px;
   overflow: hidden;
   position: relative;
   float:left;
@@ -947,6 +951,13 @@ a.thumbnail:hover {
 .margin_bottom{
   margin-bottom: 10px;
 
+}
+
+.poup_teacher_name_without_desc{
+  margin-top: -14px;
+  font-weight: 700;
+  color: black;
+  padding: 20px;
 }
 
 #knowledge_partners_div{
