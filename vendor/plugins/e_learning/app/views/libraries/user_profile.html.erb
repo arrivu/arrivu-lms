@@ -76,6 +76,8 @@
                  <ul style="list-style-type: none;text-align: center">
                    <% course_enrolled_as_teacher.each do |course| %>
                      <li style="display: inline-block;vertical-align: top">
+                       <% course_path = libraries_path+"/"+(course.id).to_s %>
+                       <a href="<%= course_path %>" style="text-decoration: none;">
                        <div class="span3 content-box resource" style="float:left;width: 322px;left:41px;">
                          <% back_ground_image = course_image(course,:type => "back_ground_image") %>
                             <% if back_ground_image == "" %>
@@ -143,7 +145,7 @@
                            </tr>
                          </table>
                           <hr style="margin: 6px 0px"> </hr>
-                          <% if course.tags %>
+                          <% if course.tags.count >= 1 %>
                           <span class="text_display">Course Tagged with</span>
                            <ul class="tags" style="list-style-type: none;margin-top: -8px;">
                             <% tags = course.tags.limit(3) %>
@@ -164,6 +166,7 @@
                           <% end %>
                         </div>
                         </div>
+                       </a>
                      </li>
                    <% end %>
                  </ul>
