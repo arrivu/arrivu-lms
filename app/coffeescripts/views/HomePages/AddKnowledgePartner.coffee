@@ -79,6 +79,7 @@ define [
             dialog.dialog 'close'
             if $("#knowledge_partners_div").find("#knowledge_partner_on_index_page").length == 1
               @show_all_knowledge_partners()
+              @show_all_partners_on_indexpage()
               $("#knowledge_partner_banner").hide()
               $("#more_partners").hide()
              else
