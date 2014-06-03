@@ -1,9 +1,13 @@
 <div id="course_comments">
     <h3 class="pop_up_h3">Reviews</h3>
 <div class="fancybox-inner">
+{{#if collection.length}}
 <ul class="collectionViewItems" style="list-style-type: none">
 
 </ul>
 </div>
 <div class="paginatedLoadingIndicator" style="display: none"></div>
 </div>
+{{else}}
+    <h2 class="no_comments">There are No Comments to show</h2>
+{{/if}}
