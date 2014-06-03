@@ -1,0 +1,39 @@
+<div id="tab-subscription-settings">
+  <% if can_do(@context, @current_user, :manage_account_settings) && @current_user.account.site_admin? %>
+      <% form_for :account, :url => account_url(@account), :html => {:method => :put, :id => "account_plugin_settings"} do |f| %>
+          <% f.fields_for :settings do |settings| %>
+
+              <table>
+                <tr><td colspan="2" > <h2>Manage subscription settings</h2></td></tr>
+                <tr>
+                  <td><%= settings.blabel :no_students, :en => "No of students" %></td>
+                  <td><%= settings.text_field :no_students, :value => @account.settings[:no_students]  %></td>
+                </tr>
+                <tr>
+                  <td><%= settings.blabel :no_teachers, :en => "No of teachers" %></td>
+                  <td><%= settings.text_field :no_teachers, :value => @account.settings[:no_teachers]  %></td>
+                </tr>
+                <tr>
+                  <td><%= settings.blabel :no_admins, :en => "No of account admins" %></td>
+                  <td><%= settings.text_field :no_admins, :value => @account.settings[:no_admins]  %></td>
+                </tr>
+                <tr>
+                  <td><%= settings.blabel :no_courses, :en => "No of courses" %></td>
+                  <td><%= settings.text_field :no_courses, :value => @account.settings[:no_courses]  %></td>
+                </tr>
+                <tr>
+                  <td><%= settings.blabel :storage, :en => "Storage in MB" %></td>
+                  <td><%= settings.text_field :storage, :value => @account.settings[:storage]  %></td>
+                </tr>
+                <tr>
+                  <td><%= settings.label :unlimited, :en => "Unlimited" %></td>
+                  <td><%= settings.check_box :unlimited,:checked => @account.unlimited?  %></td>
+
+                </tr>
+                <tr><td></td><td> <button type="submit" class="btn btn-primary" id="btn_subscription_submit">Update</button></td></tr>
+              </table>
+
+          <% end %>
+      <% end %>
+  <% end %>
+</div>
