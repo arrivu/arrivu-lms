@@ -1237,6 +1237,9 @@ routes.draw do
     end
 
     scope(:controller => :accounts) do
+      # Arrivu chnages
+      post 'accounts/:id/subscribe', :action => :subscribe
+      # Arrivu chnages
       get 'accounts', :action => :index, :path_name => :accounts
       get 'accounts/:id', :action => :show, :path_name => :account
       put 'accounts/:id', :action => :update
