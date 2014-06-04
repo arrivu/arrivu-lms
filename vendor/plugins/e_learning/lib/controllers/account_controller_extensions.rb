@@ -7,7 +7,7 @@ module Elearning
         @account.settings[:no_teachers] = params[:no_teachers]
         @account.settings[:no_admins] = params[:no_admins]
         @account.settings[:no_courses] = params[:no_courses]
-        @account.settings[:storage] = params[:storage]
+        @account.default_storage_quota_mb = params[:storage]
         @account.settings[:unlimited] = false unless params[:unlimited] == 'true'
         if @account.save!
           render :json => @account.to_json

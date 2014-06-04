@@ -13,9 +13,6 @@ module Elearning
         add_setting :no_courses,
                     :root_only => false, :default => '2'
 
-        add_setting :storage,
-                    :root_only => false, :default => '1000'
-
         add_setting :unlimited,:boolean => true,
                     :root_only => false, :default => false
 

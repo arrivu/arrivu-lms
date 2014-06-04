@@ -22,10 +22,6 @@
                   <td><%= settings.text_field :no_courses, :value => @account.settings[:no_courses]  %></td>
                 </tr>
                 <tr>
-                  <td><%= settings.blabel :storage, :en => "Storage in MB" %></td>
-                  <td><%= settings.text_field :storage, :value => @account.settings[:storage]  %></td>
-                </tr>
-                <tr>
                   <td><%= settings.label :unlimited, :en => "Unlimited" %></td>
                   <td><%= settings.check_box :unlimited,:checked => @account.unlimited?  %></td>
 

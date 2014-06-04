@@ -16,11 +16,18 @@ module Elearning
             max_user_count = @account.settings[:no_admins].to_i
             enrollment_type = params[:membership_type]
           elsif params[:enrollment_type] == "StudentEnrollment"
-            avillable_user_count = @context.account.users.where("EXISTS (?)", Enrollment.where("enrollments.user_id=users.id and  enrollments.type='StudentEnrollment' and workflow_state!='deleted'")).size
+            avillable_user_count = 0
+            @context.account.courses.not_deleted.each do |course|
+              avillable_user_count += course.enrollments.all_student.size
+            end
+
             max_user_count = @context.account.settings[:no_students].to_i
             enrollment_type = params[:enrollment_type]
           elsif params[:enrollment_type] == "TeacherEnrollment"
-            avillable_user_count = @context.account.users.where("EXISTS (?)", Enrollment.where("enrollments.user_id=users.id and  enrollments.type='TeacherEnrollment' and workflow_state!='deleted'")).size
+            avillable_user_count = 0
+            @context.account.courses.not_deleted.each do |course|
+              avillable_user_count += course.enrollments.all_teacher.size
+            end
             max_user_count = @context.account.settings[:no_teachers].to_i
             enrollment_type = params[:enrollment_type]
           end
