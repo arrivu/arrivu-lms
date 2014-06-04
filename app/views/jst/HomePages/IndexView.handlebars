@@ -1,9 +1,12 @@
 <div data-view="sliders" id="sliders">
 
 </div>
+{{#if ENV.enable_account_statistics}}
 <div data-view="accountStatistics" style="font-size: xx-small;float:left">
 
 </div>
+{{/if}}
+{{#if ENV.current_user_id}}
 <div data-view="popularCourses" id="popular_course_div"  class="row evenflow">
 
 </div>
@@ -11,7 +14,7 @@
 <div data-view="knowledgePartners" id="knowledge_partners_div"  class="row knowledge-evenflow">
 
 </div>
-
+{{/if}}
 <div data-view="learnersReviews" class="review-evenflow">
 
 </div>

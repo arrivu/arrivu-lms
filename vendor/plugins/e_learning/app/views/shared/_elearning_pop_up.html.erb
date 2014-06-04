@@ -6,7 +6,11 @@
   <div id="only_login">
   <%= form_for :pseudonym_session, :url => login_path(:nonldap => (@domain_root_account && !@domain_root_account.ldap_authentication?).presence), :html => {:id => "e_learning_login_form"} do |f| %>
   <form role="form" >
-      <table style="margin-top: 20px;">
+      <%  if @domain_root_account.facebook_login? ||  @domain_root_account.google_login? ||  @domain_root_account.linkedin_login? %>
+        <table style="margin-top: 20px;">
+      <% else %>
+        <table style="margin-top: 20px;width:58px;margin-left: 75px">
+      <% end %>
         <tbody><tr>
           <td style=" width: 58%; padding: 10px; ">
 
@@ -23,30 +27,31 @@
             <% end %>
               <div style="margin-left: 34px;" class="top"><a id="elearning_forgot_passowrd_link" href="#">Forgot password?</a></div>
               <br>
-
-
-          </td><td style="width:18%;background-repeat:no-repeat;background-image:url('/images/verticle_line.jpg');background-position: 25px 20px;background-size: 2px 85%;">
-          <div> <%= image_tag("or.png", :size => "50x50", :alt => "") %> </div>
-        </td>
-
-
-          <td style=" width: 20%;float:left;display: table-cell;vertical-align: middle;min-height: 181px; ">
-
-            <div style="display: table-cell;vertical-align: middle;min-height: 181px;text-align: center;">
-              <div class="social_login" style="display: table-cell;vertical-align: middle;min-height: 181px;">
+          </td>
+          <% if @domain_root_account.facebook_login? ||  @domain_root_account.google_login? ||  @domain_root_account.linkedin_login? %>
+           <td style="width:13%;background-repeat:no-repeat;background-image:url('/images/verticle_line.jpg');background-position: 25px 20px;background-size: 2px 85%;">
+             <div> <%= image_tag("or.png", :size => "50x50", :alt => "") %> </div>
+           </td>
+             <td style=" width: 20%;display: table-cell;vertical-align: middle;min-height: 181px; ">
+              <div style="display: table-cell;vertical-align: middle;min-height: 181px;text-align: center;">
+              <div class="social_login" style="display: table-cell;vertical-align: middle;min-height: 181px;padding-top: 23px;">
+         <% end %>
               <% if @domain_root_account.facebook_login? %>
-              <%=  link_to image_tag("fbook.png",:class => "login_img", alt: "")+  "Facebook", '/auth/facebook/' %>
+              <%=  link_to image_tag("fbook.png",:class => "login_img", alt: ""), '/auth/facebook/' %>
               <br>
-                    <br>
+               FaceBook
+              <br>
 
               <% end %>
               <% if @domain_root_account.google_login? %>
-              <%= link_to image_tag("google.jpg", :class => "login_img", alt: "")+"Google", '/auth/google_oauth2/' %>
+              <%= link_to image_tag("google.jpg", :class => "login_img", alt: ""), '/auth/google_oauth2/' %>
               <br>
-                    <br>
+               Google
+              <br>
               <%end %>
               <% if @domain_root_account.linkedin_login? %>
-              <%= link_to image_tag("linked_in.png", :class => "login_img", alt: "")+"linked in", '/auth/linkedin/' %>
+              <%= link_to image_tag("linked_in.png", :class => "login_img", alt: ""), '/auth/linkedin/' %>
+              LinkedIn
               <br>
               <%end %>
               </div>
