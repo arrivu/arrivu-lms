@@ -380,6 +380,9 @@ ApplicationHelper
           if (tab[:label] == "Grading Schemes" and !!@domain_root_account.Sublime_grade_disable?)
             tab[:href] ="hide_menu"
           end
+          if (tab[:label] == "Sub-Accounts" and (@account ||= @domain_root_account).Sublime_sub_account_disable?)
+            tab[:href] ="hide_menu"
+          end
           #Plugin settings end
 
             if FileTest.exist?("#{RAILS_ROOT}/public/images/#{tab[:css_class]}.png")
