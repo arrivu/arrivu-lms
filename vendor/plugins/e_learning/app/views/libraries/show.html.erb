@@ -1,7 +1,7 @@
 
 <%  @body_classes << "gradebook2 full-width"
     @show_left_side = false
-    jammit_css :course_library
+    jammit_css :course_library ,:bootstrap_and_responsive
     js_bundle :course_comments
     js_env :review_course_id =>  @context.id
 
