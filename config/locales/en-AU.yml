@@ -3275,6 +3275,7 @@ en-AU:
           edit_module: Edit
         title: 
           delete_module: "Delete this module"
+          delete_module_group: "Delete this module group"
           edit_module: "Edit module settings"
           student_progress: "See Student Progress for this Module"
       manage: Manage

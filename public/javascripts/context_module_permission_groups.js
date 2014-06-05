@@ -60,9 +60,18 @@ define([
             },
 
             updateModulePositions: function(event, ui) {
+
                 var $module_group = ui.item.parents(".context_module_group");
+                var $old_module_group = $(event.target).parents(".context_module_group")
                 var url = $module_group.find(".reorder_module_group_items_url").attr('href');
                 var module_items = [];
+                
+                if ($old_module_group.find(".context_module").length == 0){
+                    $old_module_group.find(".delete_module_group_link").show()
+
+                }else{
+                    $old_module_group.find(".delete_module_group_link").hide()
+                }
                 $module_group.find(".context_module").each(function() {
                     module_items.push($(this).getTemplateData({textValues: ['id']}).id);
                 });
