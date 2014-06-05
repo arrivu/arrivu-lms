@@ -384,6 +384,18 @@ ApplicationHelper
             tab[:href] ="hide_menu"
           end
           #Plugin settings end
+          #Arrivu changes to add flip classes view start
+          if (tab[:label] == "Modules" and @context.feature_enabled?(:flipped_classes))
+            tab[:href] ="hide_menu"
+          end
+          if tab[:label] == "Classes"
+            if !@context.feature_enabled?(:flipped_classes)
+              tab[:href] ="hide_menu"
+            end
+          end
+
+          #Arrivu changes to add flip classes view end
+
 
             if FileTest.exist?("#{RAILS_ROOT}/public/images/#{tab[:css_class]}.png")
               link_icon =  tab[:css_class]

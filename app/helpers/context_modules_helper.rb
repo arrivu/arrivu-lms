@@ -17,9 +17,9 @@
 #
 
 module ContextModulesHelper
-  def cache_if_module(context_module, editable, draft_state, &block)
+  def cache_if_module(context_module, editable, draft_state,flipped_classes, &block)
     if context_module
-      cache(['context_module_render_6_', context_module.cache_key, editable, draft_state].join('/'), nil, &block)
+      cache(['context_module_render_6_', context_module.cache_key, editable, draft_state,flipped_classes].join('/'), nil, &block)
     else
       yield
     end

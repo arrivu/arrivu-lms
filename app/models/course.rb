@@ -2657,13 +2657,7 @@ class Course < ActiveRecord::Base
           tabs.delete_if { |t| t[:id] == TAB_CLASSES }
           tabs.delete_if { |t| t[:id] == TAB_LIVECLASSLINKS }
         end
-        #Arrivu changes to add flip classes view start
-        if self.feature_enabled?(:flipped_classes)
-          tabs.delete_if { |t| t[:id] == TAB_MODULES }
-        else
-          tabs.delete_if { |t| t[:id] == TAB_CLASSES }
-        end
-        #Arrivu changes to add flip classes view end
+
         unless self.grants_rights?(user, opts[:session], :participate_as_student, :manage_content).values.any?
           tabs.delete_if{ |t| t[:visibility] == 'members' }
         end
