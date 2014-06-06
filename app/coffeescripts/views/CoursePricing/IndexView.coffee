@@ -1,6 +1,6 @@
 define [
   'jquery'
-  'i18n!course_pricings'
+  'i18n!account_tags'
   'str/htmlEscape'
   'jst/CoursePricing/IndexView'
   'compiled/views/CoursePricing/AddCoursePrice'
@@ -61,4 +61,4 @@ define [
     onCoursePriceSync: =>
       @addCoursePriceView.remove() if @addCoursePriceView
       @showCoursePriceView()
-      $.flashMessage(htmlEscape(I18n.t('course_price_saved_message', " saved successfully!")))
+      $.flashMessage(htmlEscape(I18n.t('course_price_saved_message', "Course Price saved successfully!")))

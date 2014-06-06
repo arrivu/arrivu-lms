@@ -558,6 +558,7 @@ routes.draw do
       resources :knowledge_partners
       resources :learners_reviews
       resources :sliders
+      resources :tags
     end
     #arrivu changes
     match 'settings' => 'accounts#settings', :as => :settings
