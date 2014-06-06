@@ -9,4 +9,7 @@ class TagsController < ApplicationController
       format.json { render json: tag_tokens(params[:q]) }
     end
   end
+
+  #ActsAsTaggableOn::Tag.find_by_account_id(@domain_root_account)
+
 end

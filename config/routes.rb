@@ -1185,6 +1185,15 @@ routes.draw do
       et_routes("account")
     end
 
+    scope(:controller => :tags) do
+      def et_routes(context)
+        get "#{context}s/:#{context}_id/tags", :action => :index, :path_name => "#{context}_tags"
+        put "#{context}s/:#{context}_id/tags/:tags_id", :action => :update, :path_name => "#{context}_tags_update"
+        delete "#{context}s/:#{context}_id/tags/:tags_id", :action => :destroy, :path_name => "#{context}_tags_delete"
+      end
+      et_routes("account")
+    end
+
     scope(:controller => :libraries) do
         get "libraries", :action => :index, :path_name => 'libraries'
         get "libraries/:course_id/course_reviews", :action => :course_reviews, :path_name => 'course_reviews'
