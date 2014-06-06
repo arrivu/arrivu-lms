@@ -558,6 +558,7 @@ routes.draw do
       resources :knowledge_partners
       resources :learners_reviews
       resources :sliders
+      resources :tags
     end
     #arrivu changes
     match 'settings' => 'accounts#settings', :as => :settings
@@ -1181,6 +1182,15 @@ routes.draw do
         post "#{context}s/:#{context}_id/popular_courses", :action => :create, :path_name => "#{context}_popular_courses_create"
         put "#{context}s/:#{context}_id/popular_courses/:popular_courses_id", :action => :update, :path_name => "#{context}_popular_courses_update"
         delete "#{context}s/:#{context}_id/popular_courses/:popular_courses_id", :action => :destroy, :path_name => "#{context}_popular_courses_delete"
+      end
+      et_routes("account")
+    end
+
+    scope(:controller => :tags) do
+      def et_routes(context)
+        get "#{context}s/:#{context}_id/tags", :action => :index, :path_name => "#{context}_tags"
+        put "#{context}s/:#{context}_id/tags/:tags_id", :action => :update, :path_name => "#{context}_tags_update"
+        delete "#{context}s/:#{context}_id/tags/:tags_id", :action => :destroy, :path_name => "#{context}_tags_delete"
       end
       et_routes("account")
     end

@@ -8,6 +8,41 @@
   <div class="class_name" >
     <%= truncate(object.name, length: 100, omission: '...') %>
   </div>
-
+  <div class="module_statistics">
+    <!--videos-->
+    <ul class="modules_ul">
+      <% if object.content_tags.active.pre_class_videos.size > 0 %>
+          <% videos_count = object.content_tags.active.pre_class_videos.size  %>
+         <li class="modules_items" data-tooltip title="This Module has <%= videos_count %> videos">
+          <img src="/images/icon_video.ico" style="width:14px;height: 14px;" >
+            <span style="margin:-4px"><%= videos_count %></span>
+         </li>
+      <% end %>
+        <!--pre-class reading materials-->
+      <% if object.content_tags.pre_class_reading_materials.not_deleted.size > 0 %>
+          <% materials_count = object.content_tags.pre_class_reading_materials.not_deleted.size %>
+         <li class="modules_items" data-tooltip title="This Module Contains <%= materials_count %> reading materials">
+           <img src="/images/reading_materials.ico" style="width: 17px;">
+             <span style="margin:-2px"> <%= materials_count %> </span>
+         </li>
+      <% end %>
+        <!--assignments-->
+      <% if object.content_tags.pre_class_assignments.not_deleted.size > 0 %>
+          <% assignments_count = object.content_tags.pre_class_assignments.not_deleted.size  %>
+         <li class="modules_items" data-tooltip title="This module has <%= assignments_count %> assignments">
+           <img src="/images/assignment_ico.png" style="height: 13px;width: 16px;">
+            <span style="margin:-4px"><%= assignments_count %></span>
+         </li>
+      <% end %>
+        <!--presentations-->
+      <% if object.content_tags.pre_class_presentation.not_deleted.size > 0 %>
+          <% presentation_count = object.content_tags.pre_class_presentation.not_deleted.size %>
+         <li class="modules_items" data-tooltip title="This module has <%= presentation_count %> presentation">
+           <img src="/images/presentation.ico" style="width: 17px;height: 17px;">
+            <span style="margin:-4px"><%= presentation_count %></span>
+         </li>
+      <% end %>
+    </ul>
+  </div>
 </div>
 </a>
