@@ -6,14 +6,24 @@
 
 </div>
 {{/if}}
-{{#if ENV.current_user_id}}
+{{#if ENV.show_popular}}
 <div data-view="popularCourses" id="popular_course_div"  class="row evenflow">
 
 </div>
+{{else}}
+<div data-view="popularCourses" id="popular_course_div" style="width: 103%;margin-left: -41px;display: inline-block;" >
 
+</div>
+{{/if}}
+{{#if ENV.show_knowledge_banner}}
 <div data-view="knowledgePartners" id="knowledge_partners_div"  class="row knowledge-evenflow">
 
 </div>
+{{else}}
+<div data-view="knowledgePartners" id="knowledge_partners_div" style="background: white"  class="row knowledge-evenflow">
+
+</div>
+
 {{/if}}
 <div data-view="learnersReviews" class="review-evenflow">
 
