@@ -11,7 +11,7 @@ class PopularCoursesController < ApplicationController
         if params[:source] == 'popular'
           @account_courses = @domain_root_account.popular_courses.limit(6)
         else
-          @account_courses = @domain_root_account.courses.not_deleted
+          @account_courses = @domain_root_account.associated_courses.active
         end
       end
       @account_courses.each_with_index do |course, idx|
