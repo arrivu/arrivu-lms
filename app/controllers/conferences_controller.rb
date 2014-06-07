@@ -183,13 +183,14 @@ class ConferencesController < ApplicationController
     end
     @users = scope.where("users.id<>?", @current_user).order(User.sortable_name_order_by_clause).all.uniq
     # exposing the initial data as json embedded on page.
+    @course_sections = @context.is_a?(Course) ? @context.course_sections.active : []
     js_env(
         current_conferences: ui_conferences_json(@new_conferences, @context, @current_user, session),
         concluded_conferences: ui_conferences_json(@concluded_conferences, @context, @current_user, session),
         default_conference: default_conference_json(@context, @current_user, session),
         conference_type_details: conference_types_json(WebConference.conference_types),
         users: @users.map { |u| {:id => u.id, :name => u.last_name_first} },
-        course_sections: @context.course_sections.active,
+        course_sections: @course_sections,
         current_date_time: Time.now
     )
   end

@@ -352,6 +352,10 @@ class AppointmentGroupsController < ApplicationController
     publish = value_to_boolean(params[:appointment_group].delete(:publish))
     params[:appointment_group][:contexts] = contexts
     @group = AppointmentGroup.new(params[:appointment_group])
+    @group.is_for_live_conference = params[:live_conference]
+    if params[:live_conference]
+      @group.live_conference_type = params[:conference_type]
+    end
     @group.update_contexts_and_sub_contexts
     if authorized_action(@group, @current_user, :manage)
       if @group.save
@@ -449,7 +453,9 @@ class AppointmentGroupsController < ApplicationController
     @group.contexts = contexts if contexts
     if authorized_action(@group, @current_user, :update)
       publish = params[:appointment_group].delete(:publish) == "1"
-      if @group.update_attributes(params[:appointment_group])
+      @group.is_for_live_conference = params[:live_conference]
+      @group.live_conference_type = params[:conference_type]
+      if @group.update_attributes(params[:appointment_group]) and @group.save
         @group.publish! if publish
         render :json => appointment_group_json(@group, @current_user, session)
       else

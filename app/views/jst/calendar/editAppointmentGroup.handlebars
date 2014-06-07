@@ -17,6 +17,19 @@
       {{checkbox "use_group_signup" id="group-signup-checkbox" uniqid=true class="group-signup-checkbox"}}
       <label for="group-signup-checkbox-{{uniqid}}">{{#t "group_signup"}}Have students sign up in groups.{{/t}}</label>
     </p>
+    {{#if conferenceTypes.length}}
+        <p>
+          {{checkbox "live_conference" id="live-conference-checkbox" class="live-conference-checkbox"}}
+          <label for="live_conference">{{#t "live_conference"}}Live Conference.{{/t}}</label>
+        </p>
+        <p>
+        <select id="web_conference_conference_type" name="web_conference[conference_type]" >
+            {{#each conferenceTypes}}
+                <option value="{{type}}" {{#if selected}}selected="selected"{{/if}}>{{name}}</option>
+            {{/each}}
+        </select>
+        </p>
+    {{/if}}
     <div class="group-signup" style="display: none">
       <label for="edit-appointment-group-cat-{{uniqid}}"><b>{{#t "group_category"}}Group Category{{/t}}</b></label><br />
       <div class="group_select">

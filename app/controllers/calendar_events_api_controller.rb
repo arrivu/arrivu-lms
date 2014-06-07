@@ -416,7 +416,7 @@ class CalendarEventsApiController < ApplicationController
           participant = nil if participant && params[:participant_id] && params[:participant_id].to_i != participant.id
         end
         raise CalendarEvent::ReservationError, "invalid participant" unless participant
-        reservation = @event.reserve_for(participant, @current_user, :cancel_existing => value_to_boolean(params[:cancel_existing]))
+        reservation = @event.reserve_for(participant, @current_user, :cancel_existing => value_to_boolean(params[:cancel_existing]),:conference_return_url => calendar_url_for(@context))
         render :json => event_json(reservation, @current_user, session)
       rescue CalendarEvent::ReservationError => err
         reservations = participant ? @event.appointment_group.reservations_for(participant) : []

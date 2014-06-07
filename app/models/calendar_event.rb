@@ -31,11 +31,12 @@ class CalendarEvent < ActiveRecord::Base
   copy_authorized_links(:description) { [self.effective_context, nil] }
 
   include Workflow
+  include Api::V1::Conferences
 
 
   belongs_to :context, :polymorphic => true
-  has_many :web_conference
-  has_many :conference_calendar_event_associations
+  has_many :web_conferences
+  has_many :conference_calendar_event_associations, :dependent => :delete_all
   belongs_to :user
   belongs_to :parent_event, :class_name => 'CalendarEvent', :foreign_key => :parent_calendar_event_id
   has_many :child_events, :class_name => 'CalendarEvent', :foreign_key => :parent_calendar_event_id, :conditions => "calendar_events.workflow_state <> 'deleted'"
@@ -307,6 +308,10 @@ class CalendarEvent < ActiveRecord::Base
         e.updating_user = updating_user
         e.destroy(false)
       end
+      self.conference_calendar_event_associations.each do |conference_calendar_event_association|
+        conference_calendar_event_association.destroy
+      end
+
       return true unless update_context_or_parent
 
       if appointment_group
@@ -319,6 +324,7 @@ class CalendarEvent < ActiveRecord::Base
         parent_event.save!
       end
       true
+
     end
   end
 
@@ -447,6 +453,26 @@ class CalendarEvent < ActiveRecord::Base
         self.workflow_state = 'locked'
         save!
       end
+      # create conference START
+      if event.appointment_group.is_for_live_conference
+        event.appointment_group.appointment_group_contexts.each do |appointment_group_context|
+          @conference = appointment_group_context.context.web_conferences.build(conference_type:  event.appointment_group.live_conference_type ,title: event.title,
+                                                   description: event.description,start_date: event.start_at)
+          @conference.settings[:default_return_url] = options[:conference_return_url]
+          @conference.settings[:record ]= true
+          @conference.user = user
+
+          appointment_group_context.context.teachers.active.each do |teacher|
+            @conference.add_initiator(teacher)
+          end
+          @conference.add_invitee(user)
+          @conference.save!
+          conference_calendar_event_association = event.conference_calendar_event_associations.build(:web_conference_id => @conference.id,:calendar_event_id => event.id)
+          conference_calendar_event_association.save!
+
+        end
+      end
+      # create conference END
       context.clear_cached_available_slots!
       event
     end
