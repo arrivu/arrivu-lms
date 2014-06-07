@@ -881,7 +881,7 @@ a.thumbnail:hover {
 .teacher_image{
   width:42px;
   margin: 0px 10px 3px 0px;
-  margin-top: 17px;
+  margin-top: 13px;
   height: 29px
 }
 .teacher_name{
@@ -890,14 +890,19 @@ a.thumbnail:hover {
   color: black;
   display: inline-table;
   margin-left: 49px;
+  position: absolute;
+}
+.name_without_desc
+{
+  margin-top: -28px;
 }
 .teacher_desc{
   color: black;
   padding: 49px;
   width: 88%;
-  margin-top: -97px;
+  margin-top: -80px;
   margin-left:2px;
-  line-height: 16px;
+  line-height: 14px;
 }
 .author_slider_index_pop_up_view{
   width:260px;
@@ -910,7 +915,7 @@ a.thumbnail:hover {
 .slides_popup{
   width:300px;
   height:75px;
-  margin-top: -3px;
+  margin-top: 8px;
   overflow: hidden;
   position: relative;
   float:left;
@@ -935,7 +940,7 @@ a.thumbnail:hover {
   margin-top: -60px;
   line-height:  16px;
   padding:53px;
-  width: 90%;
+  width: 82%;
 }
 
 .pop_up_items{
@@ -947,6 +952,13 @@ a.thumbnail:hover {
 .margin_bottom{
   margin-bottom: 10px;
 
+}
+
+.poup_teacher_name_without_desc{
+  margin-top: -14px;
+  font-weight: 700;
+  color: black;
+  padding: 20px;
 }
 
 #knowledge_partners_div{
@@ -1158,17 +1170,19 @@ ul{
 #add_popular_courses{
   margin-left: 1110px;
   font-weight: bold;
+  float: right;
+  margin-right: 41px;
 }
 
 #add_account_sliders{
-  margin-left: 1139px;
+  margin-left:  1089px;
 }
 
 #account_sliders{
   margin-top: -14px;
   margin-left: -20px;
   width:103%;
-  height:300px
+  height:280px;
 }
 #add_account_sliders_link{
   margin-bottom:-19px;
@@ -1179,7 +1193,7 @@ ul{
 }
 
 #add_knowledge_partners{
-  margin-right: 15px;
+  float: right;
 }
 
 .main_div{
@@ -1220,12 +1234,12 @@ ul{
 }
 
 .display-ul{
-  margin-top: 40px;
   list-style: none;
-  margin: 0;
+  margin: 40px 58px;
   padding: 0;
   text-align: center;
   display: flex;
+  display: -webkit-box;
 }
 .first_display_li{
   display: list-item;
