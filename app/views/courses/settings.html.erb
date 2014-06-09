@@ -353,6 +353,14 @@
           </td>
       <% end %>
     </tr>
+    <tr>
+       <% if ELEARNING &&  e_learning_enabled %>
+         <td class="form-label"><%= f.blabel :design, :en => "Course Details Page Design" %></td>
+         <td>
+           <%= f.check_box :allow_user_to_design_course_detail_page %>
+           <%= f.label :allow_user_to_design_course_detail_page, :en => "Users can design course details page of their own" %>
+       <% end %>
+    </tr>
     <!--arrivu changes-->
     <tr>
       <td colspan="4">
