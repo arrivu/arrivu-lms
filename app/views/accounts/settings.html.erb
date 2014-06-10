@@ -74,6 +74,9 @@
     <% if ELEARNING && e_learning_enabled %>
         <li><a href="#tab-topics" id="tab-topics-link">Course Topics</a></li>
     <% end  %>
+    <% if ELEARNING && e_learning_enabled %>
+        <li><a href="#tab-course_index_custom_design" id="tab-course_index_custom_design_link">Course Index Page Design</a></li>
+    <% end  %>
   </ul>
   <% if can_do(@context, @current_user, :manage_account_settings) %>
     <div id="tab-settings">
@@ -550,6 +553,15 @@ Allowing Draft State here will allow teachers to enable it in their individual c
             </div>
           <% end %>
         </fieldset>
+        <fieldset>
+          <legend><%= t(:videolink, "Course Index Page Custom Design") %></legend>
+          <% f.fields_for :settings do |settings| %>
+              <div>
+                <%= settings.check_box :course_index_custom_design %>
+                <%= settings.label :course_index_custom_design_label, :en => "Course Index Page Custom Design" %>
+              </div>
+          <% end %>
+        </fieldset>
         <div class="button-container">
           <button type="submit" class="btn btn-primary"><%= t(:update_settings_button, "Update Settings") %></button>
         </div>
@@ -984,7 +996,11 @@ Allowing Draft State here will allow teachers to enable it in their individual c
     <div id="tab-topics">
       <%= render :partial => 'topics/add_topics'%>
     </div>
+ <% end %>
+ <% if ELEARNING && e_learning_enabled %>
+    <div id="tab-course_index_custom_design">
+      <%= render :partial => 'courses/course_index_page_custom_design' %>
+    </div>
 <% end %>
-
 <!--arrivu changes-->
 </div>

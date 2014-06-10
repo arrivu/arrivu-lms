@@ -193,6 +193,7 @@ class Account < ActiveRecord::Base
   add_setting :google_docs_domain, root_only: true
   #arrivu changes to add introduction video
   add_setting :account_video_url
+  add_setting :course_index_custom_page_design, :boolean => true, :root_only => false, :default => false
   #End arrivu changes to add introduction video
   add_setting :dashboard_url, root_only: true
 

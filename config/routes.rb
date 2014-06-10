@@ -447,6 +447,7 @@ routes.draw do
     if ELEARNING
       resources :course_pricings
       resources :course_descriptions
+      resources :course_page_custom_designs
     end
     #Arrivu Changes
   end

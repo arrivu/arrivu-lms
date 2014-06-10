@@ -70,7 +70,8 @@ class Course < ActiveRecord::Base
   #               arrivu changes
                   :topic_name,
                   :topic_id,
-                  :section_privilege_to_students
+                  :section_privilege_to_students,
+                  :allow_user_to_design_course_detail_page
   #               end of arrivu changes
 
   serialize :tab_configuration
@@ -125,6 +126,7 @@ class Course < ActiveRecord::Base
   has_one :course_image
   has_one :popular_course
   has_many :payments
+  has_one :static_content
   #arrivu changes
   include LearningOutcomeContext
   include RubricContext
@@ -2811,6 +2813,7 @@ class Course < ActiveRecord::Base
   add_setting :public_syllabus, :boolean => true, :default => false
   # arrivu changes for section wise privilege for students
   add_setting :section_privilege_to_students, :boolean => true
+  add_setting :allow_user_to_design_course_detail_page, :boolean => true,:default => false
   # end of arrivu changes for section wise privilege for students
   def user_can_manage_own_discussion_posts?(user)
     return true if allow_student_discussion_editing?

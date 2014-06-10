@@ -4232,6 +4232,10 @@ en-GB:
         sections: Sections
         tools: Apps
         users: Users
+        images: Course Images
+        pricings: Course Pricings
+        description: Course Description
+        course_custom_design: Course Custom Design
       titles: 
         edit_navigation: "Edit course navigation"
       transifex_message: "Join the [Arrivu LMS Translation Community](%{transifex_url})"
