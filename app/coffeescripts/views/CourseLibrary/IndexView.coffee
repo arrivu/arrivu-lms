@@ -29,7 +29,7 @@ define [
     teacher_details:(event)->
       event.stopPropagation()
       teacher_id = this.$(event.currentTarget).find(".popup_teacher_name").attr('id')
-      location.href = "#{location.protocol}//#{location.host}/users/#{teacher_id}/details"
+      location.href = "#{location.protocol}//#{location.host}/users/"+teacher_id+"/details"
 
 
 
