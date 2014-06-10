@@ -298,7 +298,6 @@ class ConferencesController < ApplicationController
   def update
     if authorized_action(@conference, @current_user, :update)
       @conference.user ||= @current_user
-      members = get_new_members
       respond_to do |format|
         params[:web_conference].try(:delete, :long_running)
         params[:web_conference].try(:delete, :conference_type)
@@ -309,7 +308,8 @@ class ConferencesController < ApplicationController
             p.destroy
           end
           @conference.add_initiator(@current_user)
-          @conference_users.uniq.each do |u|
+          members = get_new_members
+          members.uniq.each do |u|
             if u.id != @current_user.id
               @conference.add_invitee(u)
             end
@@ -318,10 +318,9 @@ class ConferencesController < ApplicationController
 
           @conference.conference_calendar_event_associations.each do |con|
             CalendarEvent.destroy(con.calendar_event_id)
-            ConferenceCalendarEventAssociation.destroy(con.id)
           end
 
-          @conference_users.uniq.each do |u|
+          members.uniq.each do |u|
             @event = CalendarEvent.new(:title => params[:title], :description => params[:description],
                                        :start_at => params[:start_date], :end_at => params[:start_date])
             @event.context_id = u.id

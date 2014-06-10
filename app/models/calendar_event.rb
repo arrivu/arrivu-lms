@@ -36,7 +36,7 @@ class CalendarEvent < ActiveRecord::Base
 
   belongs_to :context, :polymorphic => true
   has_many :web_conferences
-  has_many :conference_calendar_event_associations, :dependent => :delete_all
+  has_many :conference_calendar_event_associations, :dependent => :destroy
   belongs_to :user
   belongs_to :parent_event, :class_name => 'CalendarEvent', :foreign_key => :parent_calendar_event_id
   has_many :child_events, :class_name => 'CalendarEvent', :foreign_key => :parent_calendar_event_id, :conditions => "calendar_events.workflow_state <> 'deleted'"
@@ -436,6 +436,9 @@ class CalendarEvent < ActiveRecord::Base
       if options[:cancel_existing]
         context.reservations_for(participant).lock.each do |reservation|
           reservation.updating_user = user
+          reservation.conference_calendar_event_associations.each do |conference_calendar_event_association|
+            conference_calendar_event_association.web_conference.destroy
+          end
           reservation.destroy
         end
       end
