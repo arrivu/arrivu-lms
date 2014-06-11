@@ -16,6 +16,9 @@ module Elearning
         add_setting :unlimited,:boolean => true,
                     :root_only => false, :default => false
 
+        add_setting :course_index_custom_design,:boolean => true,
+                    :root_only => false, :default => false
+
       end
     end
   end

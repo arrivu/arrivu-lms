@@ -52,7 +52,7 @@
                     url: location.protocol+"//"+location.host+"/courses/"+$("#course_custom_design_page").attr('rel')+"/course_page_custom_designs",
                     data: {'course_details_page_design':tinyMCE.activeEditor.getContent()},
                     success: function(res){
-                        $.flashMessage('Terms and conditions updated for this account!')
+                        $.flashMessage('Course Details Page design Page are Updated!')
                     },
                     error: function(res){
                         $.flashMessage('There is some errors .Please contact admin')

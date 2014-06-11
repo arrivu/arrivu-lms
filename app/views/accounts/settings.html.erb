@@ -570,7 +570,7 @@ Allowing Draft State here will allow teachers to enable it in their individual c
           <legend><%= t(:videolink, "Course Index Page Custom Design") %></legend>
           <% f.fields_for :settings do |settings| %>
               <div>
-                <%= settings.check_box :course_index_custom_design, :checked => @account.settings[:course_index_custom_page_design] %>
+                <%= settings.check_box :course_index_custom_design, :checked => @account.settings[:course_index_custom_design] %>
                 <%= settings.label :course_index_custom_design_label, :en => "Course Index Page Custom Design" %>
               </div>
           <% end %>

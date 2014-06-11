@@ -1726,4 +1726,7 @@ routes.draw do
   map.subscription_validate '/subscription_validate', :controller => 'subscription', :action => 'validate',:conditions => { :method => :post }
   map.authenticate '/authenticate', :controller => 'subscription', :action => 'authenticate'
   #Arrivu changes(LmsCustomization end)
+  #arrivu changes
+  match '/accounts/:account_id/course_index_custom_design' => 'course_page_custom_designs#course_index_custom_design', :as => :account_course_index_custom_design, :via => :post
+  #arrivu changes
 end
