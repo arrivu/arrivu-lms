@@ -575,6 +575,12 @@ Allowing Draft State here will allow teachers to enable it in their individual c
               </div>
           <% end %>
         </fieldset>
+        <% if ELEARNING %>
+            <legend><%= t(:videolink, "Account Statistics") %></legend>
+            <% f.fields_for :settings do |settings| %>
+           <%= render :partial => 'accounts/account_statistics',:locals => {:settings => settings}%>
+           <% end %>
+        <% end %>
         <div class="button-container">
           <button type="submit" class="btn btn-primary"><%= t(:update_settings_button, "Update Settings") %></button>
         </div>
