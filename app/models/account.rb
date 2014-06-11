@@ -191,10 +191,9 @@ class Account < ActiveRecord::Base
   add_setting :enable_fabulous_quizzes, :boolean => true, :root_only => true, :default => false
   add_setting :js_kaltura_uploader, :boolean => true, :root_only => true, :default => false
   add_setting :google_docs_domain, root_only: true
-  #arrivu changes to add introduction video
+  #arrivu changes
   add_setting :account_video_url
-  add_setting :course_index_custom_page_design, :boolean => true, :root_only => false, :default => false
-  #End arrivu changes to add introduction video
+  #End arrivu changes
   add_setting :dashboard_url, root_only: true
 
   def settings=(hash)

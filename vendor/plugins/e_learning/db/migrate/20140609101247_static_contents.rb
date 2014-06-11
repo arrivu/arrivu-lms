@@ -12,5 +12,6 @@ class StaticContents < ActiveRecord::Migration
   end
 
   def self.down
+    drop_table :static_contents
   end
 end
