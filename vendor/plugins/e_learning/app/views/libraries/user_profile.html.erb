@@ -3,10 +3,6 @@
     jammit_css :course_box
  %>
 <%= form_for :user_profile, :url => user_profile_url(@user_id),:html => {:method=> "get",:id => "user_profile"} do |f| %>
-    <html>
-    <head>
-    </head>
-    <body>
     <div class="instructor-wrapper font-os">
       <div class="container">
             <div class="main_div">
@@ -173,8 +169,6 @@
               </div>
           </div>
         </div>
-    </body>
-    </html>
 <%end %>
 
 <%js_block do %>
