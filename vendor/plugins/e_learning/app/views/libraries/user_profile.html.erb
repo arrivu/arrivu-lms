@@ -144,7 +144,7 @@
                            </tr>
                          </table>
                           <hr style="margin: 6px 0px"> </hr>
-                          <% if course.tags.count >= 1 %>
+                          <% if course.tags.count > 0 %>
                           <span class="text_display">Course Tagged with</span>
                            <ul class="tags" style="list-style-type: none;margin-top: -8px;">
                             <% tags = course.tags.limit(3) %>
@@ -159,7 +159,7 @@
                           <%end %>
                           <%  course_desc = course.course_description.try(:short_description) %>
                           <% if course_desc %>
-                          <p class="desc course_desc" style="margin-top: 3px;float:left;font-size: 12px;margin-left: -15px;margin-bottom: 0px;">
+                          <p class="desc course_desc" style="margin-top: 3px;float:left;font-size: 12px;margin-left: -15px;margin-bottom: -12px">
                             <%= truncate(course_desc, length:125, omission: '...') %>
                           </p>
                           <% end %>
