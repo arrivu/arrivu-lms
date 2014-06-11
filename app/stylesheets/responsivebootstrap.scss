@@ -5789,3 +5789,34 @@ button.close {
     overflow: visible !important;
   }
 }
+
+
+@media (min-width: 415px)and (max-width: 550px) { 
+h1{font-size:33px}
+}
+
+@media (min-width: 200px)and (max-width: 319px){
+  h1{font-size:17px}
+  p{font-size:13px}
+  .small{font-size:13px!important}
+  .teacher_profile_title {font-size:16px}
+  .teacher_description_page_name {font-size:30px}
+  .common_li{border-left: none;}
+}
+@media (min-width: 320px)and (max-width: 414px) {
+  h1{font-size:24px}
+  .common_li{border-left: none;}
+}
+@media (min-width: 350px)and (max-width: 780px) { 
+.web{width:50%}
+.common_li{border-left: none;}
+}
+@media only screen and (max-width: 200px) {
+ h1{font-size:17px}
+  p{font-size:13px}
+  .small{font-size:13px!important}
+  .teacher_profile_title {font-size:16px}
+  .teacher_description_page_name {font-size:30px}
+}
+
+

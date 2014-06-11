@@ -1,0 +1,725 @@
+info it worked if it ends with ok
+verbose cli [ 'node', '/usr/bin/npm', 'install' ]
+info using npm@1.1.4
+info using node@v0.6.12
+verbose config file /home/sysadmin/.npmrc
+verbose config file /usr/etc/npmrc
+verbose config file /usr/share/npm/npmrc
+verbose caching /home/sysadmin/dev/arrivu-lms/package.json
+verbose loadDefaults canvas-lms@0.0.0
+verbose readDependencies: using package.json deps
+verbose where, deps [ '/home/sysadmin/dev/arrivu-lms',
+verbose where, deps   [ 'requirejs',
+verbose where, deps     'uglify-js',
+verbose where, deps     'glob',
+verbose where, deps     'loom',
+verbose where, deps     'fleck',
+verbose where, deps     'testem',
+verbose where, deps     'karma-qunit',
+verbose where, deps     'karma',
+verbose where, deps     'karma-safari-launcher',
+verbose where, deps     'karma-opera-launcher',
+verbose where, deps     'karma-coverage',
+verbose where, deps     'karma-ie-launcher',
+verbose where, deps     'karma-osx-reporter',
+verbose where, deps     'karma-firework-reporter',
+verbose where, deps     'karma-coffee-preprocessor' ] ]
+verbose from cache /home/sysadmin/dev/arrivu-lms/package.json
+info preinstall canvas-lms@0.0.0
+verbose from cache /home/sysadmin/dev/arrivu-lms/package.json
+verbose readDependencies: using package.json deps
+verbose cache add [ 'requirejs@~2.1.10', null ]
+silly cache add: name, spec, args [ undefined, 'requirejs@~2.1.10', [ 'requirejs@~2.1.10', null ] ]
+verbose parsed url { pathname: 'requirejs@~2.1.10',
+verbose parsed url   path: 'requirejs@~2.1.10',
+verbose parsed url   href: 'requirejs@~2.1.10' }
+silly cache add: name, spec, args [ 'requirejs', '~2.1.10', [ 'requirejs', '~2.1.10' ] ]
+verbose parsed url { pathname: '~2.1.10', path: '~2.1.10', href: '~2.1.10' }
+verbose addNamed [ 'requirejs', '~2.1.10' ]
+verbose addNamed [ null, '>=2.1.10- <2.2.0-' ]
+silly name, range, hasData [ 'requirejs', '>=2.1.10- <2.2.0-', false ]
+verbose cache add [ 'uglify-js@~2.4.12', null ]
+silly cache add: name, spec, args [ undefined, 'uglify-js@~2.4.12', [ 'uglify-js@~2.4.12', null ] ]
+verbose parsed url { pathname: 'uglify-js@~2.4.12',
+verbose parsed url   path: 'uglify-js@~2.4.12',
+verbose parsed url   href: 'uglify-js@~2.4.12' }
+silly cache add: name, spec, args [ 'uglify-js', '~2.4.12', [ 'uglify-js', '~2.4.12' ] ]
+verbose parsed url { pathname: '~2.4.12', path: '~2.4.12', href: '~2.4.12' }
+verbose addNamed [ 'uglify-js', '~2.4.12' ]
+verbose addNamed [ null, '>=2.4.12- <2.5.0-' ]
+silly name, range, hasData [ 'uglify-js', '>=2.4.12- <2.5.0-', false ]
+verbose cache add [ 'glob@~3.2.9', null ]
+silly cache add: name, spec, args [ undefined, 'glob@~3.2.9', [ 'glob@~3.2.9', null ] ]
+verbose parsed url { pathname: 'glob@~3.2.9',
+verbose parsed url   path: 'glob@~3.2.9',
+verbose parsed url   href: 'glob@~3.2.9' }
+silly cache add: name, spec, args [ 'glob', '~3.2.9', [ 'glob', '~3.2.9' ] ]
+verbose parsed url { pathname: '~3.2.9', path: '~3.2.9', href: '~3.2.9' }
+verbose addNamed [ 'glob', '~3.2.9' ]
+verbose addNamed [ null, '>=3.2.9- <3.3.0-' ]
+silly name, range, hasData [ 'glob', '>=3.2.9- <3.3.0-', false ]
+verbose cache add [ 'loom@~2.0.0', null ]
+silly cache add: name, spec, args [ undefined, 'loom@~2.0.0', [ 'loom@~2.0.0', null ] ]
+verbose parsed url { pathname: 'loom@~2.0.0',
+verbose parsed url   path: 'loom@~2.0.0',
+verbose parsed url   href: 'loom@~2.0.0' }
+silly cache add: name, spec, args [ 'loom', '~2.0.0', [ 'loom', '~2.0.0' ] ]
+verbose parsed url { pathname: '~2.0.0', path: '~2.0.0', href: '~2.0.0' }
+verbose addNamed [ 'loom', '~2.0.0' ]
+verbose addNamed [ null, '>=2.0.0- <2.1.0-' ]
+silly name, range, hasData [ 'loom', '>=2.0.0- <2.1.0-', false ]
+verbose cache add [ 'fleck@~0.5.1', null ]
+silly cache add: name, spec, args [ undefined, 'fleck@~0.5.1', [ 'fleck@~0.5.1', null ] ]
+verbose parsed url { pathname: 'fleck@~0.5.1',
+verbose parsed url   path: 'fleck@~0.5.1',
+verbose parsed url   href: 'fleck@~0.5.1' }
+silly cache add: name, spec, args [ 'fleck', '~0.5.1', [ 'fleck', '~0.5.1' ] ]
+verbose parsed url { pathname: '~0.5.1', path: '~0.5.1', href: '~0.5.1' }
+verbose addNamed [ 'fleck', '~0.5.1' ]
+verbose addNamed [ null, '>=0.5.1- <0.6.0-' ]
+silly name, range, hasData [ 'fleck', '>=0.5.1- <0.6.0-', false ]
+verbose cache add [ 'testem@~0.3.30', null ]
+silly cache add: name, spec, args [ undefined, 'testem@~0.3.30', [ 'testem@~0.3.30', null ] ]
+verbose parsed url { pathname: 'testem@~0.3.30',
+verbose parsed url   path: 'testem@~0.3.30',
+verbose parsed url   href: 'testem@~0.3.30' }
+silly cache add: name, spec, args [ 'testem', '~0.3.30', [ 'testem', '~0.3.30' ] ]
+verbose parsed url { pathname: '~0.3.30', path: '~0.3.30', href: '~0.3.30' }
+verbose addNamed [ 'testem', '~0.3.30' ]
+verbose addNamed [ null, '>=0.3.30- <0.4.0-' ]
+silly name, range, hasData [ 'testem', '>=0.3.30- <0.4.0-', false ]
+verbose cache add [ 'karma-qunit@~0.1.1', null ]
+silly cache add: name, spec, args [ undefined,
+silly cache add: name, spec, args   'karma-qunit@~0.1.1',
+silly cache add: name, spec, args   [ 'karma-qunit@~0.1.1', null ] ]
+verbose parsed url { pathname: 'karma-qunit@~0.1.1',
+verbose parsed url   path: 'karma-qunit@~0.1.1',
+verbose parsed url   href: 'karma-qunit@~0.1.1' }
+silly cache add: name, spec, args [ 'karma-qunit', '~0.1.1', [ 'karma-qunit', '~0.1.1' ] ]
+verbose parsed url { pathname: '~0.1.1', path: '~0.1.1', href: '~0.1.1' }
+verbose addNamed [ 'karma-qunit', '~0.1.1' ]
+verbose addNamed [ null, '>=0.1.1- <0.2.0-' ]
+silly name, range, hasData [ 'karma-qunit', '>=0.1.1- <0.2.0-', false ]
+verbose cache add [ 'karma@~0.10.9', null ]
+silly cache add: name, spec, args [ undefined, 'karma@~0.10.9', [ 'karma@~0.10.9', null ] ]
+verbose parsed url { pathname: 'karma@~0.10.9',
+verbose parsed url   path: 'karma@~0.10.9',
+verbose parsed url   href: 'karma@~0.10.9' }
+silly cache add: name, spec, args [ 'karma', '~0.10.9', [ 'karma', '~0.10.9' ] ]
+verbose parsed url { pathname: '~0.10.9', path: '~0.10.9', href: '~0.10.9' }
+verbose addNamed [ 'karma', '~0.10.9' ]
+verbose addNamed [ null, '>=0.10.9- <0.11.0-' ]
+silly name, range, hasData [ 'karma', '>=0.10.9- <0.11.0-', false ]
+verbose cache add [ 'karma-safari-launcher@~0.1.1', null ]
+silly cache add: name, spec, args [ undefined,
+silly cache add: name, spec, args   'karma-safari-launcher@~0.1.1',
+silly cache add: name, spec, args   [ 'karma-safari-launcher@~0.1.1', null ] ]
+verbose parsed url { pathname: 'karma-safari-launcher@~0.1.1',
+verbose parsed url   path: 'karma-safari-launcher@~0.1.1',
+verbose parsed url   href: 'karma-safari-launcher@~0.1.1' }
+silly cache add: name, spec, args [ 'karma-safari-launcher',
+silly cache add: name, spec, args   '~0.1.1',
+silly cache add: name, spec, args   [ 'karma-safari-launcher', '~0.1.1' ] ]
+verbose parsed url { pathname: '~0.1.1', path: '~0.1.1', href: '~0.1.1' }
+verbose addNamed [ 'karma-safari-launcher', '~0.1.1' ]
+verbose addNamed [ null, '>=0.1.1- <0.2.0-' ]
+silly name, range, hasData [ 'karma-safari-launcher', '>=0.1.1- <0.2.0-', false ]
+verbose raw, before any munging testem
+verbose url resolving [ 'http://registry.npmjs.org/', './testem' ]
+verbose url resolved http://registry.npmjs.org/testem
+http GET http://registry.npmjs.org/testem
+verbose cache add [ 'karma-opera-launcher@~0.1.0', null ]
+silly cache add: name, spec, args [ undefined,
+silly cache add: name, spec, args   'karma-opera-launcher@~0.1.0',
+silly cache add: name, spec, args   [ 'karma-opera-launcher@~0.1.0', null ] ]
+verbose parsed url { pathname: 'karma-opera-launcher@~0.1.0',
+verbose parsed url   path: 'karma-opera-launcher@~0.1.0',
+verbose parsed url   href: 'karma-opera-launcher@~0.1.0' }
+silly cache add: name, spec, args [ 'karma-opera-launcher',
+silly cache add: name, spec, args   '~0.1.0',
+silly cache add: name, spec, args   [ 'karma-opera-launcher', '~0.1.0' ] ]
+verbose parsed url { pathname: '~0.1.0', path: '~0.1.0', href: '~0.1.0' }
+verbose addNamed [ 'karma-opera-launcher', '~0.1.0' ]
+verbose addNamed [ null, '>=0.1.0- <0.2.0-' ]
+silly name, range, hasData [ 'karma-opera-launcher', '>=0.1.0- <0.2.0-', false ]
+verbose cache add [ 'karma-coverage@~0.1.4', null ]
+silly cache add: name, spec, args [ undefined,
+silly cache add: name, spec, args   'karma-coverage@~0.1.4',
+silly cache add: name, spec, args   [ 'karma-coverage@~0.1.4', null ] ]
+verbose parsed url { pathname: 'karma-coverage@~0.1.4',
+verbose parsed url   path: 'karma-coverage@~0.1.4',
+verbose parsed url   href: 'karma-coverage@~0.1.4' }
+silly cache add: name, spec, args [ 'karma-coverage', '~0.1.4', [ 'karma-coverage', '~0.1.4' ] ]
+verbose parsed url { pathname: '~0.1.4', path: '~0.1.4', href: '~0.1.4' }
+verbose addNamed [ 'karma-coverage', '~0.1.4' ]
+verbose addNamed [ null, '>=0.1.4- <0.2.0-' ]
+silly name, range, hasData [ 'karma-coverage', '>=0.1.4- <0.2.0-', false ]
+verbose cache add [ 'karma-ie-launcher@~0.1.1', null ]
+silly cache add: name, spec, args [ undefined,
+silly cache add: name, spec, args   'karma-ie-launcher@~0.1.1',
+silly cache add: name, spec, args   [ 'karma-ie-launcher@~0.1.1', null ] ]
+verbose parsed url { pathname: 'karma-ie-launcher@~0.1.1',
+verbose parsed url   path: 'karma-ie-launcher@~0.1.1',
+verbose parsed url   href: 'karma-ie-launcher@~0.1.1' }
+silly cache add: name, spec, args [ 'karma-ie-launcher',
+silly cache add: name, spec, args   '~0.1.1',
+silly cache add: name, spec, args   [ 'karma-ie-launcher', '~0.1.1' ] ]
+verbose parsed url { pathname: '~0.1.1', path: '~0.1.1', href: '~0.1.1' }
+verbose addNamed [ 'karma-ie-launcher', '~0.1.1' ]
+verbose addNamed [ null, '>=0.1.1- <0.2.0-' ]
+silly name, range, hasData [ 'karma-ie-launcher', '>=0.1.1- <0.2.0-', false ]
+verbose cache add [ 'karma-osx-reporter@0.0.4', null ]
+silly cache add: name, spec, args [ undefined,
+silly cache add: name, spec, args   'karma-osx-reporter@0.0.4',
+silly cache add: name, spec, args   [ 'karma-osx-reporter@0.0.4', null ] ]
+verbose parsed url { pathname: 'karma-osx-reporter@0.0.4',
+verbose parsed url   path: 'karma-osx-reporter@0.0.4',
+verbose parsed url   href: 'karma-osx-reporter@0.0.4' }
+silly cache add: name, spec, args [ 'karma-osx-reporter',
+silly cache add: name, spec, args   '0.0.4',
+silly cache add: name, spec, args   [ 'karma-osx-reporter', '0.0.4' ] ]
+verbose parsed url { pathname: '0.0.4', path: '0.0.4', href: '0.0.4' }
+verbose addNamed [ 'karma-osx-reporter', '0.0.4' ]
+verbose addNamed [ '0.0.4', '0.0.4' ]
+verbose cache add [ 'karma-firework-reporter@~0.2.3', null ]
+silly cache add: name, spec, args [ undefined,
+silly cache add: name, spec, args   'karma-firework-reporter@~0.2.3',
+silly cache add: name, spec, args   [ 'karma-firework-reporter@~0.2.3', null ] ]
+verbose parsed url { pathname: 'karma-firework-reporter@~0.2.3',
+verbose parsed url   path: 'karma-firework-reporter@~0.2.3',
+verbose parsed url   href: 'karma-firework-reporter@~0.2.3' }
+silly cache add: name, spec, args [ 'karma-firework-reporter',
+silly cache add: name, spec, args   '~0.2.3',
+silly cache add: name, spec, args   [ 'karma-firework-reporter', '~0.2.3' ] ]
+verbose parsed url { pathname: '~0.2.3', path: '~0.2.3', href: '~0.2.3' }
+verbose addNamed [ 'karma-firework-reporter', '~0.2.3' ]
+verbose addNamed [ null, '>=0.2.3- <0.3.0-' ]
+silly name, range, hasData [ 'karma-firework-reporter', '>=0.2.3- <0.3.0-', false ]
+verbose cache add [ 'karma-coffee-preprocessor@0.1.3', null ]
+silly cache add: name, spec, args [ undefined,
+silly cache add: name, spec, args   'karma-coffee-preprocessor@0.1.3',
+silly cache add: name, spec, args   [ 'karma-coffee-preprocessor@0.1.3', null ] ]
+verbose parsed url { pathname: 'karma-coffee-preprocessor@0.1.3',
+verbose parsed url   path: 'karma-coffee-preprocessor@0.1.3',
+verbose parsed url   href: 'karma-coffee-preprocessor@0.1.3' }
+silly cache add: name, spec, args [ 'karma-coffee-preprocessor',
+silly cache add: name, spec, args   '0.1.3',
+silly cache add: name, spec, args   [ 'karma-coffee-preprocessor', '0.1.3' ] ]
+verbose parsed url { pathname: '0.1.3', path: '0.1.3', href: '0.1.3' }
+verbose addNamed [ 'karma-coffee-preprocessor', '0.1.3' ]
+verbose addNamed [ '0.1.3', '0.1.3' ]
+verbose raw, before any munging requirejs
+verbose url resolving [ 'http://registry.npmjs.org/', './requirejs' ]
+verbose url resolved http://registry.npmjs.org/requirejs
+verbose etag "2D0XCZTMN80JPBOLKDVUTY5T3"
+http GET http://registry.npmjs.org/requirejs
+verbose raw, before any munging fleck
+verbose url resolving [ 'http://registry.npmjs.org/', './fleck' ]
+verbose url resolved http://registry.npmjs.org/fleck
+verbose etag "262IZNCMT2FX1V2DPD0RQLJ0C"
+http GET http://registry.npmjs.org/fleck
+verbose raw, before any munging karma-qunit
+verbose url resolving [ 'http://registry.npmjs.org/', './karma-qunit' ]
+verbose url resolved http://registry.npmjs.org/karma-qunit
+verbose etag "2XADCR8MS1PK2MYTW7L3LFV5C"
+http GET http://registry.npmjs.org/karma-qunit
+verbose raw, before any munging karma-safari-launcher
+verbose url resolving [ 'http://registry.npmjs.org/', './karma-safari-launcher' ]
+verbose url resolved http://registry.npmjs.org/karma-safari-launcher
+verbose etag "AVAZSN1D1XYFAUR7VK3GB2N2P"
+http GET http://registry.npmjs.org/karma-safari-launcher
+verbose raw, before any munging uglify-js
+verbose url resolving [ 'http://registry.npmjs.org/', './uglify-js' ]
+verbose url resolved http://registry.npmjs.org/uglify-js
+verbose etag "230PWME6WEC6EJ7M62DYV6A2Z"
+http GET http://registry.npmjs.org/uglify-js
+verbose raw, before any munging glob
+verbose url resolving [ 'http://registry.npmjs.org/', './glob' ]
+verbose url resolved http://registry.npmjs.org/glob
+verbose etag "9HC5ZWQ2WYVJ70CJ3QY7V48YN"
+http GET http://registry.npmjs.org/glob
+verbose raw, before any munging karma-opera-launcher
+verbose url resolving [ 'http://registry.npmjs.org/', './karma-opera-launcher' ]
+verbose url resolved http://registry.npmjs.org/karma-opera-launcher
+verbose etag "2BLSXW49AA24ZRFZ2H8QTDJQ6"
+http GET http://registry.npmjs.org/karma-opera-launcher
+verbose raw, before any munging karma-coverage
+verbose url resolving [ 'http://registry.npmjs.org/', './karma-coverage' ]
+verbose url resolved http://registry.npmjs.org/karma-coverage
+verbose etag "C800J3OAG49W7NTEZ8CLRNCGE"
+http GET http://registry.npmjs.org/karma-coverage
+verbose raw, before any munging karma-ie-launcher
+verbose url resolving [ 'http://registry.npmjs.org/', './karma-ie-launcher' ]
+verbose url resolved http://registry.npmjs.org/karma-ie-launcher
+verbose etag "ECCAG20IO139C7PZ4QC6AK6VY"
+http GET http://registry.npmjs.org/karma-ie-launcher
+verbose raw, before any munging karma-osx-reporter/0.0.4
+verbose url resolving [ 'http://registry.npmjs.org/', './karma-osx-reporter/0.0.4' ]
+verbose url resolved http://registry.npmjs.org/karma-osx-reporter/0.0.4
+verbose etag "66WA9CBZZVBZU0RGAHNKBLKPV"
+http GET http://registry.npmjs.org/karma-osx-reporter/0.0.4
+verbose raw, before any munging karma-firework-reporter
+verbose url resolving [ 'http://registry.npmjs.org/', './karma-firework-reporter' ]
+verbose url resolved http://registry.npmjs.org/karma-firework-reporter
+verbose etag "1T04E2348XEVXDGO9IMT17UDY"
+http GET http://registry.npmjs.org/karma-firework-reporter
+verbose raw, before any munging karma-coffee-preprocessor/0.1.3
+verbose url resolving [ 'http://registry.npmjs.org/',
+verbose url resolving   './karma-coffee-preprocessor/0.1.3' ]
+verbose url resolved http://registry.npmjs.org/karma-coffee-preprocessor/0.1.3
+verbose etag "D4OA3E858X7Y4VS7EEQAWDGS4"
+http GET http://registry.npmjs.org/karma-coffee-preprocessor/0.1.3
+verbose raw, before any munging loom
+verbose url resolving [ 'http://registry.npmjs.org/', './loom' ]
+verbose url resolved http://registry.npmjs.org/loom
+verbose etag "941VCJC9O1DTLQR55V0RU06RS"
+http GET http://registry.npmjs.org/loom
+verbose raw, before any munging karma
+verbose url resolving [ 'http://registry.npmjs.org/', './karma' ]
+verbose url resolved http://registry.npmjs.org/karma
+verbose etag "1QZOYFOMKZWFVW4NQ1YWYYI59"
+http GET http://registry.npmjs.org/karma
+http 304 http://registry.npmjs.org/karma-qunit
+silly get cb [ 304,
+silly get cb   { date: 'Mon, 09 Jun 2014 09:36:44 GMT',
+silly get cb     via: '1.1 varnish',
+silly get cb     'last-modified': 'Mon, 09 Jun 2014 09:36:44 GMT',
+silly get cb     'cache-control': 'max-age=1',
+silly get cb     etag: '"2XADCR8MS1PK2MYTW7L3LFV5C"',
+silly get cb     connection: 'keep-alive',
+silly get cb     'x-served-by': 'cache-syd1623-SYD',
+silly get cb     'x-cache': 'MISS',
+silly get cb     'x-cache-hits': '0',
+silly get cb     'x-timer': 'S1402306604.379551,VS0,VE196',
+silly get cb     vary: 'Accept' } ]
+verbose etag karma-qunit from cache
+silly name, range, hasData 2 [ 'karma-qunit', '>=0.1.1- <0.2.0-', true ]
+silly versions [ 'karma-qunit',
+silly versions   [ '0.0.1', '0.0.2', '0.0.3', '0.1.0', '0.1.1' ] ]
+verbose bin dist [ '0.6-ares1.7.5-evundefined-openssl1.0.1-v83.7.12.22-linux-x64-3.2.0-23-generic',
+verbose bin dist   { shasum: '110d9257420b4a33bffd1a80ee890971c14e3269',
+verbose bin dist     tarball: 'http://registry.npmjs.org/karma-qunit/-/karma-qunit-0.1.1.tgz' } ]
+verbose caching /home/sysadmin/.npm/karma-qunit/0.1.1/package/package.json
+verbose loadDefaults karma-qunit@0.1.1
+http 304 http://registry.npmjs.org/fleck
+silly get cb [ 304,
+silly get cb   { date: 'Mon, 09 Jun 2014 09:36:44 GMT',
+silly get cb     via: '1.1 varnish',
+silly get cb     'last-modified': 'Mon, 09 Jun 2014 09:36:44 GMT',
+silly get cb     'cache-control': 'max-age=1',
+silly get cb     etag: '"262IZNCMT2FX1V2DPD0RQLJ0C"',
+silly get cb     connection: 'keep-alive',
+silly get cb     'x-served-by': 'cache-syd1621-SYD',
+silly get cb     'x-cache': 'MISS',
+silly get cb     'x-cache-hits': '0',
+silly get cb     'x-timer': 'S1402306604.371227,VS0,VE234',
+silly get cb     vary: 'Accept' } ]
+verbose etag fleck from cache
+silly name, range, hasData 2 [ 'fleck', '>=0.5.1- <0.6.0-', true ]
+silly versions [ 'fleck', [ '0.5.0', '0.5.1' ] ]
+verbose bin dist [ '0.6-ares1.7.5-evundefined-openssl1.0.1-v83.7.12.22-linux-x64-3.2.0-23-generic',
+verbose bin dist   { shasum: '4d25e3c30eba2d8c0f3f0dae02554f0311ebf078',
+verbose bin dist     tarball: 'http://registry.npmjs.org/fleck/-/fleck-0.5.1.tgz' } ]
+verbose caching /home/sysadmin/.npm/fleck/0.5.1/package/package.json
+verbose loadDefaults fleck@0.5.1
+http 304 http://registry.npmjs.org/requirejs
+silly get cb [ 304,
+silly get cb   { date: 'Mon, 09 Jun 2014 09:36:44 GMT',
+silly get cb     via: '1.1 varnish',
+silly get cb     'last-modified': 'Mon, 09 Jun 2014 09:36:44 GMT',
+silly get cb     'cache-control': 'max-age=1',
+silly get cb     etag: '"2D0XCZTMN80JPBOLKDVUTY5T3"',
+silly get cb     connection: 'keep-alive',
+silly get cb     'x-served-by': 'cache-syd1621-SYD',
+silly get cb     'x-cache': 'HIT',
+silly get cb     'x-cache-hits': '1',
+silly get cb     'x-timer': 'S1402306604.383688,VS0,VE206',
+silly get cb     vary: 'Accept' } ]
+verbose etag requirejs from cache
+silly name, range, hasData 2 [ 'requirejs', '>=2.1.10- <2.2.0-', true ]
+silly versions [ 'requirejs',
+silly versions   [ '0.26.0',
+silly versions     '0.27.0',
+silly versions     '0.27.1',
+silly versions     '1.0.0',
+silly versions     '1.0.1',
+silly versions     '1.0.2',
+silly versions     '1.0.3',
+silly versions     '1.0.4',
+silly versions     '1.0.5',
+silly versions     '1.0.6',
+silly versions     '1.0.7',
+silly versions     '1.0.8',
+silly versions     '2.0.0',
+silly versions     '2.0.1',
+silly versions     '2.0.2',
+silly versions     '2.0.3',
+silly versions     '2.0.4',
+silly versions     '2.0.5',
+silly versions     '2.0.6',
+silly versions     '2.1.0',
+silly versions     '2.1.1',
+silly versions     '2.1.2',
+silly versions     '2.1.3',
+silly versions     '2.1.4',
+silly versions     '2.1.5',
+silly versions     '2.1.6',
+silly versions     '2.1.7',
+silly versions     '2.1.8',
+silly versions     '2.1.9',
+silly versions     '2.1.10',
+silly versions     '2.1.11',
+silly versions     '2.1.12',
+silly versions     '2.1.13',
+silly versions     '2.1.14' ] ]
+verbose bin dist [ '0.6-ares1.7.5-evundefined-openssl1.0.1-v83.7.12.22-linux-x64-3.2.0-23-generic',
+verbose bin dist   { shasum: 'de00290aa526192ff8df4dc0ba9370ce399a76b0',
+verbose bin dist     tarball: 'http://registry.npmjs.org/requirejs/-/requirejs-2.1.14.tgz' } ]
+verbose addRemoteTarball [ 'http://registry.npmjs.org/requirejs/-/requirejs-2.1.14.tgz',
+verbose addRemoteTarball   'de00290aa526192ff8df4dc0ba9370ce399a76b0' ]
+verbose mkdir (expected) error ENOENT, no such file or directory '/tmp/npm-1402306600018'
+verbose mkdir (expected) error ENOENT, no such file or directory '/tmp/npm-1402306600018/1402306600018-0.7038072010036558'
+verbose mkdir done: /tmp/npm-1402306600018/1402306600018-0.7038072010036558 755
+verbose fetch to /tmp/npm-1402306600018/1402306600018-0.7038072010036558/tmp.tgz
+http GET http://registry.npmjs.org/requirejs/-/requirejs-2.1.14.tgz
+http 304 http://registry.npmjs.org/karma-safari-launcher
+silly get cb [ 304,
+silly get cb   { date: 'Mon, 09 Jun 2014 09:36:44 GMT',
+silly get cb     via: '1.1 varnish',
+silly get cb     'last-modified': 'Mon, 09 Jun 2014 09:36:44 GMT',
+silly get cb     'cache-control': 'max-age=1',
+silly get cb     etag: '"AVAZSN1D1XYFAUR7VK3GB2N2P"',
+silly get cb     connection: 'keep-alive',
+silly get cb     'x-served-by': 'cache-syd1621-SYD',
+silly get cb     'x-cache': 'MISS',
+silly get cb     'x-cache-hits': '0',
+silly get cb     'x-timer': 'S1402306604.426189,VS0,VE202',
+silly get cb     vary: 'Accept' } ]
+verbose etag karma-safari-launcher from cache
+silly name, range, hasData 2 [ 'karma-safari-launcher', '>=0.1.1- <0.2.0-', true ]
+silly versions [ 'karma-safari-launcher',
+silly versions   [ '0.0.1', '0.0.2', '0.0.3', '0.1.0', '0.1.1' ] ]
+verbose bin dist [ '0.6-ares1.7.5-evundefined-openssl1.0.1-v83.7.12.22-linux-x64-3.2.0-23-generic',
+verbose bin dist   { shasum: 'a6380accab60a583fdd624f41b9a3f10fdf41008',
+verbose bin dist     tarball: 'http://registry.npmjs.org/karma-safari-launcher/-/karma-safari-launcher-0.1.1.tgz' } ]
+verbose caching /home/sysadmin/.npm/karma-safari-launcher/0.1.1/package/package.json
+verbose loadDefaults karma-safari-launcher@0.1.1
+http 304 http://registry.npmjs.org/uglify-js
+silly get cb [ 304,
+silly get cb   { date: 'Mon, 09 Jun 2014 09:36:44 GMT',
+silly get cb     via: '1.1 varnish',
+silly get cb     'last-modified': 'Mon, 09 Jun 2014 09:36:45 GMT',
+silly get cb     'cache-control': 'max-age=1',
+silly get cb     etag: '"230PWME6WEC6EJ7M62DYV6A2Z"',
+silly get cb     connection: 'keep-alive',
+silly get cb     'x-served-by': 'cache-syd1623-SYD',
+silly get cb     'x-cache': 'HIT',
+silly get cb     'x-cache-hits': '1',
+silly get cb     'x-timer': 'S1402306604.940515,VS0,VE202',
+silly get cb     vary: 'Accept' } ]
+verbose etag uglify-js from cache
+silly name, range, hasData 2 [ 'uglify-js', '>=2.4.12- <2.5.0-', true ]
+silly versions [ 'uglify-js',
+silly versions   [ '0.0.1',
+silly versions     '0.0.2',
+silly versions     '0.0.3',
+silly versions     '0.0.4',
+silly versions     '0.0.5',
+silly versions     '1.0.1',
+silly versions     '1.0.2',
+silly versions     '1.0.3',
+silly versions     '1.0.4',
+silly versions     '1.0.5',
+silly versions     '1.0.6',
+silly versions     '1.0.7',
+silly versions     '1.1.0',
+silly versions     '1.1.1',
+silly versions     '1.2.0',
+silly versions     '1.2.1',
+silly versions     '1.2.2',
+silly versions     '1.2.3',
+silly versions     '1.2.4',
+silly versions     '1.2.5',
+silly versions     '1.2.6',
+silly versions     '1.3.0',
+silly versions     '1.3.1',
+silly versions     '1.3.2',
+silly versions     '1.3.3',
+silly versions     '1.3.4',
+silly versions     '2.2.0',
+silly versions     '2.2.1',
+silly versions     '2.2.2',
+silly versions     '2.2.3',
+silly versions     '2.2.4',
+silly versions     '2.2.5',
+silly versions     '2.3.0',
+silly versions     '2.3.1',
+silly versions     '2.3.2',
+silly versions     '2.3.3',
+silly versions     '2.3.4',
+silly versions     '2.3.5',
+silly versions     '2.3.6',
+silly versions     '1.3.5',
+silly versions     '2.4.0',
+silly versions     '2.4.1',
+silly versions     '2.4.2',
+silly versions     '2.4.3',
+silly versions     '2.4.4',
+silly versions     '2.4.5',
+silly versions     '2.4.6',
+silly versions     '2.4.7',
+silly versions     '2.4.8',
+silly versions     '2.4.9',
+silly versions     '2.4.10',
+silly versions     '2.4.11',
+silly versions     '2.4.12',
+silly versions     '2.4.13' ] ]
+verbose bin dist [ '0.6-ares1.7.5-evundefined-openssl1.0.1-v83.7.12.22-linux-x64-3.2.0-23-generic',
+verbose bin dist   { shasum: '18debc9e6ecfc20db1a5ea035f839d436a605aba',
+verbose bin dist     tarball: 'http://registry.npmjs.org/uglify-js/-/uglify-js-2.4.13.tgz' } ]
+verbose addRemoteTarball [ 'http://registry.npmjs.org/uglify-js/-/uglify-js-2.4.13.tgz',
+verbose addRemoteTarball   '18debc9e6ecfc20db1a5ea035f839d436a605aba' ]
+verbose mkdir (expected) error ENOENT, no such file or directory '/tmp/npm-1402306600018/1402306600564-0.8760442389175296'
+verbose mkdir done: /tmp/npm-1402306600018/1402306600564-0.8760442389175296 755
+verbose fetch to /tmp/npm-1402306600018/1402306600564-0.8760442389175296/tmp.tgz
+http GET http://registry.npmjs.org/uglify-js/-/uglify-js-2.4.13.tgz
+http 304 http://registry.npmjs.org/karma-opera-launcher
+silly get cb [ 304,
+silly get cb   { date: 'Mon, 09 Jun 2014 09:36:44 GMT',
+silly get cb     via: '1.1 varnish',
+silly get cb     'last-modified': 'Mon, 09 Jun 2014 09:36:45 GMT',
+silly get cb     'cache-control': 'max-age=1',
+silly get cb     etag: '"2BLSXW49AA24ZRFZ2H8QTDJQ6"',
+silly get cb     connection: 'keep-alive',
+silly get cb     'x-served-by': 'cache-syd1621-SYD',
+silly get cb     'x-cache': 'MISS',
+silly get cb     'x-cache-hits': '0',
+silly get cb     'x-timer': 'S1402306604.975462,VS0,VE206',
+silly get cb     vary: 'Accept' } ]
+verbose etag karma-opera-launcher from cache
+silly name, range, hasData 2 [ 'karma-opera-launcher', '>=0.1.0- <0.2.0-', true ]
+silly versions [ 'karma-opera-launcher', [ '0.0.2', '0.1.0' ] ]
+verbose bin dist [ '0.6-ares1.7.5-evundefined-openssl1.0.1-v83.7.12.22-linux-x64-3.2.0-23-generic',
+verbose bin dist   { shasum: '751c89db4e686a8327d291f19a58b34f00dbd078',
+verbose bin dist     tarball: 'http://registry.npmjs.org/karma-opera-launcher/-/karma-opera-launcher-0.1.0.tgz' } ]
+verbose caching /home/sysadmin/.npm/karma-opera-launcher/0.1.0/package/package.json
+verbose loadDefaults karma-opera-launcher@0.1.0
+http 304 http://registry.npmjs.org/glob
+silly get cb [ 304,
+silly get cb   { date: 'Mon, 09 Jun 2014 09:36:44 GMT',
+silly get cb     via: '1.1 varnish',
+silly get cb     'last-modified': 'Mon, 09 Jun 2014 09:36:45 GMT',
+silly get cb     'cache-control': 'max-age=1',
+silly get cb     etag: '"9HC5ZWQ2WYVJ70CJ3QY7V48YN"',
+silly get cb     connection: 'keep-alive',
+silly get cb     'x-served-by': 'cache-syd1621-SYD',
+silly get cb     'x-cache': 'MISS',
+silly get cb     'x-cache-hits': '0',
+silly get cb     'x-timer': 'S1402306604.967213,VS0,VE423',
+silly get cb     vary: 'Accept' } ]
+verbose etag glob from cache
+silly name, range, hasData 2 [ 'glob', '>=3.2.9- <3.3.0-', true ]
+silly versions [ 'glob',
+silly versions   [ '1.1.0',
+silly versions     '2.1.0',
+silly versions     '3.0.0',
+silly versions     '3.0.1',
+silly versions     '3.1.0',
+silly versions     '3.1.1',
+silly versions     '3.1.2',
+silly versions     '3.1.3',
+silly versions     '3.1.4',
+silly versions     '3.1.5',
+silly versions     '3.1.6',
+silly versions     '3.1.7',
+silly versions     '3.1.9',
+silly versions     '3.1.10',
+silly versions     '3.1.11',
+silly versions     '3.1.12',
+silly versions     '3.1.13',
+silly versions     '3.1.14',
+silly versions     '3.1.15',
+silly versions     '3.1.16',
+silly versions     '3.1.17',
+silly versions     '3.1.18',
+silly versions     '3.1.19',
+silly versions     '3.1.20',
+silly versions     '3.1.21',
+silly versions     '3.2.0',
+silly versions     '3.2.1',
+silly versions     '3.2.3',
+silly versions     '3.2.4',
+silly versions     '3.2.5',
+silly versions     '3.2.6',
+silly versions     '3.2.7',
+silly versions     '3.2.8',
+silly versions     '3.2.9',
+silly versions     '3.2.10',
+silly versions     '3.2.11',
+silly versions     '4.0.0',
+silly versions     '4.0.1',
+silly versions     '4.0.2' ] ]
+verbose bin dist [ '0.6-ares1.7.5-evundefined-openssl1.0.1-v83.7.12.22-linux-x64-3.2.0-23-generic',
+verbose bin dist   { shasum: '4a973f635b9190f715d10987d5c00fd2815ebe3d',
+verbose bin dist     tarball: 'http://registry.npmjs.org/glob/-/glob-3.2.11.tgz' } ]
+http 304 http://registry.npmjs.org/karma-coverage
+silly get cb [ 304,
+silly get cb   { date: 'Mon, 09 Jun 2014 09:36:44 GMT',
+silly get cb     via: '1.1 varnish',
+silly get cb     'last-modified': 'Mon, 09 Jun 2014 09:36:45 GMT',
+silly get cb     'cache-control': 'max-age=1',
+silly get cb     etag: '"C800J3OAG49W7NTEZ8CLRNCGE"',
+silly get cb     connection: 'keep-alive',
+silly get cb     'x-served-by': 'cache-syd1621-SYD',
+silly get cb     'x-cache': 'MISS',
+silly get cb     'x-cache-hits': '0',
+silly get cb     'x-timer': 'S1402306604.979706,VS0,VE431',
+silly get cb     vary: 'Accept' } ]
+verbose etag karma-coverage from cache
+verbose caching /home/sysadmin/.npm/glob/3.2.11/package/package.json
+verbose loadDefaults glob@3.2.11
+silly name, range, hasData 2 [ 'karma-coverage', '>=0.1.4- <0.2.0-', true ]
+silly versions [ 'karma-coverage',
+silly versions   [ '0.0.1',
+silly versions     '0.0.2',
+silly versions     '0.0.3',
+silly versions     '0.0.4',
+silly versions     '0.0.5',
+silly versions     '0.1.0',
+silly versions     '0.1.1',
+silly versions     '0.1.2',
+silly versions     '0.1.3',
+silly versions     '0.1.4',
+silly versions     '0.1.5',
+silly versions     '0.2.0',
+silly versions     '0.2.1',
+silly versions     '0.2.2',
+silly versions     '0.2.3',
+silly versions     '0.2.4' ] ]
+verbose bin dist [ '0.6-ares1.7.5-evundefined-openssl1.0.1-v83.7.12.22-linux-x64-3.2.0-23-generic',
+verbose bin dist   { shasum: 'a4dcbe87d4a7765456ca64218b5f0601018e1371',
+verbose bin dist     tarball: 'http://registry.npmjs.org/karma-coverage/-/karma-coverage-0.1.5.tgz' } ]
+verbose caching /home/sysadmin/.npm/karma-coverage/0.1.5/package/package.json
+verbose loadDefaults karma-coverage@0.1.5
+http 304 http://registry.npmjs.org/karma-ie-launcher
+silly get cb [ 304,
+silly get cb   { date: 'Mon, 09 Jun 2014 09:36:45 GMT',
+silly get cb     via: '1.1 varnish',
+silly get cb     'last-modified': 'Mon, 09 Jun 2014 09:36:45 GMT',
+silly get cb     'cache-control': 'max-age=1',
+silly get cb     etag: '"ECCAG20IO139C7PZ4QC6AK6VY"',
+silly get cb     connection: 'keep-alive',
+silly get cb     'x-served-by': 'cache-syd1623-SYD',
+silly get cb     'x-cache': 'MISS',
+silly get cb     'x-cache-hits': '0',
+silly get cb     'x-timer': 'S1402306605.507715,VS0,VE192',
+silly get cb     vary: 'Accept' } ]
+verbose etag karma-ie-launcher from cache
+silly name, range, hasData 2 [ 'karma-ie-launcher', '>=0.1.1- <0.2.0-', true ]
+silly versions [ 'karma-ie-launcher',
+silly versions   [ '0.0.1', '0.1.0', '0.1.1', '0.1.2', '0.1.3', '0.1.4', '0.1.5' ] ]
+verbose bin dist [ '0.6-ares1.7.5-evundefined-openssl1.0.1-v83.7.12.22-linux-x64-3.2.0-23-generic',
+verbose bin dist   { shasum: 'ee43bd238f61c45dd8fbc1694b13a50dfb5a3e1b',
+verbose bin dist     tarball: 'http://registry.npmjs.org/karma-ie-launcher/-/karma-ie-launcher-0.1.5.tgz' } ]
+verbose caching /home/sysadmin/.npm/karma-ie-launcher/0.1.5/package/package.json
+verbose loadDefaults karma-ie-launcher@0.1.5
+http 304 http://registry.npmjs.org/karma-osx-reporter/0.0.4
+silly get cb [ 304,
+silly get cb   { date: 'Mon, 09 Jun 2014 09:36:45 GMT',
+silly get cb     via: '1.1 varnish',
+silly get cb     'last-modified': 'Mon, 09 Jun 2014 09:36:45 GMT',
+silly get cb     'cache-control': 'max-age=1',
+silly get cb     etag: '"66WA9CBZZVBZU0RGAHNKBLKPV"',
+silly get cb     connection: 'keep-alive',
+silly get cb     'x-served-by': 'cache-syd1621-SYD',
+silly get cb     'x-cache': 'MISS',
+silly get cb     'x-cache-hits': '0',
+silly get cb     'x-timer': 'S1402306605.617805,VS0,VE206',
+silly get cb     vary: 'Accept' } ]
+verbose etag karma-osx-reporter/0.0.4 from cache
+verbose bin dist [ '0.6-ares1.7.5-evundefined-openssl1.0.1-v83.7.12.22-linux-x64-3.2.0-23-generic',
+verbose bin dist   { shasum: '65ef7ed2af56b82e43b9bc9028c04b87ab93fd96',
+verbose bin dist     tarball: 'http://registry.npmjs.org/karma-osx-reporter/-/karma-osx-reporter-0.0.4.tgz' } ]
+verbose caching /home/sysadmin/.npm/karma-osx-reporter/0.0.4/package/package.json
+verbose loadDefaults karma-osx-reporter@0.0.4
+http 304 http://registry.npmjs.org/karma-coffee-preprocessor/0.1.3
+silly get cb [ 304,
+silly get cb   { date: 'Mon, 09 Jun 2014 09:36:45 GMT',
+silly get cb     via: '1.1 varnish',
+silly get cb     'last-modified': 'Mon, 09 Jun 2014 09:36:45 GMT',
+silly get cb     'cache-control': 'max-age=1',
+silly get cb     etag: '"D4OA3E858X7Y4VS7EEQAWDGS4"',
+silly get cb     connection: 'keep-alive',
+silly get cb     'x-served-by': 'cache-syd1621-SYD',
+silly get cb     'x-cache': 'MISS',
+silly get cb     'x-cache-hits': '0',
+silly get cb     'x-timer': 'S1402306605.768382,VS0,VE188',
+silly get cb     vary: 'Accept' } ]
+verbose etag karma-coffee-preprocessor/0.1.3 from cache
+verbose bin dist [ '0.6-ares1.7.5-evundefined-openssl1.0.1-v83.7.12.22-linux-x64-3.2.0-23-generic',
+verbose bin dist   { shasum: '98137a9e4981b0c9084f8856ef7d4f83d8783152',
+verbose bin dist     tarball: 'http://registry.npmjs.org/karma-coffee-preprocessor/-/karma-coffee-preprocessor-0.1.3.tgz' } ]
+verbose caching /home/sysadmin/.npm/karma-coffee-preprocessor/0.1.3/package/package.json
+verbose loadDefaults karma-coffee-preprocessor@0.1.3
+http 304 http://registry.npmjs.org/karma-firework-reporter
+silly get cb [ 304,
+silly get cb   { date: 'Mon, 09 Jun 2014 09:36:45 GMT',
+silly get cb     via: '1.1 varnish',
+silly get cb     'last-modified': 'Mon, 09 Jun 2014 09:36:45 GMT',
+silly get cb     'cache-control': 'max-age=1',
+silly get cb     etag: '"1T04E2348XEVXDGO9IMT17UDY"',
+silly get cb     connection: 'keep-alive',
+silly get cb     'x-served-by': 'cache-syd1621-SYD',
+silly get cb     'x-cache': 'MISS',
+silly get cb     'x-cache-hits': '0',
+silly get cb     'x-timer': 'S1402306605.750390,VS0,VE228',
+silly get cb     vary: 'Accept' } ]
+verbose etag karma-firework-reporter from cache
+silly name, range, hasData 2 [ 'karma-firework-reporter', '>=0.2.3- <0.3.0-', true ]
+silly versions [ 'karma-firework-reporter', [ '0.2.1', '0.2.2', '0.2.3' ] ]
+verbose bin dist [ '0.6-ares1.7.5-evundefined-openssl1.0.1-v83.7.12.22-linux-x64-3.2.0-23-generic',
+verbose bin dist   { shasum: '991edd3f19c6e4a97011b6c0cb051f93f9916eed',
+verbose bin dist     tarball: 'http://registry.npmjs.org/karma-firework-reporter/-/karma-firework-reporter-0.2.3.tgz' } ]
+verbose caching /home/sysadmin/.npm/karma-firework-reporter/0.2.3/package/package.json
+verbose loadDefaults karma-firework-reporter@0.2.3
+http 200 http://registry.npmjs.org/requirejs/-/requirejs-2.1.14.tgz
+http 200 http://registry.npmjs.org/uglify-js/-/uglify-js-2.4.13.tgz
+http 304 http://registry.npmjs.org/karma
+silly get cb [ 304,
+silly get cb   { date: 'Mon, 09 Jun 2014 09:36:46 GMT',
+silly get cb     via: '1.1 varnish',
+silly get cb     'last-modified': 'Mon, 09 Jun 2014 09:36:46 GMT',
+silly get cb     'cache-control': 'max-age=1',
+silly get cb     etag: '"1QZOYFOMKZWFVW4NQ1YWYYI59"',
+silly get cb     connection: 'keep-alive',
+silly get cb     'x-served-by': 'cache-syd1621-SYD',
+silly get cb     'x-cache': 'HIT',
+silly get cb     'x-cache-hits': '1',
+silly get cb     'x-timer': 'S1402306606.199415,VS0,VE477',
+silly get cb     vary: 'Accept' } ]
+verbose etag karma from cache
+silly name, range, hasData 2 [ 'karma', '>=0.10.9- <0.11.0-', true ]
+silly versions [ 'karma', [] ]
+ERR! Error: No compatible version found: karma@'>=0.10.9- <0.11.0-'
+ERR! No valid targets found.
+ERR! Perhaps not compatible with your version of node?
+ERR!     at installTargetsError (/usr/share/npm/lib/cache.js:488:10)
+ERR!     at next_ (/usr/share/npm/lib/cache.js:438:17)
+ERR!     at next (/usr/share/npm/lib/cache.js:415:44)
+ERR!     at /usr/share/npm/lib/cache.js:408:5
+ERR!     at saved (/usr/share/npm/lib/utils/npm-registry-client/get.js:147:7)
+ERR!     at Object.oncomplete (/usr/lib/nodejs/graceful-fs.js:230:7)
+ERR! You may report this log at:
+ERR!     <http://bugs.debian.org/npm>
+ERR! or use
+ERR!     reportbug --attach /home/sysadmin/dev/arrivu-lms/npm-debug.log npm
+ERR! 
+ERR! System Linux 3.2.0-23-generic
+ERR! command "node" "/usr/bin/npm" "install"
+ERR! cwd /home/sysadmin/dev/arrivu-lms
+ERR! node -v v0.6.12
+ERR! npm -v 1.1.4
+ERR! message No compatible version found: karma@'>=0.10.9- <0.11.0-'
+ERR! message No valid targets found.
+ERR! message Perhaps not compatible with your version of node?
+verbose exit [ 1, true ]
