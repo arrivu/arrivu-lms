@@ -9,10 +9,12 @@
          {{#t "manage_popular_course"}}Manage Popular Course{{/t}}
 </a>
 {{/if}}
-<div class="resource-row" style="margin-top: 100px;">
-<ul class="collectionViewItems " style="list-style-type: none;text-align: center;">
+{{#if collection.length}}
+<div class="resource-row row" style="margin-top: 100px;">
+<ul class="collectionViewItems row " style="list-style-type: none;text-align: center;">
 
 </ul>
+{{/if}}
 </div>
 {{#if ENV.popular_courses_count}}
   <a href="/libraries" id="more_courses" class="browseourcoursessmall" style="margin-top: -37px;position: absolute;margin-left: 1146px;">See More Courses</a>

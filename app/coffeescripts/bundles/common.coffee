@@ -51,6 +51,8 @@ require [
   'compiled/badge_counts'
   'fix_facebook_oauth'
   'home_page_header'
+  'solo_teacher_account'
+  'login_popup'
 ], ($, Backbone, courseList, helpDialog, tours) ->
   courseList.init()
   helpDialog.initTriggers()

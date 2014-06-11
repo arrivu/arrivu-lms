@@ -2505,6 +2505,7 @@ en:
       details: "Details:"
       group_category: "Group Category"
       group_signup: "Have students sign up in groups."
+      group_signup: "Have students sign up in groups."
       location: Location
       name: Name
       time_range: "Time Range"
@@ -3767,6 +3768,7 @@ en:
           edit_module: Edit
         title: 
           delete_module: "Delete this module"
+          delete_module_group: "Delete this module group"
           edit_module: Edit
           student_progress: "See Student Progress for this Module"
       manage: "Manage Module"

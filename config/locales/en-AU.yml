@@ -304,7 +304,7 @@ en-AU:
     add_user_button: "Add User"
     add_user_dialog_title: "Add a New User"
     add_solo_teacher_dialog_title: "Get a  Solo Teacher Account"
-    E-learning_login_pop_up: "Log In"
+    e_learning_login_pop_up: "Log In"
     adding_course_message: "Adding Course..."
     adding_user_message: "Adding User..."
     logging_message: "Logging In..."
@@ -2173,6 +2173,7 @@ en-AU:
       details: "Details:"
       group_category: "Group Category"
       group_signup: "Have students sign up in groups."
+      live_conference: "Live Conference"
       location: Location
       name: Name
       time_range: "Time Range"
@@ -3275,6 +3276,7 @@ en-AU:
           edit_module: Edit
         title: 
           delete_module: "Delete this module"
+          delete_module_group: "Delete this module group"
           edit_module: "Edit module settings"
           student_progress: "See Student Progress for this Module"
       manage: Manage
@@ -5390,8 +5392,13 @@ en-AU:
       upload_account_sliders: "Upload Sliders"
       upload_knowledge_partner_logo: "Upload KnowledgePartner Logo"
   course_pricings:
-    delete : "Delete Price of"
+    delete: "Delete Price of"
     course_price_deleted_message: "Price deleted successfully!"
+    course_price_saved_message: "Course Price saved successfully!"
+  account_tags:
+    account_tag_saved_message: "Tags Updated successfully!"
+    account_tag_deleted_message: "Tag deleted successfully!"
+    delete: "Delete Account Tag"
   #arrivu changes
   facebook: 
     authorization_required: "Only authorized users can access that page"
@@ -11721,7 +11728,7 @@ en-AU:
         settings: Settings
         sign_up_as_teacher: "Sign Up as a Teacher"
         sign_up_as_solo_teacher: "Get a solo teacher account"
-        E-learning_login_pop_up: "Log In"
+        e_learning_login_pop_up: "Log In"
       masquerading: 
         as: "As: *%{user_name}*"
     inline_preview: 

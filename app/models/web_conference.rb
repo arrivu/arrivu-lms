@@ -22,7 +22,7 @@ class WebConference < ActiveRecord::Base
   attr_accessible :title, :duration, :description, :conference_type, :user, :user_settings, :context, :start_date
   attr_readonly :context_id, :context_type
   belongs_to :context, :polymorphic => true
-  has_many :web_conference_participants
+  has_many :web_conference_participants, :dependent => :destroy
   has_many :conference_calendar_event_associations, :dependent => :destroy
   has_many :users, :through => :web_conference_participants
   has_many :invitees, :through => :web_conference_participants, :source => :user, :conditions => ['web_conference_participants.participation_type = ?', 'invitee']
@@ -392,11 +392,19 @@ class WebConference < ActiveRecord::Base
     given { |user, session| self.cached_context_grants_right?(user, session, :manage_content) }
     can :read and can :join and can :initiate and can :create and can :delete
     
-    given { |user, session| cached_context_grants_right?(user, session, :manage_content) && !finished? }
+    given { |user, session| cached_context_grants_right?(user, session, :manage_content) && !finished? && check_for_appoitment_group}
     can :update
     
     given { |user, session| cached_context_grants_right?(user, session, :manage_content) && long_running? && active? }
     can :close
+  end
+
+  def check_for_appoitment_group
+    self.conference_calendar_event_associations.each do |conference_calendar_event_association|
+      if conference_calendar_event_association.calendar_event.appointment_group && conference_calendar_event_association.calendar_event.appointment_group.is_for_live_conference
+        return false
+      end
+    end
   end
   
   def config

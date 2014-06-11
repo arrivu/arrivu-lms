@@ -71,12 +71,25 @@
             <li><a href="#tab-plugins" id="tab-plugin-link">Plugins</a></li>
         <% end %>
     <% end %>
+    <!--e-learning-->
     <% if ELEARNING && e_learning_enabled %>
         <li><a href="#tab-topics" id="tab-topics-link">Course Topics</a></li>
     <% end  %>
     <% if ELEARNING && e_learning_enabled %>
         <li><a href="#tab-course_index_custom_design" id="tab-course_index_custom_design_link">Course Index Page Design</a></li>
     <% end  %>
+    <% if Account.site_admin.grants_right?(@current_user, :manage_site_settings) %>
+        <% if can_do(@context, @current_user, :manage_account_settings) %>
+            <li><a href="#tab-tags" id="tab-tags-link">Tags</a></li>
+        <% end %>
+    <% end %>
+    <% if Account.site_admin.grants_right?(@current_user, :manage_site_settings) %>
+        <% if can_do(@context, @current_user, :manage_account_settings) %>
+            <li><a href="#tab-subscription-settings" id="tab-subscription-settings-link">Subscription</a></li>
+        <% end %>
+    <% end %>
+
+    <!--end of e-learning-->
   </ul>
   <% if can_do(@context, @current_user, :manage_account_settings) %>
     <div id="tab-settings">
@@ -1002,5 +1015,18 @@ Allowing Draft State here will allow teachers to enable it in their individual c
       <%= render :partial => 'courses/course_index_page_custom_design' %>
     </div>
 <% end %>
+
+<% if ELEARNING %>
+    <div id="tab-tags">
+      <%= render :partial => 'accounts/tags' %>
+    </div>
+<% end %>
+
+<% if ELEARNING  %>
+    <div id="tab-subscription-settings-link">
+      <%= render :partial => 'accounts/subscription_settings'%>
+    </div>
+<% end %>
+
 <!--arrivu changes-->
 </div>

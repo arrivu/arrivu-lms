@@ -100,6 +100,9 @@ define [
       $form.find(".user_list").attr("disabled", true).loadingImage()
 
     showResults: (userList) ->
+      if userList.error
+        return $.flashError (userList.error)
+
       $form.find(".add_users_button, .go_back_button, #user_list_parsed").show()
       $form.find(".add_users_button").attr("disabled", false).focus().text I18n.t("add_n_users",
         one: "OK Looks Good, Add This 1 User"

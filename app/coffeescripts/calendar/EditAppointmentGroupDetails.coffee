@@ -24,6 +24,7 @@ define [
           {use_group_signup: @apptGroup.participant_type is 'Group'}
           @apptGroup
         )
+        conferenceTypes: ENV.conferenceTypes
       })
 
       @contextsHash = {}
@@ -48,6 +49,12 @@ define [
           @form.find(".group-signup-checkbox").prop('checked', false)
 
         $(".reservation_help").click @openHelpDialog
+
+        if @apptGroup.is_for_live_conference
+          @form.find(".live-conference-checkbox").prop('checked', true)
+        else
+          @form.find(".live-conference-checkbox").prop('checked', false)
+
       else
         # FIXME: put this url in ENV json or something
         @form.attr('action', '/api/v1/appointment_groups')
@@ -145,11 +152,16 @@ define [
 
     save: (publish) =>
       data = @form.getFormData(object_name: 'appointment_group')
+      if $(".live-conference-checkbox").prop('checked') == true
+        selected_conference = $( "#web_conference_conference_type" ).val()
+        create_conference = true
 
       params = {
         'appointment_group[title]': data.title
         'appointment_group[description]': data.description
         'appointment_group[location_name]': data.location
+        'live_conference': create_conference
+        'conference_type': selected_conference
       }
 
       if data.max_appointments_per_participant_option is '1'

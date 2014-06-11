@@ -163,6 +163,7 @@ class LibrariesController < ApplicationController
   def create_sub_account
     @sub_account = @context.sub_accounts.build(name: params[:sub_account_name][:account])
     @sub_account.root_account = @context.root_account
+    @sub_account.settings[:Sublime_sub_account_disable] =true
     @sub_account.save
     @user.flag_as_admin(@sub_account,'AccountAdmin', false)
   end

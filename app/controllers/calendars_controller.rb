@@ -19,6 +19,7 @@
 class CalendarsController < ApplicationController
   before_filter :require_user, :except => [ :public_feed ]
   before_filter :check_preferred_calendar, :only => [ :show, :show2 ]
+  include Api::V1::Conferences
 
   def show
     get_context
@@ -111,6 +112,7 @@ class CalendarsController < ApplicationController
       end
       info
     end
+    js_env(conferenceTypes: conference_types_json(WebConference.conference_types))
     Api.recursively_stringify_json_ids(@contexts_json)
   end
 

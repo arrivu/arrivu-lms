@@ -2,7 +2,7 @@ class Payment < ActiveRecord::Base
 
   attr_accessible :course_id,:user_id,:token, :identifier, :payer_id,:recurring, :digital, :popup, :completed, :canceled,
                   :amount, :title, :description
-  validates_uniqueness_of :token
+
   validates_presence_of :amount
   validates_uniqueness_of :identifier, uniqueness: true, :allow_blank => true, :allow_nil => true
   scope :recurring, where(recurring: true)

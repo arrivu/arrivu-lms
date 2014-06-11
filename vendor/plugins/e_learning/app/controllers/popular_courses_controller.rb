@@ -91,7 +91,7 @@ class PopularCoursesController < ApplicationController
       @instructure_details << @instructue_json
     else
       @user_id = User.find(@teachers.user_id)
-      if @user_id.profile.bio !=nil && @user_id.profile.title !=nil
+      if @user_id.profile.bio !=nil
         @profile = @user_id.profile.bio
         if @user_id.avatar_image_url.nil?
           @profile_pict = "/images/User.png"
