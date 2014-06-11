@@ -13,6 +13,8 @@ css_compressor: 'sass'
 <%= plugin_assets.bundle_yml %>
 
 javascripts:
+#  bootstrap_js:
+#    - public/javascripts/jquery.js
   referral_rewards:
     - public/javascripts/plugins/referral_rewards/javascripts/compiled/bundles/rewards.js
 stylesheets:
@@ -211,6 +213,8 @@ stylesheets:
   jquery_minicolors:
     - public/stylesheets/compiled/jquery_minicolors.css
   bootstrap_and_responsive:
-    - public/stylesheets/compiled/bootstrap/bootstrap.css
-    - public/stylesheets/compiled/bootstrap/responsive.css
+    - public/stylesheets/compiled/responsivebootstrap.css
+    - public/stylesheets/compiled/bootstrap_responsive.css
+
+
   <%= plugin_assets.anchors_yml %>

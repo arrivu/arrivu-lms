@@ -4,10 +4,12 @@
 </div>
 {{/if}}
 {{#if ENV.PERMISSIONS.enable_links}}
+<div id="add_link" style="width:100%;">
 <a href="#" id="add_popular_courses"  class="edit_letter_grades_link">
     <i class="icon-settings"></i>
          {{#t "manage_popular_course"}}Manage Popular Course{{/t}}
 </a>
+</div>
 {{/if}}
 {{#if collection.length}}
 <div class="resource-row" style="margin-top: 100px;">

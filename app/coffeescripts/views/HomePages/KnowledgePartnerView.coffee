@@ -13,5 +13,5 @@ define [
     afterRender: ->
       @$el.attr('id', 'knowledge_partner_' + @model.get('id'))
       @$el.css('display','inline-block')
-      @$el.css('width','279px','margin-top','21px')
+      @$el.css('margin-top','21px')
       this

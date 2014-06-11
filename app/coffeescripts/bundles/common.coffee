@@ -53,6 +53,7 @@ require [
   'home_page_header'
   'solo_teacher_account'
   'login_popup'
+  'bootstrap'
 ], ($, Backbone, courseList, helpDialog, tours) ->
   courseList.init()
   helpDialog.initTriggers()
@@ -77,3 +78,5 @@ require [
   $('body').on 'click', '[data-pushstate]', (event) ->
     event.preventDefault()
     Backbone.history.navigate $(this).attr('href'), yes
+
+#  $(".collapse").collapse()
