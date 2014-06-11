@@ -153,6 +153,8 @@ module Api::V1::CalendarEvent
     hash['participant_type'] = group.participant_type
     hash['url'] = api_v1_appointment_group_url(group)
     hash['html_url'] = appointment_group_url(hash['id'])
+    hash['is_for_live_conference'] = group.is_for_live_conference
+
     hash
   ensure
     @context = orig_context

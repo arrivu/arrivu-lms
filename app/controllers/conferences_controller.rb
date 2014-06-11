@@ -183,13 +183,14 @@ class ConferencesController < ApplicationController
     end
     @users = scope.where("users.id<>?", @current_user).order(User.sortable_name_order_by_clause).all.uniq
     # exposing the initial data as json embedded on page.
+    @course_sections = @context.is_a?(Course) ? @context.course_sections.active : []
     js_env(
         current_conferences: ui_conferences_json(@new_conferences, @context, @current_user, session),
         concluded_conferences: ui_conferences_json(@concluded_conferences, @context, @current_user, session),
         default_conference: default_conference_json(@context, @current_user, session),
         conference_type_details: conference_types_json(WebConference.conference_types),
         users: @users.map { |u| {:id => u.id, :name => u.last_name_first} },
-        course_sections: @context.course_sections.active,
+        course_sections: @course_sections,
         current_date_time: Time.now
     )
   end
@@ -297,7 +298,6 @@ class ConferencesController < ApplicationController
   def update
     if authorized_action(@conference, @current_user, :update)
       @conference.user ||= @current_user
-      members = get_new_members
       respond_to do |format|
         params[:web_conference].try(:delete, :long_running)
         params[:web_conference].try(:delete, :conference_type)
@@ -308,7 +308,8 @@ class ConferencesController < ApplicationController
             p.destroy
           end
           @conference.add_initiator(@current_user)
-          @conference_users.uniq.each do |u|
+          members = get_new_members
+          members.uniq.each do |u|
             if u.id != @current_user.id
               @conference.add_invitee(u)
             end
@@ -317,10 +318,9 @@ class ConferencesController < ApplicationController
 
           @conference.conference_calendar_event_associations.each do |con|
             CalendarEvent.destroy(con.calendar_event_id)
-            ConferenceCalendarEventAssociation.destroy(con.id)
           end
 
-          @conference_users.uniq.each do |u|
+          members.uniq.each do |u|
             @event = CalendarEvent.new(:title => params[:title], :description => params[:description],
                                        :start_at => params[:start_date], :end_at => params[:start_date])
             @event.context_id = u.id

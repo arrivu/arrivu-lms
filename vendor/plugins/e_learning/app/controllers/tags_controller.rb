@@ -29,12 +29,12 @@ class TagsController < ApplicationController
   end
 
   def destroy
-    @delete_tag = ActsAsTaggableOn::Tag.find_by_id(params[:id])
+    @tag = ActsAsTaggableOn::Tag.find_by_id(params[:id])
     respond_to do |format|
-      if @delete_tag.destroy
-        format.json { render :json => @delete_tag }
+      if @tag.destroy
+        format.json { render :json => @tag }
       else
-        format.json { render :json => @delete_tag.errors.to_json, :status => :bad_request }
+        format.json { render :json => @tag.errors.to_json, :status => :bad_request }
       end
     end
   end

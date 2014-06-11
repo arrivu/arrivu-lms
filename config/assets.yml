@@ -127,6 +127,8 @@ stylesheets:
     - public/stylesheets/compiled/grading_standards.css
   login:
     - public/stylesheets/compiled/login.css
+  login_box:
+      - public/stylesheets/compiled/login_box.css
   otp_login:
     - public/stylesheets/compiled/otp_login.css
   roster:
@@ -210,4 +212,6 @@ stylesheets:
       - public/stylesheets/compiled/topics_listing.css
   jquery_minicolors:
     - public/stylesheets/compiled/jquery_minicolors.css
+  login_box:
+    - public/stylesheets/compiled/login_box.css
   <%= plugin_assets.anchors_yml %>

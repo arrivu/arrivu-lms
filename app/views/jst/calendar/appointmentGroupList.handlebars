@@ -42,6 +42,12 @@
             <span>{{location_name}}</span>
           </div>
         {{/if}}
+         {{#if is_for_live_conference}}
+          <div class="ag-location">
+              <strong> <img src="images/live_conference.png" alt="Live Conference"/> </strong>
+              <span>Its a live conference</span>
+          </div>
+        {{/if}}
         {{#if description}}
           <p class="ag-description">{{newlinesToBreak description}}</p>
         {{/if}}

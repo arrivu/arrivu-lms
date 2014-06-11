@@ -881,7 +881,7 @@ a.thumbnail:hover {
 .teacher_image{
   width:42px;
   margin: 0px 10px 3px 0px;
-  margin-top: 17px;
+  margin-top: 13px;
   height: 29px
 }
 .teacher_name{
@@ -890,6 +890,11 @@ a.thumbnail:hover {
   color: black;
   display: inline-table;
   margin-left: 49px;
+  position: absolute;
+}
+.name_without_desc
+{
+  margin-top: -28px;
 }
 .name_without_desc
 {
@@ -899,9 +904,9 @@ a.thumbnail:hover {
   color: black;
   padding: 49px;
   width: 88%;
-  margin-top: -97px;
+  margin-top: -80px;
   margin-left:2px;
-  line-height: 16px;
+  line-height: 14px;
 }
 .author_slider_index_pop_up_view{
   width:260px;
@@ -1169,10 +1174,12 @@ ul{
 #add_popular_courses{
   margin-left: 1110px;
   font-weight: bold;
+  float: right;
+  margin-right: 41px;
 }
 
 #add_account_sliders{
-  margin-left: 1139px;
+  margin-left:  1089px;
 }
 
 #account_sliders{
@@ -1190,7 +1197,7 @@ ul{
 }
 
 #add_knowledge_partners{
-  margin-right: 15px;
+  float: right;
 }
 
 .main_div{

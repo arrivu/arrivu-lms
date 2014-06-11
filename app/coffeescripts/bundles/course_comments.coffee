@@ -2,6 +2,7 @@ require [
   'jquery'
   'compiled/views/CourseComments/CourseCommentsCollectionView'
   'compiled/collections/CourseCommentsCollection'
+  'course_details'
 ], ($,CourseCommentsCollectionView,CourseCommentsCollection) ->
 
   class CourseComments extends Backbone.View
