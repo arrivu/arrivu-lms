@@ -5474,6 +5474,11 @@ en-GB:
   course_pricings:
     delete : "Delete Price of"
     course_price_deleted_message: "Price deleted successfully!"
+    course_price_saved_message: "Course Price saved successfully!"
+  account_tags:
+      account_tag_saved_message: "Tags Updated successfully!"
+      account_tag_deleted_message: "Tag deleted successfully!"
+      delete: "Delete Account Tag"
   #arrivu changes
 
   facebook: 
