@@ -16,6 +16,8 @@ module Elearning
         add_setting :unlimited,:boolean => true,
                     :root_only => false, :default => false
 
+        add_setting :account_statistics,:boolean => true,
+                    :root_only => false, :default => true
       end
     end
   end
