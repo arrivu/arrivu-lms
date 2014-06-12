@@ -667,6 +667,9 @@ en-AU:
       global_js_and_css_includes_description: "These files will be included on all page loads for your account"
       global_js_and_css_includes_title: "Global JavaScript and CSS Includes"
       videolink: "Video Link"
+      course_index_custom_design: "Course Index Page Custom Design"
+      account_statistics: "Account Statistics"
+      account_index_page_custom_design: "Account Index Page Custom Design"
       headers: 
         report_last_run: "Last Run"
         report_name: Name

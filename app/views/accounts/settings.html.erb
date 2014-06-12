@@ -570,7 +570,7 @@ Allowing Draft State here will allow teachers to enable it in their individual c
           <% end %>
         </fieldset>
         <fieldset>
-          <legend><%= t(:videolink, "Course Index Page Custom Design") %></legend>
+          <legend><%= t(:course_index_custom_design, "Course Index Page Custom Design") %></legend>
           <% f.fields_for :settings do |settings| %>
               <div>
                 <%= settings.check_box :course_index_custom_design, :checked => @account.settings[:course_index_custom_design] %>
@@ -579,7 +579,7 @@ Allowing Draft State here will allow teachers to enable it in their individual c
           <% end %>
         </fieldset>
         <% if ELEARNING %>
-            <legend><%= t(:videolink, "Account Statistics") %></legend>
+            <legend><%= t(:account_statistics, "Account Statistics") %></legend>
             <% f.fields_for :settings do |settings| %>
            <%= render :partial => 'accounts/account_statistics',:locals => {:settings => settings}%>
            <% end %>
