@@ -1728,5 +1728,6 @@ routes.draw do
   #Arrivu changes(LmsCustomization end)
   #arrivu changes
   match '/accounts/:account_id/course_index_custom_design' => 'course_page_custom_designs#course_index_custom_design', :as => :account_course_index_custom_design, :via => :post
+  match '/accounts/:account_id/account_index_custom_design' => 'course_page_custom_designs#account_index_custom_design', :as => :account_index_page_custom_design, :via => :post
   #arrivu changes
 end

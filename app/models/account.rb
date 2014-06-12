@@ -70,7 +70,7 @@ class Account < ActiveRecord::Base
   has_one :account_header
   has_many :knowledge_partners
   has_many :account_sliders
-  has_one :static_content
+  has_many :static_content
   def inherited_assessment_question_banks(include_self = false, *additional_contexts)
     sql = []
     conds = []

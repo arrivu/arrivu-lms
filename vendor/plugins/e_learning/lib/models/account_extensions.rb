@@ -21,6 +21,9 @@ module Elearning
 
         add_setting :account_statistics,:boolean => true,
                     :root_only => false, :default => true
+
+        add_setting :account_index_page_custom_design, :boolean => true,
+                    :root_only => false, :default => false
       end
     end
   end
