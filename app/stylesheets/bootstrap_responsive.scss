@@ -132,7 +132,7 @@
     width: 370px;
   }
   .span3 {
-    width: 322px;
+    width: 270px;
   }
   .span2 {
     width: 170px;
@@ -717,9 +717,6 @@
     padding-right: 0px;
     padding-left: 0px;
   }
-  .span3{
-    width: 322px;
-  }
   .navbar-fixed-top, .navbar-fixed-bottom, .navbar-static-top {
     margin-right: -20px;
     margin-left: -20px;
@@ -797,50 +794,7 @@
   }
 }
 
-@media (max-width: 480px) {
-  .nav-collapse {
-    -webkit-transform: translate3d(0, 0, 0);
-  }
-  .page-header h1 small {
-    display: block;
-    line-height: 20px;
-  }
-  input {
-    &[type="checkbox"], &[type="radio"] {
-      border: 1px solid #ccc;
-    }
-  }
-  .form-horizontal {
-    .control-label {
-      float: none;
-      width: auto;
-      padding-top: 0;
-      text-align: left;
-    }
-    .controls {
-      margin-left: 0;
-    }
-    .control-list {
-      padding-top: 0;
-    }
-    .form-actions {
-      padding-right: 10px;
-      padding-left: 10px;
-    }
-  }
-  .modal {
-    top: 10px;
-    right: 10px;
-    left: 10px;
-  }
-  .modal-header .close {
-    padding: 10px;
-    margin: -10px;
-  }
-  .carousel-caption {
-    position: static;
-  }
-}
+
 #identity {
   margin-top: -35px;
 }
@@ -1082,7 +1036,6 @@
   }
   #header-logo{
     bottom: -30px;
-
   }
   #header{
     min-height: 100px !important;
@@ -1346,33 +1299,37 @@
   margin-left: 2%;
 }
 
-@media all and (max-width: 450px){
-  #account_sliders{
-    height: 250px !important;
-  }
-  .slides{
-    height: 250px !important;
-  }
-  .account_slider_item
-  {
-    height: 250px !important;
-  }
-  .account_slider_item img{
-    height: 250px !important;
-  }
-  .panel, .panel div{
-    height: 250px !important;
-  }
-  .span3{
-    width: 85%;
-  }
-  .popular_course_item
-  {}
-    .span3{
-      width: 75%;
-  }
-  h1 {
-    font-size: 25px;
-    line-height: 40px;
-  }
+//@media all and (max-width: 450px){
+//  #account_sliders{
+//    height: 250px !important;
+//  }
+//  .slides{
+//    height: 250px !important;
+//  }
+//  .account_slider_item
+//  {
+//    height: 250px !important;
+//  }
+//  .account_slider_item img{
+//    height: 250px !important;
+//  }
+//  .panel, .panel div{
+//    height: 250px !important;
+//  }
+//  .span3{
+//    width: 85%;
+//  }
+//  .popular_course_item
+//  {}
+//    .span3{
+//      width: 75%;
+//  }
+//  h1 {
+//    font-size: 25px;
+//    line-height: 40px;
+//  }
+//
+//}
+.small{
+  font-size:14px;
 }
