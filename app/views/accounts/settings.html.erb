@@ -74,12 +74,16 @@
     <!--e-learning-->
     <% if ELEARNING && e_learning_enabled %>
         <li><a href="#tab-topics" id="tab-topics-link">Course Topics</a></li>
-        <% if @context.settings[:course_index_custom_design] %>
-           <li><a href="#tab-course_index_custom_design" id="tab-course_index_custom_design_link">Course Index Page Design</a></li>
-        <% end %>
-        <% if @context.settings[:account_index_page_custom_design] %>
-          <li><a href="#tab-account_index_custom_design" id="tab-account_index_custom_design_link">Account Index Page Design</a></li>
-        <% end %>
+    <%end %>
+    <% if ELEARNING %>
+      <% if @context.settings[:course_index_custom_design] %>
+         <li><a href="#tab-course_index_custom_design" id="tab-course_index_custom_design_link">Course Index Page Design</a></li>
+       <% end %>
+    <% end %>
+    <% if ELEARNING  %>
+      <% if @context.settings[:account_index_page_custom_design] %>
+        <li><a href="#tab-account_index_custom_design" id="tab-account_index_custom_design_link">Account Index Page Design</a></li>
+      <% end %>
     <% end  %>
     <% if Account.site_admin.grants_right?(@current_user, :manage_site_settings) %>
         <% if can_do(@context, @current_user, :manage_account_settings) %>
@@ -1018,6 +1022,8 @@ Allowing Draft State here will allow teachers to enable it in their individual c
     <div id="tab-topics">
       <%= render :partial => 'topics/add_topics'%>
     </div>
+  <% end %>
+  <% if ELEARNING %>
     <% if @context.settings[:course_index_custom_design] %>
     <div id="tab-course_index_custom_design">
       <%= render :partial => 'courses/course_index_page_custom_design' %>
@@ -1032,8 +1038,9 @@ Allowing Draft State here will allow teachers to enable it in their individual c
     <div id="tab-subscription-settings-link">
       <%= render :partial => 'accounts/subscription_settings'%>
     </div>
-    <div id="tab-account_index_custom_design">
+
       <% if @context.settings[:account_index_page_custom_design] %>
+        <div id="tab-account_index_custom_design">
        <%= render :partial => 'accounts/account_index_page_custom_settings' %>
       <% end %>
     </div>

@@ -19,7 +19,7 @@
                   class="rich_editor"
                   name="account_index_custom_template_txt"
                   style="width: 800px;"
-        ><% if content = @context.static_content.find_or_initialize_by_content_type("Account_index") %>
+        ><% if content = @context.static_content.find_by_content_type("Account_index")%>
               <%= content.page_desc if @context.settings[:account_index_page_custom_design]  %>
           <% end %>
         </textarea>

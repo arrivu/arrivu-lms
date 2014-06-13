@@ -93,6 +93,7 @@
     <% end %>
 
   </div>
+  <% if @context.comments.count > 0 %>
   <div class="xrightcol3">
     <h1>Reviews</h1>
     <% @comments.each do |comment| %>
@@ -118,6 +119,7 @@
     <a class="btn btn-primary" id="comments_review" style="margin-left: 20%;border-radius: 0px;margin-bottom: 10px;">
       SEE ALL <%= @total_count%> REVIEWS </a>
   </div>
+  <% end %>
   <div class="xmiddlecol3">
     <div class="xinner3">
     <h1 style="border-bottom: 1px solid lightgray;" y>Full course description</h1>
