@@ -1,0 +1,2 @@
+module CourseDetailsPageCustomDesignHelper
+end

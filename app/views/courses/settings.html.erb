@@ -41,13 +41,18 @@
       <li id="feature_flags_tab"><a href="#tab-features" id="tab-features-link"><%= t('tabs.feature_options', %{Feature Options}) %></a></li>
   <% end %>
   <% if ELEARNING && e_learning_enabled %>
-      <li id="images_tab"><a href="#tab-images" id="tab-images-link"><%= t('tabs.images', %{Course Images}) %></a></li></li>
+      <li id="images_tab"><a href="#tab-images" id="tab-images-link"><%= t('tabs.images', %{Course Images}) %></a></li>
   <% end %>
   <% if ELEARNING && e_learning_enabled %>
-      <li id="pricings_tab"><a href="#tab-pricings" id="tab-pricings-link"><%= t('tabs.pricings', %{Course Pricings}) %></a></li></li>
+      <li id="pricings_tab"><a href="#tab-pricings" id="tab-pricings-link"><%= t('tabs.pricings', %{Course Pricings}) %></a></li>
   <% end %>
   <%if ELEARNING && e_learning_enabled %>
-      <li id="description_tab"><a href="#tab-description" id="tab-descriptions-link"><%= t('tabs.description', %{Course Description}) %></a></li></li>
+      <li id="description_tab"><a href="#tab-description" id="tab-descriptions-link"><%= t('tabs.description', %{Course Description}) %></a></li>
+  <% end %>
+  <% if ELEARNING && e_learning_enabled %>
+      <% if @context.settings[:allow_user_to_design_course_detail_page] %>
+      <li id="course_custom_design_tab"><a href="#tab-course_custom_design" id="tab-course_custom_design-link"><%= t('tabs.course_custom_design', %{Course Custom Design}) %></a></li>
+      <% end %>
   <% end %>
 </ul>
 <div id="tab-details">
@@ -353,6 +358,14 @@
           </td>
       <% end %>
     </tr>
+    <tr>
+       <% if ELEARNING &&  e_learning_enabled %>
+         <td class="form-label"><%= f.blabel :design, :en => "Course Details Page Design" %></td>
+         <td>
+           <%= f.check_box :allow_user_to_design_course_detail_page %>
+           <%= f.label :allow_user_to_design_course_detail_page, :en => "Course detail Custom design" %>
+       <% end %>
+    </tr>
     <!--arrivu changes-->
     <tr>
       <td colspan="4">
@@ -654,7 +667,15 @@
     <%= render :partial => "courses/course_description" %>
 <% end %>
 </div><!-- end course details tab -->
-
+<!--e-learning changes-->
+<% if ELEARNING && e_learning_enabled %>
+<% if @context.settings[:allow_user_to_design_course_detail_page] %>
+<div id="tab-course_custom_design">
+  <%= render :partial => "courses/course_custom_page_design" %>
+</div>
+<% end %>
+<% end %>
+<!--end of e-learning-->
 <% if Account.site_admin.grants_right?(@current_user, nil, :manage_courses) %>
   <div id="move_course_dialog" style="display: none;">
     <h2><%= t('headings.move_course', %{Move the course to another root account}) %></h2>

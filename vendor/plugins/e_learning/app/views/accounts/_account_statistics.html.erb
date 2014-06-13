@@ -4,4 +4,10 @@
                              :checked => @account.account_statistics?  %>
     <%= settings.label :account_statistics, :en => "Enable Account Statistics" %></td>
 </tr>
+
+<legend style="margin-top: 24px;"><%= t(:account_index_page_custom_design, "Account Index Page Custom Design") %></legend>
+<tr>
+  <td><%= settings.check_box :account_index_page_custom_design, :checked =>@domain_root_account.settings[:account_index_page_custom_design] %>
+    <%= settings.label :account_index_custom_design_label, :en => "Account Index Page Custom Design" %></td>
+</tr>
 <!--e-learning changes-->

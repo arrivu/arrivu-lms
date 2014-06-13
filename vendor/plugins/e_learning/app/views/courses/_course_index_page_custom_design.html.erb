@@ -1,0 +1,87 @@
+<%
+   jammit_css :tinymce
+%>
+<div id="course_index_page_custom_design" rel="<%= @domain_root_account.id %>">
+  <table class="formtable" style="width: 100%">
+    <tr>
+      <td>
+        <%= "Design Your Course Index Page" %>
+      </td>
+    </tr>
+    <div style="float: right;">
+      <a href="#" class="course_index_views_link" style="display: inline;">HTML Editor</a>
+      <a href="#" class="course_index_visual_link" style="display: none;">Visual Editor</a>
+    </div>
+    <tr>
+      <td>
+        <textarea rows="10" cols="240"
+                  id="course_index_page_content"
+                  class="rich_editor"
+                  name="course_custom_template_txt"
+                  style="width: 800px;"
+        ><% if content =  StaticContent.find_or_initialize_by_content_type('Course_index') %>
+          <%= content.page_desc if @context.settings[:course_index_custom_design]  %>
+         <% end %>
+        </textarea>
+
+      </td>
+    <tr>
+      <td>
+        <div class="button-container">
+          <!--<a href="<%= :back %>" class="btn dialog_closer">Cancel</a>-->
+          <button id="course_design_page_submit" type="submit" class="btn btn-primary submit_button"><%="Submit" %></button>
+        </div>
+      </td>
+    </tr>
+  </table>
+
+</div>
+
+<% js_block do %>
+    <script type="text/javascript">
+        require([
+            'jquery' /* $ */,
+            'compiled/tinymce',
+            'tinymce.editor_box',
+            'jquery.disableWhileLoading'
+        ], function($) {
+            setTimeout((function() {
+                tinymce.execCommand("mceAddControl", true, "course_content");
+                return  $("#course_index_page_content").editorBox();
+            }), 1000);
+            $("#course_design_page_submit").click(function() {
+                $("#content").disableWhileLoading($.ajax({
+                    type: 'POST',
+                    url: location.protocol+"//"+location.host+"/accounts/"+$("#course_index_page_custom_design").attr('rel')+"/course_index_custom_design",
+                    data: {'course_details_page_design':tinyMCE.activeEditor.getContent(),
+                            'content_type': "Course_index"},
+                    success: function(res){
+                        $.flashMessage('Course Index design updated for this account!')
+                    },
+                    error: function(res){
+                        $.flashMessage('There is some errors .Please contact admin')
+                    }
+                })
+                );
+            });
+            $('#course_index_page_custom_design .course_index_views_link').click(function(event) {
+                $('.course_index_views_link').hide();
+                $('.course_index_visual_link').show();
+                $("#course_index_page_content").show();
+                $("#course_index_page_content_tbl").hide();
+                $("#course_index_page_content").val("");
+                $("#course_index_page_content").val(tinyMCE.get('course_index_page_content').getContent());
+            });
+            $('#course_index_page_custom_design .course_index_visual_link').click(function(event) {
+                $('.course_index_visual_link').hide();
+                $('.course_index_views_link').show();
+                $("#course_index_page_content").hide();
+                $("#course_index_page_content_tbl").show();
+                var val = $("#course_index_page_content").val();
+                tinyMCE.get('course_index_page_content').startContent = '';
+                tinyMCE.get('course_index_page_content').startContent = val;
+                tinyMCE.get('course_index_page_content').setContent(val);
+            });
+        });
+    </script>
+<% end %>

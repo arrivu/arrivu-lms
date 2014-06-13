@@ -70,6 +70,7 @@ class Account < ActiveRecord::Base
   has_one :account_header
   has_many :knowledge_partners
   has_many :account_sliders
+  has_many :static_content
   def inherited_assessment_question_banks(include_self = false, *additional_contexts)
     sql = []
     conds = []
@@ -191,9 +192,9 @@ class Account < ActiveRecord::Base
   add_setting :enable_fabulous_quizzes, :boolean => true, :root_only => true, :default => false
   add_setting :js_kaltura_uploader, :boolean => true, :root_only => true, :default => false
   add_setting :google_docs_domain, root_only: true
-  #arrivu changes to add introduction video
+  #arrivu changes
   add_setting :account_video_url
-  #End arrivu changes to add introduction video
+  #End arrivu changes
   add_setting :dashboard_url, root_only: true
 
   def settings=(hash)

@@ -1,0 +1,87 @@
+<%
+   jammit_css :tinymce
+%>
+<div id="account_index_page_custom_design" rel="<%= @domain_root_account.id %>">
+  <table class="formtable" style="width: 100%">
+    <tr>
+      <td>
+        <%= "Design Your Account Index Page" %>
+      </td>
+    </tr>
+    <div style="float: right;">
+      <a href="#" class="account_index_views_link" style="display: inline;">HTML Editor</a>
+      <a href="#" class="account_index_visual_link" style="display: none;">Visual Editor</a>
+    </div>
+    <tr>
+      <td>
+        <textarea rows="10" cols="240"
+                  id="account_index_page_content"
+                  class="rich_editor"
+                  name="account_index_custom_template_txt"
+                  style="width: 800px;"
+        ><% if content = @context.static_content.find_or_initialize_by_content_type("Account_index") %>
+              <%= content.page_desc if @context.settings[:account_index_page_custom_design]  %>
+          <% end %>
+        </textarea>
+
+      </td>
+    <tr>
+      <td>
+        <div class="button-container">
+          <!--<a href="<%= :back %>" class="btn dialog_closer">Cancel</a>-->
+          <button id="account_index_design_page_submit" type="submit" class="btn btn-primary submit_button"><%="Submit" %></button>
+        </div>
+      </td>
+    </tr>
+  </table>
+
+</div>
+
+<% js_block do %>
+    <script type="text/javascript">
+        require([
+            'jquery' /* $ */,
+            'compiled/tinymce',
+            'tinymce.editor_box',
+            'jquery.disableWhileLoading'
+        ], function($) {
+            setTimeout((function() {
+                tinymce.execCommand("mceAddControl", true, "course_content");
+                return  $("#account_index_page_content").editorBox();
+            }), 1000);
+            $("#account_index_design_page_submit").click(function() {
+                $("#content").disableWhileLoading($.ajax({
+                    type: 'POST',
+                    url: location.protocol+"//"+location.host+"/accounts/"+$("#account_index_page_custom_design").attr('rel')+"/account_index_custom_design",
+                    data: {'account_index_page_content':tinyMCE.activeEditor.getContent(),
+                        'content_type': "Account_index"},
+                    success: function(res){
+                        $.flashMessage(' Account Index Page Design updated!')
+                    },
+                    error: function(res){
+                        $.flashMessage('There is some errors .Please contact admin')
+                    }
+                })
+                );
+            });
+            $('#account_index_page_custom_design .account_index_views_link').click(function(event) {
+                $('.account_index_views_link').hide();
+                $('.account_index_visual_link').show();
+                $("#account_index_page_content").show();
+                $("#account_index_page_content_tbl").hide();
+                $("#account_index_page_content").val("");
+                $("#account_index_page_content").val(tinyMCE.get('account_index_page_content').getContent());
+            });
+            $('#account_index_page_custom_design .account_index_visual_link').click(function(event) {
+                $('.account_index_visual_link').hide();
+                $('.account_index_views_link').show();
+                $("#account_index_page_content").hide();
+                $("#account_index_page_content_tbl").show();
+                var val = $("#account_index_page_content").val();
+                tinyMCE.get('account_index_page_content').startContent = '';
+                tinyMCE.get('account_index_page_content').startContent = val;
+                tinyMCE.get('account_index_page_content').setContent(val);
+            });
+        });
+    </script>
+<% end %>

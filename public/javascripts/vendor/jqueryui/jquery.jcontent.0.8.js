@@ -22,7 +22,7 @@ define([
             easing: '', //easeOutCirc, easeOutBounce,
             xml: '',
             pause_on_hover: false,
-            width: 1500,
+            width:$(window).width(),
             height: 300,
             videos: false
         },options);
