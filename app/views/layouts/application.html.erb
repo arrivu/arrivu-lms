@@ -28,19 +28,7 @@
     end
 
 -%>
-<% js_block do %>
-    <script>
-    $(document).ready(function() {
-   // var mydivs = $(".gradebook2"), w = $(window);
 
-        var w = $(window).width();
-
-        $(".gradebook2").css('height', w > 1280 ? 515 : w > 480 ? 615 : 715);
-
-
-    })
-    </script>
-<% end %>
 <% content_for :head do %>
     <%= include_common_stylesheets %>
     <% if @eportfolio_view === true %>

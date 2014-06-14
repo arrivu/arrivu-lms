@@ -77,7 +77,7 @@
                    <% course_enrolled_as_teacher.each do |course| %>
                      <li style="display: inline-block;vertical-align: top">
                        <div class="navigation_link" id="<%= course.id %>">
-                       <div class="span3 content-box resource" style="float:left;width: 322px;left:41px;padding-bottom: 0px;">
+                       <div class="span3 content-box resource" style="float:left;padding-bottom: 0px;">
                          <% back_ground_image = course_image(course,:type => "back_ground_image") %>
                             <% if back_ground_image == "" %>
                              <div class="type-tag-positioner"  style="">

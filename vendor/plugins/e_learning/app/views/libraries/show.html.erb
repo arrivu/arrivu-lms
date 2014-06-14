@@ -36,14 +36,14 @@ border-radius: 4px;" %>
   </div>
 
   <div style="margin-top: 53px;word-wrap:break-word;">
-    <ul class="row-fluid">
+    <ul class="">
       <li class="span3 course_properties">
        <%= image_tag 'comments.png',:style=>"margin-top: -2px;" %>  <%= pluralize(@context.comments.size,"Review") %>
       </li>
       <li class="span3 course_properties">
         <%= image_tag 'modules.png',:style=>"margin-top: -2px;" %>  <%= pluralize(@context.context_modules.size,"Module") %>
       </li>
-      <li class="span5 course_properties">
+      <li class="span3 course_properties">
         <%= image_tag 'people.png',:style=>"margin-top: -2px;" %> <%= pluralize(@context.students.size,"Student") %> Enrolled
       </li>
     </ul>
@@ -68,7 +68,7 @@ border: 1px solid hsl(0, 0%, 87%);border-radius: 4px;padding: 5px;">
   </div>
 </div>
 
-<div class="row-fluid ">
+<div class="row-fluid">
   <div class="span3">
     <h1>Instructors</h1>
     <% @context.teachers.each do |teacher| %>
@@ -96,7 +96,7 @@ border: 1px solid hsl(0, 0%, 87%);border-radius: 4px;padding: 5px;">
     <div class="span6">
     <h1 style="border-bottom: 1px solid lightgray;" >Full course description</h1>
       <div class="small">
-        <%= @context.course_description.try(:long_description) %>
+       <p> <%= @context.course_description.try(:long_description) %></p>
       </div>
       <hr/>
 
