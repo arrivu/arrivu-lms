@@ -29,6 +29,9 @@ class Account < ActiveRecord::Base
   #Arrivu changes
   has_one :account_domain_mapping
   has_many :popular_courses
+  has_many :billing_types
+  has_many :feature_sets
+  has_many :subscription_plans
   #Arrivu changes
   belongs_to :parent_account, :class_name => 'Account'
   belongs_to :root_account, :class_name => 'Account'

@@ -1,0 +1,119 @@
+<style>
+    #content{
+        padding: 0px;
+        background-color: #eceef1;
+    }
+</style>
+<% jammit_css :plans %>
+<ul style="list-style: none">
+  <li style="float: left;width: 45%;margin-left: 2%;">
+    <div id="subscription">
+      <div >
+        <h3  class="panel_h3">You have selected "<%= @subscription_plan.name%>"</h3>
+      </div>
+      <div class="subscription_attr"><%= @subscription_plan.feature_set.no_courses%>&nbsp;Courses</div>
+      <div class="subscription_attr"><%= @subscription_plan.feature_set.no_students%>&nbsp;Students</div>
+      <div class="subscription_attr"><%= @subscription_plan.feature_set.no_teachers%>&nbsp;Teachers </div>
+      <div class="subscription_attr"><%= @subscription_plan.feature_set.no_admins%>&nbsp;Admins</div>
+      <div class="subscription_attr" > <%= @subscription_plan.feature_set.storage%>&nbsp;MB Storage</div>
+    </div>
+
+  </li>
+  <li style="float: left;width: 45%;">
+    <div id="subscription">
+      <div >
+        <h3  class="panel_h3">Your total </h3>
+      </div>
+      <% @account.billing_types.each do |billing_type|%>
+          <div class="subscription_attr">
+            <input
+            <% if (billing_type.id ==  @selected_billing.try(:id) )  || (billing_type.discount_percentage == 0 && @selected_billing.try(:id).nil?)%>
+            checked="checked"
+            <% end  %>
+            class="payment_payment_method_BILLING" name="payment[payment_method]" style="margin-top: 0px;"
+                    type="radio" data-percentage="<%= billing_type.discount_percentage%>"
+                    value="<%= billing_type.months %>" data-billing-type="<%= billing_type.id %>">
+
+            <%= billing_type.billing_type.camelize%>&nbsp;Billing&nbsp;
+            (<%=billing_type.discount_percentage.to_i %>% Discount)&nbsp; Save
+            <% total_amount = (Money.new(@subscription_plan.rate_cents.to_i, "INR") * billing_type.discount_percentage)
+               discount = total_amount/100;
+            %>
+            <%= discount * billing_type.months %>&nbsp; &#8377;
+
+          </div>
+      <% end%>
+      <div class="subscription_attr" style="text-align: right">
+        <% if @final_amount %>
+         Total Price &nbsp;
+              <span class="amount" data-amount="<%= Money.new(@subscription_plan.rate_cents.to_i, "INR") %>">
+                <%=@final_amount%></span>
+              &nbsp; &#8377;
+        <% else %>
+
+              Total Price &nbsp;
+              <span class="amount" data-amount="<%= Money.new(@subscription_plan.rate_cents.to_i, "INR") %>">
+                <%=Money.new(@subscription_plan.rate_cents.to_i, "INR")%></span>
+              &nbsp; &#8377;
+
+        <% end %>
+
+    </div>
+        </div>
+  </li>
+
+  <li style="float: left;width: 92%;">
+    <div id="subscription">
+      <div >
+        <h3  class="panel_h3">Payment Options</h3>
+      </div>
+      <% @grouped_payments.each do |payments| %>
+          <% payment = payments.first %>
+          <%= content_tag :section, :class => :redirect do %>
+              <div class="boxes">
+                <%= render payments %>
+              </div>
+          <% end %>
+      <% end %>
+
+    </div>
+  </li>
+
+</ul>
+
+
+<% js_block do %>
+    <script type="text/javascript">
+        require([
+            'jquery' /* $ */,
+            'compiled/tinymce',
+            'tinymce.editor_box',
+            'jquery.disableWhileLoading'
+        ], function($) {
+  //Select billing type
+    $('.payment_payment_method_BILLING').click(function(event){
+        months = $(event.target).val();
+        discount_percentage = $(event.target).data('percentage');
+        $(".amount").each(function( index ) {
+            total_amount = $( this ).data('amount') * discount_percentage;
+            discount = total_amount/100;
+            calculated_amount = $( this ).data('amount') -  discount;
+            $( this ).text((calculated_amount* months).toFixed(2));
+
+        });
+
+    });
+    //Assign final amount to form hidden field to sent server
+    $('#pay_button').click(function(event){
+        amount =  $(".amount").text();
+        final_amount = amount * 100;
+        $("#payment_transaction_amount").val(final_amount);
+
+    });
+
+        });
+    </script>
+<% end %>
+
+
+

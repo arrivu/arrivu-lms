@@ -1,0 +1,48 @@
+<%= form_for @feature_set do |f| %>
+    <ul>
+      <% @feature_set.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+      <% end %>
+    </ul>
+    <ul style="list-style-type:none;
+         margin:0;
+         padding:0;">
+   <li>
+    <%= f.label :account_id %>
+    <%= f.collection_select :account_id, Organization.all, :id, :name %>
+ 
+ 
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+
+    <%= f.label :no_students %>
+    <%= f.text_field :no_students%>
+     <%= f.label :no_teachers %>
+     <%= f.text_field :no_teachers%>
+   </li>
+ 
+   <li style="float: right;
+           margin-top: -259px;
+           margin-right: 54%;">
+
+
+   
+      <%= f.label :no_admins %>
+      <%= f.text_field :no_admins%>
+   
+   
+      <%= f.label :no_courses %>
+      <%= f.text_field :no_courses%>
+   
+   
+      <%= f.label :storage %>
+      <%= f.text_field :storage%>
+
+     <%= f.label :unlimited %>
+     <%= f.check_box :unlimited%>
+
+
+   </li>
+      <%= f.submit "Submit" ,:class => "btn btn-primary"%>
+ </ul>
+<% end %>

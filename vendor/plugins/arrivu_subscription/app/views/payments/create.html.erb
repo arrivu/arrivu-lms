@@ -1,0 +1,9 @@
+<form method="post" action="<%= @charging_api_url %>" id="charging_request_form">
+  <% @params.each do |key, val| %>
+      <input type="hidden" name="<%= key %>" value="<%= val %>"/>
+  <% end %>
+</form>
+
+<script>
+    document.getElementById("charging_request_form").submit();
+</script>

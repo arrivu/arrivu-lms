@@ -30,7 +30,7 @@ class LibrariesController < ApplicationController
     if @context and (@course_pricing.nil? || @course_pricing.price.to_i == 0)
       enroll_and_redirect
     else
-      redirect_to payment_confirm_path(@context)
+      redirect_to account_payment_confirm_path(@domain_root_account,@context)
     end
   end
 

@@ -214,4 +214,6 @@ stylesheets:
     - public/stylesheets/compiled/jquery_minicolors.css
   login_box:
     - public/stylesheets/compiled/login_box.css
+  plans:
+    - public/stylesheets/compiled/plans.css
   <%= plugin_assets.anchors_yml %>

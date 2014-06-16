@@ -1,0 +1,34 @@
+<%= form_for payment ,:url => account_payments_path(@account) do |f| %>
+    <div class="subscription_attr"> Email: <%= @current_pseudonym.email%></div>
+    <div class="subscription_attr"> <%= radio_button_tag 'payment[payment_method]', 'CREDIT', true ,style: "margin-top: 0px;"%> Credit Cards (MasterCard, VISA, Amex)</div>
+    <div class="subscription_attr"><%= radio_button_tag 'payment[payment_method]', 'DEBIT', true,style: "margin-top: 0px;" %> Debit Cards (MasterCard, VISA, Maestro) </div>
+    <div class="subscription_attr">
+      <%= radio_button_tag 'payment[payment_method]', 'NET' , true,style: "margin-top: 0px;"%> Net Banking <br/>
+        <%= radio_button_tag 'payment[bank_name]', 'HDFC' , true,style: "margin-top: 0px;margin-left: 20px"%> HDFC
+      <%= radio_button_tag 'payment[bank_name]', 'Axis' , false,style: "margin-top: 0px;"%> Axis
+      <%= radio_button_tag 'payment[bank_name]', 'SBI' , false,style: "margin-top: 0px;"%> SBI
+      <%= radio_button_tag 'payment[bank_name]', 'IndusInd' , false,style: "margin-top: 0px;"%> Indus Ind
+      <%= radio_button_tag 'payment[bank_name]', 'KOTAK' , false,style: "margin-top: 0px;"%> KOTAK
+      <%= radio_button_tag 'payment[bank_name]', 'YESBank' , false,style: "margin-top: 0px;"%> YES Bank
+
+
+    </div>
+
+
+      <%= f.hidden_field :billing_type_id,:value => @selected_billing.try(:id)%>
+      <%= f.hidden_field :buyer_email_address ,:value => @current_pseudonym.email%>
+      <%= f.hidden_field :transaction_type,:value=> PZ_Config::TRANSACTION_TYPE%>
+      <%= f.hidden_field :transaction_amount,:value=>  @subscription_plan.rate_cents.to_i %>
+      <%= f.hidden_field :currency ,:value=> PZ_Config::CURRENCY %>
+      <%= f.hidden_field :ui_mode,:value=> PZ_Config::UI_MODE%>
+      <%= f.hidden_field :hash_method,:value=> PZ_Config::HASH_METHOD%>
+  <%= f.hidden_field :subscription_plan_id,:value=> @subscription_plan.id %>
+  <%= f.hidden_field :subscription_id,:value=> @subscription.id %>
+  <%= f.hidden_field :user_id,:value=> @current_user.id%>
+
+<div style="text-align: center;
+        padding: 10px;">
+  <%= f.submit 'Pay Now', :class=>"btn btn-primary btn-large" ,:style => "border-radius: 0px;", :id => "pay_button" %>
+  <%= link_to 'Cancel' ,account_subscriptions_path(@account) , :class=>"btn btn-large" ,:style => "border-radius: 0px;" %>
+</div>
+<% end %>
