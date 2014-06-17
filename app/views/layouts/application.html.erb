@@ -61,18 +61,65 @@
             <%end  %>
             <!--Arrivu changes-->
             <b id="header-logo-secondary"></b>
-          </div>
+
           <div class="nav-collapse" >
-            <% if (identity = (yield :identity).presence) %>
-                <%= identity %>
-            <% else %>
-                <%- cache_if(!@real_current_user, [@current_user || 'nobody', 'identity-15m'], :expires_in => 15.minutes) do -%>
-                    <%= render(:partial => 'shared/identity') %>
-                <%- end -%>
-            <% end %>
+            <ul class="nav pull-right" >
+              <li class="divider-vertical"></li>
+                  <li><%= link_to "Course Library", libraries_path%></li>
+              <% if !@current_user %>
+                  <li class="divider-vertical"></li>
+                  <% if !@domain_root_account || @domain_root_account == Account.default %>
+                      <% if ELEARNING %>
+                          <%= render :partial => 'shared/solo_teacher_account' %>
+                          <%= render :partial => 'shared/elearning_pop_up' %>
+                      <% end %>
+                  <% else  %>
+                      <li><%= link_to t('links.sign_up_as_teacher', "Sign Up as a Teacher"), register_path %></li>
+                  <% end %>
+                  <li class="divider-vertical"></li>
+                  <li><%= link_to "Log In", login_path, :id => "log_in_popup" %></li>
+              <% else %>
+                  <li class="divider-vertical"></li>
+                      <li><%= link_to "Dashboard", dashboard_path%></li>
+                  <li class="divider-vertical"></li>
+                  <% if @real_current_user && @real_current_user != @current_user %>
+                      <li class="user_name"><%= link_to t('masquerading.as', "As: *%{user_name}*", :user_name => @current_user.short_name, :wrapper => '<span class="emphasize-name">\1</span>'), user_profile_path(@current_user) %></li>
+                      <li class="divider-vertical"></li>
+                  <% else %>
+                      <li class="user_name"><%= link_to @current_user.short_name, user_profile_path(@current_user) %></li>
+
+                  <% end %>
+                  <li class="divider-vertical"></li>
+                  <% unless @current_user.fake_student? %>
+                      <li class="first inbox"><a href="<%= conversations_path %>"><span><%= t 'links.inbox', "Inbox" %></span>
+                        <% unread = @current_user.unread_conversations_count; if unread > 0 %>
+                            <b class="unread-messages-count"><%= unread %></b>
+                        <% end %>
+                      </a></li>
+                      <li class="divider-vertical"></li>
+                      <li><%= link_to t('links.settings', "Settings"), settings_profile_path %></li>
+                      <li class="divider-vertical"></li>
+                  <% end %>
+                  <li class="user_id" style="display: none;"><%= @current_user.id %></li>
+
+                  <li class="course_id" style="display: none;"><%= @context.id if @context && @context.is_a?(Course) %></li>
+
+                  <li id="current_context_code" style="display: none;"><%= @context.try_rescue(:asset_string) %></li>
+
+                  <li class="user_long_name" style="display: none;"><%= @current_user.name %></li>
+
+                  <li class="logout"><%= link_to t('links.logout', "Logout"), logout_path, :method => :delete %></li>
+                  <li class="divider-vertical"></li>
+              <% end %>
+              <% if help_link %>
+                  <li id="identity-help-container"><%= help_link %></li>
+                  <li class="divider-vertical"></li>
+              <% end %>
+            </ul>
            </div><!-- /.nav-collapse -->
         </div>
       </div><!-- /navbar-inner -->
+    </div>
     </div>
 <% else %>
 <div id="header" class="no-print <%= 'no-user' unless @current_user %> <%= 'header_bottom' if @e_learning%>" >
