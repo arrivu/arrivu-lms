@@ -1,0 +1,33 @@
+<%= render :partial => 'form' %>
+<table class="table">
+  <tr>
+    <th>Serial no</th>
+    <th>Organization Name</th>
+    <th>Feature set Name</th>
+    <th>Unlimited</th>
+    <th>Students </th>
+    <th>Teachers</th>
+    <th>Admins</th>
+    <th>Courses</th>
+    <th>Storage</th>
+    <th>Edit</th>
+    <th>Delete</th>
+  </tr>
+<% @feature_sets.each_with_index do |feature_set,idx| %>
+    <tr>
+      <td><%= idx +1 %></td>
+      <td><%= feature_set.organization.name %></td>
+      <td><%= feature_set.name %></td>
+      <td><%= feature_set.unlimited%></td>
+      <td><%= feature_set.no_students %></td>
+      <td><%= feature_set.no_teachers %></td>
+      <td><%= feature_set.no_admins %></td>
+      <td><%= feature_set.no_courses %></td>
+      <td><%= feature_set.storage %></td>
+      <td><%= link_to "Edit", edit_feature_set_path(feature_set) %></td>
+      <td><%= link_to "Destroy", feature_set, :confirm => 'Are you sure?', :method => :delete %></td>
+
+    </tr>
+
+<% end  %>
+</table>

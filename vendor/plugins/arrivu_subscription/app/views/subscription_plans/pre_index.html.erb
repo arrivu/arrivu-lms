@@ -1,0 +1,7 @@
+
+<%= form_for url_for :controller => 'subscription_plans' ,action: 'index' do |f| %>
+
+<%= f.label :account_id %>
+<%= f.collection_select :account_id, @organizations, :id, :name %>
+<%= f.submit "Proceed to organization" ,:class => "btn btn-primary" %>
+<% end  %>
