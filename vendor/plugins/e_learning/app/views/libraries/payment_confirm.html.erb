@@ -1,25 +1,87 @@
 <%
    @body_classes << "gradebook2 full-width"
    @show_left_side = false
-
 %>
- <h3 style="text-align: center;">Order Details</h3>
-<table class="table table-bordered table-striped">
-<thead><th></th><th>Course Name</th><th>Description</th><th>Quantity</th><th>Price</th></thead>
-  <tr ><td width="20%" style="text-align: center;">
-    <% if @context_image_url %>
-        <%= image_tag @context_image_url  , :style=>"width:100px;height:100px;"%>
-    <% end  %>
-  </td>
-    <td><%= @context.name%></td><td><%= @context.course_description.try(:short_description)%></td><td>1</td><td><%= number_to_currency(@course_pricing.price.to_i, :precision => 2,:delimiter => ',')%></td></tr>
-  <tr><td colspan="5" style="text-align: center;">
-  <% @grouped_payments.each do |payments| %>
-        <% payment = payments.first %>
-        <%= content_tag :section, :class => :redirect do %>
-            <div class="boxes">
-              <%= render payments %>
-            </div>
-        <% end %>
-    <% end %></td></tr>
-</table>
+<style>
+    #content{
+        padding: 0px;
+        background-color: #eceef1;
+    }
+</style>
+<% jammit_css :plans %>
+<ul style="list-style: none">
+  <li style="float: left;width: 92%;">
+    <div id="subscription">
+      <div >
+        <h3  class="panel_h3">Course details</h3>
+        <div class="subscription_attr"> Course Name: <%= @context.name%></div>
+        <% if @context.course_description.try(:short_description)  %>
+        <div class="subscription_attr">Description: <%= @context.course_description.try(:short_description)%> </div>
+         <% end  %>
+        <% if @context_image_url %>
+        <div class="subscription_attr" >
+            <%= image_tag @context_image_url, :style=>"width:100px;height:100px;"%>
+        </div>
+        <% end  %>
+        <div class="subscription_attr">Price: <%= Money.new(@course_pricing.price.to_i, "INR") %> &nbsp; &#8377;</div>
+      </div>
+
+
+    </div>
+  </li>
+
+  <li style="float: left;width: 92%;">
+    <div id="subscription">
+      <div >
+        <h3  class="panel_h3">Payment Options</h3>
+      </div>
+      <% @grouped_payments.each do |payments| %>
+          <% payment = payments.first %>
+          <%= content_tag :section, :class => :redirect do %>
+              <div class="boxes">
+                <%= render payments %>
+              </div>
+          <% end %>
+      <% end %>
+
+    </div>
+  </li>
+
+</ul>
+
+
+<% js_block do %>
+    <script type="text/javascript">
+        require([
+            'jquery' /* $ */,
+            'compiled/tinymce',
+            'tinymce.editor_box',
+            'jquery.disableWhileLoading'
+        ], function($) {
+            //Select billing type
+            $('.payment_payment_method_BILLING').click(function(event){
+                months = $(event.target).val();
+                discount_percentage = $(event.target).data('percentage');
+                $(".amount").each(function( index ) {
+                    total_amount = $( this ).data('amount') * discount_percentage;
+                    discount = total_amount/100;
+                    calculated_amount = $( this ).data('amount') -  discount;
+                    $( this ).text((calculated_amount* months).toFixed(2));
+                    $("#payment_billing_type_id").val( $(event.target).data('billing-type'));
+                });
+
+            });
+            //Assign final amount to form hidden field to sent server
+            $('#pay_button').click(function(event){
+                amount =  $(".amount").text();
+                final_amount = amount * 100;
+                $("#payment_transaction_amount").val(final_amount);
+
+            });
+
+        });
+    </script>
+<% end %>
+
+
 

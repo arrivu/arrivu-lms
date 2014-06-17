@@ -2,7 +2,7 @@ class Subscription < ActiveRecord::Base
   include SubscriptionHelper
   belongs_to :organization
   has_many :payments
-  attr_accessible :account_id,:subscription_plan_id,:subscribable_id,:subscribable_type,:expire_on
+  attr_accessible :account_id,:subscription_plan_id,:subscribable_id,:subscribable_type,:expire_on,:started_on
 
   SUBSCRIBABLE_TYPE_ACCOUNT = 'Account'
 
@@ -32,7 +32,7 @@ class Subscription < ActiveRecord::Base
 
   validates_presence_of :subscribable_id,:subscribable_type
   # validates_associated  :subscribable
-  validates_presence_of :subscription_plan
+  # validates_presence_of :subscription_plan
   validates_presence_of :paid_through, :if => :paid?
   validates_presence_of :started_on
 

@@ -18,17 +18,26 @@
       <%= f.hidden_field :billing_type_id,:value => @selected_billing.try(:id)%>
       <%= f.hidden_field :buyer_email_address ,:value => @current_pseudonym.email%>
       <%= f.hidden_field :transaction_type,:value=> PZ_Config::TRANSACTION_TYPE%>
+    <% if @subscription_plan  %>
+      <%= f.hidden_field :subscription_plan_id,:value=> @subscription_plan.id %>
       <%= f.hidden_field :transaction_amount,:value=>  @subscription_plan.rate_cents.to_i %>
+     <% else  %>
+        <%= f.hidden_field :transaction_amount,:value=>  @course_pricing.price.to_i %>
+     <% end  %>
       <%= f.hidden_field :currency ,:value=> PZ_Config::CURRENCY %>
       <%= f.hidden_field :ui_mode,:value=> PZ_Config::UI_MODE%>
       <%= f.hidden_field :hash_method,:value=> PZ_Config::HASH_METHOD%>
-  <%= f.hidden_field :subscription_plan_id,:value=> @subscription_plan.id %>
-  <%= f.hidden_field :subscription_id,:value=> @subscription.id %>
+
+  <%= f.hidden_field :subscription_id,:value=> @subscription.try(:id)%>
   <%= f.hidden_field :user_id,:value=> @current_user.id%>
 
 <div style="text-align: center;
         padding: 10px;">
   <%= f.submit 'Pay Now', :class=>"btn btn-primary btn-large" ,:style => "border-radius: 0px;", :id => "pay_button" %>
+  <% if @course_pricing  %>
+      <%= link_to 'Cancel' ,library_path(@context) , :class=>"btn btn-large" ,:style => "border-radius: 0px;" %>
+  <% else %>
   <%= link_to 'Cancel' ,account_subscriptions_path(@account) , :class=>"btn btn-large" ,:style => "border-radius: 0px;" %>
+  <% end %>
 </div>
 <% end %>
