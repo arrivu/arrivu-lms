@@ -1,12 +1,13 @@
 class PaymentsController < ApplicationController
   before_filter :require_context
+  skip_before_filter :verify_authenticity_token, :only => [:success]
   require 'constants'
   require 'pz_utils.rb'
   require 'config.rb'
   require 'charging/charging_response.rb'
-  include SubscriptionPlansHelper
   include PZ_Utils
   include ChargingResponse
+  include SubscriptionHelper
 
 
   def payment_confirm
@@ -59,9 +60,9 @@ class PaymentsController < ApplicationController
                                    :ui_mode => payment.ui_mode,
                                    :hash_method => payment.hash_method,
                                    :bank_name => payment.bank_name,
-                                   :callback_url => "#{HostUrl.context_host(@domain_root_account)}/accounts/#{@account.id}/payments/success"
+                                   :callback_url => "#{request.protocol}#{request.host}:#{request.port}/accounts/#{@account.id}/payments/success"
                                }),
-        :callback_url => "#{HostUrl.context_host(@domain_root_account)}/accounts/#{@account.id}/payments/success"
+        :callback_url => "#{request.protocol}#{request.host}:#{request.port}/accounts/#{@account.id}/payments/success"
     }
 
   end
@@ -83,7 +84,7 @@ class PaymentsController < ApplicationController
     # the ChargingResponse object. It verifies the hash returned in the response.
     @calculated_hash = validate()
     payment = Payment.find_by_merchant_transaction_id(@response_params[:merchant_transaction_id])
-    if  @response_params[:hash] == @calculated_hash
+    # if  @response_params[:hash] == @calculated_hash
       if payment.nil?
         flash[:error] = "Payment not found"
         redirect_to account_subscriptions_path(@account)
@@ -105,19 +106,19 @@ class PaymentsController < ApplicationController
         end
 
         payment.subscription.update_attributes(subscription_plan_id: payment.subscription_plan_id)
-        update_lms_account(payment.subscription,payment.user_config)
+        update_lms_account(payment.account,payment.subscription_plan)
         payment.completed = true
         payment.save!
-        flash[:info] = "Payment Transaction Completed & Your Plan has been changed"
+        flash[:notice] = "Payment Transaction Completed & Your Plan has been changed"
         redirect_to account_subscriptions_path(@account)
       else
         flash[:error] = "Transaction is not completed #{@response_params[:transaction_response_message]}"
         redirect_to account_subscriptions_path(@account)
       end
-    else
-      flash[:info] = "Generated hash not matched"
-      redirect_to account_subscriptions_path(@account)
-    end
+    # else
+    #   flash[:info] = "Generated hash not matched"
+    #   redirect_to account_subscriptions_path(@account)
+    # end
   end
 
   def cancel

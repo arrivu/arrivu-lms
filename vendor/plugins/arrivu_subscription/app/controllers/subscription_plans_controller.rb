@@ -12,14 +12,8 @@ class SubscriptionPlansController < ApplicationController
       else
         @subscription.update_attributes!(subscription_plan_id: @subscription_plan.id,expire_on: nil)
         if @subscription.valid?
-          @account.settings[:no_students] = @subscription_plan.no_students
-          @account.settings[:no_teachers] = @subscription_plan.no_teachers
-          @account.settings[:no_admins] = @subscription_plan.no_admins
-          @account.settings[:no_courses] = @subscription_plan.no_courses
-          @account.default_storage_quota_mb = @subscription_plan.storage
-          @account.settings[:unlimited] = false unless @subscription_plan.unlimited == 'true'
-          @account.save
-          flash[:info] = "Your Plan has been changed"
+          update_lms_account(@account,@subscription_plan)
+          flash[:success] = "Your Subscription Plan has been changed"
           redirect_to account_subscriptions_path(@account)
         end
       end

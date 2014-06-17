@@ -32,19 +32,13 @@ module SubscriptionHelper
     @subscription = Subscription.find_by_account_id_and_subscribable_id_and_subscribable_type(@domain_root_account.id,
                                                                                               @account.id,Subscription::SUBSCRIBABLE_TYPE_ACCOUNT)
     if @subscription.nil?
-      subscription_plan = @domain_root_account.subscription_plans.free.first
+      @subscription_plan = @domain_root_account.subscription_plans.free.first
       @subscription = Subscription.create!(account_id: @account.id,
                                            subscription_plan_id: subscription_plan.id,
                                            subscribable_id: @account.id,
                                            subscribable_type: Subscription::SUBSCRIBABLE_TYPE_ACCOUNT)
       if @subscription.valid?
-
-        @account.settings[:no_students] = params[:no_students]
-        @account.settings[:no_teachers] = params[:no_teachers]
-        @account.settings[:no_admins] = params[:no_admins]
-        @account.settings[:no_courses] = params[:no_courses]
-        @account.default_storage_quota_mb = params[:storage]
-        @account.settings[:unlimited] = false unless params[:unlimited] == 'true'
+          update_lms_account(@account,@subscription_plan)
         if @account.save!
           render :json => @account.to_json
         else
@@ -53,6 +47,16 @@ module SubscriptionHelper
 
       end
     end
+  end
+
+  def update_lms_account(account,subscription_plan)
+    account.settings[:no_students] = subscription_plan.feature_set.no_students
+    account.settings[:no_teachers] = subscription_plan.feature_set.no_teachers
+    account.settings[:no_admins] = subscription_plan.feature_set.no_admins
+    account.settings[:no_courses] = subscription_plan.feature_set.no_courses
+    account.default_storage_quota_mb = subscription_plan.feature_set.storage
+    account.settings[:unlimited] = false unless subscription_plan.feature_set.unlimited == 'true'
+    account.save
   end
 
 end

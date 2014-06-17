@@ -1,20 +1,20 @@
 <%= form_for payment ,:url => account_payments_path(@account) do |f| %>
     <div class="subscription_attr"> Email: <%= @current_pseudonym.email%></div>
-    <div class="subscription_attr"> <%= radio_button_tag 'payment[payment_method]', 'CREDIT', true ,style: "margin-top: 0px;"%> Credit Cards (MasterCard, VISA, Amex)</div>
-    <div class="subscription_attr"><%= radio_button_tag 'payment[payment_method]', 'DEBIT', true,style: "margin-top: 0px;" %> Debit Cards (MasterCard, VISA, Maestro) </div>
+    <div class="subscription_attr"> <%= radio_button_tag 'payment[payment_method]', 'CREDIT', true ,style: "margin-top: 0px;"%> Credit Cards <em style="font-weight: normal"> (MasterCard, VISA, Amex) </em></div>
+    <div class="subscription_attr"><%= radio_button_tag 'payment[payment_method]', 'DEBIT', true,style: "margin-top: 0px;" %> Debit Cards <em style="font-weight: normal"> (MasterCard, VISA, Maestro)</em> </div>
     <div class="subscription_attr">
-      <%= radio_button_tag 'payment[payment_method]', 'NET' , true,style: "margin-top: 0px;"%> Net Banking <br/>
-        <%= radio_button_tag 'payment[bank_name]', 'HDFC' , true,style: "margin-top: 0px;margin-left: 20px"%> HDFC
-      <%= radio_button_tag 'payment[bank_name]', 'Axis' , false,style: "margin-top: 0px;"%> Axis
-      <%= radio_button_tag 'payment[bank_name]', 'SBI' , false,style: "margin-top: 0px;"%> SBI
-      <%= radio_button_tag 'payment[bank_name]', 'IndusInd' , false,style: "margin-top: 0px;"%> Indus Ind
-      <%= radio_button_tag 'payment[bank_name]', 'KOTAK' , false,style: "margin-top: 0px;"%> KOTAK
-      <%= radio_button_tag 'payment[bank_name]', 'YESBank' , false,style: "margin-top: 0px;"%> YES Bank
+      <%= radio_button_tag 'payment[payment_method]', 'NET' , true,style: "margin-top: 0px;"%> Net Banking <em style="font-weight: normal">(We support the following banks.Please select one.)</em> <br/><br/>
+        <%= radio_button_tag 'payment[bank_name]', 'HDFC' , true,style: "margin-top: 0px;margin-left: 20px"%> <%= image_tag "hdfc.jpg",:width =>  '100px' %> &nbsp;
+      <%= radio_button_tag 'payment[bank_name]', 'Axis' , false,style: "margin-top: 0px;"%> <%= image_tag "axis_bank.jpg",:width =>  '100px' %> &nbsp;
+      <%= radio_button_tag 'payment[bank_name]', 'SBI' , false,style: "margin-top: 0px;"%> <%= image_tag "sbi_logo.gif",:width =>  '100px' %> &nbsp;
+      <%= radio_button_tag 'payment[bank_name]', 'IndusInd' , false,style: "margin-top: 0px;"%> <%= image_tag "indus_ind_bank.jpg",:width =>  '100px' %>  &nbsp;
+      <%= radio_button_tag 'payment[bank_name]', 'KOTAK' , false,style: "margin-top: 0px;"%> <%= image_tag "kotak_bank.png ",:width =>  '100px' %> &nbsp;
+      <%= radio_button_tag 'payment[bank_name]', 'YESBank' , false,style: "margin-top: 0px;"%> <%= image_tag "yes_bank.jpg",:width =>  '100px' %> &nbsp;
 
 
     </div>
 
-
+      <%= f.hidden_field :account_id,:value => @account.id%>
       <%= f.hidden_field :billing_type_id,:value => @selected_billing.try(:id)%>
       <%= f.hidden_field :buyer_email_address ,:value => @current_pseudonym.email%>
       <%= f.hidden_field :transaction_type,:value=> PZ_Config::TRANSACTION_TYPE%>

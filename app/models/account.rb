@@ -32,6 +32,7 @@ class Account < ActiveRecord::Base
   has_many :billing_types
   has_many :feature_sets
   has_many :subscription_plans
+  has_many :payments
   #Arrivu changes
   belongs_to :parent_account, :class_name => 'Account'
   belongs_to :root_account, :class_name => 'Account'

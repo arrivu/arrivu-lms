@@ -99,7 +99,7 @@
             discount = total_amount/100;
             calculated_amount = $( this ).data('amount') -  discount;
             $( this ).text((calculated_amount* months).toFixed(2));
-
+            $("#payment_billing_type_id").val( $(event.target).data('billing-type'));
         });
 
     });
