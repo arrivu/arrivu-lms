@@ -1,7 +1,7 @@
 <% show_e_learning_menu = (@account ||= @domain_root_account).feature_enabled?(:e_learning) %>
-<ul id="identity"
+<ul class="nav pull-right" id="identity"
     <% if  @e_learning %>
-    style="margin-top: 22px;border-radius: 10px;margin-right: 50px;"
+    style="border-radius: 10px;margin-right: 50px;"
     <% end  %>
     >
   <% if show_e_learning_menu  %>

@@ -8,7 +8,7 @@
     <%= content.page_desc.html_safe %>
 <% else %>
 <% @body_classes << "gradebook2 full-width" %>
-<% jammit_css :jcontent, :course_box
+<% jammit_css :jcontent, :course_box, :bootstrap_and_responsive
    js_bundle :home_pages
 %>
 <% end %>

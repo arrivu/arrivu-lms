@@ -7,55 +7,59 @@
 <% else %>
 <%  @body_classes << "gradebook2 full-width"
     @show_left_side = false
-    jammit_css :course_library
+    jammit_css :course_library ,:bootstrap_and_responsive
     js_bundle :course_comments
     js_env :review_course_id =>  @context.id
 %>
-<div
+<div class="row-fluid"
 <% if @context_bg_image_url %>
-    style="background-image: url('<%= @context_bg_image_url %>');background-size: 100% auto;height: 250px;"
+    style="background-image: url('<%= @context_bg_image_url %>');background-size: 100% 100%;"
 <% else  %>
     style="background: #f6f5ed;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.2);;height: 250px;"
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);"
 <% end  %>
 >
-  <div style="width: 20%;padding-top: 19px;padding-left: 60px;">
+  <div class="span3" style="text-align:center;">
     <% if @context_image_url  %>
-        <%= image_tag @context_image_url ,:class=> "thumbnail" ,:style => "width: 275px;height: 181px;"%>
+        <%= image_tag @context_image_url ,:style=>"border: 1px solid hsl(0, 0%, 87%);
+border-radius: 4px;" %>
     <% else %>
         <div style="width: 280px;height: 207px;"></div>
     <% end %>
   </div>
-<div style="width: 72.5%;float: right;margin-top: -185px;">
-  <div style="width: 600px;font-size: 23px;
+<div class="span6" style="padding: 1%;text-align:center;">
+  <div style="font-size: 23px;
           font-weight: bold;">
         <%= @context.name %>
   </div>
 
-  <div style="width: 580px;font-size: 16px;">
+  <div style="font-size: 16px;">
     <br/>
     <p>
      <%= @context.course_description.try(:short_description) %>
     </p>
   </div>
 
-  <div style="margin-top: 53px;">
-    <ul>
-      <li class="course_properties">
+  <div style="margin-top: 53px;word-wrap:break-word;">
+    <ul class="">
+      <li class="span3 course_properties">
        <%= image_tag 'comments.png',:style=>"margin-top: -2px;" %>  <%= pluralize(@context.comments.size,"Review") %>
       </li>
-      <li class="course_properties">
+      <li class="span3 course_properties">
         <%= image_tag 'modules.png',:style=>"margin-top: -2px;" %>  <%= pluralize(@context.context_modules.size,"Module") %>
       </li>
-      <li class="course_properties">
+      <li class="span3 course_properties">
         <%= image_tag 'people.png',:style=>"margin-top: -2px;" %> <%= pluralize(@context.students.size,"Student") %> Enrolled
       </li>
     </ul>
+ 
   </div>
 
 </div>
 
-  <div class="price_box thumbnail">
+ 
+  <div class="span3" style="text-align: center;margin-top: 19px;
+border: 1px solid hsl(0, 0%, 87%);border-radius: 4px;padding: 5px;">
     <div style="font-size: 18px;margin-top: 36px;">Cost per enrollment:</div>
     <div style="font-size: 18px;margin-top: 10px;font-weight: bold;
             color: darkgreen;"><%= @course_pricing.nil? ? "Free" : "$#{@course_pricing.price}" %></div>
@@ -69,16 +73,16 @@
   </div>
 </div>
 
-<div class="xouter3">
-  <div class="xleftcol3">
+<div class="row-fluid">
+  <div class="span3">
     <h1>Instructors</h1>
     <% @context.teachers.each do |teacher| %>
         <a href="<%= user_details_path(teacher) %>" style="text-decoration: none;color: black">
     <div class="instructor-bio comment comment_box" style="max-height: none;border-bottom: 1px solid lightgray;border-right: 1px solid lightgray;
             border-radius: 4px;">
       <img src=<%= teacher.avatar_url ? teacher.avatar_url : "http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&f=y" %> width="100" height="100" class="left img-circle" alt="<%= teacher.name%>">
-      <a style="color: black;text-decoration: blink" href="<%= user_details_path(teacher.id) %>"><h3 class="last emboss-light"><%= teacher.name%></h3></a>
-      <p class="fineprint emboss-light"><em style="margin-left: 10px;"><%= teacher.profile.title if  teacher.profile %></em></p>
+      <h3 class="last emboss-light"><%= teacher.name%></h3>
+      <p class="fineprint emboss-light"><em class="small-head" style="margin-left: 10px;"><%= teacher.profile.title if  teacher.profile %></em></p>
       <div class="instructor-bio-content">
         <div class="commentdesc more">
             <%= teacher.profile.bio if  teacher.profile %>
@@ -93,7 +97,27 @@
     <% end %>
 
   </div>
-  <div class="xrightcol3">
+  
+  
+    <div class="span6">
+    <h1 style="border-bottom: 1px solid lightgray;" >Full course description</h1>
+      <div class="small">
+       <p> <%= @context.course_description.try(:long_description) %></p>
+      </div>
+      <hr/>
+
+      <h1>Course Modules</h1>
+      <ul style="margin: 0px;">
+        <% @context.context_modules.active.each_with_index do |context_modules, idx |  %>
+        <li class="course_module_item <%= idx == 0 ? 'default_hover_style' : "" %> ">
+          <%= context_modules.name %>
+        </li>
+        <% end  %>
+      </ul>
+    </div>
+  
+
+<div class="span3">
     <h1>Reviews</h1>
     <% @comments.each do |comment| %>
 
@@ -117,28 +141,8 @@
      <% @total_count =   @context.comments.approved.count%>
     <a class="btn btn-primary" id="comments_review" style="margin-left: 20%;border-radius: 0px;margin-bottom: 10px;">
       SEE ALL <%= @total_count%> REVIEWS </a>
-  </div>
-  <div class="xmiddlecol3">
-    <div class="xinner3">
-    <h1 style="border-bottom: 1px solid lightgray;" y>Full course description</h1>
-      <div style="font-size: 16px;
-              line-height: 1.5;">
-        <%= @context.course_description.try(:long_description) %>
-      </div>
-      <hr/>
+  </div></div>
 
-      <h1>Course Modules</h1>
-      <ul style="margin: 0px;">
-        <% @context.context_modules.active.each_with_index do |context_modules, idx |  %>
-        <li class="course_module_item <%= idx == 0 ? 'default_hover_style' : "" %> ">
-          <%= context_modules.name %>
-        </li>
-        <% end  %>
-      </ul>
-    </div>
-  </div>
-</div>
-<div class="clear" style="border-top: 1px solid #ccc;margin-top: 50px;"></div>
 
 <form action="<%=library_enrollments_path(@context)%>" id="enrollment_dialog" data-turn-into-dialog='{"width":600,"height":600,"modal":true}' style="display:none"
       title="<%= @context.name %>">

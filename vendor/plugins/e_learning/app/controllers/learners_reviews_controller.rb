@@ -7,7 +7,7 @@ class LearnersReviewsController < ApplicationController
   def index
     respond_to do |format|
       @all_courses_comments = []
-      @domain_root_account.courses.active.sample(8).each do |course|
+      @domain_root_account.associated_courses.active.sample(8).each do |course|
             comment = course.comments.approved.first
             unless comment.nil?
              @comments =   api_json(comment, @current_user, session, API_USER_JSON_OPTS).tap do |json|
