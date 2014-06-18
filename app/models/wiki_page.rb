@@ -433,6 +433,9 @@ class WikiPage < ActiveRecord::Base
     item ||= find_by_wiki_id_and_id(context.wiki.id, hash[:id])
     item ||= find_by_wiki_id_and_migration_id(context.wiki.id, hash[:migration_id])
     item ||= context.wiki.wiki_pages.new
+    #arrivu changes
+    item.wiki_type = hash[:wiki_type]
+    #arrivu changes
     # force the url to be the same as the url_name given, since there are
     # likely other resources in the import that link to that url
     if hash[:url_name].present?
@@ -468,7 +471,9 @@ class WikiPage < ActiveRecord::Base
     end
     return if hash[:type] && ['folder', 'FOLDER_TYPE'].member?(hash[:type]) && hash[:linked_resource_id]
     hash[:missing_links] = {}
-    allow_savwikie = true
+    #arrivu changes
+    allow_save = true
+    #arrivu changes
     if hash[:type] == 'linked_resource' || hash[:type] == "URL_TYPE"
       allow_save = false
     elsif ['folder', 'FOLDER_TYPE'].member? hash[:type]
