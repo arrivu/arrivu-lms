@@ -221,11 +221,11 @@ class Subscription < ActiveRecord::Base
                         end
 
     # if they've paid again, then reset expiration
-    if subscription_plan_id_changed? and paid?
-      self.expire_on = Date.today + 1.months
-    else
-      self.expire_on = nil
-    end
+    # if subscription_plan_id_changed? and paid?
+    #   self.expire_on = Date.today + 1.months
+    # else
+    #   self.expire_on = nil
+    # end
     self.in_trial = false
   end
 

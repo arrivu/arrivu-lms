@@ -112,7 +112,8 @@ class PaymentsController < ApplicationController
         payment.subscription.paid_through = Date.today
         payment.completed = true
         if payment.subscription.subscribable_type == "Account"
-          if payment.subscription.expire_on
+
+          if payment.subscription.expire_on && (payment.subscription_plan_id == payment.subscription.subscription_plan_id)
             if payment.billing_type
               payment.subscription.expire_on += payment.billing_type.months.months
             else
