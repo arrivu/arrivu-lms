@@ -13,7 +13,7 @@ class SubscriptionPlansController < ApplicationController
         @subscription.update_attributes!(subscription_plan_id: @subscription_plan.id,expire_on: nil)
         if @subscription.valid?
           update_lms_account(@account,@subscription_plan)
-          flash[:success] = "Your Subscription Plan has been changed"
+          flash[:notice] = "Your Subscription Plan has been changed"
           redirect_to account_subscriptions_path(@account)
         end
       end

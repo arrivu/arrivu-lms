@@ -32,20 +32,15 @@ module SubscriptionHelper
     @subscription = Subscription.find_by_account_id_and_subscribable_id_and_subscribable_type(@domain_root_account.id,
                                                                                               @account.id,Subscription::SUBSCRIBABLE_TYPE_ACCOUNT)
     if @subscription.nil?
-      @subscription_plan = @domain_root_account.subscription_plans.free.first
-      @subscription = Subscription.create!(account_id: @account.id,
-                                           subscription_plan_id: subscription_plan.id,
+       @subscription_plan = @domain_root_account.subscription_plans.free.first
+       @subscription = Subscription.create!(account_id: @domain_root_account.id,
+                                           subscription_plan_id: @subscription_plan.id,
                                            subscribable_id: @account.id,
                                            subscribable_type: Subscription::SUBSCRIBABLE_TYPE_ACCOUNT)
-      if @subscription.valid?
-          update_lms_account(@account,@subscription_plan)
-        if @account.save!
-          render :json => @account.to_json
-        else
-          render :json => @account.errors ,:status => :bad_request
-        end
 
-      end
+       update_lms_account(@account,@subscription_plan)
+
+
     end
   end
 

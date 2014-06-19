@@ -24,7 +24,7 @@
       <div >
         <h3  class="panel_h3">Your total </h3>
       </div>
-      <% @account.billing_types.each do |billing_type|%>
+      <% @domain_root_account.billing_types.each do |billing_type|%>
           <div class="subscription_attr">
             <input
             <% if (billing_type.id ==  @selected_billing.try(:id) )  || (billing_type.discount_percentage == 0 && @selected_billing.try(:id).nil?)%>

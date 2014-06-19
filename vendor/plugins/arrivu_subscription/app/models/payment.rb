@@ -4,9 +4,8 @@ class Payment < ActiveRecord::Base
                   :buyer_email_address,:transaction_type,:transaction_amount,:payment_method,:currency,:ui_mode,
                   :hash_method,:completed, :canceled,:bank_name,:billing_type_id,:account_id
 
-  validates_presence_of :subscription_plan_id,:subscription_id,:user_id,
-                        :buyer_email_address,:transaction_type,:transaction_amount,:payment_method,:currency,:ui_mode,
-                        :hash_method,:bank_name,:account_id
+  validates_presence_of :user_id,:buyer_email_address,:transaction_type,:transaction_amount,:payment_method,:currency,
+                        :ui_mode,:hash_method,:bank_name,:account_id
   validates_uniqueness_of :merchant_transaction_id, uniqueness: true
 
   scope :completed,     where(completed: true)
