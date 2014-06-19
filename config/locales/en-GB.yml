@@ -9017,6 +9017,7 @@ en-GB:
   notification: 
     added_to_conversation_description: "You are added to a conversation"
     added_to_conversation_display: "Added to conversation"
+    payment_invoice: "Payment Invoice"
     all_submissions_description: |-
         *Instructor and Admin only:*
         

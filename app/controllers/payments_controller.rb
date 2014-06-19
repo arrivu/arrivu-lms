@@ -110,7 +110,8 @@ class PaymentsController < ApplicationController
         redirect_to root_url
       elsif @response_params[:transaction_response_code] == 'SUCCESS'
         payment.subscription.paid_through = Date.today
-        payment.completed = true
+        payment.complete_payment!
+
         if payment.subscription.subscribable_type == "Account"
 
           if payment.subscription.expire_on && (payment.subscription_plan_id == payment.subscription.subscription_plan_id)

@@ -252,6 +252,8 @@ class Notification < ActiveRecord::Base
       FREQ_IMMEDIATELY
     when 'Added To Conversation'
       FREQ_IMMEDIATELY
+    when 'Payment Invoice'
+      FREQ_IMMEDIATELY
     else
       FREQ_DAILY
     end
@@ -328,6 +330,7 @@ class Notification < ActiveRecord::Base
     t 'names.appointment_reserved_by_user', 'Appointment Reserved By User'
     t 'names.appointment_reserved_for_user', 'Appointment Reserved For User'
     t 'names.submission_needs_grading', 'Submission Needs Grading'
+    t 'names.payment_invoice', 'Payment Invoice'
   end
 
   # TODO: i18n ... show these anywhere we show the category today
@@ -403,6 +406,8 @@ class Notification < ActiveRecord::Base
         t(:added_to_conversation_display, 'Added To Conversation')
       when 'Membership Update'
         t(:membership_update_display, 'Membership Update')
+      when 'Payment Invoice'
+        t(:payment_invoice, 'Payment Invoice')
       when 'Reminder'
         t(:reminder_display, 'Reminder')
       else

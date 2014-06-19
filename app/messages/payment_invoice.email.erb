@@ -1,0 +1,24 @@
+<% define_content :link do %>
+    <%= HostUrl.protocol %>://<%= HostUrl.context_host(asset.account) %>/<%= asset.account.class.to_s.downcase.pluralize %>/<%= asset.account_id %>/subscriptions
+<% end %>
+
+<% define_content :subject do %>
+  <%= t :subject, "Invoice Payment Confirmation" %>
+<% end %>
+
+<%= "Dear Customer,"%>
+
+  Your Payment of &#8377; <%= Money.new(asset.transaction_amount.to_i, "INR")  %>  to Arrivu LMS for Transaction ID <%= asset.merchant_transaction_id %> is SUCCESSFUL.
+
+
+
+ORDER DETAILS
+Merchant	 :	<%= HostUrl.protocol %>://<%= HostUrl.context_host(asset.account) %>
+Date	     :  <%=asset.updated_at  %>
+Amount	 :	&#8377; <%= Money.new(asset.transaction_amount.to_i, "INR")  %>
+Transaction ID	 :	<%= asset.merchant_transaction_id %>
+
+
+
+<%= t :details, "Click here to view your subscription details" %>
+<%= content :link %>

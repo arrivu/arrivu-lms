@@ -15,10 +15,35 @@ class Payment < ActiveRecord::Base
   belongs_to :billing_type
   belongs_to :account
   belongs_to :subscription
+  belongs_to :user
+
 
 
   before_create :generate_merchant_transaction_id
+  after_save :broadcast_notifications
 
+  has_a_broadcast_policy
+
+  set_broadcast_policy do |p|
+    p.dispatch :payment_invoice
+    p.to {|record| record.user}
+    p.whenever { @send_payment_invoice }
+  end
+
+  def broadcast_notifications
+    return if @broadcasted
+    @broadcasted = true
+    raise ArgumentError, "Broadcast Policy block not supplied for #{self.class.to_s}" unless self.class.broadcast_policy_list
+    self.class.broadcast_policy_list.broadcast(self)
+  end
+
+  def complete_payment!
+    @send_payment_invoice = true
+    self.completed = true
+    self.save
+    @send_payment_invoice = false
+    true
+  end
 
 
   def details

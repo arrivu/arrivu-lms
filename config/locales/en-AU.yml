@@ -8873,6 +8873,7 @@ en-AU:
   notification: 
     added_to_conversation_description: "You are added to a conversation"
     added_to_conversation_display: "Added To Conversation"
+    payment_invoice: "Payment Invoice"
     all_submissions_description: |-
         *Instructor and Admin only:*
         
