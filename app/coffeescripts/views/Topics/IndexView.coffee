@@ -1,17 +1,16 @@
 define [
   'jquery'
-  'underscore'
   'i18n!topics'
   'str/htmlEscape'
   'jst/topics/IndexView'
   'compiled/views/Topics/AddTopicView'
-  'compiled/views/Topics/EditView'
   'compiled/views/Topics/AddSubTopicView'
-  'compiled/views/Topics/TopicListView'
-  'compiled/models/CourseTopic'
-], ($, _, I18n, htmlEscape, template, AddTopicView, EditView, AddSubTopicView, TopicListView, CourseTopic) ->
+  'compiled/models/CourseTopic',
+], ($, I18n, htmlEscape, template, AddTopicView, AddSubTopicView, CourseTopic) ->
 
   class IndexView extends Backbone.View
+
+    @child 'topicsCollectionView', '[data-view=topics]'
 
     template: template
 
@@ -26,60 +25,29 @@ define [
       @showTopicsView()
 
     showTopicsView: =>
-      @collection.fetch()
-      @collection.on 'sync', @renderTopicListView, @collection
-
-    renderTopicListView: (collection) ->
-      $("#topic_add").empty()
-      _.each collection.models, (model) ->
-        topicListView = new TopicListView
-          name: model.attributes.name
-          id: model.attributes.id
-        $("#topic_add").append topicListView.render().el
-        _.each model.attributes.children, (model) ->
-          topicListView = new TopicListView
-            name: model.name
-            id: model.id
-            is_child: true
-          $("#topic_add").append topicListView.render().el
-          _.each model.children, (model) ->
-            topicListView = new TopicListView
-              name: model.name
-              id: model.id
-              is_sub_child: true
-            $("#topic_add").append topicListView.render().el
+      @topicsCollectionView.collection.fetch()
+      @topicsCollectionView.show()
 
     addTopic: ->
       newTopic = new CourseTopic
       newTopic.on 'sync', @onTopicSync
       @addTopicView = new AddTopicView(model: newTopic).render()
 
-
-    subTopic: (event)->
-      parent_id = $(event.target).closest("a").attr('data-add-sub-topic')
+    subTopic: ->
       newsubTopic = new CourseTopic
       newsubTopic.on 'sync', @onTopicSync
-      @addSubTopicView = new AddSubTopicView(model: newsubTopic,parent_id: parent_id).render()
+      @addSubTopicView = new AddSubTopicView(model: newsubTopic).render()
 
-    render_topic_view: (res) ->
-      console.log(res)
-      topicListView = new TopicListView
-        name: model.name
-        id: model.id
-        is_sub_child: true
-      $("#topic_add").append topicListView.render().el
 
     editTopic: (event) ->
       view = @$(event.currentTarget).closest('.topic_item').data('view')
       topic = view.model
-      console.log(view);
       topic.on 'sync', @onTopicSync
-      @editView = new EditView(model: topic).render()
+      @addTopicView = new AddTopicView(model: topic).render()
 
     onTopicSync: (model) =>
       @addTopicView.remove() if @addTopicView
       @addSubTopicView.remove() if @addSubTopicView
-      @editView.remove() if @editView
       @showTopicsView()
       $.flashMessage(htmlEscape(I18n.t('topic_saved_message', "%{topic} saved successfully!", { topic: model.get('name') })))
 
