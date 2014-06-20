@@ -1,0 +1,21 @@
+<%= form_for @subscription_plan do |f| %>
+    <ul>
+      <% @subscription_plan.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+      <% end %>
+
+    <%= f.label :feature_set_id %>
+    <%= f.collection_select :feature_set_id, @feature_sets, :id, :name %>
+ 
+ 
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+
+      <%= f.label :rate_cents %>
+      <%= f.text_field :rate_cents %>
+
+
+   
+ <%= f.submit "Submit" ,:class => "btn btn-primary"%>
+ </ul>
+<% end %>

@@ -1,29 +1,50 @@
 class Payment < ActiveRecord::Base
 
-  attr_accessible :course_id,:user_id,:token, :identifier, :payer_id,:recurring, :digital, :popup, :completed, :canceled,
-                  :amount, :title, :description
+  attr_accessible :subscription_plan_id,:subscription_id,:user_id,:merchant_transaction_id,
+                  :buyer_email_address,:transaction_type,:transaction_amount,:payment_method,:currency,:ui_mode,
+                  :hash_method,:completed, :canceled,:bank_name,:billing_type_id,:account_id
 
-  validates_presence_of :amount
-  validates_uniqueness_of :identifier, uniqueness: true, :allow_blank => true, :allow_nil => true
-  scope :recurring, where(recurring: true)
-  scope :digital,   where(digital: true)
-  scope :popup,     where(popup: true)
+  validates_presence_of :user_id,:buyer_email_address,:transaction_type,:transaction_amount,:payment_method,:currency,
+                        :ui_mode,:hash_method,:bank_name,:account_id
+  validates_uniqueness_of :merchant_transaction_id, uniqueness: true
+
   scope :completed,     where(completed: true)
-  cattr_accessor :title ,:description
-  belongs_to :course
-  belongs_to  :user
 
-  def goods_type
-    digital? ? :digital : :real
+  belongs_to :account_subscription
+  belongs_to :subscription_plan
+  belongs_to :billing_type
+  belongs_to :account
+  belongs_to :subscription
+  belongs_to :user
+
+
+
+  before_create :generate_merchant_transaction_id
+  after_save :broadcast_notifications
+
+  has_a_broadcast_policy
+
+  set_broadcast_policy do |p|
+    p.dispatch :payment_invoice
+    p.to {|record| record.user}
+    p.whenever { @send_payment_invoice }
   end
 
-  def payment_type
-    recurring? ? :recurring : :instant
+  def broadcast_notifications
+    return if @broadcasted
+    @broadcasted = true
+    raise ArgumentError, "Broadcast Policy block not supplied for #{self.class.to_s}" unless self.class.broadcast_policy_list
+    self.class.broadcast_policy_list.broadcast(self)
   end
 
-  def ux_type
-    popup? ? :popup : :redirect
+  def complete_payment!
+    @send_payment_invoice = true
+    self.completed = true
+    self.save
+    @send_payment_invoice = false
+    true
   end
+
 
   def details
     if recurring?
@@ -74,50 +95,13 @@ class Payment < ActiveRecord::Base
     self.cancel!
   end
 
-  private
+  protected
 
-  def client
-    Paypal::Express::Request.new PAYPAL_CONFIG
-  end
-
-  DESCRIPTION = {
-      item: 'PayPal Express Sample Item',
-      instant: 'PayPal Express Instant Payment',
-      recurring: 'PayPal Express Sample Recurring Payment'
-  }
-
-  def payment_request
-    request_attributes = if self.recurring?
-                           {
-                               billing_type: :RecurringPayments,
-                               billing_agreement_description: DESCRIPTION[:recurring]
-                           }
-                         else
-                           item = {
-                               name: title,
-                               description: description,
-                               amount: self.amount
-                           }
-                           item[:category] = :Digital if self.digital?
-                           {
-                               amount: self.amount,
-                               description: description,
-                               items: [item]
-                           }
-                         end
-    Paypal::Payment::Request.new request_attributes
-  end
-
-  def recurring_request
-    Paypal::Payment::Recurring.new(
-        start_date: Time.now,
-        description: DESCRIPTION[:recurring],
-        billing: {
-            period: :Month,
-            frequency: 1,
-            amount: self.amount
-        }
-    )
+  def generate_merchant_transaction_id
+    self.merchant_transaction_id = loop do
+      random_token = SecureRandom.urlsafe_base64(nil, false)
+      break random_token unless Payment.exists?(merchant_transaction_id: random_token)
+    end
   end
 
 end

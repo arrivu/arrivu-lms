@@ -553,6 +553,37 @@ routes.draw do
 
   resources :accounts do
     #arrivu changes
+    # Subscription
+    resources :subscriptions
+    resources :feature_sets
+
+    get "query/index"
+    get "refund/index"
+
+    get "response/response_display"
+    get "charging/charging_display"
+    post "charging/charging_display"
+    get "charging/show" ,:as => :charging
+    post "response/response_display"
+    post "query/index"
+    get "query/show"
+    get "refund/show"
+    post "refund/index"
+
+    resources :subscription_plans do
+      post 'subscribe', on: :member
+    end
+
+
+    match 'confirm/:subscription_id',:to => 'payments#payment_confirm', :as => :payment_confirm
+    resources :payments, only: [:show, :create, :destroy] do
+      collection do
+        post :success
+        get :cancel
+        post :notify
+      end
+    end
+
     if ELEARNING
       match '/add_logo' => 'home_pages#add_logo' ,:as => :add_logo ,:via => :put
       post 'create_solo_teacher' => 'libraries#create_user', :as => :create_solo_teacher
@@ -1696,12 +1727,13 @@ routes.draw do
     resources :home_pages
     resources :teachers
     resources :libraries do
+      match 'payment_confirm',:to => 'libraries#payment_confirm', :as => :payment_confirm
       match 'enroll' => 'libraries#enrollment', :as => :enrollments
       get 'payment_complete' => 'libraries#payment_complete', :as => :payment_complete
       post 'create_user' => 'libraries#create_user', :as => :create_user
     end
     get 'users/:user_id/details' => 'libraries#user_profile', :as => :user_details
-    match 'payment_confirm/:course_id',:to => 'libraries#payment_confirm', :as => :payment_confirm
+
     resources :payments, only: [:show, :create, :destroy] do
       collection do
         get :success
@@ -1720,14 +1752,17 @@ routes.draw do
   match '/update_referree'  => 'referrals#update_referree',:path_name => "reward", :as => :referree_registration, :via => :post
   #Arrivu changes(LmsCustomization start)
   map.resources :feature_wishs
-  map.resources :subscription #, :member => {:validate => :post}
-  map.subscription_expired '/subscription_expired', :controller => 'subscription', :action => 'subscription_expired'
-  map.subscription_expired_email '/subscription_expired_email', :controller => 'subscription', :action => 'subscription_expired_email',:conditions => { :method => :post }
-  map.subscription_validate '/subscription_validate', :controller => 'subscription', :action => 'validate',:conditions => { :method => :post }
-  map.authenticate '/authenticate', :controller => 'subscription', :action => 'authenticate'
+  map.resources :account_subscription #, :member => {:validate => :post}
+  map.subscription_expired '/subscription_expired', :controller => 'account_subscription', :action => 'subscription_expired'
+  map.subscription_expired_email '/subscription_expired_email', :controller => 'account_subscription', :action => 'subscription_expired_email',:conditions => { :method => :post }
+  map.subscription_validate '/subscription_validate', :controller => 'account_subscription', :action => 'validate',:conditions => { :method => :post }
+  map.authenticate '/authenticate', :controller => 'account_subscription', :action => 'authenticate'
   #Arrivu changes(LmsCustomization end)
   #arrivu changes
   match '/accounts/:account_id/course_index_custom_design' => 'course_page_custom_designs#course_index_custom_design', :as => :account_course_index_custom_design, :via => :post
   match '/accounts/:account_id/account_index_custom_design' => 'course_page_custom_designs#account_index_custom_design', :as => :account_index_page_custom_design, :via => :post
+
+
+
   #arrivu changes
 end

@@ -982,7 +982,7 @@ ApplicationHelper
         unless @badge_ex_tool.nil?
           @resource_title = @badge_ex_tool.label_for(:main_navigation)
           @resource_url_for_main_nav = @badge_ex_tool.main_navigation(:url)
-          @opaque_id = @current_user.opaque_identifier(:asset_string)
+          @opaque_id = @badge_ex_tool.opaque_identifier_for(@current_user)
           @resource_type = 'main_navigation'
           @return_url = user_profile_url(@current_user, :include_host => true)
           if for_leader_board

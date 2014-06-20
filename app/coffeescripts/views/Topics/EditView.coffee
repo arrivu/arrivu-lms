@@ -1,14 +1,15 @@
 define [
+  'jquery'
   'jst/topics/EditView'
   'compiled/views/ValidatedFormView'
   'compiled/jquery/fixDialogButtons'
-  'compiled/models/CourseTopic'
-  'compiled/views/Topics/TopicListView'
-], (template, ValidatedFormView, CourseTopic, TopicListView) ->
+  'jquery.minicolors'
+], ($,template, ValidatedFormView) ->
   class EditView extends ValidatedFormView
     template: template
     tagName: 'form'
     id: 'topic_form'
+
     className: 'validated-form-view form-horizontal bootstrap-form'
 
     afterRender: ->
@@ -26,20 +27,20 @@ define [
           click: => @submit()
         ]
       $("#hue-demo").minicolors
-        control: $(this).attr("data-control") or "hue"
-        defaultValue: $(this).attr("data-defaultValue") or ""
-        inline: $(this).attr("data-inline") is "true"
-        letterCase: $(this).attr("data-letterCase") or "lowercase"
-        opacity: $(this).attr("data-opacity")
-        position: $(this).attr("data-position") or "bottom left"
+          control: $(this).attr("data-control") or "hue"
+          defaultValue: $(this).attr("data-defaultValue") or ""
+          inline: $(this).attr("data-inline") is "true"
+          letterCase: $(this).attr("data-letterCase") or "lowercase"
+          opacity: $(this).attr("data-opacity")
+          position: $(this).attr("data-position") or "bottom left"
       change: (hex, opacity) ->
-        log = undefined
+          log = undefined
       try
-        log = (if hex then hex else "transparent")
-        log += ", " + opacity  if opacity
-        console.log log
-        return
-        theme: "default"
+          log = (if hex then hex else "transparent")
+          log += ", " + opacity  if opacity
+          console.log log
+          return
+          theme: "default"
       @$el.submit (e) =>
         @submit()
         return false
@@ -48,15 +49,6 @@ define [
     submit: ->
       this.$el.parent().find('.btn-primary').removeClass('ui-state-hover')
       super
-      topic_name =  $("#sub_topic_form #name").val()
-      color =  $("#sub_topic_form #hue-demo").val()
-      newsubTopic = new CourseTopic
-      $("#content").disableWhileLoading newsubTopic.save
-        name: topic_name
-        color: color
-      ,
-        success: @render_topic_view
-        error: $.flashMessage("There is some error while Adding Topic")
 
     showErrors: (errors) ->
       @removeErrors()
@@ -82,10 +74,3 @@ define [
       super
       message = 'There was an error in processing your request'
       @$el.prepend("<div class='alert alert-error'>#{message}</span>")
-    render_topic_view: (res) ->
-      console.log(res)
-      topicListView = new TopicListView
-        name: model.name
-        id: model.id
-        is_sub_child: true
-      $("#topic_add").append topicListView.render().el

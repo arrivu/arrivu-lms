@@ -47,6 +47,7 @@ en-GB:
     root_account_cant_have_sis_id: "SIS IDs cannot be set on root accounts"
     sis_id_in_use: "SIS ID \"%{sis_id}\" is already in use"
     tab_admin_tools: "Admin tools"
+    tab_subscriptions: Subscriptions
     tab_authentication: Authentication
     tab_courses: Courses
     tab_developer_keys: "Developer keys"
@@ -9016,6 +9017,7 @@ en-GB:
   notification: 
     added_to_conversation_description: "You are added to a conversation"
     added_to_conversation_display: "Added to conversation"
+    payment_invoice: "Payment Invoice"
     all_submissions_description: |-
         *Instructor and Admin only:*
         

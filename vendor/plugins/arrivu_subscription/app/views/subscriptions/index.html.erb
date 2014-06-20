@@ -1,0 +1,126 @@
+<style>
+  #content{
+      padding: 0px;
+      background-color: #eceef1;
+  }
+</style>
+<% jammit_css :plans  %>
+<div class="subscription_top">
+  <br/>
+ <div style="margin-left: 20px">
+  You Have a <%= @subscription.subscription_plan.name %> subscription.
+   <% if @subscription.expire_on &&  @subscription.paid_through%>
+     It will expire on <b> <%= @subscription.expire_on %> </b>.
+      <% unless @subscription.expired?  %>
+       You have <%= @subscription.usage %> days usage.
+       <% end  %>
+   <% end  %>
+       <br/>
+  According to plan you have to pay monthly <%= Money.new(@subscription.subscription_plan.rate_cents.to_i, "INR")  %> &#8377;.<br/>
+
+   <% if @subscription.paid? && @subscription.in_grace?  %>
+       Your subscription is in Grace period.Pay your monthly bill now. Once our grace is expired your subscription
+       will changed to free plan.
+   <% end  %>
+  <% if @subscription.expired?  %>
+   <div class="alert-error" style="width: 37%;
+           padding: 5px;">
+   Your subscription is expired so it will be automatically changed to free plan.
+   </div>
+       <br/>
+ <% end  %>
+
+
+
+
+ </div>
+</div>
+<div id="plans">
+
+  <% @plans.each do |plan| %>
+      <div class="plan">
+        <div class="name"><%= plan.name %></div>
+        <div class="details">
+          <div class="price" >
+            <ul style="list-style: none;">
+              <li style="float: left">&#8377;&nbsp;</li>
+              <li style="float: left" class="amount" data-amount="<%= Money.new(plan.rate_cents.to_i, "INR") %>"><%= "#{Money.new(plan.rate_cents.to_i, "INR") }"%></li>
+            </ul>
+            <div class="per_month">per month</div>
+          </div>
+
+          <hr class="feature_separator"/>
+          <div class="kisses"><%= plan.feature_set.no_courses%> Courses</div>
+          <hr class="feature_separator"/>
+          <div class="kisses"><%= plan.feature_set.no_students%> Students</div>
+          <hr class="feature_separator"/>
+          <div class="kisses"><%= plan.feature_set.no_teachers%> Teachers</div>
+          <hr class="feature_separator"/>
+          <div class="kisses"><%= plan.feature_set.no_admins%> Admins</div>
+          <hr class="feature_separator"/>
+          <div class="kisses"><%= plan.feature_set.storage%> Storage</div>
+
+          <div class="signup">
+            <%= form_for :subscription, :html => {:class => "change_plan_form"}, :url => subscribe_account_subscription_plan_path(@account,plan,subscription_id: @subscription.id) do |f| %>
+             <%= f.hidden_field :billing ,:value => "",:class => "billing_type"%>
+            <% if @subscription.subscription_plan_id ==  plan.id %>
+                <%@found= true  %>
+              <%= f.submit  "Pay Now"%>
+             <% else  %>
+                 <% if @found  %>
+                        <%= f.submit  "Upgrade Now"%>
+                 <% else  %>
+                        <%= f.submit  "Degrade"%>
+                 <% end %>
+
+            <% end%>
+            <% end %>
+          </div>
+        </div>
+      </div>
+  <% end %>
+
+  <div class="plan" style="  width: 100px;
+          text-align: left;margin-left: 20px;color: #676767;">
+    <% @domain_root_account.billing_types.each do |billing_type|%>
+
+        <div class="offer">Save <%= billing_type.discount_percentage.to_i%>%</div>
+        by paying <%= billing_type.billing_type %>.
+        <div>
+          <input  class="payment_payment_method_BILLING" name="payment[payment_method]" style="margin-top: 0px;"
+                  type="radio" data-percentage="<%= billing_type.discount_percentage%>"
+                  value="<%= billing_type.months %>" data-billing-type="<%= billing_type.id %>">&nbsp;Billing
+        </div>
+        <br/>
+
+    <% end%>
+
+  </div>
+
+
+  <div class="clear"></div>
+</div>
+<% js_block do %>
+    <script type="text/javascript">
+        require([
+            'jquery' /* $ */,
+            'compiled/tinymce',
+            'tinymce.editor_box',
+            'jquery.disableWhileLoading'
+        ], function($) {
+            $('.payment_payment_method_BILLING').click(function(event){
+                months = $(event.target).val();
+                discount_percentage = $(event.target).data('percentage');
+                $(".amount").each(function( index ) {
+                     total_amount = $( this ).data('amount') * discount_percentage;
+                     discount = total_amount/100;
+                     calculated_amount = $( this ).data('amount') -  discount;
+                    $( this ).text(calculated_amount.toFixed(2));
+                    $(".billing_type").val($(event.target).data('billing-type'));
+
+                });
+
+            });
+        });
+    </script>
+<% end %>

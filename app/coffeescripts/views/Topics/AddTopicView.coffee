@@ -47,18 +47,9 @@ define [
         return false
       this
 
-    submit: (event) ->
+    submit: ->
       this.$el.parent().find('.btn-primary').removeClass('ui-state-hover')
       super
-      topic_name =  $("#sub_topic_form #name").val()
-      color =  $("#sub_topic_form #hue-demo").val()
-      newsubTopic = new CourseTopic
-      $("#content").disableWhileLoading newsubTopic.save
-        name: topic_name
-        color: color
-      ,
-        success: @render_topic_view
-        error: $.flashMessage("There is some error while Adding Topic")
 
     showErrors: (errors) ->
       @removeErrors()

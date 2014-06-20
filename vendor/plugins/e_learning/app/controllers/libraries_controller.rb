@@ -1,12 +1,19 @@
 class LibrariesController < ApplicationController
+  require 'constants'
+  require 'pz_utils.rb'
+  require 'config.rb'
+  require 'charging/charging_response.rb'
+  include PZ_Utils
+  include ChargingResponse
   include ELearningHelper
+  include ActionView::Helpers::DateHelper
 
   before_filter :require_user, :only => [:enrollment,:payment_complete,:payment_confirm,:enrollment,:enroll_and_redirect]
   before_filter :check_private_e_learning
   before_filter :set_e_learning
   before_filter :check_e_learning
   before_filter :require_context ,:only => [:course_reviews]
-  include ActionView::Helpers::DateHelper
+
   helper_method :total_students_count
   helper_method :total_review_count
   helper_method :course_enrolled_as_teacher
@@ -30,13 +37,14 @@ class LibrariesController < ApplicationController
     if @context and (@course_pricing.nil? || @course_pricing.price.to_i == 0)
       enroll_and_redirect
     else
-      redirect_to payment_confirm_path(@context)
+      redirect_to library_payment_confirm_path(@context)
     end
   end
 
   def enroll_and_redirect
     @enrollment = @context.enroll_student(@current_user, :enrollment_state => 'active')
       if @enrollment
+        flash[:notice] = "You are now enrolled to this course"
         redirect_to course_url(@context)
       else
         redirect_to root_url
@@ -44,16 +52,21 @@ class LibrariesController < ApplicationController
   end
 
   def payment_confirm
-    get_course_and_price(params[:course_id])
+    get_course_and_price(params[:library_id])
     @grouped_payments = [[Payment.new]]
+    @subscription = Subscription.find_or_create_by_account_id_and_subscribable_id_and_subscribable_type(@account.id,
+                                @context.id,@context.class.name,started_on: Date.today,subscription_plan_id: 0)
     get_course_images
   end
 
   def payment_complete
-    @payment = Payment.find(params[:payment_id])
-    @context = @payment.course
+    @payment = Payment.find(params[:payment_id]) rescue nil
+    @context = Course.find(@payment.subscription.subscribable_id) rescue nil
     if (@payment.user_id == @current_user.id) && @payment.completed
       enroll_and_redirect
+    else
+      flash[:error] = "The payment is not completed or the payment initiator is not you."
+      redirect_to library_payment_confirm_path(@context.id)
     end
   end
 
@@ -107,13 +120,7 @@ class LibrariesController < ApplicationController
     end
     @user.name ||= params[:pseudonym][:unique_id]
     unless @user.registered?
-      @user.workflow_state = if require_password
-                               'registered'
-                             elsif notify == :self_registration && @user.registration_approval_required?
-                               'pending_approval'
-                             else
-                               'pre_registered'
-                             end
+      @user.workflow_state = 'registered'
     end
     @pseudonym ||= @user.pseudonyms.build(:account => @context)
     @pseudonym.account.email_pseudonyms = !allow_non_email_pseudonyms

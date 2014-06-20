@@ -1,0 +1,25 @@
+<%= render :partial => 'form' %>
+<table class="table">
+  <tr>
+    <th>Serial no</th>
+    <th>Organization Name</th>
+    <th>Name</th>
+    <th>Price in paisa</th>
+
+    <th>Edit</th>
+    <th>Delete</th>
+  </tr>
+<% @subscription_plans.each_with_index do |subscription_plan,idx| %>
+    <tr>
+      <td><%= idx +1 %></td>
+      <td><%= subscription_plan.feature_set.organization.name %></td>
+      <td><%= subscription_plan.name %></td>
+      <td><%= subscription_plan.rate_cents %></td>
+
+      <td><%= link_to "Edit", edit_subscription_plan_path(subscription_plan,account_id: @org.id) %></td>
+      <td><%= link_to "Destroy", subscription_plan, :confirm => 'Are you sure?', :method => :delete %></td>
+
+    </tr>
+
+<% end  %>
+</table>

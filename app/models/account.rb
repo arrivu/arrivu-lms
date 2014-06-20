@@ -29,6 +29,10 @@ class Account < ActiveRecord::Base
   #Arrivu changes
   has_one :account_domain_mapping
   has_many :popular_courses
+  has_many :billing_types
+  has_many :feature_sets
+  has_many :subscription_plans
+  has_many :payments
   #Arrivu changes
   belongs_to :parent_account, :class_name => 'Account'
   belongs_to :root_account, :class_name => 'Account'
@@ -1079,6 +1083,7 @@ class Account < ActiveRecord::Base
   TAB_JOBS = 15
   TAB_DEVELOPER_KEYS = 16
   TAB_ADMIN_TOOLS = 17
+  TAB_SUBSCRIPTION = 18
 
 
   def external_tool_tabs(opts)
@@ -1125,6 +1130,7 @@ class Account < ActiveRecord::Base
       tabs << { :id => TAB_SIS_IMPORT, :label => t('#account.tab_sis_import', "SIS Import"), :css_class => 'sis_import', :href => :account_sis_import_path } if self.root_account? && self.allow_sis_import && user && self.grants_right?(user, nil, :manage_sis)
     end
     tabs += external_tool_tabs(opts)
+    tabs << { :id => TAB_ADMIN_TOOLS, :label => t('#account.tab_subscriptions', "Subscriptions"), :css_class => 'subscriptions', :href => :account_subscriptions_path }
     tabs << { :id => TAB_ADMIN_TOOLS, :label => t('#account.tab_admin_tools', "Admin Tools"), :css_class => 'admin_tools', :href => :account_admin_tools_path } if can_see_admin_tools_tab?(user)
     tabs << { :id => TAB_SETTINGS, :label => t('#account.tab_settings', "Settings"), :css_class => 'settings', :href => :account_settings_path }
     tabs

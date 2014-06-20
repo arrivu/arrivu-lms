@@ -1,0 +1,99 @@
+// Place all the styles related to the home controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+#plans {
+  display: table;
+  margin: 0 auto;
+  margin-bottom: 10px;
+  h1 {
+    font-size: 65px;
+    font-family: Georgia, Times;
+    margin-top: 0;
+    margin-bottom: 12px;
+  }
+  .plan {
+    float: left;
+    width: 200px;
+    text-align: center;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    .name {
+      color: white;
+      font-weight: bold;
+      font-size: 20px;
+      -webkit-font-smoothing: subpixel-antialiased;
+      padding: 13px 0;
+      background: #56be8e;
+    }
+    .details {
+      padding: 5px;
+      background-color: white;
+    }
+    .price {
+      font-size: 27px;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    .per_month {
+      font-size: 12px;
+      margin-bottom: 10px;
+      color: #5E5E5E;
+    }
+    .kisses {
+      font-size: 15px;
+      color: #676767;
+    }
+    .signup {
+      margin: 20px;
+      input {
+        font-size: 16px;
+        padding: 7px 12px 8px 10px;
+        color: #FFF;
+        background: #56be8e;
+        text-decoration: none;
+        text-transform: uppercase;
+        font-family: "Avenir", "Futura", Helvetica, sans-serif;
+        border: none;
+      }
+    }
+  }
+}
+
+.feature_separator{
+  margin: 13px 0;
+}
+
+.container{
+  width: auto;
+}
+
+.offer{
+  font-size: 18px;
+  font-weight: bold;
+}
+.subscription_top{
+  min-height: 100px;
+  background-color: white;
+  border-top: 5px solid #56be8e;
+  margin-bottom: 20px;
+}
+
+.panel_h3{
+  background: #56be8e;
+  color: #fff;
+  padding: 0.2em 0.8em;
+  font-size: 1.4em;
+  margin: 0;
+  position: relative;
+}
+#subscription{
+  margin-left: 5%;
+  margin-top: 20px;
+}
+.subscription_attr{
+background: white;
+  font-size: 14px;
+  font-weight: bold;
+  border-bottom: 1px solid  #eeeeee;
+  padding: 11px 20px 15px 50px;
+}
