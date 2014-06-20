@@ -4,7 +4,7 @@
  %>
 <%= form_for :user_profile, :url => user_profile_url(@user_id),:html => {:method=> "get",:id => "user_profile"} do |f| %>
     <div class="instructor-wrapper font-os">
-      <div class="container">
+      <div class="container" style="padding: 10px;">
             <div class="span3">
               <div>
                 <div class="web">
@@ -22,32 +22,32 @@
                 </div>
               </div>
             </div>
-          <div class="span6">
+          <div class="span8">
             <div class="fx ml40 ">
               <h1 class="teacher_description_page_name"><%= @user_id.name %></h1>
               <h2 class="teacher_profile_title"><%= @user_id.profile.title %></h2>
               <h3 style="margin-top: 20px;font-size: 18px;font-weight: 700;">About</h3>
-              <div style="position: relative;">
-                <div class="teacher_profile_bio" data-collapsable-text-height="400">
-                  <p><%= @user_id.profile.bio %></p>
+              <div>
+                <div class="teacher_profile_bio" >
+                 <p> <%= @user_id.profile.bio %></p>
                 </div>
               </div>
-              <ul class="display-ul row-fluid">
-                <li class="span3 first_display_li">
+              <ul class="row-fluid">
+                <li class="span3 first_display_li" style="text-align: center;">
                   <div class="div_students_count">
                     <%=total_students_count %> </div>
                   <div class="div_students_icon">
                     <i class="icon-user"></i>
                     Students </div>
                 </li>
-                <li class="span3 common_li">
+                <li class="span3 common_li" style="text-align: center;">
                   <div class="common_li_div_display">
                     <%= @user_id.teacher_enrollments.count %> </div>
                   <div class="common_li_icon_display">
                     <i class="icon-note-dark"></i>
                     Courses </div>
                 </li>
-                <li class="span3 common_li">
+                <li class="span3 common_li" style="text-align: center;">
                   <div class="common_li_div_display">
                     <%= total_review_count %> </div>
                   <div class="common_li_icon_display">
@@ -69,7 +69,7 @@
               <div class="evenflow">
               <div class="resource-row">
                  <% course_enrolled_as_teacher  %>
-                 <ul style="list-style-type: none;text-align: center">
+                 <ul style="list-style-type: none;text-align: center;padding: 27px;">
                    <% course_enrolled_as_teacher.each do |course| %>
                      <li style="display: inline-block;vertical-align: top">
                        <div class="navigation_link" id="<%= course.id %>">

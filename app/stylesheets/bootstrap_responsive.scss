@@ -321,6 +321,9 @@
   .span6, .row-fluid .span6{
     width: 50% ;
   }
+  .span8, .row-fluid .span8{
+    width: 50% ;
+  }
 }
 @media (max-width: 1200px) and (min-width: 768px){
 //  .span3{
@@ -356,6 +359,9 @@
   .span6, .row-fluid .span6{
     width: 95% ;
   }
+  .span8, .row-fluid .span8{
+    width: 95% ;
+  }
 }
 @media  (max-width: 480px) {
 
@@ -374,6 +380,6 @@
     overflow: hidden;
     position: absolute;
     top: -3px;
-    right: 53px;
+    right: 35px;
   }
 }

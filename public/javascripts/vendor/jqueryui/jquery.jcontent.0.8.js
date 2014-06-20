@@ -24,7 +24,6 @@ define([
             pause_on_hover: false,
             width: $(window).width(),
             height: 350,
-            position: absolute,
             videos: false
         },options);
 

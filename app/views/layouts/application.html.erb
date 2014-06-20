@@ -57,7 +57,7 @@
                 <a class="brand" id="header-logo" href="<%= logo_root_url %>" <% if @e_learning  %>style="" <% end  %>><%= t 'links.dashboard', "My Dashboard" %></a>
             <% end %>
             <% if can_do((@account ||= @domain_root_account), @current_user, :manage_account_settings) %>
-                <a href="#" id="upload_logo_link"  style="width: 160px;height: 42px;left: 182px;margin-top: -22px;position: absolute;z-index: 1;"><%= "↓ Upload logo" %></a>
+                <a href="#" id="upload_logo_link"  style="width: 160px;height: 42px;left: 182px;position: absolute;z-index: 1;"><%= "↓ Upload logo" %></a>
             <%end  %>
             <!--Arrivu changes-->
             <b id="header-logo-secondary"></b>

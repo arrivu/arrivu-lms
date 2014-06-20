@@ -19,15 +19,14 @@
             box-shadow: 0 1px 2px rgba(0,0,0,0.2);"
 <% end  %>
 >
-  <div class="span3" style="text-align:center;">
+  <div class="span3" style="text-align:center;padding: 20px;">
     <% if @context_image_url  %>
-        <%= image_tag @context_image_url ,:style=>"border: 1px solid hsl(0, 0%, 87%);
-border-radius: 4px;" %>
+        <%= image_tag @context_image_url %>
     <% else %>
         <div style="width: 280px;height: 207px;"></div>
     <% end %>
   </div>
-<div class="span6" style="padding: 1%;text-align:center;">
+<div class="span6" style="padding: 1%;">
   <div style="font-size: 23px;
           font-weight: bold;">
         <%= @context.name %>
@@ -42,13 +41,13 @@ border-radius: 4px;" %>
 
   <div style="margin-top: 53px;word-wrap:break-word;">
     <ul class="">
-      <li class="span3 course_properties">
+      <li class="course_properties">
        <%= image_tag 'comments.png',:style=>"margin-top: -2px;" %>  <%= pluralize(@context.comments.size,"Review") %>
       </li>
-      <li class="span3 course_properties">
+      <li class="course_properties">
         <%= image_tag 'modules.png',:style=>"margin-top: -2px;" %>  <%= pluralize(@context.context_modules.size,"Module") %>
       </li>
-      <li class="span3 course_properties">
+      <li class="course_properties">
         <%= image_tag 'people.png',:style=>"margin-top: -2px;" %> <%= pluralize(@context.students.size,"Student") %> Enrolled
       </li>
     </ul>
@@ -58,9 +57,9 @@ border-radius: 4px;" %>
 </div>
 
  
-  <div class="span3" style="text-align: center;margin-top: 19px;
-border: 1px solid hsl(0, 0%, 87%);border-radius: 4px;padding: 5px;">
-    <div style="font-size: 18px;margin-top: 36px;">Cost per enrollment:</div>
+  <div class="span3" style="text-align: center;margin-top: 25px;
+border: 1px solid hsl(0, 0%, 87%);border-radius: 4px;padding: 25px;background: #fff;">
+    <div style="font-size: 18px;">Cost per enrollment:</div>
     <div style="font-size: 18px;margin-top: 10px;font-weight: bold;
             color: darkgreen;"><%= @course_pricing.nil? ? "Free" : "$#{@course_pricing.price}" %></div>
     <div style="margin-top: 20px;">
@@ -73,15 +72,15 @@ border: 1px solid hsl(0, 0%, 87%);border-radius: 4px;padding: 5px;">
   </div>
 </div>
 
-<div class="row-fluid">
+<div class="">
   <div class="span3">
-    <h1>Instructors</h1>
+    <h1 style="font-size: 1.8em;font-weight: normal;">Instructors</h1>
     <% @context.teachers.each do |teacher| %>
         <a href="<%= user_details_path(teacher) %>" style="text-decoration: none;color: black">
     <div class="instructor-bio comment comment_box" style="max-height: none;border-bottom: 1px solid lightgray;border-right: 1px solid lightgray;
             border-radius: 4px;">
       <img src=<%= teacher.avatar_url ? teacher.avatar_url : "http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&f=y" %> width="100" height="100" class="left img-circle" alt="<%= teacher.name%>">
-      <h3 class="last emboss-light"><%= teacher.name%></h3>
+      <h3 class="last emboss-light" style="font-size: 1.8em;font-weight: normal;"><%= teacher.name%></h3>
       <p class="fineprint emboss-light"><em class="small-head" style="margin-left: 10px;"><%= teacher.profile.title if  teacher.profile %></em></p>
       <div class="instructor-bio-content">
         <div class="commentdesc more">
@@ -97,16 +96,16 @@ border: 1px solid hsl(0, 0%, 87%);border-radius: 4px;padding: 5px;">
     <% end %>
 
   </div>
-  
-  
-    <div class="span6">
-    <h1 style="border-bottom: 1px solid lightgray;" >Full course description</h1>
+
+
+    <div class="span7">
+    <h1 style="border-bottom: 1px solid lightgray;font-size: 1.8em;font-weight: normal;" >Full course description</h1>
       <div class="small">
        <p> <%= @context.course_description.try(:long_description) %></p>
       </div>
       <hr/>
 
-      <h1>Course Modules</h1>
+      <h1 style="font-size: 1.8em;font-weight: normal;">Course Modules</h1>
       <ul style="margin: 0px;">
         <% @context.context_modules.active.each_with_index do |context_modules, idx |  %>
         <li class="course_module_item <%= idx == 0 ? 'default_hover_style' : "" %> ">
@@ -118,7 +117,7 @@ border: 1px solid hsl(0, 0%, 87%);border-radius: 4px;padding: 5px;">
   
 
 <div class="span3">
-    <h1>Reviews</h1>
+    <h1 style="font-size: 1.8em;font-weight: normal;">Reviews</h1>
     <% @comments.each do |comment| %>
 
           <div  class="comment left_bottom_border" id="comment_<%= comment ? comment.id : "{{ blank }}" %>" style="<%= hidden unless comment %>">

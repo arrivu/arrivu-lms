@@ -5060,11 +5060,30 @@ button.close {
     padding-right: 10px;
   }
 }
+@media (min-width: 600px) and (max-width: 980px) {
+  #course_library .row-fluid .span3{
+    width: 17%;
+  }
+  .resource{
+    width: 310px !important;
+    text-align: left;
+  }
+}
+@media (min-width: 400px) and (max-width: 599px) {
+
+  .resource{
+    width: 310px !important;
+    text-align: left;
+  }
+}
 
 @media (min-width: 980px) {
   .nav-collapse.collapse {
     height: auto !important;
     overflow: visible !important;
+  }
+  #course_library .row-fluid .span3{
+    width: 17%;
   }
   .resource{
     width: 310px !important;
@@ -5077,9 +5096,8 @@ button.close {
     margin-left: 2px;
     line-height: 16px;
   }
-  [class*="span"]{
-    margin-left: 0px !important;
-  }
+
+
   .content-box {
     background-color: #fff;
     border: 1px solid #ddd;
@@ -5089,6 +5107,22 @@ button.close {
   }
 }@media (max-width: 550px) {
 h1{font-size:33px}
+  .popup_teacher_desc {
+    color: black;
+    margin-top: -60px;
+    line-height: 16px;
+    padding: 50px 35px 0px 50px;
+  }
+  .popular_course_item .span3, .span3, .row-fluid .span3 {
+    width: 100%;
+
+  }
+  .course_desc {
+    padding: 5px;
+    background-color: #efefef;
+    margin-left: -15px;
+    width: 100%;
+  }
 }@media (min-width: 200px)and (max-width: 319px){
   h1{font-size:17px}
   p{font-size:13px}

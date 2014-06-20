@@ -1,4 +1,5 @@
 require [
+  'jquery'
   'compiled/views/HomePages/IndexView'
   'compiled/collections/AccountSlidersCollection'
   'compiled/collections/PopularCoursesCollection'
@@ -11,7 +12,7 @@ require [
   'compiled/collections/LearnerReviewCollection'
   'jquery.disableWhileLoading'
   'slider'
-], (IndexView,AccountSliderCollection,PopularCoursesCollection,AccountSliderCollectionView,AccountStatisticsView,
+], ($,IndexView,AccountSliderCollection,PopularCoursesCollection,AccountSliderCollectionView,AccountStatisticsView,
     PopularCourseCollectionView,KnowledgePartnersCollection,KnowledgePartnerCollectionView,LearnerReviewCollectionView
     LearnerReviewCollection) ->
 
