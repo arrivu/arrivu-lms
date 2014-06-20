@@ -120,13 +120,7 @@ class LibrariesController < ApplicationController
     end
     @user.name ||= params[:pseudonym][:unique_id]
     unless @user.registered?
-      @user.workflow_state = if require_password
-                               'registered'
-                             elsif notify == :self_registration && @user.registration_approval_required?
-                               'pending_approval'
-                             else
-                               'pre_registered'
-                             end
+      @user.workflow_state = 'registered'
     end
     @pseudonym ||= @user.pseudonyms.build(:account => @context)
     @pseudonym.account.email_pseudonyms = !allow_non_email_pseudonyms

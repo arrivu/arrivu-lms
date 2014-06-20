@@ -143,7 +143,7 @@ class Subscription < ActiveRecord::Base
 
   # if paid through today, returns zero
   def remaining_days
-    (self.paid_through - Date.today)
+    (self.expire_on - Date.today)
   end
 
   def remaining_days_of_grace
