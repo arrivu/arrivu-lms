@@ -51,13 +51,13 @@
             <!--Arrivu changes-->
            <% @account ||=@domain_root_account  %>
             <% if !@account.account_header.nil?  &&  Attachment.exists?(@account.account_header.header_logo_url) == true %>
-                <a class="brand" href="<%= root_url %>"><img class="logo <%= 'logo_bottom' if (@e_learning) %>" style="width: 174px;height: 63px;left: 2px;bottom: 4px;position: absolute;"
+                <a class="brand" href="<%= root_url %>"><img class="logo <%= 'logo_bottom' if (@e_learning) %>" style="width: 174px;height: 63px;left: 2px;bottom: 4px;"
                                                 src= <%= header_logo_image %>></a>
             <% else  %>
                 <a class="brand" id="header-logo" href="<%= logo_root_url %>" <% if @e_learning  %>style="" <% end  %>><%= t 'links.dashboard', "My Dashboard" %></a>
             <% end %>
             <% if can_do((@account ||= @domain_root_account), @current_user, :manage_account_settings) %>
-                <a href="#" id="upload_logo_link"  style="width: 160px;height: 42px;left: 182px;position: absolute;z-index: 1;"><%= "↓ Upload logo" %></a>
+                <a href="#" id="upload_logo_link"  style="width: 160px;height: 42px;left: 182px;z-index: 1;"><%= "↓ Upload logo" %></a>
             <%end  %>
             <!--Arrivu changes-->
             <b id="header-logo-secondary"></b>
@@ -128,7 +128,7 @@
     <!--Arrivu changes-->
     <% @account ||=@domain_root_account  %>
         <% if !@account.account_header.nil?  &&  Attachment.exists?(@account.account_header.header_logo_url) == true %>
-            <a  href="<%= root_url %>"><img class="logo <%= 'logo_bottom' if (@e_learning) %>" style="width: 174px;height: 63px;left: 2px;bottom: 4px;position: absolute;"
+            <a  href="<%= root_url %>"><img class="logo <%= 'logo_bottom' if (@e_learning) %>" style="width: 174px;height: 63px;left: 2px;bottom: 4px;"
                                             src= <%= header_logo_image %>></a>
         <% else  %>
             <a id="header-logo" href="<%= logo_root_url %>" <% if @e_learning  %>style="" <% end  %>><%= t 'links.dashboard', "My Dashboard" %></a>
