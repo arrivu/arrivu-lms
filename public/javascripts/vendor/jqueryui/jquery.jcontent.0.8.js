@@ -22,8 +22,9 @@ define([
             easing: '', //easeOutCirc, easeOutBounce,
             xml: '',
             pause_on_hover: false,
-            width:$(window).width(),
-            height: 300,
+            width: $(window).width(),
+            height: 350,
+            position: absolute,
             videos: false
         },options);
 

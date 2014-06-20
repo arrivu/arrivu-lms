@@ -19,6 +19,10 @@ xmlns:fb="http://www.facebook.com/2008/fbml"
 > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
+  <meta name="HandheldFriendly" content="True">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="viewport" id="vp" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
   <title><%= yield :page_title || t('default_page_title', "Arrivu LMS") %></title>
   <noscript> <meta http-equiv=refresh content="0; URL=/enable-javascript.html" /> </noscript>
   <!--[if lte IE 6]> <meta http-equiv=refresh content="0; URL=/ie-6-is-not-supported.html" /> <![endif]-->
@@ -28,6 +32,7 @@ xmlns:fb="http://www.facebook.com/2008/fbml"
   <%= yield :meta_tags %>
   <%= include_css_bundles %>
   <!--[if lte IE 8]> <%= javascript_include_tag "vendor/html5.js" %> <![endif]-->
+  <%= javascript_include_tag "jQuery.js" %>
   <%= yield :stylesheets %>
   <%= include_account_css %>
 
@@ -51,4 +56,4 @@ xmlns:fb="http://www.facebook.com/2008/fbml"
         document.attachEvent('onclick', _earlyClick);
   </script>
 </head>
-<body class="<%= (@body_classes).uniq.join(" ") %>">
+<body class="<%= (@body_classes).uniq.join(" ") %> foo">

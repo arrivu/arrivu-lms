@@ -28,6 +28,7 @@
     end
 
 -%>
+
 <% content_for :head do %>
     <%= include_common_stylesheets %>
     <% if @eportfolio_view === true %>
@@ -36,7 +37,91 @@
 <% end %>
 <%= render :partial => "layouts/head" %>
 <%= render :partial => 'shared/flash_notices' %>
+<% if @e_learning %>
+    <% jammit_css :bootstrap_and_responsive
+    js_bundle :jquery, :bootstrap_js%>
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+            <!--Arrivu changes-->
+           <% @account ||=@domain_root_account  %>
+            <% if !@account.account_header.nil?  &&  Attachment.exists?(@account.account_header.header_logo_url) == true %>
+                <a class="brand" href="<%= root_url %>"><img class="logo <%= 'logo_bottom' if (@e_learning) %>" style="width: 174px;height: 63px;left: 2px;bottom: 4px;position: absolute;"
+                                                src= <%= header_logo_image %>></a>
+            <% else  %>
+                <a class="brand" id="header-logo" href="<%= logo_root_url %>" <% if @e_learning  %>style="" <% end  %>><%= t 'links.dashboard', "My Dashboard" %></a>
+            <% end %>
+            <% if can_do((@account ||= @domain_root_account), @current_user, :manage_account_settings) %>
+                <a href="#" id="upload_logo_link"  style="width: 160px;height: 42px;left: 182px;margin-top: -22px;position: absolute;z-index: 1;"><%= "↓ Upload logo" %></a>
+            <%end  %>
+            <!--Arrivu changes-->
+            <b id="header-logo-secondary"></b>
 
+          <div class="nav-collapse" >
+            <ul class="nav pull-right" >
+              <li class="divider-vertical"></li>
+                  <li><%= link_to "Course Library", libraries_path%></li>
+              <% if !@current_user %>
+                  <li class="divider-vertical"></li>
+                  <% if !@domain_root_account || @domain_root_account == Account.default %>
+                      <% if ELEARNING %>
+                          <%= render :partial => 'shared/solo_teacher_account' %>
+                          <%= render :partial => 'shared/elearning_pop_up' %>
+                      <% end %>
+                  <% else  %>
+                      <li><%= link_to t('links.sign_up_as_teacher', "Sign Up as a Teacher"), register_path %></li>
+                  <% end %>
+                  <li class="divider-vertical"></li>
+                  <li><%= link_to "Log In", login_path, :id => "log_in_popup" %></li>
+              <% else %>
+                  <li class="divider-vertical"></li>
+                      <li><%= link_to "Dashboard", dashboard_path%></li>
+                  <li class="divider-vertical"></li>
+                  <% if @real_current_user && @real_current_user != @current_user %>
+                      <li class="user_name"><%= link_to t('masquerading.as', "As: *%{user_name}*", :user_name => @current_user.short_name, :wrapper => '<span class="emphasize-name">\1</span>'), user_profile_path(@current_user) %></li>
+                      <li class="divider-vertical"></li>
+                  <% else %>
+                      <li class="user_name"><%= link_to @current_user.short_name, user_profile_path(@current_user) %></li>
+
+                  <% end %>
+                  <li class="divider-vertical"></li>
+                  <% unless @current_user.fake_student? %>
+                      <li class="first inbox"><a href="<%= conversations_path %>"><span><%= t 'links.inbox', "Inbox" %></span>
+                        <% unread = @current_user.unread_conversations_count; if unread > 0 %>
+                            <b class="unread-messages-count"><%= unread %></b>
+                        <% end %>
+                      </a></li>
+                      <li class="divider-vertical"></li>
+                      <li><%= link_to t('links.settings', "Settings"), settings_profile_path %></li>
+                      <li class="divider-vertical"></li>
+                  <% end %>
+                  <li class="user_id" style="display: none;"><%= @current_user.id %></li>
+
+                  <li class="course_id" style="display: none;"><%= @context.id if @context && @context.is_a?(Course) %></li>
+
+                  <li id="current_context_code" style="display: none;"><%= @context.try_rescue(:asset_string) %></li>
+
+                  <li class="user_long_name" style="display: none;"><%= @current_user.name %></li>
+
+                  <li class="logout"><%= link_to t('links.logout', "Logout"), logout_path, :method => :delete %></li>
+                  <li class="divider-vertical"></li>
+              <% end %>
+              <% if help_link %>
+                  <li id="identity-help-container"><%= help_link %></li>
+                  <li class="divider-vertical"></li>
+              <% end %>
+            </ul>
+           </div><!-- /.nav-collapse -->
+        </div>
+      </div><!-- /navbar-inner -->
+    </div>
+    </div>
+<% else %>
 <div id="header" class="no-print <%= 'no-user' unless @current_user %> <%= 'header_bottom' if @e_learning%>" >
   <div id="header-inner">
     <a href="#content" id="skip_navigation_link"><%= t 'links.skip_to_content', "Skip To Content" %></a>
@@ -46,7 +131,7 @@
             <a  href="<%= root_url %>"><img class="logo <%= 'logo_bottom' if (@e_learning) %>" style="width: 174px;height: 63px;left: 2px;bottom: 4px;position: absolute;"
                                             src= <%= header_logo_image %>></a>
         <% else  %>
-            <a id="header-logo" href="<%= logo_root_url %>" <% if @e_learning  %>style="bottom: -39px;" <% end  %>><%= t 'links.dashboard', "My Dashboard" %></a>
+            <a id="header-logo" href="<%= logo_root_url %>" <% if @e_learning  %>style="" <% end  %>><%= t 'links.dashboard', "My Dashboard" %></a>
         <% end %>
         <% if can_do((@account ||= @domain_root_account), @current_user, :manage_account_settings) %>
             <a href="#" id="upload_logo_link"  style="width: 160px;height: 42px;left: 182px;margin-top: -22px;position: absolute;z-index: 1;"><%= "↓ Upload logo" %></a>
@@ -137,8 +222,9 @@
           <%= render :partial => 'shared/user_badges' %>
         </ul>
     <% end %>
-  </div>
+          </div>
 </div>
+<% end %>
 <div id="instructure_ajax_error_box">
   <div style="text-align: right; background-color: #fff;"><a href="#" class="close_instructure_ajax_error_box_link"><%= t('links.close', 'Close') %></a></div>
   <iframe id="instructure_ajax_error_result" src="about:blank" style="border: 0;"></iframe>
@@ -146,7 +232,7 @@
 
 <%= yield :leading_content %>
 
-<div id="wrapper-container">
+<div id="wrapper-container" >
   <div id="wrapper">
     <% if @show_left_side %>
         <%# @left_side_list_view is temporary until we redo eportfolios %>

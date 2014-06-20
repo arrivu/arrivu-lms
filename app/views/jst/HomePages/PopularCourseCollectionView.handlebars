@@ -4,14 +4,17 @@
 </div>
 {{/if}}
 {{#if ENV.PERMISSIONS.enable_links}}
+<div id="add_link" style="width:100%;">
 <a href="#" id="add_popular_courses"  class="edit_letter_grades_link">
     <i class="icon-settings"></i>
          {{#t "manage_popular_course"}}Manage Popular Course{{/t}}
 </a>
+</div>
 {{/if}}
 {{#if collection.length}}
-<div class="resource-row row" style="margin-top: 100px;">
-<ul class="collectionViewItems row " style="list-style-type: none;text-align: center;">
+
+<div class="resource-row" style="margin-top: 100px;">
+<ul class="collectionViewItems " style="list-style-type: none;text-align: center;margin-top: 30px;margin-left:0px;">
 
 </ul>
 {{/if}}

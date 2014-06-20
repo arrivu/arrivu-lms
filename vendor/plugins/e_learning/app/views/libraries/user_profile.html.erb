@@ -1,13 +1,13 @@
 <%  @body_classes << "gradebook2 full-width"
     @show_left_side = false
-    jammit_css :course_box
+    jammit_css :course_box,:bootstrap_and_responsive
  %>
 <%= form_for :user_profile, :url => user_profile_url(@user_id),:html => {:method=> "get",:id => "user_profile"} do |f| %>
     <div class="instructor-wrapper font-os">
       <div class="container">
-            <div class="main_div">
+            <div class="span3">
               <div>
-                <div>
+                <div class="web">
                   <% if service_enabled?(:avatars) %>
                        <img src="<%= @user_id.avatar_url %>" style= "width:80%;border-radius: 500px;">
                   <% else %>
@@ -22,7 +22,7 @@
                 </div>
               </div>
             </div>
-          <div class="teacher_main_div">
+          <div class="span6">
             <div class="fx ml40 ">
               <h1 class="teacher_description_page_name"><%= @user_id.name %></h1>
               <h2 class="teacher_profile_title"><%= @user_id.profile.title %></h2>
@@ -32,22 +32,22 @@
                   <p><%= @user_id.profile.bio %></p>
                 </div>
               </div>
-              <ul class="display-ul">
-                <li class="first_display_li">
+              <ul class="display-ul row-fluid">
+                <li class="span3 first_display_li">
                   <div class="div_students_count">
                     <%=total_students_count %> </div>
                   <div class="div_students_icon">
                     <i class="icon-user"></i>
                     Students </div>
                 </li>
-                <li class="common_li">
+                <li class="span3 common_li">
                   <div class="common_li_div_display">
                     <%= @user_id.teacher_enrollments.count %> </div>
                   <div class="common_li_icon_display">
                     <i class="icon-note-dark"></i>
                     Courses </div>
                 </li>
-                <li class="common_li">
+                <li class="span3 common_li">
                   <div class="common_li_div_display">
                     <%= total_review_count %> </div>
                   <div class="common_li_icon_display">
@@ -73,7 +73,7 @@
                    <% course_enrolled_as_teacher.each do |course| %>
                      <li style="display: inline-block;vertical-align: top">
                        <div class="navigation_link" id="<%= course.id %>">
-                       <div class="span3 content-box resource" style="float:left;width: 322px;left:41px;padding-bottom: 0px;margin:20px;">
+                       <div class="span3 content-box resource" style="float:left;padding-bottom: 0px;">
                          <% back_ground_image = course_image(course,:type => "back_ground_image") %>
                             <% if back_ground_image == "" %>
                              <div class="type-tag-positioner"  style="">
