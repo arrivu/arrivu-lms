@@ -5,8 +5,20 @@ require([
     'compiled/jquery/fixDialogButtons' /* fix dialog formatting */,
     'compiled/jquery.rails_flash_notifications'
 ], function( $) {
-    $("#upload_logo_link").click(function(event) {
-        var $dialog = $("#header_logo_dialog")
+    $(".logo").hover(function() {
+        $(".hide").css("display","inline-block");
+    });
+    $(".hide").mouseout(function(){
+        $(".hide").css("display","none");
+    });
+    $("#header-logo").hover(function() {
+        $(".hide").css("display","inline-block");
+    });
+    $(".hide").mouseout(function(){
+        $(".hide").css("display","none");
+    });
+    $(".hide").click(function(event) {
+        var $dialog = $("#header_logo_dialog");
         $dialog.dialog({
             title: ( "Add Account Header Details"),
             width:550,
