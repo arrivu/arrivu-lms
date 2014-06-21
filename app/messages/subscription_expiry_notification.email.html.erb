@@ -1,0 +1,33 @@
+<% if asset.subscription.subscribable_type == 'Account'
+     @account = Account.find(asset.subscription.subscribable_id)
+   end
+%>
+<% define_content :link do %>
+    <%= HostUrl.protocol %>://<%= HostUrl.context_host(@account) %>/<%= @account.class.to_s.downcase.pluralize %>/<%= @account.id %>/subscriptions
+<% end %>
+
+<% define_content :subject do %>
+    <%= t :subject, "Subscription Expiry Notification" %>
+<% end %>
+
+<%= "Dear Customer,"%> <br/> <br/>
+
+Your  Subscription in <b> Arrivu LMS </b> <b>"<%= asset.subscription.subscription_plan.name %>" </b>  plan
+<% if asset.notify_day == 7 %>
+    Will expire in 7 days(<%= asset.subscription.expire_on%>).
+<% elsif asset.notify_day == 1 %>
+    Will expire in 1 day(<%= asset.subscription.expire_on%>).
+    <br/>
+    After <%= Subscription::EXPIRATION_GRACE_PERIOD %> days your subscription plan
+    will be degarded to free plan and you cannot access your over limit resources.
+<% elsif asset.notify_day == 0 %>
+    Is expired today (<%= asset.subscription.expire_on%>).
+    <br/>
+    and your subscription plan is degraded to free plan.
+
+<% end  %>
+<br/> <br/>
+Click the below link to make your subscription payment.
+
+
+<p><a href="<%= content(:link) %>"><%= t(:link, "Click here to view your subscription details") %></a></p>

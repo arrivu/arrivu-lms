@@ -1,10 +1,18 @@
 class Subscription < ActiveRecord::Base
   include SubscriptionHelper
-  belongs_to :organization
+  belongs_to :account
   has_many :payments
+  has_many :subscription_expiry_notifications
   attr_accessible :account_id,:subscription_plan_id,:subscribable_id,:subscribable_type,:expire_on,:started_on
 
   SUBSCRIBABLE_TYPE_ACCOUNT = 'Account'
+  config = Setting.from_config("subscription")
+  if config
+    EXPIRATION_GRACE_PERIOD = config[:grace_period]
+  else
+    EXPIRATION_GRACE_PERIOD = 1
+  end
+
 
   belongs_to :subscription_plan, :class_name => "SubscriptionPlan"
   belongs_to :subscribable, :polymorphic => true
