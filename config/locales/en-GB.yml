@@ -9018,6 +9018,7 @@ en-GB:
     added_to_conversation_description: "You are added to a conversation"
     added_to_conversation_display: "Added to conversation"
     payment_invoice: "Payment Invoice"
+    subscription_expiry_notification: "Subscription Expiry Notification"
     all_submissions_description: |-
         *Instructor and Admin only:*
         

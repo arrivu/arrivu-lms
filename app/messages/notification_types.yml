@@ -17,6 +17,10 @@
     - name: Payment Invoice
       delay_for: 0
 
+- category: Subscription Expiry Notification
+  notifications:
+    - name: Subscription Expiry Notification
+      delay_for: 0
 
 - category: Added To Conversation
   notifications:
