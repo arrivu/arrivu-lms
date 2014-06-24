@@ -53,11 +53,10 @@
             <% if !@account.account_header.nil?  &&  Attachment.exists?(@account.account_header.header_logo_url) == true %>
                 <a class="brand" href="<%= root_url %>"><img class="logo <%= 'logo_bottom' if (@e_learning) %>" style="width: 174px;height: 63px;left: 2px;bottom: 4px;"
                                                 src= <%= header_logo_image %>></a>
-
-              <i class="icon-edit hide" style="position: absolute;display:none;margin-left: -18px;margin-top: 40px;background-color: black;color:white;"></i>
+              <i class="icon-edit hide" style="position: absolute;display:none;margin-left: -18px;margin-top: 40px;background-color: black;color:white;padding: 6px;"></i>
             <% else  %>
                 <a class="brand" id="header-logo" href="<%= logo_root_url %>" <% if @e_learning  %>style="" <% end  %>><%= t 'links.dashboard', "My Dashboard" %></a>
-                <i class="icon-edit hide" style="position: absolute;display:none;top: 48px;left: 190px;background-color: black;color:white;"></i>
+                <i class="icon-edit hide" style="position: absolute;display:none;top: 48px;left: 190px;background-color: black;color:white;padding: 6px;"></i>
             <% end %>
             <!--Arrivu changes-->
             <b id="header-logo-secondary"></b>
@@ -130,10 +129,10 @@
         <% if !@account.account_header.nil?  &&  Attachment.exists?(@account.account_header.header_logo_url) == true %>
             <a  href="<%= root_url %>"><img class="logo <%= 'logo_bottom' if (@e_learning) %>" style="width: 174px;height: 63px;left: 2px;bottom: 4px;position:absolute;"
                                             src= <%= header_logo_image %>></a>
-            <i class="icon-edit hide" style="position: absolute;display:none;left:156px;bottom:10px;background-color:black;color:white;"></i>
+            <i class="icon-edit hide" style="position: absolute;display:none;left:156px;bottom:10px;background-color:black;color:white;padding: 6px;"></i>
         <% else  %>
              <a id="header-logo" href="<%= root_url %>" <% if @e_learning  %>style="" <% end  %>><%= t 'links.dashboard', "My Dashboard" %></a>
-              <i class="icon-edit hide" style="position: absolute;display:none;margin-left: 160px;background-color:black;color:white;"></i>
+              <i class="icon-edit hide" style="position: absolute;display:none;margin-left: 160px;background-color:black;color:white;padding: 6px;"></i>
         <% end %>
     <!--Arrivu changes-->
     <b id="header-logo-secondary"></b>

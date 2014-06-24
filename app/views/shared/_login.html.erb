@@ -4,13 +4,12 @@
 <% extend Api::V1::Account %>
 <% js_bundle :login %>
 <% login_handle_name = @domain_root_account.login_handle_name rescue AccountAuthorizationConfig.default_login_handle_name %>
-<div id="modal-box" class="login-box">
+<div id="login" style="display:none;">
   <div id="modal-box-inner">
-    <h1
-    <% unless @domain_root_account.account_header.nil?  %>
-    style="background-image: url(<%="#{request.protocol}#{request.host}:#{request.port}#{header_logo_image}"%>)"
-    <% end  %>
-    >Canvas</h1>
+    <!--<% unless @domain_root_account.account_header.nil?  %>-->
+    <!--style="background-image: url(<%="#{request.protocol}#{request.host}:#{request.port}#{header_logo_image}"%>)"-->
+    <!--<% end  %>-->
+
     <% if @is_delegated %>
         <div id="login_form">
           <% if flash[:delegated_message] %>
@@ -27,75 +26,111 @@
           <a href="<%= login_path %>" style="font-size: 1.3em;" class="btn"><%= login_message %></a>
         </div>
     <% else %>
-        <div class="social_login">
-          <ul class="social_login_list">
+        <div id ="login_modal">
+          <div id="only_login">
+            <%= form_for :pseudonym_session, :url => login_path(:nonldap => (@domain_root_account && !@domain_root_account.ldap_authentication?).presence), :html => {:id => "e_learning_login_form"} do |f| %>
+                <form role="form" >
+                  <%  if @domain_root_account.facebook_login? ||  @domain_root_account.google_login? ||  @domain_root_account.linkedin_login? %>
+                      <table style="margin-top: 7px;">
+                  <% else %>
+                      <table style="margin-top: 20px;width:58px;margin-left: 75px">
+                  <% end %>
+                  <tbody><tr>
+                    <td style=" width: 58%; padding: 10px; ">
+
+                      <div class="form-group" style=" margin-top: 40px; margin-left: 33px; ">
+                        <%=f.label :unique_id, login_handle_name %><%=f.text_field :unique_id, :class => "text", :value => params[:pseudonym_session].try(:[], :unique_id) %>
+                      </div>
+                      <div class="form-group" style=" margin-left: 33px; " >
+                        <%= f.label :password,  "Password" %> <%=f.password_field :password, :class => "text" %>
+                      </div>
+                      <button type="submit" style="margin-left: 33px;" id="elearning_login_button" class="btn btn btn-primary">
+                        Log In
+                      </button>
+            <% end %>
+            <div style="margin-left: 34px;" class="top"><a id="forgot_passowrd_link" href="#">Forgot password?</a></div>
+            <br>
+            </td>
+            <% if @domain_root_account.facebook_login? ||  @domain_root_account.google_login? ||  @domain_root_account.linkedin_login? %>
+                <td style="width:13%;background-repeat:no-repeat;background-image:url('/images/verticle_line.jpg');background-position: 25px 20px;background-size: 2px 85%;">
+                  <div> <%= image_tag("or.png", :size => "50x50", :alt => "") %> </div>
+                </td>
+                <td style=" width: 20%;display: table-cell;vertical-align: middle;min-height: 181px; ">
+                  <div style="display: table-cell;vertical-align: middle;min-height: 181px;text-align: center;">
+                    <div class="social_login" style="display: table-cell;vertical-align: middle;min-height: 181px;padding-top: 4px;">
+            <% end %>
             <% if @domain_root_account.facebook_login? %>
-                <li class="social_login_image" ><%= link_to image_tag("fb.png",:class => "login_img", alt: "Login with FB", :style => "width: 160px"), '/auth/facebook/' %></li>
+                <%=  link_to image_tag("fbook.png",:class => "login_img", alt: ""), '/auth/facebook/' %>
+                <br>
+                FaceBook
+                <br>
+
             <% end %>
             <% if @domain_root_account.google_login? %>
-                <li class="social_login_image"><%= link_to image_tag("google.png", :class => "login_img", alt: "Login with Google", :style => "width: 160px"), '/auth/google_oauth2/' %></li>
-            <% end %>
+                <%= link_to image_tag("google.jpg", :class => "login_img", alt: ""), '/auth/google_oauth2/' %>
+                <br>
+                Google
+                <br>
+            <%end %>
             <% if @domain_root_account.linkedin_login? %>
-                <li class="social_login_image"> <%= link_to image_tag("linkedin.png", :class => "login_img", alt: "Login with Linkedin", :style => "width: 160px"), '/auth/linkedin/' %></li>
-            <% end %>
-          </ul>
-        </div>
-        <% if @domain_root_account.facebook_login? || @domain_root_account.google_login? || @domain_root_account.linkedin_login? %>
-            <div style="display: table;margin: 10px auto;">
-              <ul style="min-width: 480px;text-align:center;margin: 0px;">
-                <li class="social_login_image">OR</li>
-              </ul>
+                <%= link_to image_tag("linked_in.png", :class => "login_img", alt: ""), '/auth/linkedin/' %>
+                LinkedIn
+                <br>
+            <%end %>
             </div>
-        <% end  %>
-        <%= form_for :pseudonym_session, :url => login_path(:nonldap => (@domain_root_account && !@domain_root_account.ldap_authentication?).presence), :html => {:id => "login_form"} do |f| %>
-            <% if @domain_root_account && @domain_root_account.self_registration? && !hide_self_reg_banner %>
-                <% if @domain_root_account.self_registration_type == 'observer' %>
-                    <% js_env :ACCOUNT => account_json(@domain_root_account, nil, session, ['registration_settings']),
-                              :PASSWORD_POLICY => @domain_root_account.password_policy %>
-                    <%= link_to t("coenrollment_bannercoenrollment_banner", "*Parent of a Arrivu LMS User?* **Click Here For an Account**", :wrapper => {'*' => '<i>\1</i>', '**' => '<b>\1</b>'}), '#', :id => 'coenrollment_link', :class => 'register_banner' %>
-                <% else %>
-                    <%= link_to t("register_for_arrivu_lms", "*Need a Arrivu LMS Account?* **Click Here, It's Free!**", :wrapper => {'*' => '<i>\1</i>', '**' => '<b>\1</b>'}),  Setting.get("registration_link", "/register_from_website"), :id => 'register_link', :class => 'not_external register_banner' %>
-                <% end %>
-            <% end %>
-            <h2 class="ui-helper-hidden-accessible"><%= t('log_in', 'Log In') %></h2>
-            <% login_inner_dialog = yield :login_inner_dialog %>
-            <%= login_inner_dialog if login_inner_dialog && !login_inner_dialog.strip.empty? %>
-            <input type="hidden" name="redirect_to_ssl" value="1"/>
-            <div>
-              <span class=" field-with-fancyplaceholder"><%= f.label :unique_id, login_handle_name %><%= f.text_field :unique_id, :class => "text", :value => params[:pseudonym_session].try(:[], :unique_id) %></span>
-              <span class=" field-with-fancyplaceholder"><%= f.label :password, :en => "Password" %><%= f.password_field :password, :class => "text" %></span>
             </div>
-            <div>
-              <div class="login-options">
-                <% unless session_timeout_enabled %>
-                    <%= f.check_box :remember_me, :checked => session[:used_remember_me_token] %>
-                    <%= f.label :remember_me, :en => "Stay signed in" %>
-                <% end %>
+            </td>
+            </tr>
+            </tbody></table>
 
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <% url = (params[:lms_login] != '1' && @domain_root_account.try(:forgot_password_external_url)) || "#" %><br />
-                <%= link_to t('dont_know_password', "Don't know your password?"), url, :class => (url != '#' ? "not_external" : "forgot_password_link"), :id => "login_forgot_password" %>
+            </form>
+            </div>
+          </div>
+          <!--forgot password form-->
+          <%= form_for :pseudonym_session, :url => forgot_password_path, :html => {:id => "forgot_password_form", :style => "display: none;"} do |f| %>
+
+              <p><%= t('login_handle', "Enter your %{login_handle_name} and we'll send you a link to change your password.", :login_handle_name => login_handle_name) %></p>
+              <div>
+                <span class="field-with-fancyplaceholder"><label  for="pseudonym_session_unique_id_forgot"><%= login_handle_name %></label><input class="email_address text" type="text" name="pseudonym_session[unique_id_forgot]" value="<%= @unauthorized_user.email rescue '' %>" id="pseudonym_session_unique_id_forgot" /></span>
+                <button type="submit" id="request_password_button" class="btn btn-primary"><%= t('buttons.request_password', 'Request Password') %></button>
               </div>
 
-              <!-- crazy IE 8-9 workaround!, if you take this input type=submit out, you cannot just submit the form by hitting enter in ie8-9 -->
-              <input type="submit" style="position: absolute; height: 0px; width: 0px; border: none; padding: 0px;" hidefocus="true" tabindex="-1" />
+              <div class="top"> &larr;<a id="login_link" href="#">Back to Login</a></div>
+          <% end %>
 
-              <button type="submit" class="btn btn-primary"><%= t('log_in', 'Log In') %></button>
-            </div>
-        <% end %>
-    <% end %>
-
-    <%= form_for :pseudonym_session, :url => forgot_password_path, :html => {:id => "forgot_password_form", :style => "display: none;"} do |f| %>
-
-        <p><%= t('login_handle', "Enter your %{login_handle_name} and we'll send you a link to change your password.", :login_handle_name => login_handle_name) %></p>
-        <div>
-          <span class=" field-with-fancyplaceholder"><label for="pseudonym_session_unique_id_forgot"><%= login_handle_name %></label><input class="email_address text" type="text" name="pseudonym_session[unique_id_forgot]" value="<%= @unauthorized_user.email rescue '' %>" id="pseudonym_session_unique_id_forgot" /></span>
-          <button type="submit" class="btn btn-primary"><%= t('buttons.request_password', 'Request Password') %></button>
         </div>
-
-        &larr; <%= link_to t('back_to_login', "Back to Login"), login_path, :class => "login_link" %>
-    <% end %>
+     <% end %>
   </div>
-</div>
+
 <%= # for plugin use
     render "shared/login_trailer" %>
+<% js_block do %>
+    <script type="text/javascript">
+        require([
+            'i18n!accounts' /* I18n.t */,
+            'jquery' /* $ */,
+            'compiled/util/addPrivacyLinkToDialog',
+            'user_sortable_name',
+            'jquery.instructure_forms' /* formSubmit */,
+            'jqueryui/dialog',
+            'compiled/jquery/fixDialogButtons' /* fix dialog formatting */,
+            'compiled/jquery.rails_flash_notifications'
+        ], function(I18n, $, addPrivacyLinkToDialog) {
+            $(document).ready(function(){
+                $("#login").dialog({
+                    title: I18n.t('E-learning_login_pop_up', "Log In"),
+                    width: 510,
+                    poition: 'center'
+                });
+                $("#forgot_passowrd_link").click(function(){
+                  $("#login_modal").hide();
+                  $("#forgot_password_form").show();
+                });
+                $("#login_link").click(function(){
+                  $("#forgot_password_form").hide();
+                  $("#login_modal").show();
+                });
+            });
+        });
+        </script>
+<%end%>
