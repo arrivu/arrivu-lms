@@ -2644,6 +2644,11 @@ class Course < ActiveRecord::Base
         tab[:hidden_unused] = true if tab[:id] == TAB_OFFERS && !active_record_types[:offers]
         tab[:hidden_unused] = true if tab[:id] == TAB_BONUSVIDEOS && !active_record_types[:bonus_videos]
         tab[:hidden_unused] = true if tab[:id] == TAB_LABS && !active_record_types[:lab]
+        if ELEARNING
+          tab[:hidden] = true if tab[:id] == TAB_OFFERS
+          tab[:hidden] = true if tab[:id] == TAB_CAREERS
+          tab[:hidden] = true if tab[:id] == TAB_REFERRALS
+        end
       end
 
       # remove tabs that the user doesn't have access to
