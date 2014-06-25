@@ -14,7 +14,7 @@
         <tbody><tr>
           <td style=" width: 58%; padding: 10px; ">
 
-              <div class="form-group" style=" margin-top: 56px; margin-left: 33px; ">
+              <div class="form-group" style=" margin-top: 30px; margin-left: 33px; ">
                 <%=f.label :unique_id, login_handle_name %><%=f.text_field :unique_id, :class => "text", :value => params[:pseudonym_session].try(:[], :unique_id) %>
               </div>
               <div class="form-group" style=" margin-left: 33px; " >
@@ -37,20 +37,20 @@
               <div class="social_login" style="display: table-cell;vertical-align: middle;min-height: 181px;padding-top: 23px;">
          <% end %>
               <% if @domain_root_account.facebook_login? %>
-              <%=  link_to image_tag("fbook.png",:class => "login_img", alt: ""), '/auth/facebook/' %>
+              <%=  link_to image_tag("fbook.png",:class => "login_img",:style =>"margin:5px", alt: ""), '/auth/facebook/' %>
               <br>
                FaceBook
               <br>
 
               <% end %>
               <% if @domain_root_account.google_login? %>
-              <%= link_to image_tag("google.jpg", :class => "login_img", alt: ""), '/auth/google_oauth2/' %>
+              <%= link_to image_tag("google.jpg", :class => "login_img",:style =>"margin:5px", alt: ""), '/auth/google_oauth2/' %>
               <br>
                Google
               <br>
               <%end %>
               <% if @domain_root_account.linkedin_login? %>
-              <%= link_to image_tag("linked_in.png", :class => "login_img", alt: ""), '/auth/linkedin/' %>
+              <%= link_to image_tag("linked_in.png", :class => "login_img",:style =>"margin:5px", alt: ""), '/auth/linkedin/' %>
               LinkedIn
               <br>
               <%end %>

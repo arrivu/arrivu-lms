@@ -53,21 +53,21 @@
             </td>
             <% if @domain_root_account.facebook_login? ||  @domain_root_account.google_login? ||  @domain_root_account.linkedin_login? %>
                 <td style="width:13%;background-repeat:no-repeat;background-image:url('/images/verticle_line.jpg');background-position: 25px 20px;background-size: 2px 85%;">
-                  <div> <%= image_tag("or.png", :size => "50x50", :alt => "") %> </div>
+                  <div> <%= image_tag("or.png", :size => "50x50",:style=>"margin:4px", :alt => "") %> </div>
                 </td>
                 <td style=" width: 20%;display: table-cell;vertical-align: middle;min-height: 181px; ">
                   <div style="display: table-cell;vertical-align: middle;min-height: 181px;text-align: center;">
                     <div class="social_login" style="display: table-cell;vertical-align: middle;min-height: 181px;padding-top: 4px;">
             <% end %>
             <% if @domain_root_account.facebook_login? %>
-                <%=  link_to image_tag("fbook.png",:class => "login_img", alt: ""), '/auth/facebook/' %>
+                <%=  link_to image_tag("fbook.png",:class => "login_img",:style=>"margin:4px", alt: ""), '/auth/facebook/' %>
                 <br>
                 FaceBook
                 <br>
 
             <% end %>
             <% if @domain_root_account.google_login? %>
-                <%= link_to image_tag("google.jpg", :class => "login_img", alt: ""), '/auth/google_oauth2/' %>
+                <%= link_to image_tag("google.jpg", :class => "login_img",:style=>"margin:4px", alt: ""), '/auth/google_oauth2/' %>
                 <br>
                 Google
                 <br>
