@@ -51,7 +51,7 @@
             <!--Arrivu changes-->
            <% @account ||=@domain_root_account  %>
             <% if !@account.account_header.nil?  &&  Attachment.exists?(@account.account_header.header_logo_url) == true %>
-                <a class="brand" href="<%= root_url %>"><img class="logo <%= 'logo_bottom' if (@e_learning) %>" style="width: 174px;height: 63px;left: 2px;bottom: 4px;"
+                <a class="brand" style="width: 174px;height: 63px;left: 2px;bottom: 4px;" href="<%= root_url %>"><img class="logo <%= 'logo_bottom' if (@e_learning) %>"
                                                 src= <%= header_logo_image %>></a>
               <i class="icon-edit hide" style="position: absolute;display:none;margin-left: -18px;margin-top: 40px;background-color: black;color:white;padding: 6px;"></i>
             <% else  %>
@@ -127,7 +127,8 @@
     <!--Arrivu changes-->
     <% @account ||=@domain_root_account  %>
         <% if !@account.account_header.nil?  &&  Attachment.exists?(@account.account_header.header_logo_url) == true %>
-            <a  href="<%= root_url %>"><img class="logo <%= 'logo_bottom' if (@e_learning) %>" style="width: 174px;height: 63px;left: 2px;bottom: 4px;position:absolute;"
+            <a  href="<%= root_url %>" style="width: 174px;height: 63px;left: 2px;padding: 0px 0px 0px 10px;
+                    bottom: 0px;position:absolute;"><img class="logo <%= 'logo_bottom' if (@e_learning) %>"
                                             src= <%= header_logo_image %>></a>
             <i class="icon-edit hide" style="position: absolute;display:none;left:156px;bottom:10px;background-color:black;color:white;padding: 6px;"></i>
         <% else  %>
