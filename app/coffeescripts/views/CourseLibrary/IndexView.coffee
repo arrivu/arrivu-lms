@@ -14,6 +14,7 @@ define [
       'click .topic' : 'filterByTopics'
       'click .details': 'movetocourselibrary'
       'click .slides_popup': 'teacher_details'
+      'click .tagging' : 'filter_course_by_tags'
 
     filterByTopics:(event) ->
       clicked_topic_id = $(event.target).data('id')
@@ -31,5 +32,8 @@ define [
       teacher_id = this.$(event.currentTarget).find(".pop_up_items").attr('id')
       location.href = "#{location.protocol}//#{location.host}/users/"+teacher_id+"/details"
 
-
+    filter_course_by_tags:(event)->
+      event.stopPropagation()
+      tag_id = this.$(event.currentTarget).attr('id')
+      location.href = "#{location.protocol}//#{location.host}/accounts/"+ENV.account_id+"/tagged_courses/"+tag_id
 

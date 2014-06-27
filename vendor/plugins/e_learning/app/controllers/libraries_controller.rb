@@ -7,6 +7,7 @@ class LibrariesController < ApplicationController
   include ChargingResponse
   include ELearningHelper
   include ActionView::Helpers::DateHelper
+  include TaggedCoursesHelper
 
   before_filter :require_user, :only => [:enrollment,:payment_complete,:payment_confirm,:enrollment,:enroll_and_redirect]
   before_filter :check_private_e_learning
@@ -275,15 +276,6 @@ class LibrariesController < ApplicationController
       back_ground_image = ""
     end
 
-    end
-  end
-
-  def price_course(course)
-    @course_pricing = CoursePricing.where('course_id = ? AND DATE(?) BETWEEN start_at AND end_at', course.id, Date.today).first
-    unless @course_pricing.nil?
-      course_price = @course_pricing.price
-    else
-      course_price = ""
     end
   end
 

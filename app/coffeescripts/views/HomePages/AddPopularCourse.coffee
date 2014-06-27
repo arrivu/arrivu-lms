@@ -21,6 +21,7 @@ define [
 
     events:
       'click .popular_course_item': 'addpopularcourse'
+      'click .tagging' : 'filter_course_by_tags'
 
     className: 'validated-form-view form-horizontal bootstrap-form'
 
@@ -107,3 +108,8 @@ define [
         $(event.currentTarget).find(".ribbon-wrapper").css('display','block');
         $(event.currentTarget.firstElementChild).attr('id','is_a_popular_course');
         @showPopularCourseonIndexPage()
+
+    filter_course_by_tags:(event)->
+      event.stopPropagation()
+      tag_id = this.$(event.currentTarget).attr('id')
+      location.href = "#{location.protocol}//#{location.host}/accounts/"+ENV.account_id+"/tagged_courses/"+tag_id

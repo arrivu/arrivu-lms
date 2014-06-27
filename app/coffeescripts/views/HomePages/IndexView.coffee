@@ -32,6 +32,7 @@ define [
       'click #add_knowledge_partners': 'addKnowledgePartner'
       'click .details':'movetocourselibrary'
       'click .index_view_slides' : 'teacher_details'
+      'click .tagging' : 'filter_course_by_tags'
 
     addAccountSlider: ->
       newAccountSliderView = new AccountSlider
@@ -59,3 +60,8 @@ define [
 #    teacher_details:(event) ->
 #      teacher_id = this.$(event.currentTarget).find(".teacher_name").attr('id')
 #      location.href = "#{location.protocol}//#{location.host}/users/profiles/"+teacher_id
+
+    filter_course_by_tags:(event)->
+      event.stopPropagation()
+      tag_id = this.$(event.currentTarget).attr('id')
+      location.href = "#{location.protocol}//#{location.host}/accounts/"+ENV.account_id+"/tagged_courses/"+tag_id

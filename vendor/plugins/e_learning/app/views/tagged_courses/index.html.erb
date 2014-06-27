@@ -1,0 +1,136 @@
+<style>
+    #breadcrumbs{
+        display: none;
+    }
+</style>
+<% @body_classes << "gradebook2 full-width"
+   @show_left_side = false
+   jammit_css :bootstrap_and_responsive,:course_box
+%>
+<div id="tag_course_listing_banner">
+  <div class="container">
+    <% @tagger_name = ActsAsTaggableOn::Tag.find_by_id(params[:tag_id]) %>
+    <h1 id="tag_discourse_course_title">Courses Tagged with <%= @tagger_name.to_s.capitalize %></h1>
+  </div>
+</div>
+<%= form_for :account_tag_filter_course, :url => account_tagged_courses_url(@domain_root_account),:html => {:style =>'padding-top:60px;',:method=> "get",:id => "account_tag_courses"} do |f| %>
+
+    <ul style="list-style-type: none;text-align: center;padding: 27px;">
+      <% @result_courses.each do |course| %>
+        <li style="display: inline-block;vertical-align: top">
+          <div class="navigation_link" id="<%= course.id %>">
+            <div class="span3 content-box resource" style="float:left;padding-bottom: 0px;">
+             <%if course.popular_course  %>
+                <div class="ribbon-wrapper">
+                  <div class="ribbon-wrapper-green">
+                   <div class="ribbon-green">Popular</div>
+                  </div>
+                </div>
+              <% end %>
+              <% @background_image_attchment = getcourse_image(course,:image => "back_ground_image") %>
+              <% if @background_image_attchment == "" || @background_image_attchment.nil?  %>
+                  <div class="type-tag-positioner"  style="">
+              <% else %>
+                  <div class="type-tag-positioner"  style="background-image: url('<%= @background_image_attchment %>');background-size: cover;">
+              <% end %>
+              <% @image_attachment = getcourse_image(course,:image => "image")%>
+              <img alt="" class="<%= @image_attachment == ""  || @image_attachment.nil?  ? '' : 'course-badge img-circle' %>" src="<%= @image_attachment  %>">
+              <% if course.topic  %>
+                  <div class="type ribbon1" style="background-color: <%= course.topic.color %>">
+                    <span><%= course.topic.name %></span>
+                  </div>
+              <% else %>
+                  <div class="type ribbon1" style="background-color: #228b22;">
+                    <span> others</span>
+                  </div>
+              <%end %>
+              </div>
+              <div class="details course_name_div" >
+                <h2 class="course_name"><%= course.name %></h2>
+
+                <table class="table_align">
+                  <tr>
+                    <% price = price_course(course) %>
+                    <% if price == ""  %>
+                        <td>
+                          Free
+                        </td>
+                    <%else %>
+                        <td>
+                          <img src="/images/icon-price.jpg" class="price_image">
+                        </td>
+                        <td>
+                          <%= price %>
+                        </td>
+                    <% end %>
+                    <% course_modules = course.context_modules.active.nil? ? false :  course.context_modules.active.size if course.context_modules %>
+                    <% if course_modules >= 1%>
+                        <td class="course_mod">
+                          <a class="icon-module"></a>
+                        </td>
+                        <td>
+                          <%= course_modules %>
+                        </td>
+                    <% end %>
+                    <% users_count = course.student_enrollments.count.nil? ? "false" : course.student_enrollments.count %>
+                    <% if users_count >= 1 %>
+                        <td class="user_display">
+                          <a class="icon-user"></a>
+                        </td>
+                        <td class="user_count">
+                          <%= users_count %>
+                        </td>
+                    <% end %>
+                    <% tags_count = course.tags.count.nil? ? 'false' : course.tags.count if course.tags %>
+                    <% if tags_count >= 1%>
+                        <td class="tag_icon">
+                          <a class="icon-tag"></a>
+                        </td>
+                        <td class="tag_display">
+                          <%= tags_count %>
+                        </td>
+                    <% end %>
+                  </tr>
+                </table>
+                <hr style="margin: 6px 0px"> </hr>
+                <% if course.tags.count >= 1 %>
+                    <span class="text_display"> Tags:</span>
+                    <ul class="tags" style="list-style-type: none;margin-top: -8px;">
+                      <% tags = course.tags.limit(3) %>
+                      <% tags.each do |tag| %>
+                          <li>
+                            <a href="#"><b><%= tag.name %></b>
+                              <span><%= ActsAsTaggableOn::Tagging.find_all_by_tag_id(tag).count %></span>
+                            </a>
+                          </li>
+                      <%end %>
+                    </ul>
+                <%end %>
+                <%  course_desc = course.course_description.try(:short_description) %>
+                <% if course_desc %>
+                    <p class="desc course_desc" style="margin-top: 3px;float:left;font-size: 12px;margin-left: -15px;margin-bottom: 0px;">
+                      <%= truncate(course_desc, length:125, omission: '...') %>
+                    </p>
+                <% end %>
+                <% teacher = getcourse_teacher(course) %>
+                <% unless teacher.avatar_image_url.nil? %>
+                   <div class="teachers_detail">
+                     <div class="teacher_image"><img src=<%= teacher.avatar_image_url %> ></div>
+                       <span class="tag_teacher_name"><%= teacher.name %></span>
+                        <p class="tag_teacher_desc">
+                          <%= truncate(teacher.profile.bio, length:120, omission: '...') %>
+                        </p>
+                   </div>
+                  <% else %>
+                    <div class="teachers">
+                        <div class="teacher_without_image"><img src="images/User.png"></div>
+                    </div>
+                  <% end %>
+              </div>
+              </div>
+            </div>
+        </li>
+      <%end %>
+    </ul>
+ <%end %>
+

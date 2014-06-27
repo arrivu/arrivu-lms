@@ -556,7 +556,6 @@ routes.draw do
     # Subscription
     resources :subscriptions
     resources :feature_sets
-
     get "query/index"
     get "refund/index"
 
@@ -591,6 +590,7 @@ routes.draw do
       resources :learners_reviews
       resources :sliders
       resources :tags
+      match '/tagged_courses/:tag_id' => "tagged_courses#index", :as=> :tagged_courses, :via => :get
     end
     #arrivu changes
     match 'settings' => 'accounts#settings', :as => :settings

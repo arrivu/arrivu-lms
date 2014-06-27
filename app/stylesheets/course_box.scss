@@ -1305,3 +1305,48 @@ ul{
   font-size: 32px;
   color:#686868;
 }
+
+.teachers_detail{
+  width: 300px;
+  margin-top: -3px;
+  overflow: hidden;
+  position: relative;
+  float: left;
+  text-align: center;
+  text-indent: 2px;
+  margin-left: -13px;
+}
+.tag_teacher_name{
+  margin-top: -51px;
+  font-weight: 700;
+  color: black;
+  display: inline-table;
+  margin-left: -96px;
+  position: absolute;
+}
+
+.tag_teacher_desc{
+  color: black;
+  padding: 50px 0px 0px 50px;
+  margin-top: -84px;
+  margin-left: 1px;
+  line-height: 15px;
+  text-align: left;
+}
+
+#tag_course_listing_banner{
+  color: white;
+  background-image: url(/images/bgblack.png);
+  min-height: 50px;
+  margin: 0px;
+  position: absolute;
+  left: -1px;
+  right: -1px;
+  top: 0;
+}
+#tag_discourse_course_title{
+  color: #fff;
+  font-size: 30px;
+  text-align: center;
+  font-weight: bold;
+}
