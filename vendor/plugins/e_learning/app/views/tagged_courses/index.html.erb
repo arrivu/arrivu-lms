@@ -113,19 +113,19 @@
                     </p>
                 <% end %>
                 <% teacher = getcourse_teacher(course) %>
-                <% unless teacher.avatar_image_url.nil? %>
-                   <div class="teachers_detail">
-                     <div class="teacher_image"><img src=<%= teacher.avatar_image_url %> ></div>
-                       <span class="tag_teacher_name"><%= teacher.name %></span>
-                        <p class="tag_teacher_desc">
-                          <%= truncate(teacher.profile.bio, length:120, omission: '...') %>
-                        </p>
-                   </div>
-                  <% else %>
-                    <div class="teachers">
-                        <div class="teacher_without_image"><img src="images/User.png"></div>
-                    </div>
-                  <% end %>
+                  <% unless teacher.nil?%>
+                      <span class="tag_teacher_name_without_desc"><%= teacher.name %></span>
+                        <% unless teacher.avatar_image_url.nil? %>
+                          <div class="tag_teacher_image"><img src="<%= teacher.avatar_image_url %>"></div>
+                        <%else %>
+                          <div style="width: 40px;float: left;"><img src="/images/User.png"></div>
+                       <%end%>
+                      <% unless teacher.profile.bio.nil? %>
+                          <p class="tag_teacher_desc">
+                            <%= truncate( teacher.profile.bio, length:120, omission: '...') %>
+                          </p>
+                      <% end %>
+                  <%end %>
               </div>
               </div>
             </div>

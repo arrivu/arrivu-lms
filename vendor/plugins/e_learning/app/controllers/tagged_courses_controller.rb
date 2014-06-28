@@ -38,7 +38,9 @@ class TaggedCoursesController < ApplicationController
 
   def getcourse_teacher(course)
      @teacher = course.teacher_enrollments.first
-     @user = User.find(@teacher.user_id) rescue nil
+     unless @teacher.nil?
+       @user = User.find(@teacher.user_id)
+     end
   end
 
 

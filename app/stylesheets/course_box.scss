@@ -1317,21 +1317,17 @@ ul{
   margin-left: -13px;
 }
 .tag_teacher_name{
-  margin-top: -51px;
   font-weight: 700;
   color: black;
   display: inline-table;
-  margin-left: -96px;
-  position: absolute;
+  margin-left: 56px
 }
 
 .tag_teacher_desc{
-  color: black;
-  padding: 50px 0px 0px 50px;
-  margin-top: -84px;
-  margin-left: 1px;
-  line-height: 15px;
+  width: 84%;
+  line-height: 16px;
   text-align: left;
+  padding: 0px 45px 0px;
 }
 
 #tag_course_listing_banner{
@@ -1349,4 +1345,15 @@ ul{
   font-size: 30px;
   text-align: center;
   font-weight: bold;
+}
+.tag_teacher_image{
+  float: left;
+  width: 42px;
+  margin: 26px -4px 6px 0px;
+}
+.tag_teacher_name_without_desc{
+  margin-top: -14px;
+  font-weight: 700;
+  color: black;
+  padding: 4px 13px;
 }
