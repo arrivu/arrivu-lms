@@ -83,7 +83,7 @@
     <% end  %>
     <% if Account.site_admin.grants_right?(@current_user, :manage_site_settings) %>
         <% if can_do(@context, @current_user, :manage_account_settings) %>
-            <li><a href="#tab-tags" id="tab-tags-link">Tags</a></li>
+            <li><a href="#tab-course_tags" id="tab-tags-link">Course Tags</a></li>
         <% end %>
     <% end %>
     <% if Account.site_admin.grants_right?(@current_user, :manage_site_settings) %>
@@ -874,7 +874,7 @@ Allowing Draft State here will allow teachers to enable it in their individual c
                         <%= t :no_enrollment_roles, "Unenrolled users" %>
                       </label>
                     </li>
-                  </ul>
+                  </ul>tab-forum_tags
                 <% end %>
               </td>
               <td id="restrict_to_membership_roles">
@@ -1026,8 +1026,8 @@ Allowing Draft State here will allow teachers to enable it in their individual c
 <% end %>
 
 <% if ELEARNING %>
-    <div id="tab-tags">
-      <%= render :partial => 'accounts/tags' %>
+    <div id="tab-course_tags">
+      <%= render :partial => 'accounts/course_tags' %>
     </div>
     <div id="tab-subscription-settings-link">
       <%= render :partial => 'accounts/subscription_settings'%>

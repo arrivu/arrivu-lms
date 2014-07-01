@@ -5,7 +5,17 @@ class PopularCoursesController < ApplicationController
     @show_banner = false
     respond_to do |format|
       @courses = []
-      if  params[:topic_id].present? and params[:topic_id].to_i != 0
+      if params[:tag_id].present?
+        @account_courses = []
+        @tag_id = params[:tag_id]
+        @tagged_courses = ActsAsTaggableOn::Tagging.find_all_by_tag_id(@tag_id)
+        @tagged_courses.each do |tag_course|
+          @course = @domain_root_account.associated_courses.active.find(tag_course.taggable_id)
+          unless @course.nil?
+            @account_courses << @course
+          end
+        end
+      elsif  params[:topic_id].present? and params[:topic_id].to_i != 0
         @account_courses = @domain_root_account.courses.not_deleted.find_all_by_topic_id(params[:topic_id])
       else
         if params[:source] == 'popular'

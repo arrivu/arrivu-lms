@@ -34,6 +34,6 @@ define [
 
     filter_course_by_tags:(event)->
       event.stopPropagation()
-      tag_id = this.$(event.currentTarget).attr('id')
-      location.href = "#{location.protocol}//#{location.host}/accounts/"+ENV.account_id+"/tagged_courses/"+tag_id
-
+      result_tag_id = this.$(event.currentTarget).attr('id')
+      @accountCourseCollectionView.collection.setParam('per_page', 10)
+      @accountCourseCollectionView.collection.fetch({ data:{tag_id: result_tag_id}})

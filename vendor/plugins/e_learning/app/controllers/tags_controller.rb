@@ -12,11 +12,25 @@ class TagsController < ApplicationController
 
   #ActsAsTaggableOn::Tag.find_all_by_account_id(@domain_root_account)
   def index
+    @total_course_tags = []
     respond_to do |format|
-      @account_tags = ActsAsTaggableOn::Tag.find_all_by_account_id(@domain_root_account)
-        @account_tags = Api.paginate(@account_tags, self, api_v1_account_tags_url)
-        format.json {render :json => @account_tags.map(&:attributes).to_json}
-       end
+      if params[:source] == "course"
+        @course_tags = ActsAsTaggableOn::Tagging.find_all_by_taggable_type("Course")
+      else
+        @course_tags = ActsAsTaggableOn::Tagging.find_all_by_taggable_type("DiscussionTopic")
+      end
+      @course_tags.each do |tag|
+        @account_tags = ActsAsTaggableOn::Tag.find_all_by_id_and_account_id(tag.tag_id,@domain_root_account)
+        @tag_name = @account_tags[0].name
+        @course_json =   api_json(tag, @current_user, session, API_USER_JSON_OPTS).tap do |json|
+          json[:id] = tag.tag_id
+          json[:tag_name] = @tag_name
+        end
+        @total_course_tags << @course_json
+      end
+      @total_course_tags = Api.paginate(@total_course_tags, self, api_v1_account_tags_url)
+      format.json {render :json => @total_course_tags}
+    end
   end
 
 
