@@ -10,11 +10,12 @@ require [
   'compiled/views/HomePages/KnowledgePartnerCollectionView'
   'compiled/views/HomePages/LearnersReviewsCollectionView'
   'compiled/collections/LearnerReviewCollection'
+  'compiled/views/HomePages/AccountCourseCollectionView'
   'jquery.disableWhileLoading'
   'slider'
 ], ($,IndexView,AccountSliderCollection,PopularCoursesCollection,AccountSliderCollectionView,AccountStatisticsView,
     PopularCourseCollectionView,KnowledgePartnersCollection,KnowledgePartnerCollectionView,LearnerReviewCollectionView
-    LearnerReviewCollection) ->
+    LearnerReviewCollection,AccountCourseCollectionView) ->
 
   # Collections
 
@@ -33,6 +34,8 @@ require [
     collection: knowledgePartnerCollection
   learnerReviewCollectionView = new  LearnerReviewCollectionView
     collection:learnerReviewCollection
+  accountCourseCollectionView = new  AccountCourseCollectionView
+    collection:popularCourseCollection
 
   @app = new IndexView
     accountSliderCollectionView: accountSliderCollectionView
@@ -40,6 +43,7 @@ require [
     popularCourseCollectionView: popularCourseCollectionView
     knowledgePartnerCollectionView: knowledgePartnerCollectionView
     learnerReviewCollectionView: learnerReviewCollectionView
+    accountCourseCollectionView: accountCourseCollectionView
     el: '#content'
 
   @app.render()

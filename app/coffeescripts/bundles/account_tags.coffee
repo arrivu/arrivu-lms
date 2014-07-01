@@ -16,5 +16,4 @@ require [
     el: '#account_tags'
 
   @app.render()
-  accountTagCollection.setParam('source', "course")
   accountTagCollection.fetch()

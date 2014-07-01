@@ -16,6 +16,7 @@ define [
     events:
       'click [data-edit-tags]': 'editAccountTags'
       'click [data-delete-tags]': 'deleteAccountTags'
+      'click #select_tag_type': 'select_tag_type'
 
     afterRender: ->
       @showAccountTagView()
@@ -55,3 +56,8 @@ define [
       @editAccountTagsView.remove() if @editAccountTagsView
       @showAccountTagView()
       $.flashMessage(htmlEscape(I18n.t('account_tag_saved_message', " Tags Updated successfully!")))
+
+    select_tag_type:(event) ->
+      clicked_tag_type = $("#select_tag_type").val()
+      @accountTagsCollectionView.collection.setParam('per_page', 50)
+      @accountTagsCollectionView.collection.fetch({ data:{source: clicked_tag_type}})

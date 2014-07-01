@@ -57,13 +57,8 @@ define [
       popular_item = this.$(event.currentTarget).attr('id')
       location.href = "#{location.protocol}//#{location.host}/libraries/"+popular_item
 
-#    teacher_details:(event) ->
-#      teacher_id = this.$(event.currentTarget).find(".teacher_name").attr('id')
-#      location.href = "#{location.protocol}//#{location.host}/users/profiles/"+teacher_id
 
     filter_course_by_tags:(event)->
       event.stopPropagation()
       result_tag_id = this.$(event.currentTarget).attr('id')
-#      @accountCourseCollectionView.collection.setParam('per_page', 10)
-#      @accountCourseCollectionView.collection.fetch({ data:{tag_id: result_tag_id}})
-      location.href = "#{location.protocol}//#{location.host}/libraries/"
+      location.href = "#{location.protocol}//#{location.host}/libraries?tag_id="+result_tag_id

@@ -1,8 +1,6 @@
 class TagsController < ApplicationController
   include TagsHelper
 
-
-
   def context_tags
     respond_to do |format|
       format.html
@@ -14,10 +12,10 @@ class TagsController < ApplicationController
   def index
     @total_course_tags = []
     respond_to do |format|
-      if params[:source] == "course"
-        @course_tags = ActsAsTaggableOn::Tagging.find_all_by_taggable_type("Course")
-      else
+      if params[:source] == "discussion"
         @course_tags = ActsAsTaggableOn::Tagging.find_all_by_taggable_type("DiscussionTopic")
+      else
+        @course_tags = ActsAsTaggableOn::Tagging.find_all_by_taggable_type("Course")
       end
       @course_tags.each do |tag|
         @account_tags = ActsAsTaggableOn::Tag.find_all_by_id_and_account_id(tag.tag_id,@domain_root_account)
