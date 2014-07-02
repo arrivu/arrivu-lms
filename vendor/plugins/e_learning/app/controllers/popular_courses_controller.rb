@@ -90,8 +90,9 @@ class PopularCoursesController < ApplicationController
     @price = []
     @course_pricing = CoursePricing.where('course_id = ? AND DATE(?) BETWEEN start_at AND end_at', course.id, Date.today).first
     unless @course_pricing.nil?
+      @course_price = Money.new(@course_pricing.price.to_i, "INR")
       @pricing_json =   api_json(course,@current_user, session, API_USER_JSON_OPTS).tap do |json|
-      json[:course_price] = @course_pricing.price
+      json[:course_price] = @course_price.to_f
       json[:show_price] = true
       end
     else

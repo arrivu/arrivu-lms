@@ -61,7 +61,11 @@
 border: 1px solid hsl(0, 0%, 87%);border-radius: 4px;padding: 25px;background: #fff;">
     <div style="font-size: 18px;">Cost per enrollment:</div>
     <div style="font-size: 18px;margin-top: 10px;font-weight: bold;
-            color: darkgreen;"><%= @course_pricing.nil? ? "Free" : "$#{@course_pricing.price}" %></div>
+            color: darkgreen;">
+      <%unless @course_pricing.nil? %>
+      &#8377;
+      <% end  %>
+      <%= @course_pricing.nil? ? "Free" : " #{Money.new(@course_pricing.price.to_i, "INR")}" %></div>
     <div style="margin-top: 20px;">
      <%if can_do(@context, @current_user, :read)  %>
           <%= link_to "Go to class" ,course_path(@context) ,:class =>"btn btn-primary btn-large" ,:style=> "border-radius: 0px;"%>

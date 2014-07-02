@@ -83,7 +83,7 @@
     <% end  %>
     <% if Account.site_admin.grants_right?(@current_user, :manage_site_settings) %>
         <% if can_do(@context, @current_user, :manage_account_settings) %>
-            <li><a href="#tab-course_tags" id="tab-tags-link">Course Tags</a></li>
+            <li><a href="#tab-course_tags" id="tab-tags-link"> Tags</a></li>
         <% end %>
     <% end %>
     <% if Account.site_admin.grants_right?(@current_user, :manage_site_settings) %>
