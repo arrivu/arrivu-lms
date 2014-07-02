@@ -120,7 +120,8 @@
                 $("#login").dialog({
                     title: I18n.t('E-learning_login_pop_up', "Log In"),
                     width: 510,
-                    poition: 'center'
+                    poition: 'center',
+                    closeOnEscape: false
                 });
                 $("#forgot_passowrd_link").click(function(){
                   $("#login_modal").hide();
