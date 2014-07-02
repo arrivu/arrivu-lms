@@ -393,7 +393,21 @@ ApplicationHelper
               tab[:href] ="hide_menu"
             end
           end
-
+          if tab[:label] == "Offers"
+            if @domain_root_account.feature_enabled?(:e_learning)
+               tab[:href] = "hide_menu"
+            end
+          end
+          if tab[:label] == "Careers"
+            if @domain_root_account.feature_enabled?(:e_learning)
+              tab[:href] = "hide_menu"
+            end
+          end
+          if tab[:label] == "Refer a friend"
+            if @domain_root_account.feature_enabled?(:e_learning)
+              tab[:href] = "hide_menu"
+            end
+          end
           #Arrivu changes to add flip classes view end
 
 
