@@ -26,7 +26,6 @@ class LibrariesController < ApplicationController
       if params[:tag_id].present?
         session[:tag_id] = params[:tag_id]
       end
-
   end
 
   def show

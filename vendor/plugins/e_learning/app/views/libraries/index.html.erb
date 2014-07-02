@@ -1,4 +1,8 @@
-
+<style>
+    .collectionViewItems{
+        margin-top: -11px;
+    }
+</style>
 <% if @domain_root_account.settings[:course_index_custom_design] &&  content = @domain_root_account.static_content.find_by_content_type("Course_index")%>
     <% @body_classes << "gradebook2 full-width"
        jammit_css :course_box,:topics_listing
