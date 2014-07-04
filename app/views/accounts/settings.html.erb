@@ -61,11 +61,12 @@
     <% if can_do(@context, @current_user, :manage_feature_flags) %>
       <li><a href="#tab-features" id="tab-features-link"><%= t(:feature_options, "Feature Options") %></a></li>
     <% end %>
+    <% if Account.site_admin.grants_right?(@current_user, :manage_site_settings) %>
     <li id="terms_tab"><a href="#tab-terms"><%= t('tabs.terms',%{Terms and Conditions}) %></a></li>
     <% if can_do(@context, @current_user, :manage_account_settings) %>
         <li><a href="#tab-sms" id="tab-sms-settings-link">SMS Settings</a></li>
     <% end %>
-
+    <% end %>
     <% if Account.site_admin.grants_right?(@current_user, :manage_site_settings) %>
         <% if can_do(@context, @current_user, :manage_account_settings) %>
             <li><a href="#tab-plugins" id="tab-plugin-link">Plugins</a></li>
@@ -560,6 +561,7 @@ Allowing Draft State here will allow teachers to enable it in their individual c
             <% end %>
           </fieldset>
         <% end %>
+        <% if Account.site_admin.grants_right?(@current_user, :manage_site_settings) %>
         <fieldset>
           <legend><%= t(:videolink, "Video Link") %></legend>
           <% f.fields_for :settings do |settings| %>
@@ -569,6 +571,8 @@ Allowing Draft State here will allow teachers to enable it in their individual c
             </div>
           <% end %>
         </fieldset>
+        <% end %>
+        <% if Account.site_admin.grants_right?(@current_user, :manage_site_settings) %>
         <fieldset>
           <legend><%= t(:course_index_custom_design, "Course Index Page Custom Design") %></legend>
           <% f.fields_for :settings do |settings| %>
@@ -578,7 +582,8 @@ Allowing Draft State here will allow teachers to enable it in their individual c
               </div>
           <% end %>
         </fieldset>
-        <% if ELEARNING %>
+        <% end  %>
+        <% if ELEARNING &&  Account.site_admin.grants_right?(@current_user, :manage_site_settings) %>
             <legend><%= t(:account_statistics, "Account Statistics") %></legend>
             <% f.fields_for :settings do |settings| %>
            <%= render :partial => 'accounts/account_statistics',:locals => {:settings => settings}%>
@@ -1007,10 +1012,12 @@ Allowing Draft State here will allow teachers to enable it in their individual c
   <% if can_do(@context, @current_user, :manage_feature_flags) %>
     <div id="tab-features"></div>
   <% end %>
+  <% if Account.site_admin.grants_right?(@current_user, :manage_site_settings) %>
   <div id="tab-terms">
     <%= render :partial =>'accounts/terms_and_conditions' %>
   </div>
   <%= render :partial => 'accounts/sms_settings' %>
+  <%end %>
   <%= render :partial => 'accounts/plugin_settings' %>
 
 <!--arivu changes-->
@@ -1018,16 +1025,21 @@ Allowing Draft State here will allow teachers to enable it in their individual c
     <div id="tab-topics">
       <%= render :partial => 'topics/add_topics'%>
     </div>
-    <% if @context.settings[:course_index_custom_design] %>
     <div id="tab-course_index_custom_design">
-      <%= render :partial => 'courses/course_index_page_custom_design' %>
+      <% if Account.site_admin.grants_right?(@current_user, :manage_site_settings) %>
+          <% if @context.settings[:account_index_page_custom_design] %>
+           <%= render :partial => 'courses/course_index_page_custom_design' %>
+          <%end %>
+      <%end%>
     </div>
-  <% end  %>
+
 <% end %>
 
 <% if ELEARNING %>
     <div id="tab-course_tags">
+      <% if Account.site_admin.grants_right?(@current_user, :manage_site_settings) %>
       <%= render :partial => 'accounts/course_tags' %>
+      <%end %>
     </div>
     <div id="tab-subscription-settings-link">
       <%= render :partial => 'accounts/subscription_settings'%>

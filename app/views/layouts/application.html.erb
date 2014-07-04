@@ -60,7 +60,6 @@
             <% end %>
             <!--Arrivu changes-->
             <b id="header-logo-secondary"></b>
-
           <div class="nav-collapse" >
             <ul class="nav pull-right" >
               <li class="divider-vertical"></li>
@@ -125,7 +124,7 @@
   <div id="header-inner">
     <a href="#content" id="skip_navigation_link"><%= t 'links.skip_to_content', "Skip To Content" %></a>
     <!--Arrivu changes-->
-    <% @account ||=@domain_root_account  %>
+    <% @account ||= @domain_root_account  %>
         <% if !@account.account_header.nil?  &&  Attachment.exists?(@account.account_header.header_logo_url) == true %>
             <a  href="<%= root_url %>" style="width: 174px;height: 63px;left: 2px;padding: 0px 0px 0px 10px;
                     bottom: 0px;position:absolute;"><img class="logo <%= 'logo_bottom' if (@e_learning) %>"
@@ -281,34 +280,34 @@
 </div>
 
 <% if @show_embedded_chat %>
-    <%= render :partial => 'shared/embedded_chat' %>
+  <%= render :partial => 'shared/embedded_chat' %>
 <% end %>
 
 <% if @show_fixed_bottom %>
-    <%= render :partial => 'layouts/fixed_bottom' %>
+  <%= render :partial => 'layouts/fixed_bottom' %>
 <% end %>
 
 <% if wizard %>
-    <div id="wizard_spacer_box"></div>
-    <div id="wizard_box" role="dialog" tabindex="-1">
-      <div class="shadow shadow_1"></div>
-      <div class="shadow shadow_3"></div>
-      <div class="shadow shadow_5"></div>
-      <div class="wizard_content">
-        <div class="links">
-          <a href="#" class="close_wizard_link"><i class="icon-x"></i><span class="screen-reader-text"><%= t('links.close', 'Close') %></span></a>
-        </div>
-        <%= wizard %>
+  <div id="wizard_spacer_box"></div>
+  <div id="wizard_box" role="dialog" tabindex="-1">
+    <div class="shadow shadow_1"></div>
+    <div class="shadow shadow_3"></div>
+    <div class="shadow shadow_5"></div>
+    <div class="wizard_content">
+      <div class="links">
+        <a href="#" class="close_wizard_link"><i class="icon-x"></i><span class="screen-reader-text"><%= t('links.close', 'Close') %></span></a>
       </div>
+      <%= wizard %>
     </div>
+  </div>
 <% end %>
 <% if keyboard_navigation %>
-    <div id="keyboard_navigation">
-      <%= keyboard_navigation %>
-      <div class='hidden-readable' tabindex='0'>
-        <%= t('keyboard_navigation.close', 'Press comma to close this dialog') %>
-      </div>
+  <div id="keyboard_navigation">
+    <%= keyboard_navigation %>
+    <div class='hidden-readable' tabindex='0'>
+      <%= t('keyboard_navigation.close', 'Press comma to close this dialog') %>
     </div>
+  </div>
 <% end %>
 <div style="display:none;"><!-- Everything inside of this should always stay hidden -->
   <div id="ajax_authenticity_token"><%= form_authenticity_token %></div>
