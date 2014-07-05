@@ -46,7 +46,7 @@ class HomePagesController < ApplicationController
       params[:header_logo].delete :context_type
       duplicate_handling = params.delete :duplicate_handling
       @attachment ||= @account.attachments.build
-      if authorized_action(@context, @current_user, :manage_account_settings)
+      if authorized_action((@account ||= @domain_root_account), @current_user, :manage_account_settings)
         respond_to do |format|
           @attachment.folder_id ||= @folder.id
           @attachment.workflow_state = nil
