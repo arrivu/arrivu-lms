@@ -1,4 +1,7 @@
-
+<%
+   js_bundle :course_comments
+   js_env :review_course_id =>  @context.id
+%>
 <% if @context.settings[:allow_user_to_design_course_detail_page] && @context.static_content.content_type == "Course" %>
    <%  @body_classes << "gradebook2 full-width"
        @show_left_side = false
@@ -8,8 +11,7 @@
 <%  @body_classes << "gradebook2 full-width"
     @show_left_side = false
     jammit_css :course_library ,:bootstrap_and_responsive
-    js_bundle :course_comments
-    js_env :review_course_id =>  @context.id
+
 %>
 <div class="row-fluid"
 <% if @context_bg_image_url %>
