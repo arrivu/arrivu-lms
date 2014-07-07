@@ -16,6 +16,6 @@ require [
       courseCommentCollection.url = "/api/v1/libraries/"+ENV.review_course_id+"/course_reviews"
       $("#content").disableWhileLoading courseCommentCollection.fetch(
         success:->
-          courseCommentCollectionView.render
+          courseCommentCollectionView.render()
       )
 
