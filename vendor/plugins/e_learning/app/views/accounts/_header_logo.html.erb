@@ -1,9 +1,10 @@
 <div id ="header_logo_dialog" style="display:none;">
-<%= form_for :header_logo,:url => account_add_logo_url(@account ||= @domain_root_account),:html => {:method=> "put",:id => "upload_header_logo_form",:style => " margin-left:189px;" , :multipart => true} do |f| %>
+  <% account = account_context(@context)%>
+<%= form_for :header_logo,:url => account_add_logo_url(account ||= @domain_root_account),:html => {:method=> "put",:id => "upload_header_logo_form",:style => " margin-left:189px;" , :multipart => true} do |f| %>
   <table>
     <tr>
       <td>
-        <div id="label_id" rel ="<%=(@account ||= @domain_root_account).id %>" style="margin-left: -70px;margin-right:40px"><%= "Add Logo:  " %></div>
+        <div id="label_id" rel ="<%= account.id%>" style="margin-left: -70px;margin-right:40px"><%= "Add Logo:  " %></div>
       </td>
       <td>
         <input type="hidden" name="return_to"/>

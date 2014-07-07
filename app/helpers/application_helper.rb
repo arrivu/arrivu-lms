@@ -1080,10 +1080,22 @@ ApplicationHelper
   end
 
   def header_logo_image
-    (@account ||= @domain_root_account)
-    unless @account.account_header.nil?
-    if Attachment.exists?(@account.account_header.header_logo_url) == true
-      @thumbnail = Attachment.find(@account.account_header.header_logo_url).thumbnail
+    unless @current_user.nil?
+      accounts = @current_user.common_account_chain(@domain_root_account)
+      if  accounts.size == 1
+        account= accounts.first
+      else
+        account = account_context(@context)
+      end
+    end
+
+    unless  account &&  account.account_header
+      account = @domain_root_account
+    end
+    @can_change_logo = can_do(account, @current_user, :manage_account_settings)
+    unless account.account_header.nil?
+    if Attachment.exists?(account.account_header.header_logo_url)
+      @thumbnail = Attachment.find(account.account_header.header_logo_url).thumbnail
       if @thumbnail
         @logo_url = "/images/thumbnails/show/#{@thumbnail.id}/#{@thumbnail.uuid}"
       end
