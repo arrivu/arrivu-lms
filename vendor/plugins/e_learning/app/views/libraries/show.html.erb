@@ -120,8 +120,8 @@ border: 1px solid hsl(0, 0%, 87%);border-radius: 4px;padding: 25px;background: #
         <% end  %>
       </ul>
     </div>
-  
 
+<% if @comments.count>0 %>
 <div class="span3">
     <h1 style="font-size: 1.8em;font-weight: normal;">Reviews</h1>
     <% @comments.each do |comment| %>
@@ -147,7 +147,7 @@ border: 1px solid hsl(0, 0%, 87%);border-radius: 4px;padding: 25px;background: #
     <a class="btn btn-primary" id="comments_review" style="margin-left: 20%;border-radius: 0px;margin-bottom: 10px;">
       SEE ALL <%= @total_count%> REVIEWS </a>
   </div></div>
-
+<%end %>
 
 <form action="<%=library_enrollments_path(@context)%>" id="enrollment_dialog" data-turn-into-dialog='{"width":600,"height":600,"modal":true}' style="display:none"
       title="<%= @context.name %>">
