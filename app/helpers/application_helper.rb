@@ -1089,18 +1089,20 @@ ApplicationHelper
       end
     end
 
-    unless  account &&  account.account_header
+    unless account
       account = @domain_root_account
     end
     @can_change_logo = can_do(account, @current_user, :manage_account_settings)
-    unless account.account_header.nil?
-    if Attachment.exists?(account.account_header.header_logo_url)
-      @thumbnail = Attachment.find(account.account_header.header_logo_url).thumbnail
-      if @thumbnail
-        @logo_url = "/images/thumbnails/show/#{@thumbnail.id}/#{@thumbnail.uuid}"
+    unless account.account_header
+       account = @domain_root_account
+    end
+      unless account.account_header.nil?
+        if Attachment.exists?(account.account_header.header_logo_url)
+          @attachment = Attachment.find(account.account_header.header_logo_url)
+          @logo_url = file_download_url(@attachment, { :verifier => @attachment.uuid, :download => '1', :download_frd => '1' })
+        end
       end
-    end
-    end
+
   end
 
 end

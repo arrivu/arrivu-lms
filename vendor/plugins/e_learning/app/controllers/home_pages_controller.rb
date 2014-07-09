@@ -53,10 +53,12 @@ class HomePagesController < ApplicationController
           @attachment.file_state = 'available'
           success = nil
           if params[:header_logo][:uploaded_data]
-            success = @attachment.update_attributes(params[:header_logo])
-            @attachment.errors.add(:base, t('errors.server_error', "Upload failed, server error, please try again.")) unless success
-          else
-            @attachment.errors.add(:base, t('errors.missing_field', "Upload failed, expected form field missing"))
+            unless params[:header_logo][:uploaded_data].content_type =~ /\Aimage\/.*\Z/
+              success = nil
+              @attachment.errors.add(:base, t('errors.validatee', "Upload failed, Select a valid file to upload."))
+            else
+              success = @attachment.update_attributes(params[:header_logo])
+            end
           end
             deleted_attachments = @attachment.handle_duplicates(duplicate_handling)
           if success

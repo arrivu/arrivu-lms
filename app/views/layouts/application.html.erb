@@ -128,8 +128,8 @@
     <a href="#content" id="skip_navigation_link"><%= t 'links.skip_to_content', "Skip To Content" %></a>
     <!--Arrivu changes-->
         <% if header_logo_image%>
-            <a class="logo" href="<%= root_url %>" style="width: 174px;height: 63px;left: 2px;
-                    bottom: 0px;position:absolute;"><img class=" custom_logo_fit <%= 'logo_bottom' if (@e_learning) %>"
+            <a  href="<%= root_url %>" style="width: 174px;height: 63px;left: 2px;
+                    bottom: 0px;position:absolute;"><img class="logo custom_logo_fit <%= 'logo_bottom' if (@e_learning) %>"
                                             src= <%= @logo_url %>></a>
          <% if @can_change_logo %>
           <i class="icon-edit hide" style="position: absolute;display:none;left:156px;bottom:10px;background-color:black;color:white;padding: 6px;"></i>

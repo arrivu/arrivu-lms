@@ -47,6 +47,7 @@ require([
                {
                    $("#upload_header_logo_form").find(".uploading").slideUp();
                    alert ("Please choose your logo to upload");
+                   $("#upload_header_logo_form").find(".uploading").hide();
                }
            },
            success: function(data){
@@ -56,6 +57,9 @@ require([
              $("#upload_header_logo_form").find(".uploading").slideUp();
              $("#header_logo_dialog").dialog("close")
 
+           },
+           error: function(data){
+             $("#upload_header_logo_form").find(".uploading").hide();
            }
        })
 

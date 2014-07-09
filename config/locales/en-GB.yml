@@ -1,4 +1,4 @@
---- 
+---
 en-GB: 
   EditAppointmentGroupDetails: 
     affect_reservations: "How will this affect reservations?"
@@ -5574,6 +5574,8 @@ en-GB:
       upload_failed: "Upload failed, please try again."
       uploading: "Uploading error"
       uploading_zip: "There were errors uploading the zip file."
+      validate: "Upload failed, Select a valid file to upload"
+      not_selected : "Select a file to Upload"
     fields: 
       file: File
     full_index: 

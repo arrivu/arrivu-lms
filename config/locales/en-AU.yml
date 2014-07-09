@@ -5489,6 +5489,8 @@ en-AU:
       upload_failed: "Upload failed, please try again."
       uploading: "Uploading Error"
       uploading_zip: "There were errors uploading the zip file."
+      validate: "Upload failed, Select a valid file to upload"
+      not_selected : "Select a file to Upload"
     fields: 
       file: File
     full_index: 
