@@ -1,6 +1,5 @@
-
 <div id="tab-images">
-  <table>
+  <table style="border-collapse: collapse">
    <tr>
       <td>
         <div style="margin-left: 10px;">
@@ -18,14 +17,16 @@
      </td>
    </tr>
     <tr>
-      <td>
+      <% unless @context.settings[:allow_user_to_design_course_detail_page] %>
+      <td class="space">
         <div style="margin-left: 10px;">
           <div><%= "Image :  " %></div>
         </div>
       </td>
-      <td>
+      <td class="space">
          <div><a href="#" class="upload_new_image_link" style="padding-top:2px;margin-right:10px;margin-left: 77px"><%= t('links.upload_image', %{Upload a new image}) %></a></div>
       </td>
+      <%end %>
     </tr>
   </table>
   <%= form_for :attachment, :url => context_url(@context,:course_image_upload=>"image"), :html => {:method=> "put",:id => "upload_image_form",:style => "display: none; margin-left:189px;" , :multipart => true} do |f| %>
@@ -40,12 +41,12 @@
   <% end %>
   <table>
     <tr>
-      <td>
+      <td class="space">
         <div style="margin-left: 10px;">
           <div><%= "Background Image Preview:  " %></div>
         </div>
       </td>
-      <td>
+      <td class="space">
        <% if @context.course_image.nil? %>
             <img id="course_background_image" src="/images/course_background.jpg " style="width: 200px; min-height: 31px; max-height: 126px" class="thumbnail">
         <% elsif  Attachment.exists?(@context.course_image.course_back_ground_image_attachment_id) == true  %>
@@ -56,6 +57,7 @@
       </td>
     </tr>
     <tr>
+      <% unless @context.settings[:allow_user_to_design_course_detail_page] %>
       <td>
         <div style="margin-left: 10px;">
           <div><%= "Background Image :  " %></div>
@@ -64,6 +66,7 @@
       <td>
         <div><a href="#" class="upload_new_background_image_link" style="padding-top:2px;margin-right:10px"><%= t('links.upload_image', %{Upload a new background image}) %></a></div>
       </td>
+      <%end %>
     </tr>
   </table>
   <%= form_for :attachment, :url => context_url(@context,:course_image_upload =>"back_ground_image"), :html => {:method=> "put",:id => "upload_background_image_form", :style => "display: none; margin-left:189px;", :multipart => true} do |f| %>
