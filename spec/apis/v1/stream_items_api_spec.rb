@@ -501,7 +501,9 @@ describe UsersController, type: :request do
     WebConference.stubs(:plugins).returns(
         [OpenObject.new(:id => "big_blue_button", :settings => {:domain => "bbb.instructure.com", :secret_dec => "secret"}, :valid_settings? => true, :enabled? => true),]
     )
-    @conference = BigBlueButtonConference.create!(:title => 'myconf', :user => @user, :description => 'mydesc', :conference_type => 'big_blue_button', :context => @course)
+    @conference = BigBlueButtonConference.create!(:title => 'myconf', :user => @user, :description => 'mydesc',
+                                                  :conference_type => 'big_blue_button', :context => @course,
+                                                  :start_date => DateTime.now )
     json = api_call(:get, "/api/v1/users/activity_stream.json",
                     { :controller => "users", :action => "activity_stream", :format => 'json' })
     json.should == [{

@@ -78,7 +78,9 @@ describe ConferencesController do
       plugin = PluginSetting.find_or_create_by_name('adobe_connect')
       plugin.update_attribute(:settings, { :domain => 'adobe_connect.test' })
 
-      @conference = @course.web_conferences.create!(:conference_type => 'AdobeConnect', :duration => 60, :user => @teacher)
+      @conference = @course.web_conferences.create!(:conference_type => 'AdobeConnect', :duration => 60,
+                                                    :user => @teacher,
+                                                    :start_date => DateTime.now)
       plugin.disabled = true
       plugin.save!
       get 'index', :course_id => @course.id

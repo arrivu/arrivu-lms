@@ -28,9 +28,7 @@ module Api::V1::Tab
   def tab_json(tab, user, session)
     hash = {}
     hash[:id] = tab[:css_class]
-    unless tab[:label] == "Pages" || tab[:label] == "FAQ" || tab[:label] == "Careers" || tab[:label] == "Videos" || tab[:label] == "Offers" || tab[:label] == "Bonus Videos" || tab[:label] == "Labs"
-     hash[:html_url] = html_url(tab)
-    end
+    hash[:html_url] = html_url(tab)
     hash[:position] = tab[:position]
     hash[:hidden] = true if tab[:hidden]
     hash[:unused] = true if tab[:hidden_unused]
@@ -46,6 +44,8 @@ module Api::V1::Tab
       send(tab[:href], *tab[:args])
     elsif tab[:no_args]
       send(tab[:href])
+    elsif tab[:type]
+      send(tab[:href], @context,tab[:type])
     else
       send(tab[:href], @context)
     end

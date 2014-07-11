@@ -254,8 +254,8 @@ module SIS
               #user.omniauth_authentications.bulid(:user_id => user_id, :provider => provider)
               my_logger.info "Creating omniauth_authentications, #{user_id}"
 
-              oaa = OmniauthAuthentication.find_by_user_id(user.id)
-              oaa ||= OmniauthAuthentication.new(:user_id => user.id)
+              oaa = user.omniauth_authentication
+              oaa ||= user.build_omniauth_authentication
               oaa.provider = provider.downcase
               oaa.save!
             end
