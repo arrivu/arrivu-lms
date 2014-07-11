@@ -55,7 +55,8 @@ describe WebConference do
       user_model
       email = "email@email.com"
       @user.stubs(:email).returns(email)
-      conference = BigBlueButtonConference.new(:title => "my conference", :user => @user, :context => course)
+      conference = BigBlueButtonConference.new(:title => "my conference", :user => @user, :context => course,
+                                               :start_date => DateTime.now)
       conference.settings = {:record => true, :not => :for_user}
       conference.save
       conference.reload

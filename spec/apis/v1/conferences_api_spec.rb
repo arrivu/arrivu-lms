@@ -45,7 +45,8 @@ describe "Conferences API", type: :request do
       @conferences = (1..2).map { |i| @course.web_conferences.create!(:conference_type => 'Wimba',
                                                                       :duration => 60,
                                                                       :user => @teacher,
-                                                                      :title => "Wimba #{i}")}
+                                                                      :title => "Wimba #{i}",
+                                                                      :start_date => DateTime.now)}
 
       json = api_call(:get, "/api/v1/courses/#{@course.to_param}/conferences", @category_path_options.
         merge(action: 'index', course_id: @course.to_param))
@@ -59,7 +60,8 @@ describe "Conferences API", type: :request do
       @conferences = ['AdobeConnect', 'Wimba'].map {|ct| @course.web_conferences.create!(:conference_type => ct,
                                                                                          :duration => 60,
                                                                                          :user => @teacher,
-                                                                                         :title => ct)}
+                                                                                         :title => ct,
+                                                                                         :start_date => DateTime.now)}
       plugin.disabled = true
       plugin.save!
       json = api_call(:get, "/api/v1/courses/#{@course.to_param}/conferences", @category_path_options.
@@ -72,7 +74,8 @@ describe "Conferences API", type: :request do
       @conferences = (1..2).map { |i| @course.web_conferences.create!(:conference_type => 'Wimba',
                                                                       :duration => 60,
                                                                       :user => @teacher,
-                                                                      :title => "Wimba #{i}")}
+                                                                      :title => "Wimba #{i}",
+                                                                      :start_date => DateTime.now)}
       @conferences[0].users << @user
       @conferences[0].save!
       json = api_call(:get, "/api/v1/courses/#{@course.to_param}/conferences", @category_path_options.
@@ -87,7 +90,8 @@ describe "Conferences API", type: :request do
       @conferences = (1..2).map { |i| @group.web_conferences.create!(:conference_type => 'Wimba',
                                                                       :duration => 60,
                                                                       :user => @teacher,
-                                                                      :title => "Wimba #{i}")}
+                                                                      :title => "Wimba #{i}",
+                                                                      :start_date => DateTime.now)}
       json = api_call(:get, "/api/v1/groups/#{@group.to_param}/conferences", @category_path_options.
         merge(action: 'index', group_id: @group.to_param))
       json.should == api_conferences_json(@conferences.reverse.map{|c| WebConference.find(c.id)}, @group, @student)
