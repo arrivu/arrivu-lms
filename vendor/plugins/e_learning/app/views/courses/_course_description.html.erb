@@ -8,8 +8,8 @@
             </tr>
             <tr>
                <td>
-                 <textarea maxlength="350" rows="10" cols="240" id="short_description" name="short_description_txt" style="width: 300px;">
-                   <%= @context.course_description.short_description  if @context.course_description != nil %></textarea>
+                 <textarea <% if @context.settings[:allow_user_to_design_course_detail_page] %> readonly="readonly"<%end %> id="short_description" name="short_description_txt" style="width: 300px;height:90px;"><%= @context.course_description.short_description  if @context.course_description != nil %></textarea>
+                 <% if @e_learning  %>style="" <% end  %>
                </td>
             </tr>
             <tr>
@@ -19,14 +19,16 @@
             </tr>
             <tr>
                <td>
-                 <textarea rows="10" cols="240" id="long_description" name="long_description_txt" style="width: 400px;"><%= @context.course_description.long_description if @context.course_description != nil %></textarea>
+                 <textarea <% if @context.settings[:allow_user_to_design_course_detail_page] %> readonly="readonly"<%end %> id="long_description" name="long_description_txt" style="width: 600px;height:100px"><%= @context.course_description.long_description if @context.course_description != nil %></textarea>
                </td>
             </tr>
             <tr>
-               <td>
-                 <button id ="add_course_description" class="btn btn-primary" style= "margin-left: 117px;;margin-top: 21px;"
-                 type="submit"><i class="icon-add"></i> <%= t('buttons.add_section', %{Submit Description}) %></button>
-               </td>
+              <% unless @context.settings[:allow_user_to_design_course_detail_page] %>
+                  <td>
+                    <button id ="add_course_description" class="btn btn-primary" style= "margin-top: 21px;"
+                    type="submit"><i class="icon-add"></i> <%= t('buttons.add_section', %{Submit Description}) %></button>
+                  </td>
+               <% end %>
             </tr>
         </table>
     </div>

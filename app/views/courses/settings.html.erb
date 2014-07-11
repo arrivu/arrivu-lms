@@ -362,8 +362,16 @@
        <% if ELEARNING &&  e_learning_enabled %>
          <td class="form-label"><%= f.blabel :design, :en => "Course Details Page Design" %></td>
          <td>
+           <span class="course_form">
            <%= f.check_box :allow_user_to_design_course_detail_page %>
            <%= f.label :allow_user_to_design_course_detail_page, :en => "Course detail Custom design" %>
+           </span>
+           <% if @context.settings[:allow_user_to_design_course_detail_page] %>
+               <span class="course_info "><%= t('course_details_custom_design_enabled', "Course Detail Page Custom Design is Enabled")   %> </span>
+           <% else %>
+               <span class="course_info "><%= t('course_details_custom_design_disabled', "Course Detail Page Custom Design is Disabled")   %> </span>
+           <% end %>
+          </td>
        <% end %>
     </tr>
     <!--arrivu changes-->
@@ -497,7 +505,9 @@
                   <% if extra_text %>
                       (<%= extra_text %>)
                   <% end %>
-                  <%= link_to "<i class='icon-download'></i>".html_safe, context_url(last_complete.account, :context_file_download_url, last_complete.attachment.id) %>
+                  <% if last_complete.attachment %>
+                    <%= link_to "<i class='icon-download'></i>".html_safe, context_url(last_complete.account, :context_file_download_url, last_complete.attachment.id) %>
+                  <% end %>
               <% else %>
                   <%= t 'report_last_run_never', 'Never' %>
               <% end %>
