@@ -4187,6 +4187,8 @@ en-AU:
       tab_cant_disable: "This page can't be disabled, only hidden"
       tab_disabled: "Page disabled, will redirect to course home page"
       tab_hidden_if_disabled: "Page disabled, won't appear in navigation"
+      course_details_custom_design_enabled: "Course Detail Page Custom Design is Enabled"
+      course_details_custom_design_disabled: "Course Detail Page Custom Design is Disabled"
       tabs: 
         alerts: Alerts
         details: "Course Details"
