@@ -39,6 +39,7 @@ class WikiPage < ActiveRecord::Base
 
   TITLE_LENGTH = WikiPage.columns_hash['title'].limit rescue 255
   SIMPLY_VERSIONED_EXCLUDE_FIELDS = [:workflow_state, :hide_from_students, :editing_roles, :notify_of_update]
+
   has_many :page_comments
 
   def validate_front_page_visibility
@@ -205,6 +206,16 @@ class WikiPage < ActiveRecord::Base
     self.versions.map(&:model)
   end
 
+  WIKI_TYPE_FAQS ='faq'
+  WIKI_TYPE_CAREERS ='career'
+  WIKI_TYPE_PAGES ='wiki'
+  WIKI_TYPE_VIDEOS ='video'
+  WIKI_TYPE_OFFERS ='offer'
+  WIKI_TYPE_BONUS_VIDEOS = 'bonus_video'
+  WIKI_TYPE_LABS = 'lab'
+
+  WIKI_PAGE_TYPES = [:wiki, :faq, :career,:video,:offer,:bonus_video, :lab]
+
   scope :active, where(:workflow_state => 'active')
 
   scope :deleted_last, order("workflow_state='deleted'")
@@ -213,13 +224,13 @@ class WikiPage < ActiveRecord::Base
 
   scope :published, where("wiki_pages.workflow_state='active' AND (wiki_pages.hide_from_students=? OR wiki_pages.hide_from_students IS NULL)", false)
   scope :unpublished, where("wiki_pages.workflow_state='unpublished' OR (wiki_pages.hide_from_students=? AND wiki_pages.workflow_state<>'deleted')", true)
-  scope :pages, where(:wiki_type => 'wiki')
-  scope :faqs, where(:wiki_type => 'faq')
-  scope :careers, where(:wiki_type => 'career')
-  scope :videos, where(:wiki_type => 'video')
-  scope :offers, where(:wiki_type => 'offer')
-  scope :bonusvideos, where(:wiki_type => 'bonus_video')
-  scope :labs, where(:wiki_type => 'labs')
+  scope :pages, where(:wiki_type => WIKI_TYPE_PAGES)
+  scope :faqs, where(:wiki_type => WIKI_TYPE_FAQS)
+  scope :careers, where(:wiki_type => WIKI_TYPE_CAREERS)
+  scope :videos, where(:wiki_type => WIKI_TYPE_VIDEOS)
+  scope :offers, where(:wiki_type => WIKI_TYPE_OFFERS)
+  scope :bonus_videos, where(:wiki_type => WIKI_TYPE_BONUS_VIDEOS)
+  scope :labs, where(:wiki_type => WIKI_TYPE_LABS)
 
 
   # needed for ensure_unique_url
@@ -612,19 +623,13 @@ class WikiPage < ActiveRecord::Base
     end
   end
 
-  WIKI_TYPE_FAQS ='faq'
-  WIKI_TYPE_CAREERS ='career'
-  WIKI_TYPE_PAGES ='wiki'
-  WIKI_TYPE_VIDEOS ='video'
-  WIKI_TYPE_OFFERS ='offer'
-  WIKI_TYPE_BONUS_VIDEOS = 'bonus_video'
-  WIKI_TYPE_LABS = 'labs'
+
 
   DEFAULT_FAQ_FRONT_PAGE_URL = 'faq-front-page'
   DEFAULT_CAREER_FRONT_PAGE_URL = 'career-front-page'
   DEFAULT_VIDEO_FRONT_PAGE_URL = 'video-front-page'
   DEFAULT_OFFER_FRONT_PAGE_URL = 'offer-front-page'
-  DEFAULT_BONUS_VIDEO_FRONT_PAGE_URL = 'bonusvideo-front-page'
+  DEFAULT_BONUS_VIDEO_FRONT_PAGE_URL = 'bonus-video-front-page'
   DEFAULT_LAB_FRONT_PAGE_URL = 'lab-front-page'
 
 end

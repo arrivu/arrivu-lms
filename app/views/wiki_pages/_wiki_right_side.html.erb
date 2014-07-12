@@ -1,7 +1,7 @@
 <% course_home ||= false %>
 <% cache([@page,@wiki_type, @context, @wiki, @current_user, 'wiki_sidebar_links_partial'].cache_key) do %>
 <div id="wiki_show_view_secondary">
-  <% if !course_home && can_do(@wiki, @current_user, :manage) && @context.wiki.wiki_pages.length < 2 || @context.wiki.wiki_pages.faqs.length < 2 || @context.wiki.wiki_pages.careers.length <  2 || @context.wiki.wiki_pages.videos.length < 2 || @context.wiki.wiki_pages.bonusvideos.length < 2 || @context.wiki.wiki_pages.offers.length < 2 || @context.wiki.wiki_pages.labs.length < 2  %>
+  <% if !course_home && can_do(@wiki, @current_user, :manage) && @context.wiki.wiki_pages.length < 2 || @context.wiki.wiki_pages.faqs.length < 2 || @context.wiki.wiki_pages.careers.length <  2 || @context.wiki.wiki_pages.videos.length < 2 || @context.wiki.wiki_pages.bonus_videos.length < 2 || @context.wiki.wiki_pages.offers.length < 2 || @context.wiki.wiki_pages.labs.length < 2  %>
     <div class="rs-margin-lr rs-margin-top">
     <p>
       <% if @wiki_type == "bonus_video" %>
@@ -66,7 +66,7 @@
     <% elsif @page.wiki_type == WikiPage::WIKI_TYPE_CAREERS%>
     <% pages = @context.wiki.wiki_pages.careers.not_deleted.select{|p| !p.new_record? }.sort_by{|p| p.title || ""} %>
     <% elsif @page.wiki_type == WikiPage::WIKI_TYPE_BONUS_VIDEOS%>
-    <% pages = @context.wiki.wiki_pages.bonusvideos.not_deleted.select{|p| !p.new_record? }.sort_by{|p| p.title || ""} %>
+    <% pages = @context.wiki.wiki_pages.bonus_videos.not_deleted.select{|p| !p.new_record? }.sort_by{|p| p.title || ""} %>
     <% else @page.wiki_type == WikiPage::WIKI_TYPE_LABS%>
     <% pages = @context.wiki.wiki_pages.labs.not_deleted.select{|p| !p.new_record? }.sort_by{|p| p.title || ""} %>
     <% end %>

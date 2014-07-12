@@ -2552,7 +2552,7 @@ class Course < ActiveRecord::Base
       { :id => TAB_REFERRALS, :label => t('#tabs.referrals', "Refer a friend"), :css_class => 'referrals', :href => :course_referrals_path},
       { :id => TAB_VIDEOS, :label => t('#tabs.videos', "Videos"), :css_class => 'videos',:href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_VIDEOS },
       { :id => TAB_OFFERS, :label => t('#tabs.offers', "Offers"), :css_class => 'offer',:href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_OFFERS },
-      { :id => TAB_BONUSVIDEOS, :label => t('#tabs.bonusvideos', "Bonus Videos"), :css_class => 'bonus_videos', :href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_BONUS_VIDEOS },
+      { :id => TAB_BONUSVIDEOS, :label => t('#tabs.bonus_videos', "Bonus Videos"), :css_class => 'bonus_videos', :href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_BONUS_VIDEOS },
       { :id => TAB_LABS, :label => t('#tabs.labs', "Labs"), :css_class => 'labs', :href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_LABS },
       {:id => TAB_COMMENTS, :label => t('#tabs.testimonial', "Testimonial"), :css_class => 'comments', :href => :course_comments_path},
       {:id => TAB_LIVECLASSLINKS, :label => t('#tabs.live_class_links', "Live Class Links"), :css_class => 'live_class_links', :href => :course_live_class_links_path},

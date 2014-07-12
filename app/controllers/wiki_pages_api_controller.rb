@@ -228,7 +228,23 @@ class WikiPagesApiController < ApplicationController
     if authorized_action(@context.wiki, @current_user, :read)
       pages_route = polymorphic_url([:api_v1, @context, :wiki_pages])
       # omit body from selection, since it's not included in index results
-      scope = @context.wiki.wiki_pages.select(WikiPage.column_names - ['body']).includes(:user)
+      # here we add types filter
+      if @wiki_type == WikiPage::WIKI_TYPE_FAQS
+        scope = @context.wiki.wiki_pages.faqs.select(WikiPage.column_names - ['body']).includes(:user)
+      elsif @wiki_type == WikiPage::WIKI_TYPE_CAREERS
+        scope = @context.wiki.wiki_pages.careers.select(WikiPage.column_names - ['body']).includes(:user)
+      elsif @wiki_type == WikiPage::WIKI_TYPE_VIDEOS
+        scope = @context.wiki.wiki_pages.videos.select(WikiPage.column_names - ['body']).includes(:user)
+      elsif @wiki_type == WikiPage::WIKI_TYPE_OFFERS
+        scope = @context.wiki.wiki_pages.offers.select(WikiPage.column_names - ['body']).includes(:user)
+      elsif @wiki_type == WikiPage::WIKI_TYPE_LABS
+        scope = @context.wiki.wiki_pages.labs.select(WikiPage.column_names - ['body']).includes(:user)
+      elsif @wiki_type == WikiPage::WIKI_TYPE_BONUS_VIDEOS
+        scope = @context.wiki.wiki_pages.bonus_videos.select(WikiPage.column_names - ['body']).includes(:user)
+      else
+        scope = @context.wiki.wiki_pages.pages.select(WikiPage.column_names - ['body']).includes(:user)
+      end
+
       if params.has_key?(:published)
         scope = value_to_boolean(params[:published]) ? scope.published : scope.unpublished
       else
