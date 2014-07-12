@@ -4189,6 +4189,9 @@ en-AU:
       tab_hidden_if_disabled: "Page disabled, won't appear in navigation"
       course_details_custom_design_enabled: "Course Detail Page Custom Design is Enabled"
       course_details_custom_design_disabled: "Course Detail Page Custom Design is Disabled"
+      course_visible_on_course_catalogue: "This Course will Visible on Course Catalogue"
+      not_course_visible_on_course_catalogue: "This Course will not Visible on Course Catalogue"
+      course_tags: "Click to add tags of this Course"
       tabs: 
         alerts: Alerts
         details: "Course Details"

@@ -5,17 +5,21 @@
   <div class="control-group">
 <tr><td>
      <label for="course_tag" class="control-label"> Add Tags:</label></td>
-   <div class="controls">
-     <td><input  type="text"
+
+     <td>
+        <span class="course_form">
+       <input  type="text"
              class="token_input"
              id="course_tag_tokens"
              name="tag_tokens"
-             data-pre= <%= @course_tags %> ></td>
+             data-pre= <%= @course_tags %> >
+        </span>
+        <span class="course_info "><%= t('course_tags', "Click to add tags of this Course")     %> </span>
+     </td>
 
-    </div>
+
    </tr>
   </div>
-
 </fieldset>
 <style>
     ul.token-input{
