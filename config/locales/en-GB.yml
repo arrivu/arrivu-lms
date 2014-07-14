@@ -4124,7 +4124,7 @@ en-GB:
         pending_acceptance_explanation: "This user has not yet accepted the invitation to the course"
         pending_acceptance_of_invitation: pending
       roster_users: 
-        canvas_user_id: "Arrivu LMS user ID"
+        canvas_user_id: "LMS user ID"
         login_name_or_sis_id: "Login / SIS ID"
         name: Name
         no_people_found: "No people found"

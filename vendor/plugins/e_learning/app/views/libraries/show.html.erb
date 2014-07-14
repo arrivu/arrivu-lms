@@ -5,7 +5,7 @@
 <% if @context.settings[:allow_user_to_design_course_detail_page] %>
    <%  @body_classes << "gradebook2 full-width"
        @show_left_side = false
-      jammit_css :bootstrap_and_responsive
+
    %>
     <% if @context.static_content %>
      <%= @context.static_content.page_desc.html_safe %>
