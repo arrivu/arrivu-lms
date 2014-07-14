@@ -155,7 +155,7 @@
   <div>
     <h2><%= t 'headers.page_tools', 'Page Tools' %></h2>
     <ul class="item_list">
-      <% unless @page.is_front_page? || @page.new_record? || !can_do(@page, @current_user, :update) ||  !@page.is_front_page? && !@page.deleted? && @page.url == WikiPage::DEFAULT_FAQ_FRONT_PAGE_URL || @page.url == WikiPage::DEFAULT_CAREER_FRONT_PAGE_URL%>
+      <% unless @page.is_front_page? || @page.new_record? || !can_do(@page, @current_user, :update) ||  !@page.is_front_page? && !@page.deleted? && WikiPage::DEFAULT_FRONT_PAGES.include?(@page.url) %>
         <li>
           <a id="wiki_page_rename_link" class="icon-note-dark element_toggler" aria-controls="wiki_page_rename_section" href="#"><%= t 'links.rename_page', 'Rename this '+"#{@wiki_type}" %></a>
           <div id="wiki_page_rename_section" style="display:none;">

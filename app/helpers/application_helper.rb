@@ -369,9 +369,6 @@ ApplicationHelper
           class_name = tab[:css_class].downcase.replace_whitespace("-")
           class_name += ' active' if @active_tab == tab[:css_class]
           #Plugin settings start
-          if (tab[:label] == "Sub-Accounts" and !!@domain_root_account.Sublime_sub_account_disable?)
-            tab[:href] ="hide_menu"
-          end
 
           if (tab[:label] == "Grades" and !!@domain_root_account.Sublime_grade_disable?) || (tab[:label] == "Outcomes" and !!@domain_root_account.Sublime_outcomes_disable?)
             tab[:href] ="hide_menu"

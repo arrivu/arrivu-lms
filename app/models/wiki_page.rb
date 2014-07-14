@@ -102,43 +102,45 @@ class WikiPage < ActiveRecord::Base
   end  
   
   def ensure_unique_url
-    url_attribute = self.class.url_attribute
-    base_url = self.send(url_attribute)
-    base_url = self.send(self.class.attribute_to_urlify).to_s.to_url if base_url.blank? || !self.only_when_blank
-    conditions = [wildcard("#{url_attribute}", base_url, :type => :right)]
-    unless new_record?
-      conditions.first << " and id != ?"
-      conditions << id
-    end
-    # make stringex scoping a little more useful/flexible... in addition to
-    # the normal constructed attribute scope(s), it also supports paramater-
-    # less scopeds. note that there needs to be an instance_method of
-    # the same name for this to work
-    scopes = self.class.scope_for_url ? Array(self.class.scope_for_url) : []
-    base_scope = self.class
-    scopes.each do |scope|
-      next unless self.respond_to?(scope)
-      if base_scope.respond_to?(scope)
-        return unless send(scope)
-        base_scope = base_scope.send(scope)
+    unless DEFAULT_FRONT_PAGES.include?self.url
+      url_attribute = self.class.url_attribute
+      base_url = self.send(url_attribute)
+      base_url = self.send(self.class.attribute_to_urlify).to_s.to_url if base_url.blank? || !self.only_when_blank
+      conditions = [wildcard("#{url_attribute}", base_url, :type => :right)]
+      unless new_record?
+        conditions.first << " and id != ?"
+        conditions << id
+      end
+      # make stringex scoping a little more useful/flexible... in addition to
+      # the normal constructed attribute scope(s), it also supports paramater-
+      # less scopeds. note that there needs to be an instance_method of
+      # the same name for this to work
+      scopes = self.class.scope_for_url ? Array(self.class.scope_for_url) : []
+      base_scope = self.class
+      scopes.each do |scope|
+        next unless self.respond_to?(scope)
+        if base_scope.respond_to?(scope)
+          return unless send(scope)
+          base_scope = base_scope.send(scope)
+        else
+          conditions.first << " and #{connection.quote_column_name(scope)} = ?"
+          conditions << send(scope)
+        end
+      end
+      url_owners = base_scope.where(conditions).all
+      # This is the part in stringex that messed us up, since it will never allow
+      # a url of "front-page" once "front-page-1" or "front-page-2" is created
+      # We modify it to allow "front-page" and start the indexing at "front-page-2"
+      # instead of "front-page-1"
+      if url_owners.size > 0 && url_owners.detect{|u| u.send(url_attribute) == base_url}
+        n = 2
+        while url_owners.detect{|u| u.send(url_attribute) == "#{base_url}-#{n}"}
+          n = n.succ
+        end
+        write_attribute url_attribute, "#{base_url}-#{n}"
       else
-        conditions.first << " and #{connection.quote_column_name(scope)} = ?"
-        conditions << send(scope)
+        write_attribute url_attribute, base_url
       end
-    end
-    url_owners = base_scope.where(conditions).all
-    # This is the part in stringex that messed us up, since it will never allow
-    # a url of "front-page" once "front-page-1" or "front-page-2" is created
-    # We modify it to allow "front-page" and start the indexing at "front-page-2"
-    # instead of "front-page-1"
-    if url_owners.size > 0 && url_owners.detect{|u| u.send(url_attribute) == base_url}
-      n = 2
-      while url_owners.detect{|u| u.send(url_attribute) == "#{base_url}-#{n}"}
-        n = n.succ
-      end
-      write_attribute url_attribute, "#{base_url}-#{n}"
-    else
-      write_attribute url_attribute, base_url
     end
   end
 
@@ -624,12 +626,14 @@ class WikiPage < ActiveRecord::Base
   end
 
 
-
+  # when adding new wiki front page url make sure the DEFAULT_FRONT_PAGES constant also get updated
   DEFAULT_FAQ_FRONT_PAGE_URL = 'faq-front-page'
   DEFAULT_CAREER_FRONT_PAGE_URL = 'career-front-page'
   DEFAULT_VIDEO_FRONT_PAGE_URL = 'video-front-page'
   DEFAULT_OFFER_FRONT_PAGE_URL = 'offer-front-page'
   DEFAULT_BONUS_VIDEO_FRONT_PAGE_URL = 'bonus-video-front-page'
   DEFAULT_LAB_FRONT_PAGE_URL = 'lab-front-page'
+
+  DEFAULT_FRONT_PAGES =[DEFAULT_FAQ_FRONT_PAGE_URL,DEFAULT_CAREER_FRONT_PAGE_URL,DEFAULT_VIDEO_FRONT_PAGE_URL,DEFAULT_OFFER_FRONT_PAGE_URL,DEFAULT_BONUS_VIDEO_FRONT_PAGE_URL,DEFAULT_LAB_FRONT_PAGE_URL]
 
 end

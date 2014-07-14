@@ -320,13 +320,31 @@ class WikiPagesApiController < ApplicationController
   def create
     initial_params = params.slice(:url)
     initial_params.merge! (params[:wiki_page] || {}).slice(:url, :title)
-
     @wiki = @context.wiki
+    if WikiPage::WIKI_PAGE_TYPES.include?(@wiki_type.to_sym)
+      initial_params[:wiki_type] = @wiki_type
+      if @wiki_type ==  WikiPage::WIKI_TYPE_FAQS and !@wiki.wiki_pages.not_deleted.where(:url => WikiPage::DEFAULT_FAQ_FRONT_PAGE_URL).exists?
+        initial_params[:url] = WikiPage::DEFAULT_FAQ_FRONT_PAGE_URL
+      elsif @wiki_type ==  WikiPage::WIKI_TYPE_CAREERS and !@wiki.wiki_pages.not_deleted.where(:url => WikiPage::DEFAULT_CAREER_FRONT_PAGE_URL).exists?
+        initial_params[:url] =  WikiPage::DEFAULT_CAREER_FRONT_PAGE_URL
+      elsif @wiki_type ==  WikiPage::WIKI_TYPE_VIDEOS and !@wiki.wiki_pages.not_deleted.where(:url => WikiPage::DEFAULT_VIDEO_FRONT_PAGE_URL).exists?
+        initial_params[:url] =  WikiPage::DEFAULT_VIDEO_FRONT_PAGE_URL
+      elsif @wiki_type ==  WikiPage::WIKI_TYPE_OFFERS and !@wiki.wiki_pages.not_deleted.where(:url => WikiPage::DEFAULT_OFFER_FRONT_PAGE_URL).exists?
+        initial_params[:url] =  WikiPage::DEFAULT_OFFER_FRONT_PAGE_URL
+      elsif @wiki_type ==  WikiPage::WIKI_TYPE_BONUS_VIDEOS and !@wiki.wiki_pages.not_deleted.where(:url => WikiPage::DEFAULT_BONUS_VIDEO_FRONT_PAGE_URL).exists?
+        initial_params[:url] =  WikiPage::DEFAULT_BONUS_VIDEO_FRONT_PAGE_URL
+      elsif @wiki_type ==  WikiPage::WIKI_TYPE_LABS and !@wiki.wiki_pages.not_deleted.where(:url => WikiPage::DEFAULT_LAB_FRONT_PAGE_URL).exists?
+        initial_params[:url] =  WikiPage::DEFAULT_LAB_FRONT_PAGE_URL
+      end
+    end
     @page = @wiki.build_wiki_page(@current_user, initial_params)
     if authorized_action(@page, @current_user, :create)
       update_params = get_update_params(Set[:title, :body])
       if !update_params.is_a?(Symbol) && @page.update_attributes(update_params) && process_front_page
         log_asset_access(@page, "wiki", @wiki, 'participate')
+        unless initial_params[:url].empty?
+          @page.update_attributes(url: initial_params[:url] )
+        end
         render :json => wiki_page_json(@page, @current_user, session)
       else
         render :json => @page.errors, :status => update_params.is_a?(Symbol) ? update_params : :bad_request
@@ -535,7 +553,7 @@ class WikiPagesApiController < ApplicationController
     # attempt to find an existing page
     is_front_page_action = is_front_page_action?
     url = is_front_page_action ? Wiki::DEFAULT_FRONT_PAGE_URL : params[:url]
-    @page = if is_front_page_action
+    @page = if is_front_page_action and @wiki_type ==  WikiPage::WIKI_TYPE_PAGES
       @wiki.front_page
     else
       @wiki.wiki_pages.not_deleted.find_by_url(url)
