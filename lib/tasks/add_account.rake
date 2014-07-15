@@ -63,7 +63,8 @@ namespace :db do
           @account.settings[:Sublime_course_export_disable]= course_export_flag
           @account.settings[:private_license_enable]= course_export_flag
           puts "Creating Account #{name}... "
-          account_to_domain_mapping = @account.build_account_domain_mapping(domain_name: @account.name,workflow_state: 'active')
+          @account.build_account_domain_mapping(domain_name: @account.name.downcase.gsub(' ', '-'),
+                                                                            workflow_state: 'active')
           @account.save!
 
           #now add the siteAdmin account admin to this account admin
