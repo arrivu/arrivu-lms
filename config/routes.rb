@@ -1536,6 +1536,10 @@ routes.draw do
       delete "courses/:course_id/modules/:id", :action => :destroy
     end
 
+    scope(:controller => :class_categories_api) do
+      get "courses/:course_id/class_categories", :action => :index, :path_name => 'course_class_categories'
+    end
+
     scope(:controller => :context_module_items_api) do
       get "courses/:course_id/modules/:module_id/items", :action => :index, :path_name => 'course_context_module_items'
       get "courses/:course_id/modules/:module_id/items/:id", :action => :show, :path_name => 'course_context_module_item'
