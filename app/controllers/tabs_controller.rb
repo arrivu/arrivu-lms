@@ -170,6 +170,10 @@ class TabsController < ApplicationController
         tab[:href] && tab[:label] && Collaboration.any_collaborations_configured?
       elsif (tab[:id] == @context.class::TAB_CONFERENCES rescue false)
         tab[:href] && tab[:label] && feature_enabled?(:web_conferences)
+      elsif (tab[:id] == @context.class::TAB_CLASSES rescue false)
+         @context.feature_enabled?(:flipped_classes)
+      elsif (tab[:id] == @context.class::TAB_MODULES rescue false)
+         !@context.feature_enabled?(:flipped_classes)
       else
         tab[:href] && tab[:label]
       end
