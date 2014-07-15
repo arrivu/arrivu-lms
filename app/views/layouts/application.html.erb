@@ -239,7 +239,13 @@
 </div>
 
 <%= yield :leading_content %>
-
+<% if @e_learning %>
+    <style>
+      #content{
+         padding:0em;
+       }
+    </style>
+<%end %>
 <div id="wrapper-container" >
   <div id="wrapper">
     <% if @show_left_side %>

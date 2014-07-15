@@ -4,6 +4,7 @@
   <% if !course_home && can_do(@wiki, @current_user, :manage) && @context.wiki.wiki_pages.length < 2 || @context.wiki.wiki_pages.faqs.length < 2 || @context.wiki.wiki_pages.careers.length <  2 || @context.wiki.wiki_pages.videos.length < 2 || @context.wiki.wiki_pages.bonusvideos.length < 2 || @context.wiki.wiki_pages.offers.length < 2 || @context.wiki.wiki_pages.labs.length < 2  %>
     <div class="rs-margin-lr rs-margin-top">
     <p>
+
       <% if @wiki_type == "bonus_video" %>
          <b><%= t :wiki_description_header, "What's a Bonus Video for?" %></b>
       <% else %>
@@ -17,22 +18,27 @@
               %>
               <% elsif @wiki_type == WikiPage::WIKI_TYPE_CAREERS %>
               <%= <<-EOT
-                                    Its a place you can put careers opportunities .
+                    Its a place you can put careers opportunities .
                   EOT
               %>
              <% elsif @wiki_type == WikiPage::WIKI_TYPE_OFFERS %>
               <%= <<-EOT
-                                                      Its a place you can put offers opportunities .
+                    Its a place you can put offers opportunities .
                   EOT
               %>
               <% elsif @wiki_type == WikiPage::WIKI_TYPE_VIDEOS %>
               <%= <<-EOT
-                                                      Its a place you can put videos opportunities .
+                    Its a place you can put videos opportunities .
                   EOT
               %>
               <% elsif @wiki_type == WikiPage::WIKI_TYPE_LABS %>
               <%= <<-EOT
-                                                                        Its a place you can put lab contents .
+                    Its a place you can put lab contents .
+                  EOT
+              %>
+              <% elsif @wiki_type == WikiPage::WIKI_TYPE_BONUS_VIDEOS %>
+              <%= <<-EOT
+                    Its a place you can put Bonus Video contents .
                   EOT
               %>
               <% else  %>
