@@ -53,7 +53,6 @@ require [
   'home_page_header'
   'solo_teacher_account'
   'login_popup'
-  'bootstrap'
 ], ($, Backbone, courseList, helpDialog, tours) ->
   courseList.init()
   helpDialog.initTriggers()

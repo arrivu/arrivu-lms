@@ -128,13 +128,16 @@ class PopularCoursesController < ApplicationController
         @profile = @user_id.profile.bio
         if @user_id.avatar_image_url.nil?
           @profile_pict = "/images/User.png"
+          @has_teacher_image = false
         else
           @profile_pict = @user_id.avatar_image_url
+          @has_teacher_image = true
         end
         @instructue_json =   api_json(course,@current_user, session, API_USER_JSON_OPTS).tap do |json|
           json[:teacher_desc] = @profile
           json[:teacher_name] = @user_id.name
           json[:teacher_image] = @profile_pict
+          json[:has_teacher_image] = @has_teacher_image
           json[:teacher_id] = @teachers.user_id
           json[:teacher_details_url] =  user_details_path(@user_id)
         end
