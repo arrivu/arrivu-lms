@@ -989,12 +989,12 @@ ApplicationHelper
     unless @current_user.nil?
       context_external_tool = ContextExternalTool.find_by_tool_id_and_workflow_state('canvabadges',['anonymous','name_only','email_only','public']).try(:id)
       unless context_external_tool.nil?
-        @badge_ex_tool = ContextExternalTool.find_for(context_external_tool, @domain_root_account, :main_navigation)
+        @badge_ex_tool = ContextExternalTool.find_for(context_external_tool, @domain_root_account, :user_navigation)
         unless @badge_ex_tool.nil?
-          @resource_title = @badge_ex_tool.label_for(:main_navigation)
-          @resource_url_for_main_nav = @badge_ex_tool.main_navigation(:url)
+          @resource_title = @badge_ex_tool.label_for(:user_navigation)
+          @resource_url_for_main_nav = @badge_ex_tool.user_navigation(:url)
           @opaque_id = @badge_ex_tool.opaque_identifier_for(@current_user)
-          @resource_type = 'main_navigation'
+          @resource_type = 'user_navigation'
           @return_url = user_profile_url(@current_user, :include_host => true)
           if for_leader_board
             badge_context = @context
@@ -1031,7 +1031,7 @@ ApplicationHelper
 
   def get_user_badges_for_header
     response = get_user_badges
-    @response_ok = (!@badge_error && response && (response.code == '200'|| '304'))
+    @response_ok = (!@badge_error && response && (['200','304'].include? response.code) && !(['500','404'].include? response.code))
     if @response_ok
       @badges_array = JSON.parse(response.body)
     end

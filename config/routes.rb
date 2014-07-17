@@ -1512,11 +1512,12 @@ routes.draw do
       delete "courses/:course_id/pages/:url", :action => :destroy
       delete "groups/:group_id/pages/:url", :action => :destroy
       [:wiki, :faq, :career,:video,:offer,:bonus_video, :lab].each do |wiki_page_type|
+        type_regexp = Regexp.new([:wiki, :faq, :career,:video,:offer,:bonus_video, :lab].join("|"))
         get "courses/:course_id/:type/#{wiki_page_type}-front-page", action: :show_front_page
         put "courses/:course_id/:type/#{wiki_page_type}-front-page", :action => :update_front_page
-        type_regexp = Regexp.new([:wiki, :faq, :career,:video,:offer,:bonus_video, :lab].join("|"))
+
         get "courses/:course_id/:type", :action => :index, :path_name => "course_#{wiki_page_type}s", constraints: { type: type_regexp }
-        get "courses/:course_id/:type/:url", :action => :show, :path_name => "course_#{wiki_page_type}"
+        get "courses/:course_id/:type/:url", :action => :show, :path_name => "course_#{wiki_page_type}", constraints: { type: type_regexp }
         get "courses/:course_id/:type/:url/revisions", :action => :revisions, :path_name => "course_#{wiki_page_type}_revisions"
       end
       get "courses/:course_id/:type/:url/revisions/latest", :action => :show_revision
