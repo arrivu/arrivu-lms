@@ -10,8 +10,8 @@ class PopularCoursesController < ApplicationController
         @tag_id = params[:tag_id]
         @tagged_courses = ActsAsTaggableOn::Tagging.find_all_by_tag_id(@tag_id)
         @tagged_courses.each do |tag_course|
-          @course = @domain_root_account.associated_courses.active.find(tag_course.taggable_id)
-          unless @course.nil?
+          @course = @domain_root_account.associated_courses.active.available.find(tag_course.taggable_id)
+          if @course.settings[:make_this_course_visible_on_course_catalogue]
             @account_courses << @course
           end
         end
@@ -21,8 +21,8 @@ class PopularCoursesController < ApplicationController
         session[:tag_id] = nil
         @tagged_courses = ActsAsTaggableOn::Tagging.find_all_by_tag_id(@tag_id)
         @tagged_courses.each do |tag_course|
-          @course = @domain_root_account.associated_courses.active.find(tag_course.taggable_id)
-          unless @course.nil?
+          @course = @domain_root_account.associated_courses.active.available.find(tag_course.taggable_id)
+          if @course.settings[:make_this_course_visible_on_course_catalogue]
             @account_courses << @course
           end
         end
@@ -30,15 +30,26 @@ class PopularCoursesController < ApplicationController
         @account_courses = @domain_root_account.courses.not_deleted.find_all_by_topic_id(params[:topic_id])
       else
         if params[:source] == 'popular'
-          @account_courses = @domain_root_account.popular_courses.limit(6)
+          @account_courses = []
+          @popular_courses = @domain_root_account.popular_courses.limit(6)
+          @popular_courses.each do |popular|
+            course = popular.course
+            if course.settings[:make_this_course_visible_on_course_catalogue]
+              @account_courses << course
+            end
+          end
         else
-          @account_courses = @domain_root_account.associated_courses.active
+          @account_courses = []
+          @published_courses = []
+          @published_courses = @domain_root_account.associated_courses.active.available
+          @published_courses.each do|publish_course|
+            if publish_course.settings[:make_this_course_visible_on_course_catalogue]
+               @account_courses << publish_course
+            end
+          end
         end
       end
       @account_courses.each_with_index do |course, idx|
-        if params[:source] == 'popular'
-          course = course.course
-        end
         @teachers = course.teacher_enrollments
         @teacher_desc = instructure_details(course)
         @course_image = course.course_image
@@ -117,13 +128,16 @@ class PopularCoursesController < ApplicationController
         @profile = @user_id.profile.bio
         if @user_id.avatar_image_url.nil?
           @profile_pict = "/images/User.png"
+          @has_teacher_image = false
         else
           @profile_pict = @user_id.avatar_image_url
+          @has_teacher_image = true
         end
         @instructue_json =   api_json(course,@current_user, session, API_USER_JSON_OPTS).tap do |json|
           json[:teacher_desc] = @profile
           json[:teacher_name] = @user_id.name
           json[:teacher_image] = @profile_pict
+          json[:has_teacher_image] = @has_teacher_image
           json[:teacher_id] = @teachers.user_id
           json[:teacher_details_url] =  user_details_path(@user_id)
         end

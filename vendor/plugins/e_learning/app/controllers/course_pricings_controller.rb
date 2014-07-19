@@ -52,8 +52,8 @@ class CoursePricingsController < ApplicationController
          @course_pricings.update_attributes(course_id:params['course_id'],start_at:params['start_date'],end_at:params['end_date'],price:params['course_price'])
          format.json { render :json => @course_pricings.to_json}
        elsif nooverlap?(course_pricings,updated_start_date,updated_end_date)
-         if(params['start_date'].to_date() >= Date.today)
-           if(params['end_date'].to_date() >= params['start_date'].to_date())
+         if(updated_start_date >= Date.today)
+           if(updated_end_date >= updated_start_date)
              if @course_pricings.update_attributes(course_id:params['course_id'],start_at:params['start_date'],end_at:params['end_date'],price:params['course_price'])
                format.json { render :json => @course_pricings.to_json}
              else

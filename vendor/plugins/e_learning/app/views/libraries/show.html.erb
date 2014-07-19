@@ -1,11 +1,11 @@
 <%
-   js_bundle :course_comments
+   js_bundle :course_comments,:bootstrap
    js_env :review_course_id =>  @context.id
 %>
 <% if @context.settings[:allow_user_to_design_course_detail_page] %>
    <%  @body_classes << "gradebook2 full-width"
        @show_left_side = false
-      jammit_css :bootstrap_and_responsive
+
    %>
     <% if @context.static_content %>
      <%= @context.static_content.page_desc.html_safe %>
@@ -128,12 +128,12 @@ border: 1px solid hsl(0, 0%, 87%);border-radius: 4px;padding: 25px;background: #
 <div class="span3">
     <h1 style="font-size: 1.8em;font-weight: normal;">Reviews</h1>
     <% @comments.each do |comment| %>
-
+      <a href="<%= user_details_path(comment.user) %>" style="text-decoration: none;color: black">
           <div  class="comment left_bottom_border" id="comment_<%= comment ? comment.id : "{{ blank }}" %>" style="<%= hidden unless comment %>">
             <div style="float: left;" class="user_name">
 
               <% if service_enabled?(:avatars) %>
-                  <%= avatar(comment.user_id) %>
+                  <img src=<%=  comment.user.avatar_url ?  comment.user.avatar_url: "http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&f=y" %> width="50px" height="50px" alt="<%= comment.user.name%>">
               <% end  %>
               <%= comment.user_name rescue nbsp %></div>
             &nbsp;<%= comment.user.name  %>
@@ -144,7 +144,7 @@ border: 1px solid hsl(0, 0%, 87%);border-radius: 4px;padding: 25px;background: #
             <div class="clear" style="border-top: 1px solid #ccc;"></div>
            <p><%= comment.comment  %></p>
           </div>
-
+        </a>
     <%end %>
      <% @total_count =   @context.comments.approved.count%>
     <a class="btn btn-primary" id="comments_review" style="margin-left: 20%;border-radius: 0px;margin-bottom: 10px;">

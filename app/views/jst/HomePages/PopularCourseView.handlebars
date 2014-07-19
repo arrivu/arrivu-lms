@@ -90,7 +90,11 @@
                 <a href="{{teacher_details_url}}" id="{{teacher_id}}">
                 <div class="index_view_slides">
                    <div class="items">
-                       <div class="teacher_image" ><img src={{teacher_image}}></div>
+                       {{#if has_teacher_image}}
+                          <div class="teacher_image" ><img src={{teacher_image}}></div>
+                       {{else}}
+                          <div class="teacher_image" ><img class="default_teacher_image" src={{teacher_image}}></div>
+                        {{/if}}
                     {{#if teacher_desc}}
                        <span id="{{teacher_id}}" class="teacher_name">{{teacher_name}}</span>
                         <p class="teacher_desc" >{{{ truncate teacher_desc 130 }}}</p>

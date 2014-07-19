@@ -71,7 +71,8 @@ class Course < ActiveRecord::Base
                   :topic_name,
                   :topic_id,
                   :section_privilege_to_students,
-                  :allow_user_to_design_course_detail_page
+                  :allow_user_to_design_course_detail_page,
+                  :make_this_course_visible_on_course_catalogue
   #               end of arrivu changes
 
   serialize :tab_configuration
@@ -479,6 +480,7 @@ class Course < ActiveRecord::Base
   scope :name_like, lambda { |name| where(wildcard('courses.name', 'courses.sis_source_id', 'courses.course_code', name)) }
   scope :needs_account, lambda { |account, limit| where(:account_id => nil, :root_account_id => account).limit(limit) }
   scope :active, where("courses.workflow_state<>'deleted'")
+  scope :available, where("workflow_state=?","available")
   scope :least_recently_updated, lambda { |limit| order(:updated_at).limit(limit) }
   scope :manageable_by_user, lambda { |*args|
     # args[0] should be user_id, args[1], if true, will include completed
@@ -2808,6 +2810,7 @@ class Course < ActiveRecord::Base
   # arrivu changes for section wise privilege for students
   add_setting :section_privilege_to_students, :boolean => true
   add_setting :allow_user_to_design_course_detail_page, :boolean => true,:default => false
+  add_setting :make_this_course_visible_on_course_catalogue, :boolean => true,:default => false
   # end of arrivu changes for section wise privilege for students
   def user_can_manage_own_discussion_posts?(user)
     return true if allow_student_discussion_editing?

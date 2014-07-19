@@ -129,7 +129,7 @@
     <!--Arrivu changes-->
         <% if header_logo_image%>
             <a  href="<%= root_url %>" style="width: 174px;height: 63px;left: 2px;
-                    bottom: 0px;position:absolute;"><img class="logo custom_logo_fit <%= 'logo_bottom' if (@e_learning) %>"
+                    top:7px;position:absolute;"><img class="logo custom_logo_fit <%= 'logo_bottom' if (@e_learning) %>"
                                             src= <%= @logo_url %>></a>
          <% if @can_change_logo %>
           <i class="icon-edit hide" style="position: absolute;display:none;left:156px;bottom:10px;background-color:black;color:white;padding: 6px;"></i>
@@ -160,6 +160,9 @@
                 <%- if show_home_menu? -%>
                     <%= render(:partial => 'shared/home_menu') %>
                 <%- else  -%>
+                    <a href="#" class="menu-item-title">
+                      <%= @current_user.menu_data[:group_memberships_count].zero? ? t('links.courses', "Courses") : t('links.courses_and_groups', "Courses & Groups") -%>
+                      <span class="menu-item-title-icon"></span> <i class="icon-mini-arrow-down"></i></a>
                     <%= render(:partial => "shared/menu_courses", :locals => menu_courses_locals) %>
                 <%- end -%>
               </li>
@@ -236,7 +239,13 @@
 </div>
 
 <%= yield :leading_content %>
-
+<% if @e_learning %>
+    <style>
+      #content{
+         padding:0em;
+       }
+    </style>
+<%end %>
 <div id="wrapper-container" >
   <div id="wrapper">
     <% if @show_left_side %>
