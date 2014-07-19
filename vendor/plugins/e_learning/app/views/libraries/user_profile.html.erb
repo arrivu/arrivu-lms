@@ -1,5 +1,6 @@
 <%  @body_classes << "gradebook2 full-width"
     @show_left_side = false
+    js_bundle :bootstrap
     jammit_css :course_box,:bootstrap_and_responsive
  %>
 <%= form_for :user_profile, :url => user_profile_url(@user_id),:html => {:method=> "get",:id => "user_profile"} do |f| %>

@@ -374,6 +374,25 @@
           </td>
        <% end %>
     </tr>
+    <!--a flag to make course visible on course catalogue-->
+    <tr>
+      <% if ELEARNING &&  e_learning_enabled %>
+          <td class="form-label"><%= f.blabel :design, :en => "Visibility on Course Catalogue" %></td>
+          <td>
+           <span class="course_form">
+           <%= f.check_box :make_this_course_visible_on_course_catalogue %>
+             <%= f.label :make_this_course_visible_on_course_catalogue, :en => "Course Visibility on Course Catalogue" %>
+           </span>
+            <% if @context.settings[:make_this_course_visible_on_course_catalogue] %>
+                <span class="course_info "><%= t('course_visible_on_course_catalogue', "This Course will Visible on Course Catalogue")   %> </span>
+            <% else %>
+                <span class="course_info "><%= t('not_course_visible_on_course_catalogue', "This Course will not Visible on Course Catalogue")   %> </span>
+            <% end %>
+          </td>
+      <% end %>
+    </tr>
+
+
     <!--arrivu changes-->
     <tr>
       <td colspan="4">

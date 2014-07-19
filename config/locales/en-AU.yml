@@ -4081,7 +4081,7 @@ en-AU:
         pending_acceptance_explanation: "This user has not yet accepted the invitation to the course"
         pending_acceptance_of_invitation: pending
       roster_users: 
-        canvas_user_id: "Canvas User ID"
+        canvas_user_id: "LMS  User ID"
         login_name_or_sis_id: "Login / SIS ID"
         name: Name
         no_people_found: "No people found"
@@ -4189,6 +4189,9 @@ en-AU:
       tab_hidden_if_disabled: "Page disabled, won't appear in navigation"
       course_details_custom_design_enabled: "Course Detail Page Custom Design is Enabled"
       course_details_custom_design_disabled: "Course Detail Page Custom Design is Disabled"
+      course_visible_on_course_catalogue: "This Course will Visible on Course Catalogue"
+      not_course_visible_on_course_catalogue: "This Course will not Visible on Course Catalogue"
+      course_tags: "Click to add tags of this Course"
       tabs: 
         alerts: Alerts
         details: "Course Details"
