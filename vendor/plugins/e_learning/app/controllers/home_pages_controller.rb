@@ -10,8 +10,8 @@ class HomePagesController < ApplicationController
     js_env :context_asset_string => @domain_root_account.try(:asset_string)
     js_env :PERMISSIONS => { enable_links:  can_do((@account ||= @domain_root_account), @current_user, :manage_account_settings)}
     js_env :Account_Statistics => {
-          users_count: @domain_root_account.users.count,
-          courses_count: @domain_root_account.courses.count,
+          users_count: @domain_root_account.fast_all_users.count,
+          courses_count: @domain_root_account.associated_courses.active.available.count,
           modules_count:total_account_modules_count,
           topics_count:@domain_root_account.topics.count
     }
@@ -106,7 +106,7 @@ class HomePagesController < ApplicationController
 
   def total_account_modules_count
     @account_modules = 0
-    @account_courses = @domain_root_account.courses
+    @account_courses =  @domain_root_account.associated_courses.active.available
       @account_courses.each do  |course|
         @modules_count = course.context_modules.active.size if course.context_modules
         @account_modules += @modules_count
