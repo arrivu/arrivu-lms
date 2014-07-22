@@ -37,7 +37,7 @@ define [
 
     check_dt = (my_item, my_array) ->
       for item in my_array
-        return false if item == my_item
+        return false if  parseInt(item, 10) == parseInt(my_item, 10)
       true and $(event.target).hasClass('token-input-selected-token')
 
 

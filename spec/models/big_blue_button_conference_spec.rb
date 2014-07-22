@@ -44,7 +44,9 @@ describe BigBlueButtonConference do
       user_model
       email = "email@email.com"
       @user.stubs(:email).returns(email)
-      conference = BigBlueButtonConference.create!(:title => "my conference", :user => @user, :context => Account.default)
+      conference = BigBlueButtonConference.create!(:title => "my conference", :user => @user,
+                                                   :context => Account.default,
+                                                   :start_date => DateTime.now)
       conference.config.should_not be_nil
 
       # set some vars so it thinks it's been created and doesn't do an api call
@@ -69,7 +71,9 @@ describe BigBlueButtonConference do
       user_model
       email = "email@email.com"
       @user.stubs(:email).returns(email)
-      conference = BigBlueButtonConference.create!(:title => "my conference", :user => @user, :context => Account.default)
+      conference = BigBlueButtonConference.create!(:title => "my conference", :user => @user,
+                                                   :context => Account.default,
+                                                   :start_date => DateTime.now)
       conference.expects(:send_request).with(:create, anything).returns(true)
 
       conference.craft_url(@user).should match(/\Ahttp:\/\/bbb\.instructure\.com\/bigbluebutton\/api\/join/)
@@ -84,7 +88,9 @@ describe BigBlueButtonConference do
       user_model
       email = "email@email.com"
       @user.stubs(:email).returns(email)
-      conference = BigBlueButtonConference.create!(:title => "my conference", :user => @user, :context => Account.default)
+      conference = BigBlueButtonConference.create!(:title => "my conference", :user => @user,
+                                                   :context => Account.default,
+                                                   :start_date => DateTime.now)
       conference.expects(:send_request).once.with(:create, anything).returns(true)
       conference.initiate_conference
       conference.active?.should be_true
@@ -112,6 +118,7 @@ describe BigBlueButtonConference do
       bbb.user_settings = { :record => true }
       bbb.user = user
       bbb.context = Account.default
+      bbb.start_date = DateTime.now
       bbb.save!
       bbb.expects(:send_request).with do |verb, options|
         verb.should eql :create
@@ -125,6 +132,7 @@ describe BigBlueButtonConference do
       bbb.user_settings = { :record => false }
       bbb.user = user
       bbb.context = Account.default
+      bbb.start_date = DateTime.now
       bbb.save!
       bbb.expects(:send_request).with do |verb, options|
         verb.should eql :create
@@ -139,6 +147,7 @@ describe BigBlueButtonConference do
       bbb.user_settings = { record: true }
       bbb.user = user
       bbb.context = Account.default
+      bbb.start_date = DateTime.now
       bbb.save!
       response = {returncode: 'SUCCESS', recordings: "\n  ",
                   messageKey: 'noRecordings', message: 'There are not
@@ -157,6 +166,7 @@ describe BigBlueButtonConference do
       bbb.conference_key = 'test'
       bbb.settings[:admin_key] = 'admin'
       bbb.settings[:user_key] = 'user'
+      bbb.start_date = DateTime.now
       bbb.save
 
       bbb.expects(:send_request).never
@@ -190,6 +200,7 @@ describe BigBlueButtonConference do
       bbb.user_settings = { :record => true }
       bbb.user = user
       bbb.context = Account.default
+      bbb.start_date = DateTime.now
       bbb.save!
       bbb.expects(:send_request).with do |verb, options|
         verb.should eql :create

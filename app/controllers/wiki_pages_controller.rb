@@ -96,7 +96,7 @@ class WikiPagesController < ApplicationController
         redirect_to named_context_url(@context, :context_wiki_page_url, @page.wiki_type, WikiPage::DEFAULT_BONUS_VIDEO_FRONT_PAGE_URL)
       else
         redirect_to named_context_url(@context, :context_wiki_page_url, @page.wiki_type, @context.wiki.get_front_page_url || Wiki::DEFAULT_FRONT_PAGE_URL)
-       end
+      end
     end
   end
 

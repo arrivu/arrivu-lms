@@ -34,7 +34,20 @@ module Api::V1::WikiPage
       hash['published'] = true
     end
     hash['front_page'] = wiki_page.is_front_page?
-    if wiki_page.context.feature_enabled?(:draft_state)
+
+    if @wiki_type == WikiPage::WIKI_TYPE_FAQS
+      hash['html_url'] = named_context_url(wiki_page.context, :context_wiki_page_url, @wiki_type, wiki_page.url,:include_host => true)
+    elsif @wiki_type == WikiPage::WIKI_TYPE_CAREERS
+      hash['html_url'] = named_context_url(wiki_page.context, :context_wiki_page_url, @wiki_type, wiki_page.url,:include_host => true)
+    elsif @wiki_type == WikiPage::WIKI_TYPE_VIDEOS
+      hash['html_url'] = named_context_url(wiki_page.context, :context_wiki_page_url, @wiki_type, wiki_page.url,:include_host => true)
+    elsif @wiki_type == WikiPage::WIKI_TYPE_OFFERS
+      hash['html_url'] = named_context_url(wiki_page.context, :context_wiki_page_url, @wiki_type, wiki_page.url,:include_host => true)
+    elsif @wiki_type == WikiPage::WIKI_TYPE_LABS
+      hash['html_url'] = named_context_url(wiki_page.context, :context_wiki_page_url, @wiki_type, wiki_page.url,:include_host => true)
+    elsif @wiki_type == WikiPage::WIKI_TYPE_BONUS_VIDEOS
+      hash['html_url'] = named_context_url(wiki_page.context, :context_wiki_page_url, @wiki_type, wiki_page.url)
+    elsif wiki_page.context.feature_enabled?(:draft_state)
       hash['html_url'] = polymorphic_url([wiki_page.context, :named_page], :wiki_page_id => wiki_page)
     else
       hash['html_url'] = polymorphic_url([wiki_page.context, :named_wiki_page], :id => wiki_page)

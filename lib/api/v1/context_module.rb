@@ -133,6 +133,21 @@ module Api::V1::ContextModule
 
     hash['content_details'] = content_details(content_tag, current_user) if includes.include?('content_details')
 
+    if content_tag.context.feature_enabled?(:flipped_classes) and ContentTag::FLIP_CLASS_TYPES.detect{|cat| cat == content_tag.category}
+      category = ContentTag::FLIP_CLASS_TYPES.detect{|cat| cat == content_tag.category}
+      if category == ContentTag::PRE_CLASS_VIDEO
+        hash['class_category_id'] = ContentTag::PRE_CLASS_VIDEO_POSITION
+      elsif category == ContentTag::PRE_CLASS_RECORDING
+        hash['class_category_id'] = ContentTag::PRE_CLASS_RECORDING_POSITION
+      elsif category == ContentTag::PRE_CLASS_PRESENTATION
+        hash['class_category_id'] = ContentTag::PRE_CLASS_PRESENTATION_POSITION
+      elsif category == ContentTag::PRE_CLASS_ASSIGNMENTS
+        hash['class_category_id'] = ContentTag::PRE_CLASS_ASSIGNMENTS_POSITION
+      elsif category == ContentTag::PRE_CLASS_READING_MATERIALS
+        hash['class_category_id'] = ContentTag::PRE_CLASS_READING_MATERIALS_POSITION
+      end
+    end
+
     hash
   end
 

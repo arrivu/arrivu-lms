@@ -153,7 +153,7 @@
           <div class="new" style="margin-top: 5px;">
             <%= before_label :video_name, "Video Name" %>
             <input type="text" name="wiki_page[title]" class="item_title"/>
-            <a href="<%=  context_url(@context, :context_wiki_pages_url,:type => "video") %>" style="display: none;" class="add_item_url">&nbsp;</a>
+            <a href="<%=  context_url(@context, :context_wiki_pages_url,:type => WikiPage::WIKI_TYPE_VIDEOS) %>" style="display: none;" class="add_item_url">&nbsp;</a>
           </div>
         </div>
     <% end %>
@@ -177,7 +177,7 @@
           <div class="new" style="margin-top: 5px;">
             <%= before_label :offer_name, "Offer Name" %>
             <input type="text" name="wiki_page[title]" class="item_title"/>
-            <a href="<%=  context_url(@context, :context_wiki_pages_url,:type => "offer") %>" style="display: none;" class="add_item_url">&nbsp;</a>
+            <a href="<%=  context_url(@context, :context_wiki_pages_url,:type => WikiPage::WIKI_TYPE_OFFERS) %>" style="display: none;" class="add_item_url">&nbsp;</a>
           </div>
         </div>
     <% end %>
@@ -201,7 +201,7 @@
           <div class="new" style="margin-top: 5px;">
             <%= before_label :faq, "New Faq WikiPage Name" %>
             <input type="text" name="wiki_page[title]" class="item_title"/>
-            <a href="<%=  context_url(@context, :context_wiki_pages_url,:type => "faq") %>" style="display: none;" class="add_item_url">&nbsp;</a>
+            <a href="<%=  context_url(@context, :context_wiki_pages_url,:type => WikiPage::WIKI_TYPE_FAQS) %>" style="display: none;" class="add_item_url">&nbsp;</a>
           </div>
         </div>
     <% end %>
@@ -225,7 +225,7 @@
           <div class="new" style="margin-top: 5px;">
             <%= before_label :career, "New Career WikiPage Name" %>
             <input type="text" name="wiki_page[title]" class="item_title"/>
-            <a href="<%=  context_url(@context, :context_wiki_pages_url,:type => "career") %>" style="display: none;" class="add_item_url">&nbsp;</a>
+            <a href="<%=  context_url(@context, :context_wiki_pages_url,:type => WikiPage::WIKI_TYPE_CAREERS) %>" style="display: none;" class="add_item_url">&nbsp;</a>
           </div>
         </div>
     <% end %>
@@ -250,7 +250,7 @@
           <div class="new" style="margin-top: 5px;">
             <%= before_label :labs, "New Lab WikiPage Name" %>
             <input type="text" name="wiki_page[title]" class="item_title"/>
-            <a href="<%=  context_url(@context, :context_wiki_pages_url,:type => "labs") %>" style="display: none;" class="add_item_url">&nbsp;</a>
+            <a href="<%=  context_url(@context, :context_wiki_pages_url,:type => WikiPage::WIKI_TYPE_LABS) %>" style="display: none;" class="add_item_url">&nbsp;</a>
           </div>
         </div>
     <% end %>
@@ -278,7 +278,7 @@
         <div class="new" style="margin-top: 5px;">
           <%= before_label :page_name, "Page Name" %>
           <input type="text" name="wiki_page[title]" class="item_title"/>
-          <a href="<%= context_url(@context, :context_wiki_pages_url, :type => "wiki") %>" style="display: none;" class="add_item_url">&nbsp;</a>
+          <a href="<%= context_url(@context, :context_wiki_pages_url, :type => WikiPage::WIKI_TYPE_PAGES) %>" style="display: none;" class="add_item_url">&nbsp;</a>
         </div>
       </div>
       <% end %>

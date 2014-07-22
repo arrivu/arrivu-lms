@@ -53,6 +53,13 @@ describe "Modules API", type: :request do
     @module3 = @course.context_modules.create(:name => "module3")
     @module3.workflow_state = 'unpublished'
     @module3.save!
+    [@module1,@module2,@module3].each do |test_module|
+      context_module_group = ContextModuleGroup.find_or_create_by_context_id_and_context_type_and_is_default(@course.id,
+                                                                                                             @course.class.name,true,name: ContextModuleGroup::DEFAULT_MODULE_GROUP_NAME )
+      context_module_association = test_module.build_context_module_group_association(context_module_group_id: context_module_group.id)
+      context_module_association.position = ContextModuleGroupAssociation.infer_position(context_module_association)
+      context_module_association.save!
+    end
   end
 
   context "as a teacher" do
@@ -259,6 +266,14 @@ describe "Modules API", type: :request do
         @test_modules[2..3].each { |m| m.update_attribute(:workflow_state , 'unpublished') }
         @test_modules.map { |tm| tm.workflow_state }.should == %w(active active unpublished unpublished)
         @modules_to_update = [@test_modules[1], @test_modules[3]]
+        @test_modules.each do |test_module|
+          context_module_group = ContextModuleGroup.find_or_create_by_context_id_and_context_type_and_is_default(@course.id,
+                                          @course.class.name,true,name: ContextModuleGroup::DEFAULT_MODULE_GROUP_NAME )
+          context_module_association = test_module.build_context_module_group_association(context_module_group_id: context_module_group.id)
+          context_module_association.position = ContextModuleGroupAssociation.infer_position(context_module_association)
+          context_module_association.save!
+        end
+
 
         @wiki_page = @course.wiki.wiki_pages.create(:title => 'Wiki Page Title')
         @wiki_page.unpublish!

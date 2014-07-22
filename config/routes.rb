@@ -153,7 +153,7 @@ routes.draw do
     get 'pages/:wiki_page_id/edit' => 'wiki_pages#edit_page', :wiki_page_id => /[^\/]+/, :as => :edit_named_page
     get 'pages/:wiki_page_id/revisions' => 'wiki_pages#page_revisions', :wiki_page_id => /[^\/]+/, :as => :named_page_revisions
 
-    type_regexp = Regexp.new([:wiki, :faq, :career,:video,:offer,:bonus_video, :labs].join("|"))
+    type_regexp = Regexp.new([:wiki, :faq, :career,:video,:offer,:bonus_video, :lab].join("|"))
     resources :wiki_pages, path: ':type', constraints: { type: type_regexp } do
     match 'comments_create' => 'wiki_pages#comments_create' ,:as => :comments_create, :via => :post
     match 'comment_destroy/:id'=> 'wiki_pages#comment_destroy', :as => :comment_destroy,:only => [:destroy]
@@ -1511,6 +1511,21 @@ routes.draw do
       put "groups/:group_id/pages/:url", :action => :update
       delete "courses/:course_id/pages/:url", :action => :destroy
       delete "groups/:group_id/pages/:url", :action => :destroy
+      [:wiki, :faq, :career,:video,:offer,:bonus_video, :lab].each do |wiki_page_type|
+        type_regexp = Regexp.new([:wiki, :faq, :career,:video,:offer,:bonus_video, :lab].join("|"))
+        get "courses/:course_id/:type/#{wiki_page_type}-front-page", action: :show_front_page
+        put "courses/:course_id/:type/#{wiki_page_type}-front-page", :action => :update_front_page
+
+        get "courses/:course_id/:type", :action => :index, :path_name => "course_#{wiki_page_type}s", constraints: { type: type_regexp }
+        get "courses/:course_id/:type/:url", :action => :show, :path_name => "course_#{wiki_page_type}", constraints: { type: type_regexp }
+        get "courses/:course_id/:type/:url/revisions", :action => :revisions, :path_name => "course_#{wiki_page_type}_revisions"
+      end
+      get "courses/:course_id/:type/:url/revisions/latest", :action => :show_revision
+      get "courses/:course_id/:type/:url/revisions/:revision_id", :action => :show_revision
+      post "courses/:course_id/:type/:url/revisions/:revision_id", :action => :revert
+      post "courses/:course_id/:type", :action => :create
+      put "courses/:course_id/:type/:url", :action => :update
+      delete "courses/:course_id/:type/:url", :action => :destroy
     end
 
     scope(:controller => :context_modules_api) do
@@ -1520,6 +1535,10 @@ routes.draw do
       post "courses/:course_id/modules", :action => :create, :path_name => 'course_context_module_create'
       put "courses/:course_id/modules/:id", :action => :update, :path_name => 'course_context_module_update'
       delete "courses/:course_id/modules/:id", :action => :destroy
+    end
+
+    scope(:controller => :class_categories_api) do
+      get "courses/:course_id/class_categories", :action => :index, :path_name => 'course_class_categories'
     end
 
     scope(:controller => :context_module_items_api) do

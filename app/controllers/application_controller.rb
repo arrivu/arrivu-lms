@@ -1125,7 +1125,7 @@ class ApplicationController < ActionController::Base
 
     @page.editing_roles = (@context.default_wiki_editing_roles rescue nil) || @page.default_roles
 
-    if @page.is_front_page? or @wiki.wiki_pages.faqs.empty? or @wiki.wiki_pages.careers.empty? or @wiki.wiki_pages.videos.empty? or @wiki.wiki_pages.offers.empty? or @wiki.wiki_pages.bonusvideos.empty?
+    if @page.is_front_page? or @wiki.wiki_pages.faqs.empty? or @wiki.wiki_pages.careers.empty? or @wiki.wiki_pages.videos.empty? or @wiki.wiki_pages.offers.empty? or @wiki.wiki_pages.bonus_videos.empty?
       if @page.wiki_type == "bonus_video"
         @page.body = t "#application.wiki_front_page_default_content_course", "Welcome to your new course Bonus Video!" if @context.is_a?(Course)
         @page.body = t "#application.wiki_front_page_default_content_group", "Welcome to your new group Bonus Video!" if @context.is_a?(Group)
@@ -1767,7 +1767,7 @@ class ApplicationController < ActionController::Base
     elsif @wiki_type == WikiPage::WIKI_TYPE_OFFERS
       @context.wiki.wiki_pages.offers.count == 0
     elsif @wiki_type == WikiPage::WIKI_TYPE_BONUS_VIDEOS
-      @context.wiki.wiki_pages.bonusvideos.count == 0
+      @context.wiki.wiki_pages.bonus_videos.count == 0
     elsif @wiki_type == WikiPage::WIKI_TYPE_LABS
       @context.wiki.wiki_pages.labs.count == 0
     else

@@ -228,14 +228,14 @@ namespace :db do
         a = Account.default.reload
         a.name = name
         #Arrivu changes to add account domain mapping
-        account_to_domain_mapping = a.build_account_domain_mapping(domain_name: a.name,workflow_state: 'active')
+        a.account_domain_mapping.update_attributes(domain_name: a.name.downcase.gsub(' ', '-'))
         #Arrivu changes to add account domain mapping
         a.save!
       end
     else
       a = Account.default.reload
       a.name = ENV['CANVAS_LMS_ACCOUNT_NAME']
-      account_to_domain_mapping = a.build_account_domain_mapping(domain_name: a.name,workflow_state: 'active')
+      account_to_domain_mapping = a.account_domain_mapping.update_attributes(domain_name: a.name)
       a.save!
     end
   end

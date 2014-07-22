@@ -926,7 +926,7 @@ class User < ActiveRecord::Base
     courses_to_update = self.enrollments.active.select(:course_id).uniq.map(&:course_id)
     Enrollment.suspend_callbacks(:update_cached_due_dates) do
       self.enrollments.each { |e| e.destroy }
-      self.omniauth_authentication.destroy
+      self.omniauth_authentication.destroy if self.omniauth_authentication
     end
     courses_to_update.each do |course|
       DueDateCacher.recompute_course(course)
