@@ -38,8 +38,8 @@
                     <% if is_managable or @authorized_for_user  %>
                         href="<%= context_url(@context, :context_url) %>/modules/items/<%= tag ? tag.id : "{{ id }}" %>"
                     <% end %>
-                    <% if tag.content_type == "ContextExternalTool" %>
-                      style="color:#c2401c;"> Badge </a></span><br>
+                    <% if tag.content_type == "ContextExternalTool"  and !tag.title.nil? %>
+                      style="color:#c2401c;"> <%= tag.title.split(':')[0]%></a></span><br>
                     <% else %>
                       style="color:#c2401c;"> Class  Presentation&nbsp;<%=sprintf '%02d',idx + 1%></a></span><br>
                     <%end %>
