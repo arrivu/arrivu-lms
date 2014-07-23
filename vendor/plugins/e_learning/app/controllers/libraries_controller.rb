@@ -159,6 +159,13 @@ class LibrariesController < ApplicationController
           create_sub_account
         end
         format.json {render :json => @pseudonym}
+    elsif
+      @pseudonym = @context.pseudonyms.active.custom_find_by_unique_id(params[:pseudonym][:unique_id])
+      PseudonymSession.new(@pseudonym).save
+      if params[:for_solo_teacher_enrollment].present?
+        create_sub_account
+      end
+      format.json {render :json => @pseudonym}
     else
       errors = {
           :errors => {

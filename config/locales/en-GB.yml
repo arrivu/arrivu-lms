@@ -312,6 +312,7 @@ en-GB:
     add_user_button: "Add user"
     add_user_dialog_title: "Add a new user"
     add_solo_teacher_dialog_title: "Get a  Solo Teacher Account"
+    create_user_account: "Create Account"
     adding_course_message: "Adding course..."
     adding_user_message: "Adding user..."
     logging_message: "Logging In..."
