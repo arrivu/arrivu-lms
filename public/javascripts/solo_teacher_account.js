@@ -24,7 +24,7 @@ require([
         required: ['user[name]','pseudonym[unique_id]','sub_account_name[account]'],
         beforeSubmit: function(data) {
             $("button").attr('disabled', true)
-                .filter(".submit_button").text(I18n.t('adding_user_message', "Adding User..."));
+                .filter(".submit_button").text(I18n.t('creating_user_account', "Creating Account..."));
         },
         success: function(data) {
             $.flashMessage("Your solo teacher account created and you should receive an email confirmation shortly");

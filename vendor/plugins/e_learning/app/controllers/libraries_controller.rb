@@ -156,14 +156,13 @@ class LibrariesController < ApplicationController
         @user.new_registration((params[:user] || {}).merge({:remote_ip  => request.remote_ip, :cookies => cookies}))
         @pseudonym.send_registration_notification!
         if params[:for_solo_teacher_enrollment].present?
-          create_sub_account
+          create_sub_account(@user)
         end
         format.json {render :json => @pseudonym}
-    elsif
-      @pseudonym = @context.pseudonyms.active.custom_find_by_unique_id(params[:pseudonym][:unique_id])
+    elsif @pseudonym = @context.pseudonyms.active.custom_find_by_unique_id(params[:pseudonym][:unique_id])
       PseudonymSession.new(@pseudonym).save
       if params[:for_solo_teacher_enrollment].present?
-        create_sub_account
+        create_sub_account(@pseudonym.user)
       end
       format.json {render :json => @pseudonym}
     else
@@ -178,12 +177,12 @@ class LibrariesController < ApplicationController
     end
   end
 
-  def create_sub_account
+  def create_sub_account(user)
     @sub_account = @context.sub_accounts.build(name: params[:sub_account_name][:account])
     @sub_account.root_account = @context.root_account
     @sub_account.settings[:Sublime_sub_account_disable] =true
     @sub_account.save
-    @user.flag_as_admin(@sub_account,'AccountAdmin', false)
+    user.flag_as_admin(@sub_account,'AccountAdmin', false)
   end
 
   def get_course_and_price(course_id)
