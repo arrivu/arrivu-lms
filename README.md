@@ -26,4 +26,5 @@ Tasks to populate
 * Fix rename migration to migrate domain mapping get migrate first (bundle exec rake 'fix_domain_mapping')
 * To populate subscription plans (bundle exec rake db:seed_subscription)
 * Generate sample discussion topics (bundle exec rake db:populate)
+* Fix module groups error (bundle exec rake db:fix_module_groups)
 
