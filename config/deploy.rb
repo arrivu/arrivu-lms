@@ -163,7 +163,7 @@ namespace :canvas do
   desc "Tasks that run after create_symlink"
   task :after_create_symlink do
     canvasuser_permission
-    # deploy.migrate unless is_hotfix?
+    deploy.migrate unless is_hotfix?
     load_notifications unless is_hotfix?
   end
 
