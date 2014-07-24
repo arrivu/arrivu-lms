@@ -29,7 +29,7 @@ set :use_sudo,      true
 set :deploy_env,    "production"
 #set :bundle_dir,    "/var/data/gems"
 set :bundle_without, [:sqlite]
-set :bundle_flags, "--deployment --binstubs"
+set :bundle_flags, "--path vendor/bundle --without=sqlite --binstubs"
 
 set :server_base_url, "http://lms.arrivuhiring.com"
 #set me for future
