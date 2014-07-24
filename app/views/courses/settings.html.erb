@@ -344,7 +344,7 @@
           <td>
 
             <span class="course_form">
-            <% if can_do(@context.root_account, @current_user, :manage_courses) %>
+            <% if can_do(@context.account, @current_user, :manage_courses) %>
               <select name="course[topic_id]" id="course_topic_id">
                 <% @context.root_account.topics.each do |topic| %>
                     <option value="<%= topic.id %>" <%= 'selected' if topic.id == @context.topic_id %>><%= topic.name %></option>
@@ -354,7 +354,11 @@
               <%= @context.topic.name if @context.topic%>
             <% end %>
           </span>
-            <span class="course_info topic_name"><%= @context.topic.name if @context.topic %></span>
+            <% unless @context.topic.nil? %>
+              <span class="course_info"><%= @context.topic.name if @context.topic %></span>
+            <% else %>
+              <span class="course_info"><%= "Click to add Topics for this Course" %></span>
+            <% end %>
           </td>
       <% end %>
     </tr>

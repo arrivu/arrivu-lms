@@ -305,6 +305,8 @@ en-AU:
     add_user_button: "Add User"
     add_user_dialog_title: "Add a New User"
     add_solo_teacher_dialog_title: "Get a  Solo Teacher Account"
+    create_user_account: "Create Account"
+    creating_user_account: "Creating Account"
     e_learning_login_pop_up: "Log In"
     adding_course_message: "Adding Course..."
     adding_user_message: "Adding User..."

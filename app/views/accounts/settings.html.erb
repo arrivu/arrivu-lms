@@ -42,7 +42,9 @@
     <li><a href="#tab-quotas" id="tab-quotas-link"><%= t(:tab_quotas, "Quotas") %></a></li>
     <% end %>
     <% if can_do(@context, @current_user, :manage_account_settings) %>
+      <% if @account.root_account? && !@account.site_admin? %>
     <li><a href="#tab-notifications" id="tab-notifications-link"><%= t(:tab_notifications, "Notifications") %></a></li>
+    <% end %>
     <% end %>
     <li><a href="#tab-users" id="tab-users-link"><%= t(:tab_admins, "Admins") %></a></li>
     <% if @account.root_account? %>
@@ -75,11 +77,13 @@
     <!--e-learning-->
     <% if ELEARNING && e_learning_enabled %>
         <li><a href="#tab-topics" id="tab-topics-link">Course Topics</a></li>
+        <% if @account.root_account? && !@account.site_admin? %>
         <% if @context.settings[:course_index_custom_design] %>
            <li><a href="#tab-course_index_custom_design" id="tab-course_index_custom_design_link">Course Index Page Design</a></li>
         <% end %>
         <% if @context.settings[:account_index_page_custom_design] %>
           <li><a href="#tab-account_index_custom_design" id="tab-account_index_custom_design_link">Account Index Page Design</a></li>
+        <% end %>
         <% end %>
     <% end  %>
     <% if Account.site_admin.grants_right?(@current_user, :manage_site_settings) %>
@@ -572,7 +576,7 @@ Allowing Draft State here will allow teachers to enable it in their individual c
           <% end %>
         </fieldset>
         <% end %>
-        <% if Account.site_admin.grants_right?(@current_user, :manage_site_settings) %>
+        <% if @account.root_account? && !@account.site_admin? %>
         <fieldset>
           <legend><%= t(:course_index_custom_design, "Course Index Page Custom Design") %></legend>
           <% f.fields_for :settings do |settings| %>
@@ -703,11 +707,11 @@ Allowing Draft State here will allow teachers to enable it in their individual c
             </table>
 
           <% end %>
-        <% end %>
 
         <div class="button-container">
           <button type="submit" class="btn btn-primary"><%= t(:update_settings_button, "Update Settings") %></button>
         </div>
+       <% end %>
       <% end %>
     </div>
   <% end %>
@@ -1026,8 +1030,8 @@ Allowing Draft State here will allow teachers to enable it in their individual c
       <%= render :partial => 'topics/add_topics'%>
     </div>
     <div id="tab-course_index_custom_design">
-      <% if Account.site_admin.grants_right?(@current_user, :manage_site_settings) %>
-          <% if @context.settings[:account_index_page_custom_design] %>
+      <% if @account.root_account? && !@account.site_admin? %>
+          <% if @context.settings[:course_index_custom_design] %>
            <%= render :partial => 'courses/course_index_page_custom_design' %>
           <%end %>
       <%end%>
@@ -1045,8 +1049,10 @@ Allowing Draft State here will allow teachers to enable it in their individual c
       <%= render :partial => 'accounts/subscription_settings'%>
     </div>
     <div id="tab-account_index_custom_design">
-      <% if @context.settings[:account_index_page_custom_design] %>
-       <%= render :partial => 'accounts/account_index_page_custom_settings' %>
+      <% if @account.root_account? && !@account.site_admin? %>
+        <% if @context.settings[:account_index_page_custom_design] %>
+         <%= render :partial => 'accounts/account_index_page_custom_settings' %>
+        <% end %>
       <% end %>
     </div>
 <% end %>

@@ -27,7 +27,13 @@ class PopularCoursesController < ApplicationController
           end
         end
       elsif  params[:topic_id].present? and params[:topic_id].to_i != 0
-        @account_courses = @domain_root_account.courses.not_deleted.find_all_by_topic_id(params[:topic_id])
+        @account_courses = []
+        @topic_courses = @domain_root_account.associated_courses.active.available.find_all_by_topic_id(params[:topic_id])
+        @topic_courses.each do |topic_course|
+          if topic_course.settings[:make_this_course_visible_on_course_catalogue]
+            @account_courses << topic_course
+          end
+        end
       else
         if params[:source] == 'popular'
           @account_courses = []

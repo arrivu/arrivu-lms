@@ -604,7 +604,7 @@ class ContextModule < ActiveRecord::Base
     # Clear the old tags to be replaced by new ones
     item.content_tags.destroy_all
     item.save!
-    
+
     item_map = {}
     @item_migration_position = item.content_tags.not_deleted.map(&:position).compact.max || 0
     (hash[:items] || []).each do |tag_hash|
