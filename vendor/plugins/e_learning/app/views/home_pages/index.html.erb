@@ -3,12 +3,10 @@
         top: 30px;
     }
 </style>
-<% if @domain_root_account.settings[:account_index_page_custom_design] &&  content = @domain_root_account.static_content.find_by_content_type("Account_index")%>
-    <% @body_classes << "gradebook2 full-width"%>
-    <%= content.page_desc.html_safe %>
-<% else %>
-<% @body_classes << "gradebook2 full-width" %>
-<% jammit_css :jcontent, :course_box, :bootstrap_and_responsive
+<% @body_classes << "gradebook2 full-width"
+   jammit_css :jcontent, :course_box, :bootstrap_and_responsive
    js_bundle :home_pages,:bootstrap
 %>
+<% if @domain_root_account.settings[:account_index_page_custom_design] &&  content = @domain_root_account.static_content.find_by_content_type("Account_index")%>
+    <%= content.page_desc.html_safe %>
 <% end %>
