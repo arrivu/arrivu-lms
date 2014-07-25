@@ -79,33 +79,44 @@ define([
                 });
             },
 
-            updateModuleItemPositions: function(event, ui) {
-                var $module = ui.item.parents(".context_module");
-                var $draggedItemId =  ui.item.data('id');
-                console.log(ui);
-                var $category = ui.item.closest("#category").attr('class');
-                var url = $module.find(".reorder_items_url").attr('href');
-                var items = [];
-                $module.find(".context_module_items .context_module_item").each(function() {
-                    items.push($(this).getTemplateData({textValues: ['id']}).id);
-                });
-                $module.find(".context_module_items.ui-sortable").sortable('disable');
-                $module.disableWhileLoading(
-                    $.ajaxJSON(url, 'POST', {order: items.join(","),category: $category,dragged_item_id: $draggedItemId}, function(data) {
-                        if(data && data.context_module && data.context_module.content_tags) {
-                            for(var idx in data.context_module.content_tags) {
-                                var tag = data.context_module.content_tags[idx].content_tag;
-                                $module.find("#context_module_item_" + tag.id).fillTemplateData({
-                                    data: {position: tag.position}
-                                });
+            updateModuleItemPositions: function(event, ui,for_category,item_id) {
+                if (for_category) {
+                    var $module = ui.parents(".context_module");
+                    var $draggedItemId = item_id;
+                    console.log($draggedItemId);
+                    var $category = ui.closest("#category").attr('class');
+                    var url = $module.find(".reorder_items_url").attr('href');
+                    console.log(url);
+
+                } else {
+                    console.log("else");
+                    var $module = ui.item.parents(".context_module");
+                    var $draggedItemId = ui.item.data('id');
+                    console.log(ui);
+                    var $category = ui.item.closest("#category").attr('class');
+                    var url = $module.find(".reorder_items_url").attr('href');
+                    var items = [];
+                    $module.find(".context_module_items .context_module_item").each(function () {
+                        items.push($(this).getTemplateData({textValues: ['id']}).id);
+                    });
+                    $module.find(".context_module_items.ui-sortable").sortable('disable');
+                    $module.disableWhileLoading(
+                        $.ajaxJSON(url, 'POST', {order: items.join(","), category: $category, dragged_item_id: $draggedItemId}, function (data) {
+                            if (data && data.context_module && data.context_module.content_tags) {
+                                for (var idx in data.context_module.content_tags) {
+                                    var tag = data.context_module.content_tags[idx].content_tag;
+                                    $module.find("#context_module_item_" + tag.id).fillTemplateData({
+                                        data: {position: tag.position}
+                                    });
+                                }
                             }
-                        }
-                        $module.find(".context_module_items.ui-sortable").sortable('enable');
-                    }, function(data) {
-                        $module.find(".content").loadingImage('remove');
-                        $module.find(".content").errorBox(I18n.t('errors.reorder', 'Reorder failed, please try again.'));
-                    })
-                );
+                            $module.find(".context_module_items.ui-sortable").sortable('enable');
+                        }, function (data) {
+                            $module.find(".content").loadingImage('remove');
+                            $module.find(".content").errorBox(I18n.t('errors.reorder', 'Reorder failed, please try again.'));
+                        })
+                    );
+                }
             },
 
             refreshProgressions: function(show_links) {
@@ -594,7 +605,7 @@ define([
                 $module.attr('id', 'context_module_' + data.context_module.id);
 
                 // Set this module up with correct data attributes
-                $module.find('.add_module_item_link').attr('rel',"/courses/" + data.context_module.context_id + "/classes/" + data.context_module.id + "/items")
+                $module.find('.add_module_item_link').attr('rel',"/courses/" + data.context_module.context_id + "/classes/" + data.context_module.id + "/items");
                 $module.attr('data-module-url', "/courses/" + data.context_module.context_id + "/classes/" + data.context_module.id);
                 $module.attr('data-workflow-state', data.context_module.workflow_state);
                 $module.attr('data-module-id', data.context_module.id);
@@ -886,12 +897,15 @@ define([
                     var url = $module.find(".add_module_item_link").attr('rel');
                     $module.disableWhileLoading(
                         $.ajaxJSON(url, 'POST', item_data, function(data) {
-                            $item.remove();
+
                             data.content_tag.type = item_data['item[type]'];
                             $item = modules.addItemToModule($module, data.content_tag);
                             $module.find(".context_module_items.ui-sortable").sortable('enable').sortable('refresh');
                             if (ENV.ENABLE_DRAFT) { initNewItemPublishButton($item, data.content_tag); }
                             modules.updateAssignmentData();
+                            modules.updateModuleItemPositions(event,$item,true,data.content_tag.id);
+                            $item.remove();
+
                         })
                     );
                 };
