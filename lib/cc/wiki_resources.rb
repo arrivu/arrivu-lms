@@ -35,7 +35,9 @@ module CC
           meta_fields[:workflow_state] = page.workflow_state
           meta_fields[:workflow_state] = 'unpublished' if page.hide_from_students && page.workflow_state == 'active'
           meta_fields[:front_page] = page.is_front_page?
-
+          #arrivu changes
+            meta_fields[:wiki_type] = page.wiki_type
+          #arrivu changes
           File.open(path, 'w') do |file|
             file << @html_exporter.html_page(page.body, page.title, meta_fields)
           end
