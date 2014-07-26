@@ -349,17 +349,17 @@ class WikiPagesController < ApplicationController
   end
 
   def tab_type(wiki_type='wiki')
-    if wiki_type == 'faq'
+    if wiki_type == WikiPage::WIKI_TYPE_FAQS
        @context.class::TAB_FAQS
-    elsif wiki_type == 'career'
+    elsif wiki_type == WikiPage::WIKI_TYPE_CAREERS
        @context.class::TAB_CAREERS
-    elsif wiki_type == 'video'
+    elsif wiki_type == WikiPage::WIKI_TYPE_VIDEOS
       @context.class::TAB_VIDEOS
-    elsif wiki_type == 'offer'
+    elsif wiki_type == WikiPage::WIKI_TYPE_OFFERS
       @context.class::TAB_OFFERS
-    elsif wiki_type == 'bonus_video'
+    elsif wiki_type == WikiPage::WIKI_TYPE_BONUS_VIDEOS
       @context.class::TAB_BONUSVIDEOS
-    elsif wiki_type == 'labs'
+    elsif wiki_type == WikiPage::WIKI_TYPE_LABS
       @context.class::TAB_LABS
     else
        @context.class::TAB_PAGES
