@@ -3,18 +3,22 @@ class SlidersController < ApplicationController
   include ELearningHelper
   before_filter :check_private_e_learning
   before_filter :check_e_learning
+  before_filter :clear_slider_cache ,:except => [:index,:render_attachment_json]
   def index
     respond_to do |format|
-      @sliders = []
-      @account_sliders = @domain_root_account.account_sliders
-      @account_sliders.each_with_index do |slider, idx|
-        attachment = Attachment.find(slider.account_slider_attachment_id)
-        @slider_json =   api_json(attachment, @current_user, session, API_USER_JSON_OPTS).tap do |json|
-          json[:id] = slider.id
-          json[:slider_url] = file_download_url(attachment, { :verifier => attachment.uuid, :download => '1', :download_frd => '1' })
+      @sliders = Rails.cache.fetch(['sliders', @domain_root_account.try(:id)].cache_key, :expires_in => 1.month) do
+        @sliders = []
+        @account_sliders = @domain_root_account.account_sliders
+        @account_sliders.each_with_index do |slider, idx|
+          attachment = Attachment.find(slider.account_slider_attachment_id)
+          @slider_json =   api_json(attachment, @current_user, session, API_USER_JSON_OPTS).tap do |json|
+            json[:id] = slider.id
+            json[:slider_url] = file_download_url(attachment, { :verifier => attachment.uuid, :download => '1', :download_frd => '1' })
+          end
+          @sliders << @slider_json
         end
-        @sliders << @slider_json
-      end
+        @sliders
+        end
       format.json {render :json => @sliders.to_json}
     end
   end
@@ -112,6 +116,8 @@ class SlidersController < ApplicationController
     render :json => json, :as_text => true
   end
 
-
+  def clear_slider_cache
+    Rails.cache.delete(['sliders', @domain_root_account.try(:id)].cache_key)
+  end
 
 end
