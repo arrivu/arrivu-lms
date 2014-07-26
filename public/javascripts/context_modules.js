@@ -899,7 +899,7 @@ define([
                         $.ajaxJSON(url, 'POST', item_data, function(data) {
 
                             data.content_tag.type = item_data['item[type]'];
-                            $item = modules.addItemToModule($module, data.content_tag);
+                            modules.addItemToModule($module, data.content_tag);
                             $module.find(".context_module_items.ui-sortable").sortable('enable').sortable('refresh');
                             if (ENV.ENABLE_DRAFT) { initNewItemPublishButton($item, data.content_tag); }
                             modules.updateAssignmentData();
