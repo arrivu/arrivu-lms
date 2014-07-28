@@ -604,6 +604,12 @@ class ContextModule < ActiveRecord::Base
     # Clear the old tags to be replaced by new ones
     item.content_tags.destroy_all
     item.save!
+    #context module group association creation
+    context_module_group = ContextModuleGroup.find_or_create_by_context_id_and_context_type_and_is_default(item.context.id,
+                                                                                                           item.context.class.name,true,name: ContextModuleGroup::DEFAULT_MODULE_GROUP_NAME )
+    context_module_association = ContextModuleGroupAssociation.new(context_module_group_id: context_module_group.id,context_module_id: item.id)
+    context_module_association.position = ContextModuleGroupAssociation.infer_position(context_module_association)
+    context_module_association.save!
 
     item_map = {}
     @item_migration_position = item.content_tags.not_deleted.map(&:position).compact.max || 0
@@ -751,6 +757,9 @@ class ContextModule < ActiveRecord::Base
       item.new_tab = hash[:new_tab]
       item.position = (@item_migration_position ||= self.content_tags.not_deleted.map(&:position).compact.max || 0)
       item.workflow_state = 'active'
+      #arrivu changes
+      item.category = hash[:category]
+      #arrivu_changes
       @item_migration_position += 1
       item.save!
     end

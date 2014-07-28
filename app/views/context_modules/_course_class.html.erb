@@ -11,8 +11,8 @@
   <div class="module_statistics">
     <!--videos-->
     <ul class="modules_ul">
-      <% if object.content_tags.active.pre_class_videos.size > 0 %>
-          <% videos_count = object.content_tags.active.pre_class_videos.size  %>
+      <% if object.content_tags.not_deleted.pre_class_videos.size > 0 %>
+          <% videos_count = object.content_tags.not_deleted.pre_class_videos.size  %>
          <li class="modules_items" data-tooltip title="This Module has <%= videos_count %> videos">
           <img src="/images/videos.png" style="width:24px;height: 21px;" >
          </li>

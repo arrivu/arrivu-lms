@@ -401,10 +401,15 @@ ApplicationHelper
             end
           end
           if tab[:label] == "Refer a friend"
-            if @domain_root_account.feature_enabled?(:e_learning)
+            if !@domain_root_account.feature_enabled?(:e_learning)
               tab[:href] = "hide_menu"
             end
           end
+          #Hiding bonus video wiki type
+          if tab[:label] == "Bonus Videos"
+            tab[:href] = "hide_menu"
+          end
+          #Hiding bonus video
           #Arrivu changes to add flip classes view end
 
 

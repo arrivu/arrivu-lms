@@ -40,14 +40,18 @@
         <% if !only || only.include?(:videos) %>
             <option value="video" class="context_module_content"><%= t :video_item, "Videos" %></option>
         <% end %>
+        <% unless @domain_root_account.feature_enabled?(:e_learning) %>
         <% if !only || only.include?(:offers) %>
             <option value="offer" class="context_module_content"><%= t :offer_item, "Offers" %></option>
+        <% end %>
         <% end %>
         <% if !only || only.include?(:faq) %>
             <option value="faq" class="context_module_content"><%= t :faq_item, "FAQ" %></option>
         <% end %>
+        <% unless @domain_root_account.feature_enabled?(:e_learning) %>
         <% if !only || only.include?(:career) %>
             <option value="career" class="context_module_content"><%= t :career_item, "Careers" %></option>
+        <% end %>
         <% end %>
         <% if !only || only.include?(:labs) %>
             <option value="labs" class="context_module_content"><%= t :labs, "Labs" %></option>
@@ -266,7 +270,7 @@
         <select class="module_item_select" multiple>
           <%# cache on the context.wiki instead of just the context because even though it will require a db query, we will get a much better cache hit rate %>
           <% cache([@context.wiki, 'non_deleted_wiki_pages']) do  %>
-            <% @context.wiki.wiki_pages.not_deleted.select([:id, :title]).each do |page| %>
+            <% @context.wiki.wiki_pages.pages.not_deleted.select([:id, :title]).each do |page| %>
               <% if page && !page.new_record? %>
                 <option value="<%= page.id %>"><%= page.title %></option>
               <% end %>
