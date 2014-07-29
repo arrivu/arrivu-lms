@@ -1166,7 +1166,7 @@ ul{
 }
 
 #add_link{
-  margin-bottom: -9px;
+  margin-bottom: 2px;
   z-index: 1;
   float: right;
   margin-right: 12px;
@@ -1204,7 +1204,7 @@ ul{
   position: relative;
 }
 #add_knowledge_partners{
-  margin-right: 50px;
+  margin-right: 70px;
 }
 
 .main_div{
@@ -1360,4 +1360,11 @@ ul{
 .default_teacher_image{
   width:54px;
   margin-top:11px;
+}
+
+.no_courses_text_display{
+  text-align: center;
+  font-size: x-large;
+  margin-top: 24px;
+  color: cadetblue;
 }

@@ -992,7 +992,9 @@ ApplicationHelper
 
   def get_badges(for_leader_board=nil,user_ids=[])
     unless @current_user.nil?
-      context_external_tool = ContextExternalTool.find_by_tool_id_and_workflow_state('canvabadges',['anonymous','name_only','email_only','public']).try(:id)
+     unless @context.nil?
+      context_external_tool = @context.context_external_tools.find_by_tool_id_and_workflow_state('canvabadges',['anonymous','name_only','email_only','public']).try(:id)
+     end
       unless context_external_tool.nil?
         @badge_ex_tool = ContextExternalTool.find_for(context_external_tool, @domain_root_account, :user_navigation)
         unless @badge_ex_tool.nil?
