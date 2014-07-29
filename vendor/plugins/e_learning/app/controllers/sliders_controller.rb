@@ -6,7 +6,7 @@ class SlidersController < ApplicationController
   before_filter :clear_slider_cache ,:except => [:index,:render_attachment_json]
   def index
     respond_to do |format|
-      @sliders = Rails.cache.fetch(['sliders', @domain_root_account.try(:id)].cache_key, :expires_in => 1.month) do
+      @sliders = Rails.cache.fetch(['sliders', @domain_root_account.try(:id)].cache_key) do
         @sliders = []
         @account_sliders = @domain_root_account.account_sliders
         @account_sliders.each_with_index do |slider, idx|

@@ -3,19 +3,23 @@ class KnowledgePartnersController < ApplicationController
   before_filter :require_context
   before_filter :check_private_e_learning
   before_filter :check_e_learning
+  before_filter :clear_knowledge_partners_cache ,:except => [:index]
 
   def index
     respond_to do |format|
-      @knowledge_partners = []
-      @account_knowledge_partners = @domain_root_account.knowledge_partners
-      @account_knowledge_partners.each_with_index do |knowledge_partner, idx|
-        attachment = Attachment.find(knowledge_partner.knowledge_partners_attachment_id)
-        @knowledge_partner_json =   api_json(attachment, @current_user, session, API_USER_JSON_OPTS).tap do |json|
-          json[:id] = knowledge_partner.id
-          json[:partners_info] = knowledge_partner.partners_info
-          json[:knowledge_partner_log_url] = file_download_url(attachment, { :verifier => attachment.uuid, :download => '1', :download_frd => '1' })
+      @knowledge_partners = Rails.cache.fetch(['knowledge_partners', @domain_root_account.try(:id)].cache_key) do
+        @knowledge_partners = []
+        @account_knowledge_partners = @domain_root_account.knowledge_partners
+        @account_knowledge_partners.each_with_index do |knowledge_partner, idx|
+          attachment = Attachment.find(knowledge_partner.knowledge_partners_attachment_id)
+          @knowledge_partner_json =   api_json(attachment, @current_user, session, API_USER_JSON_OPTS).tap do |json|
+            json[:id] = knowledge_partner.id
+            json[:partners_info] = knowledge_partner.partners_info
+            json[:knowledge_partner_log_url] = file_download_url(attachment, { :verifier => attachment.uuid, :download => '1', :download_frd => '1' })
+          end
+          @knowledge_partners << @knowledge_partner_json
         end
-        @knowledge_partners << @knowledge_partner_json
+        @knowledge_partners
       end
       format.json {render :json => @knowledge_partners.to_json}
     end
@@ -88,6 +92,10 @@ class KnowledgePartnersController < ApplicationController
         format.json { render :json =>  @knowledge_partner.errors.to_json, :status => :bad_request }
       end
     end
+  end
+
+  def clear_knowledge_partners_cache
+    Rails.cache.delete(['knowledge_partners', @domain_root_account.try(:id)].cache_key)
   end
 
 end
