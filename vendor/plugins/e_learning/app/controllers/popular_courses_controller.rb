@@ -4,7 +4,7 @@ class PopularCoursesController < ApplicationController
   def index
     #account courses list
     respond_to do |format|
-    @courses = Rails.cache.fetch(['popular_courses', @domain_root_account.try(:id)].cache_key) do
+    @courses = Rails.cache.fetch(['popular_courses',params[:source], @domain_root_account.try(:id)].cache_key) do
     @show_banner = false
 
       @courses = []
@@ -235,7 +235,8 @@ class PopularCoursesController < ApplicationController
   end
 
   def clear_popular_courses_cache
-    Rails.cache.delete(['popular_courses', @domain_root_account.try(:id)].cache_key)
+    Rails.cache.delete(['popular_courses','popular', @domain_root_account.try(:id)].cache_key)
+    Rails.cache.delete(['popular_courses','account_courses', @domain_root_account.try(:id)].cache_key)
   end
 
 end
