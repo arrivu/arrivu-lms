@@ -130,6 +130,11 @@ class WikiPagesController < ApplicationController
     end
 
     if @page.update_attributes(params[:wiki_page].merge(:user_id => @current_user.id))
+      #arrivu_changes
+      if @page.wiki_type != params[:wiki_type]
+        @page.update_attributes(:wiki_type => params[:wiki_type])
+      end
+      #arrivu_changes
       unless @page.context.feature_enabled?(:draft_state)
         @page.set_as_front_page! if @page.is_front_page?
       end
