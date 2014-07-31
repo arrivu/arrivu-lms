@@ -1234,6 +1234,7 @@ en:
       ta: "Ta Enrollments"
       teachers: "Teacher Enrollments"
     user_add_failed_message: "Adding User Failed, please try again"
+    create_account_failed_message: "Create account Failed, please try again"
     user_added_message: "*%{user}* successfully added!"
     user_added_message_sent_message: "*%{user}* successfully added! They should receive an email confirmation shortly."
     user_deleted_message: "%{username} successfully deleted"

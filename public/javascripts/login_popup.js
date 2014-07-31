@@ -19,13 +19,15 @@ require([
             poition: 'center'
         }).fixDialogButtons();
         $(".ui-dialog-buttonset").find("#request_password_button").hide();
+        $('#e_learning_login_form').find("input[type=text],input[type=password], textarea").val("");
+        $(".error_box").remove();
     });
     $("#e_learning_login_form").formSubmit({
         required: ['pseudonym_session[unique_id]','pseudonym_session[password]'],
         beforeSubmit: function(data) {
             $(this).loadingImage();
             $("button").attr('disabled', true)
-                .filter(".submit_button").text(I18n.t('logging_message', "Logging In..."));
+                .filter(".button_type_submit").text(I18n.t('logging_message', "Logging In..."));
         },
         success: function(data) {
             $.flashMessage("Successfully Logged IN");
@@ -35,7 +37,8 @@ require([
         },
         error: function(data){
             $(this).loadingImage('remove');
-            $("button").attr('disabled', false);
+            $("button").attr('disabled', false)
+                .filter(".button_type_submit").text(I18n.t('login_failed', "Login Failed"));
         }
     });
     $("#elearning_forgot_passowrd_link").click(function(event) {

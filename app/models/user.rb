@@ -190,6 +190,7 @@ class User < ActiveRecord::Base
   has_many :user_account_associations
   has_many :associated_accounts, :source => :account, :through => :user_account_associations, :order => 'user_account_associations.depth'
   has_many :associated_root_accounts, :source => :account, :through => :user_account_associations, :order => 'user_account_associations.depth', :conditions => 'accounts.parent_account_id IS NULL'
+  has_many :associated_sub_accounts, :source => :account, :through => :user_account_associations, :order => 'user_account_associations.depth', :conditions => 'accounts.parent_account_id IS NOT NULL'
   has_many :developer_keys
   has_many :access_tokens, :include => :developer_key
   has_many :context_external_tools, :as => :context, :dependent => :destroy, :order => 'name'

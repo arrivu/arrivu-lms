@@ -317,6 +317,7 @@ en-GB:
     adding_course_message: "Adding course..."
     adding_user_message: "Adding user..."
     logging_message: "Logging In..."
+    login_failed: "Login Failed"
     additional_settings_right_side: 
       links: 
         suspend: "Suspend account"
@@ -1021,6 +1022,7 @@ en-GB:
             text: "This is a report of all courses that have none of the following items: assignments, announcements, discussions, files, modules, pages, or quizzes."
     update_failed_notice: "Account settings update failed"
     user_add_failed_message: "Adding user failed, please try again"
+    create_account_failed_message: "Create account Failed, please try again"
     user_deleted_message: "%{username} successfully deleted"
     user_inactivity_csv_description: 
       account_reports: 
