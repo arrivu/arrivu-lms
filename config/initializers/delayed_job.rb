@@ -57,6 +57,7 @@ if Rails.env == "development"
       #obj[:payload_object].perform
       obj.perform
       Rails.logger.info "Delayed::Job:SYNC END"
+
     end
   end
 end
