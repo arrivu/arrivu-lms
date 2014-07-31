@@ -9,7 +9,7 @@
       </div>
   </div>
 
-  <%@module.content_tags.active.pre_class_videos.each do |tag|  %>
+  <% @module.content_tags.not_deleted.pre_class_videos.each do |tag|  %>
       <div style="margin: 5px 15px; font-size: 100%;
               font-weight: bold;
               color: #7f8c8d;
@@ -33,8 +33,8 @@
             <% end %>
         <% elsif tag.content_type == "ContextExternalTool" %>
             <%= image_tag "badges.png", :style=>"line-height:28px;;height:26px;margin-top:-3px;margin-left: 10px;" %> &nbsp;&nbsp;&nbsp;&nbsp;
-        <% elsif tag.content_type == "Quiz" %>
-            <%= image_tag "class_quiz.jpg", :style=>"line-height:28px;height:29px;margin-top:-3px;margin-left:6px;" %> &nbsp;&nbsp;&nbsp;&nbsp;
+        <% elsif tag.content_type == "Quizzes::Quiz" %>
+            <%= image_tag "class_quiz.jpg", :style=>"line-height:28px;height:28px;margin-top:-1px;margin-left:6px;" %> &nbsp;&nbsp;&nbsp;&nbsp;
         <% end %>
         <a class="title <%= '_explicit_external_link' if tag && tag.content_type == 'ExternalUrl' %>"
         <% if is_managable or @authorized_for_user  %>

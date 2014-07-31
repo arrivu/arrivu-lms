@@ -27,4 +27,4 @@ Tasks to populate
 * To populate subscription plans (bundle exec rake db:seed_subscription)
 * Generate sample discussion topics (bundle exec rake db:populate)
 * Fix module groups error (bundle exec rake db:fix_module_groups)
-
+* Add another Root Account (bundle exec rake db:add_account)
