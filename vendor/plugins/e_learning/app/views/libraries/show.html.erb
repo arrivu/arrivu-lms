@@ -1,21 +1,15 @@
 <%
    js_bundle :course_comments,:bootstrap
    js_env :review_course_id =>  @context.id
+   @body_classes << "gradebook2 full-width"
+   @show_left_side = false
+   jammit_css :course_library ,:bootstrap_and_responsive
 %>
 <% if @context.settings[:allow_user_to_design_course_detail_page] %>
-   <%  @body_classes << "gradebook2 full-width"
-       @show_left_side = false
-
-   %>
     <% if @context.static_content %>
      <%= @context.static_content.page_desc.html_safe %>
     <% end %>
 <% else %>
-<%  @body_classes << "gradebook2 full-width"
-    @show_left_side = false
-    jammit_css :course_library ,:bootstrap_and_responsive
-
-%>
 <div class="row-fluid"
 <% if @context_bg_image_url %>
     style="background-image: url('<%= @context_bg_image_url %>');background-size: 100% 100%;min-height: 235px;"
@@ -130,10 +124,10 @@ border: 1px solid hsl(0, 0%, 87%);border-radius: 4px;padding: 25px;background: #
     <% @comments.each do |comment| %>
       <a href="<%= user_details_path(comment.user) %>" style="text-decoration: none;color: black">
           <div  class="comment left_bottom_border" id="comment_<%= comment ? comment.id : "{{ blank }}" %>" style="<%= hidden unless comment %>">
-            <div style="float: left;" class="user_name">
+            <div style="float: left;margin-bottom: 5px;" class="user_name">
 
               <% if service_enabled?(:avatars) %>
-                  <img src=<%=  comment.user.avatar_url ?  comment.user.avatar_url: "http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&f=y" %> width="50px" height="50px" alt="<%= comment.user.name%>">
+                  <img class="img img-circle" src=<%=  comment.user.avatar_url ?  comment.user.avatar_url: "http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&f=y" %> width="50px" height="50px" alt="<%= comment.user.name%>">
               <% end  %>
               <%= comment.user_name rescue nbsp %></div>
             &nbsp;<%= comment.user.name  %>

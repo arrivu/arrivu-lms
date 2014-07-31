@@ -1100,13 +1100,15 @@ ApplicationHelper
     unless account.account_header
        account = @domain_root_account
     end
+    @logo_url = Rails.cache.fetch(['logo_url', account.try(:id)].cache_key) do
       unless account.account_header.nil?
         if Attachment.exists?(account.account_header.header_logo_url)
           @attachment = Attachment.find(account.account_header.header_logo_url)
           @logo_url = file_download_url(@attachment, { :verifier => @attachment.uuid, :download => '1', :download_frd => '1' })
         end
+        @logo_url
       end
-
+    end
   end
 
 end

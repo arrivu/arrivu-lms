@@ -10,7 +10,7 @@
               color: #7f8c8d;
               line-height: 1.2;background-color: #fcfbdf;border-radius:5px;">
         <% if tag.content_type == "ContextExternalTool" %>
-         <div style="width:auto;padding:6px 17px;float:left;"><%= image_tag "badges.png" , :style=> "height: 40px;padding:5px;border-radius:35px;margin-left:-1px;" %> &nbsp;&nbsp;&nbsp;&nbsp;</div>
+         <div style="width:auto;padding:15px 32px;padding-left: 34px;float:left;"><i class="icon-link" aria-label="Item type: Link"></i> &nbsp;&nbsp;&nbsp;&nbsp;</div>
         <% else %>
          <div style="width:auto;padding:6px 17px;float:left;"><%= image_tag "course_assignment.png" , :style=> "padding:5px;border-radius: 35px;" %> &nbsp;&nbsp;&nbsp;&nbsp;</div>
         <% end %>
@@ -19,9 +19,9 @@
                     <% if is_managable or @authorized_for_user  %>
                         href="<%= context_url(@context, :context_url) %>/modules/items/<%= tag ? tag.id : "{{ id }}" %>"
                     <% end  %>
-                      <% if tag.content_type == "ContextExternalTool" %>
-                        style="color:#d4811b;"> Badge&nbsp;</a></span><br>
-                      <%else %>
+                      <% if tag.content_type == "ContextExternalTool" and !tag.title.nil?%>
+                        style="color:#d4811b;"> <%= tag.title.split(':')[0] %>&nbsp;</a></span><br>
+                      <% else %>
                         style="color:#d4811b;"> Assignment&nbsp;<%= sprintf '%02d',idx + 1 %></a></span><br>
                       <% end %>
           <%= truncate(tag.title, length: 53, omission: '..') %>

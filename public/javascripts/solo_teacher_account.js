@@ -16,13 +16,16 @@ require([
             title: I18n.t('add_solo_teacher_dialog_title', "Get a  Solo Teacher Account"),
             width: 500
         }).fixDialogButtons();
-        addPrivacyLinkToDialog($dialog);
+//        addPrivacyLinkToDialog($dialog);
         $("#add_solo_teacher_form :text:visible:first").focus().select();
+        $('#add_solo_teacher_form').find("input[type=text], textarea").val("");
+        $(".error_box").remove();
     });
     $("#add_solo_teacher_form").formSubmit({
         formErrors: false,
         required: ['user[name]','pseudonym[unique_id]','sub_account_name[account]'],
         beforeSubmit: function(data) {
+            $(this).loadingImage();
             $("button").attr('disabled', true)
                 .filter(".submit_button").text(I18n.t('creating_user_account', "Creating Account..."));
         },
@@ -32,8 +35,10 @@ require([
             window.location.href = "/dashboard"
         },
         error: function(data) {
+            $(this).loadingImage('remove');
             $("button").attr('disabled', false)
-                .filter(".submit_button").text(I18n.t('add_user_button', "Add User"));
+                .filter(".submit_button").text(I18n.t('create_account_failed_message', "Create account Failed, please try again"));
+
             errorData = {};
             // Email errors
             if(data.pseudonym){
@@ -53,7 +58,7 @@ require([
             $(this).formErrors(errorData);
 
             $(this).find("button").attr('disabled', false)
-                .filter(".submit_button").text(I18n.t('user_add_failed_message', "Adding User Failed, please try again"));
+                .filter(".submit_button").text(I18n.t('create_user_account', "Create Account"));
         }
     });
     $("#solo_teacher_dialog .cancel_button").click(function() {

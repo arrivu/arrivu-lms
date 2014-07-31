@@ -6,24 +6,18 @@
         margin-right: 200px;
     }
 </style>
+<% @body_classes << "gradebook2 full-width"
+   jammit_css :course_box,:topics_listing, :bootstrap_and_responsive
+   js_bundle :course_library,:course_comments,:bootstrap
+%>
 <% if @domain_root_account.settings[:course_index_custom_design] &&  content = @domain_root_account.static_content.find_by_content_type("Course_index")%>
-    <% @body_classes << "gradebook2 full-width"
-       jammit_css :course_box,:topics_listing
-       js_bundle :course_comments
-    %>
   <%= content.page_desc.html_safe %>
 <% else %>
-<% @body_classes << "gradebook2 full-width"
-  js_bundle :course_library,:course_comments,:bootstrap
-  jammit_css :course_box,:topics_listing, :bootstrap_and_responsive
-%>
-
-<div id="course_listing_banner">
-<div class="container">
-  <h1 id="discourse_course_title">Discover Courses</h1>
-</div>
-</div>
-<div id="course_library" >
-
-</div>
+    <div id="course_listing_banner">
+        <div class="container">
+            <h1 id="discourse_course_title">Discover Courses</h1>
+        </div>
+    </div>
+        <div id="course_library" >
+    </div>
 <% end %>
