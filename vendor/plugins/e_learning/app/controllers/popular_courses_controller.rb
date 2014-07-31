@@ -1,10 +1,9 @@
 class PopularCoursesController < ApplicationController
-  before_filter :clear_popular_courses_cache ,:except => [:index]
+  # before_filter :clear_popular_courses_cache ,:except => [:index]
 
   def index
     #account courses list
     respond_to do |format|
-    @courses = Rails.cache.fetch(['popular_courses',params[:source], @domain_root_account.try(:id)].cache_key) do
     @show_banner = false
 
       @courses = []
@@ -102,7 +101,6 @@ class PopularCoursesController < ApplicationController
         @courses << @course_json
       end
       @courses = Api.paginate(@courses, self, api_v1_account_popular_courses_url)
-    end
       format.json {render :json => @courses}
     end
   end
