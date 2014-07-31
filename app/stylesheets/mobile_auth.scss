@@ -39,7 +39,6 @@ html {
   width: 300px;
   height: 198px;
   z-index: 1;
-  background-image: url("../../images/arrivu_logo.png");
   background-position: center 30px;
   background-repeat: no-repeat;
   background-size: 270px 48px;
@@ -115,4 +114,22 @@ input::-webkit-input-placeholder {
 
 .icon_url {
   display: none;
+}
+
+.default_logo{
+  top: 26px;
+  position: absolute;
+  margin: 0 auto;
+  padding: 0px 12px;
+  width: 270px;
+  height: 56px;
+}
+
+.account_logo_style{
+  top: 35px;
+  position: absolute;
+  margin: 0 auto;
+  padding: 0px 12px;
+  width: 270px;
+  height: 56px;
 }

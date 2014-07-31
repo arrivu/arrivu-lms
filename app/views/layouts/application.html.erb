@@ -68,10 +68,10 @@
                   <li><%= link_to "Course Library", libraries_path%></li>
               <% if !@current_user %>
                   <li class="divider-vertical"></li>
+                         <%= render :partial => 'shared/elearning_pop_up' %>
                   <% if !@domain_root_account || @domain_root_account == Account.default %>
                       <% if ELEARNING %>
                           <%= render :partial => 'shared/solo_teacher_account' %>
-                          <%= render :partial => 'shared/elearning_pop_up' %>
                       <% end %>
                   <% else  %>
                       <li><%= link_to t('links.sign_up_as_teacher', "Sign Up as a Teacher"), register_path %></li>

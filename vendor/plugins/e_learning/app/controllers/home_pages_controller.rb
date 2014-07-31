@@ -117,11 +117,15 @@ class HomePagesController < ApplicationController
  def  public_courses_count
    @account_courses = []
    @published_courses = @domain_root_account.associated_courses.active.available
+   if @published_courses.empty?
+     @courses_count = 0
+   else
    @published_courses.each do|publish_course|
      if publish_course.settings[:make_this_course_visible_on_course_catalogue]
        @account_courses << publish_course
        @courses_count = @account_courses.count
      end
+   end
    end
    @courses_count
  end

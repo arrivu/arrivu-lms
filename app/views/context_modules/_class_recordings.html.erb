@@ -15,14 +15,14 @@
                   <% if is_managable or @authorized_for_user  %>
                   href="<%= live_class_link.link_url%>"
                   <% end  %>
-                  style="color:#239bc0;"><%=live_class_link.course_section.name  if live_class_link.course_section%> class recording</a></span><br>
+                  style="color:#239bc0;"><%=live_class_link.course_section.name  if live_class_link.course_section%> Class Recording</a></span><br>
           <%= live_class_link.name %>
 
         </div>
       </div>
 
   <% end %>
-  <% @module.content_tags.pre_class_presentation.active.each_with_index do |tag,idx|  %>
+  <% @module.content_tags.pre_class_presentation.not_deleted.each_with_index do |tag,idx|  %>
       <div style="margin: 14px 17px 10px; font-size: 100%;
               font-weight: bold;
               color: #7f8c8d;
