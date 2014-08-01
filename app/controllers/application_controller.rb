@@ -1319,9 +1319,9 @@ class ApplicationController < ActionController::Base
       elsif feature == :etherpad
         !!EtherpadCollaboration.config
       elsif feature == :kaltura
-        !!Kaltura::ClientV3.config and !!!@domain_root_account.Sublime_kaltura_disable?
+        !!Kaltura::ClientV3.config unless @domain_root_account.Sublime_kaltura_disable?
       elsif feature == :web_conferences
-        !!WebConference.config and !!!@domain_root_account.Sublime_bbb_disable?
+        !!WebConference.config unless @domain_root_account.Sublime_bbb_disable?
       elsif feature == :scribd
         !!ScribdAPI.config
       elsif feature == :scribd_html5

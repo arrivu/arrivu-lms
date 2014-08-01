@@ -551,7 +551,7 @@ ApplicationHelper
   def inst_env
     global_inst_object = { :environment =>  Rails.env }
     {
-      :allowMediaComments       => Kaltura::ClientV3.config && @context.try_rescue(:allow_media_comments?),
+      :allowMediaComments       => Kaltura::ClientV3.config && @context.try_rescue(:allow_media_comments?) && !@domain_root_account.Sublime_kaltura_disable?,
       :kalturaSettings          => Kaltura::ClientV3.config.try(:slice, 'domain', 'resource_domain', 'rtmp_domain', 'partner_id', 'subpartner_id', 'player_ui_conf', 'player_cache_st', 'kcw_ui_conf', 'upload_ui_conf', 'max_file_size_bytes', 'do_analytics', 'use_alt_record_widget', 'hide_rte_button', 'js_uploader'),
       :equellaEnabled           => !!equella_enabled?,
       :googleAnalyticsAccount   => Setting.get('google_analytics_key', nil),
