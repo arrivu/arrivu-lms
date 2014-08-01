@@ -406,10 +406,10 @@ define([
                     var data = $(this).find(".header").getTemplateData({textValues: ['name', 'id']});
                     var $option = $(document.createElement('option'));
                     $option.val(data.id);
-
+                    text = ENV.is_fliped_class_enabled ? "the class ," : "the module ,"
                     // data.id could come back as undefined, so calling $option.val(data.id) would return an "", which is not chainable, so $option.val(data.id).text... would die.
                     $option.attr('role', 'option')
-                        .text("the module, " + data.name)
+                        .text(text + data.name)
                         .addClass('context_module_' + data.id)
                         .addClass('context_module_option');
 
@@ -742,9 +742,10 @@ define([
         });
         $(".delete_module_link").live('click', function(event) {
             event.preventDefault();
+            message_displayed = ENV.is_fliped_class_enabled ? I18n.t('confirm.delete_class', "Are you sure you want to delete this class?") : I18n.t('confirm.delete', "Are you sure you want to delete this module?")
             $(this).parents(".context_module").confirmDelete({
                 url: $(this).attr('href'),
-                message: I18n.t('confirm.delete', "Are you sure you want to delete this module?"),
+                message: message_displayed,
                 success: function(data) {
                     var id = data.context_module.id;
                     $(".context_module .prerequisites .criterion").each(function() {
@@ -814,9 +815,10 @@ define([
         });
         $(".delete_item_link").live('click', function(event) {
             event.preventDefault();
-            $(this).parents(".context_module_item").confirmDelete({
+            message_displayed = ENV.is_fliped_class_enabled ? I18n.t('confirm.delete_class_view_item', 'Are you sure you want to remove this item from the class?') : I18n.t('confirm.delete_item', 'Are you sure you want to remove this item from the module?')
+                $(this).parents(".context_module_item").confirmDelete({
                 url: $(this).attr('href'),
-                message: I18n.t('confirm.delete_item', 'Are you sure you want to remove this item from the module?'),
+                message: message_displayed,
                 success: function(data) {
                     $(this).slideUp(function() {
                         $(this).remove();

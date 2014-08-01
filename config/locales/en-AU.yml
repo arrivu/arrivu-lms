@@ -2813,7 +2813,7 @@ en-AU:
       topic_locked_module: "This topic is part of the module *%{module}* and hasn't been unlocked yet."
       topic_locked_no_reason: "This topic is locked.  No other reason has been provided."
       topic_locked_until: "This topic is locked until %{date}."
-      visit_modules_page_for_details: "Visit the modules page for information on how to unlock this content."
+      visit_modules_page_for_details: "Visit the module page for information on how to unlock this content."
     titles: 
       content_is_locked: "Content Is Locked"
   content_migration: 
@@ -3140,7 +3140,9 @@ en-AU:
       update: "Update Module"
     confirm: 
       delete: "Are you sure you want to delete this module?"
+      delete_class: "Are you sure you want to delete this class"
       delete_item: "Are you sure you want to remove this item from the module?"
+      delete_class_view_item: "Are you sure you want to remove this item from the class?"
     content: 
       add_prerequisite: "Add prerequisite to *%{module}*"
       assignment_points_possible: "out of %{points_possible}"
@@ -3198,7 +3200,11 @@ en-AU:
           next: "Next %{name_module_or_class}/Item"
           outdent: "Outdent Current Item"
           previous: "Previous %{name_module_or_class}/Item"
-      keycode_descriptions: 
+          next_module_view: "Next Module"
+          previous_module_view: "Previous Module"
+          next_class_view: "Next Class"
+          previous_class_view: "Previous Class"
+      keycode_descriptions:
         next_module_item: "Select next module or module item"
         previous_module_item: "Select previous module or module item"
         toggle_module_dragging: "Select item to begin dragging, or drop previously selected item"
@@ -3216,8 +3222,11 @@ en-AU:
       labels: 
         indent: Indent
         module_complete_when: "This module is complete when"
+        class_complete_when: "This class is complete when"
         modules: 
           before_students_view: "Before students can view this module"
+        class:
+          before_syudents_view: "Before students can view this class"
         new_tab: "Load this tool in a new tab"
         require_sequential_progress: "students must move through requirements in this module in sequential order"
         sort_by: "Sort By"
@@ -3243,6 +3252,7 @@ en-AU:
       prerequisites: 
         another_module: "Another Module"
       prerequisites_need_item: "You'll need to add items before you can specify how a user will complete this module"
+      prerequisites_need_class: "You'll need to add items before you can specify how a user will complete this class"
       requirements: 
         must_contribute: "contribute to the page"
         must_score_at_least: "score at least"
@@ -12099,6 +12109,7 @@ en-AU:
         files_page: "Click to insert a link to the files page"
         grades_page: "Click to insert a link to the grades page"
         modules: "Click to insert a link to this module"
+        classes: "Click to insert a link to this class"
         modules_page: "Click to insert a link to the modules page"
         quizzes: "Click to insert a link to this quiz"
         syllabus_page: "Click to insert a link to the syllabus"
@@ -12119,7 +12130,8 @@ en-AU:
         find_on_flickr: "Find images on flickr creative commons"
         grades_page: Grades
         modules: "Modules List"
-        modules_page: Modules
+        classes: "Classes List"
+        modules_page: "Modules"
         new_page: "Link to a New Page"
         quizzes: "Quiz List"
         syllabus: "Course Syllabus"
@@ -12132,6 +12144,7 @@ en-AU:
         assignments: Assignments
         discussions: Discussions
         modules: Modules
+        class: Classes
         nav: 
           course: "Course Navigation"
           group: "Group Navigation"

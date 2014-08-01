@@ -15,7 +15,11 @@
 
     <div class="context-modules-main-header clearfix">
       <h2 class="context-modules-title">
-        <%= t('headings.course_modules', %{Course Classes}) %>
+        <% if @context.feature_enabled?(:flipped_classes) %>
+            <%= t('headings.course_classes', %{Course Classes}) %>
+        <% else %>
+            <%= t('headings.course_modules', %{Course Modules}) %>
+        <% end %>
       </h2>
 
       <% if can_do(@context, @current_user, :manage_content) %>

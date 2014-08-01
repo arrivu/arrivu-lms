@@ -9,7 +9,13 @@
 
 <% if @tag.locked_for? @current_user %>
   <h2><%= @tag.title %></h2>
-  <%= lock_explanation({:context_module => @tag.context_module, :asset_string => "content_tag_#{@tag.id}"}, nil, @context) %>
+  <% a= lock_explanation({:context_module => @tag.context_module, :asset_string => "content_tag_#{@tag.id}"}, nil, @context) %>
+    <% if @context.feature_enabled?(:flipped_classes)  && a.include?("module")%>
+        <% res = a.gsub! 'module', 'class' %>
+        <%= res %>
+    <% else %>
+        <%= a %>
+    <% end %>
 <% else %>
   <ul style="margin-top:0" class="ui-listview ui-listview-no-rounded-bottom">
     <li class="active">
