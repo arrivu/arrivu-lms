@@ -2532,6 +2532,8 @@ class Course < ActiveRecord::Base
   TAB_COMMENTS=25
   TAB_LABS=26
 
+  TABS_TO_HIDE =[TAB_COMMENTS,TAB_LABS,TAB_LIVECLASSLINKS,TAB_OFFERS,TAB_VIDEOS,TAB_BONUSVIDEOS,TAB_CAREERS,TAB_REFERRALS]
+
   def self.default_tabs
     [
       { :id => TAB_HOME, :label => t('#tabs.home', "Home"), :css_class => 'home', :href => :course_path },
@@ -2550,14 +2552,14 @@ class Course < ActiveRecord::Base
       { :id => TAB_CONFERENCES, :label => t('#tabs.conferences', "Conferences"), :css_class => 'conferences', :href => :course_conferences_path },
       { :id => TAB_COLLABORATIONS, :label => t('#tabs.collaborations', "Collaborations"), :css_class => 'collaborations', :href => :course_collaborations_path },
       { :id => TAB_FAQS, :label =>t('#tabs.faq', "FAQ"), :css_class => 'faq',:href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_FAQS  },
-      { :id => TAB_CAREERS, :label =>t('#tabs.careers', "Careers"), :css_class => 'career', :href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_CAREERS },
-      { :id => TAB_REFERRALS, :label => t('#tabs.referrals', "Refer a friend"), :css_class => 'referrals', :href => :course_referrals_path},
-      { :id => TAB_VIDEOS, :label => t('#tabs.videos', "Videos"), :css_class => 'videos',:href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_VIDEOS },
-      { :id => TAB_OFFERS, :label => t('#tabs.offers', "Offers"), :css_class => 'offer',:href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_OFFERS },
-      { :id => TAB_BONUSVIDEOS, :label => t('#tabs.bonus_videos', "Bonus Videos"), :css_class => 'bonus_videos', :href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_BONUS_VIDEOS },
-      { :id => TAB_LABS, :label => t('#tabs.labs', "Labs"), :css_class => 'labs', :href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_LABS },
-      {:id => TAB_COMMENTS, :label => t('#tabs.testimonial', "Testimonial"), :css_class => 'comments', :href => :course_comments_path},
-      {:id => TAB_LIVECLASSLINKS, :label => t('#tabs.live_class_links', "Live Class Links"), :css_class => 'live_class_links', :href => :course_live_class_links_path},
+      { :id => TAB_CAREERS, :label =>t('#tabs.careers', "Careers"), :css_class => 'career', :href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_CAREERS,:hidden => true },
+      { :id => TAB_REFERRALS, :label => t('#tabs.referrals', "Refer a friend"), :css_class => 'referrals', :href => :course_referrals_path,:hidden => true},
+      { :id => TAB_VIDEOS, :label => t('#tabs.videos', "Videos"), :css_class => 'videos',:href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_VIDEOS,:hidden => true },
+      { :id => TAB_OFFERS, :label => t('#tabs.offers', "Offers"), :css_class => 'offer',:href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_OFFERS,:hidden => true },
+      { :id => TAB_BONUSVIDEOS, :label => t('#tabs.bonus_videos', "Bonus Videos"), :css_class => 'bonus_videos', :href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_BONUS_VIDEOS,:hidden => true },
+      { :id => TAB_LABS, :label => t('#tabs.labs', "Labs"), :css_class => 'labs', :href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_LABS,:hidden => true },
+      {:id => TAB_COMMENTS, :label => t('#tabs.testimonial', "Testimonial"), :css_class => 'comments', :href => :course_comments_path,:hidden => true},
+      {:id => TAB_LIVECLASSLINKS, :label => t('#tabs.live_class_links', "Live Class Links"), :css_class => 'live_class_links', :href => :course_live_class_links_path,:hidden => true},
       { :id => TAB_SETTINGS, :label => t('#tabs.settings', "Settings"), :css_class => 'settings', :href => :course_settings_path }
 
     ]
@@ -2629,7 +2631,6 @@ class Course < ActiveRecord::Base
       # Ensure that Settings is always at the bottom
       tabs.delete_if {|t| t[:id] == TAB_SETTINGS }
       tabs << settings_tab
-
       tabs.each do |tab|
         tab[:hidden_unused] = true if tab[:id] == TAB_MODULES && !active_record_types[:modules]
         tab[:hidden_unused] = true if tab[:id] == TAB_CLASSES && !active_record_types[:classes]
@@ -2709,6 +2710,11 @@ class Course < ActiveRecord::Base
       # tabs.each_with_index{|t, i| t[:sort_index] = i }
       # tabs = tabs.sort_by{|t| [t[:hidden_unused] || t[:hidden] ? 1 : 0, t[:sort_index]] } if !self.tab_configuration || self.tab_configuration.empty?
       tabs
+    #  tabs.each do |tab|
+    #    if TABS_TO_HIDE.include?(tab[:id])
+    #      tab[:hidden] = true
+    #    end
+    #end
     end
   end
 
