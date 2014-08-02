@@ -91,6 +91,7 @@ class ReferralsController < ApplicationController
                                                                                 provider: Reference::SELF)
       end
     end
+   @domain_root_account = @reward.account
    social_providers = [Reference::FACEBOOK,Reference::GOOGLE,Reference::TWITTER,Reference::LINKEDIN,Reference::ACCOUNT,Reference::SELF,Reference::GLOBAL]
     unless social_providers.include?(@reference.try(:provider))
       @reference_email = @reference.try(:provider)

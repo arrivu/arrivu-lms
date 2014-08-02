@@ -9,6 +9,7 @@ define [
     tagName: 'tr'
 
     initialize: ->
+      super
       @name = @options.name
       @email = @options.email
       @enrolled_at = @options.enrolled_at
