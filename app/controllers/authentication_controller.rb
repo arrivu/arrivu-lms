@@ -16,11 +16,9 @@ class AuthenticationController < ApplicationController
         if @authentication.provider.downcase.to_s == provider.downcase.to_s
           if @authentication.user.workflow_state != "inactive"
             update_user_info(@authentication,auth)
-            reset_session_for_login
-            @pseudonym_session = @domain_root_account.pseudonym_sessions.new(@authentication.user)
             @pseudonym = @domain_root_account.pseudonyms.active.custom_find_by_unique_id(@authentication.user.email)
             @pseudonym_session = @domain_root_account.pseudonym_sessions.create!(@pseudonym, false)
-            successful_login(@pseudonym_session)
+            successful_login(@authentication.user)
           else
             activation_pending
           end
@@ -42,7 +40,7 @@ class AuthenticationController < ApplicationController
                            :avatar_image_source=>auth['provider'],
                            :avatar_image_updated_at => Time.now,
                            :phone => auth[:info][:phone])
-      @user.workflow_state = 'inactive'
+
       @pseudonym = @user.pseudonyms.create!(:unique_id => auth[:info][:email],
                                             :account => @domain_root_account)
       @user.communication_channels.create!(:path => auth[:info][:email]) { |cc| cc.workflow_state = 'active' }
@@ -50,14 +48,15 @@ class AuthenticationController < ApplicationController
       @user.build_omniauth_authentication(:provider => provider,
                                           :token => auth[:credentials][:token],
                                           :uid => auth['uid'])
+      @user.workflow_state = @domain_root_account.social_login_admin_approval? ? 'inactive' : 'registered'
       @user.save!
       @pseudonym.save!
-      un_successful_login
+      @domain_root_account.social_login_admin_approval? ? un_successful_login : successful_login(@user)
     end
  end
 
-  def successful_login(pseudonym)
-    @current_pseudonym = pseudonym
+  def successful_login(user)
+    @current_pseudonym =  @domain_root_account.pseudonym_sessions.new(user)
     flash[:notice] = "You are now logged in"
     favourites
   end
