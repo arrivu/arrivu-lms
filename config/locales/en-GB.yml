@@ -2497,7 +2497,7 @@ en-GB:
         need_integer: "Please enter an integer for the play list cache"
   canvas_cartridge_description: "This enables converting a Arrivu LMS export to the intermediary json format to be imported"
   canvas_cartridge_display: "Arrivu LMS Common Cartridge"
-  canvas_cartridge_file_description: "Arrivu LMS course export package"
+  canvas_cartridge_file_description: "LMS course export package"
   canvas_cartridge_name: "Arrivu LMS cartridge importer"
   cc: 
     by: "CC attribution"
@@ -3723,7 +3723,7 @@ en-GB:
   course_copy_argument_error: "A course copy requires a source course."
   course_copy_description: "Migration plugin for copying Arrivu LMS courses"
   course_copy_display: "Course copy"
-  course_copy_file_description: "Copy a Arrivu LMS course"
+  course_copy_file_description: "Copy a LMS course"
   course_copy_name: "Copy Arrivu LMS course"
   course_copy_no_course_error: "The source course was not found."
   course_copy_not_allowed_error: "You are not allowed to copy the source course."

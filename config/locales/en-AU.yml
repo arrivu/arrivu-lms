@@ -2482,7 +2482,7 @@ en-AU:
         need_integer: "Please enter an integer for the play list cache"
   canvas_cartridge_description: "This enables converting a canvas export to the intermediary json format to be imported"
   canvas_cartridge_display: "Canvas Common Cartridge"
-  canvas_cartridge_file_description: "Canvas Course Export Package"
+  canvas_cartridge_file_description: "LMS Course Export Package"
   canvas_cartridge_name: "Canvas Cartridge Importer"
   cc: 
     by: "CC Attribution"
@@ -3681,7 +3681,7 @@ en-AU:
   course_copy_argument_error: "A course copy requires a source course."
   course_copy_description: "Migration plugin for copying canvas courses"
   course_copy_display: "Course Copy"
-  course_copy_file_description: "Copy a Canvas Course"
+  course_copy_file_description: "Copy a LMS Course"
   course_copy_name: "Copy Canvas Course"
   course_copy_no_course_error: "The source course was not found."
   course_copy_not_allowed_error: "You are not allowed to copy the source course."
