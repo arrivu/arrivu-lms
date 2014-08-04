@@ -33,9 +33,9 @@ define [
         if key == clicked_tag_id
           _.each @collections(), (collection) =>
             collection.each (model) =>
-                model.set('hidden', check_dt(model.get('id'), value))
+                model.set('hidden', check_dt(model.get('id'), value, event))
 
-    check_dt = (my_item, my_array) ->
+    check_dt = (my_item, my_array, event) ->
       for item in my_array
         return false if  parseInt(item, 10) == parseInt(my_item, 10)
       true and $(event.target).hasClass('token-input-selected-token')

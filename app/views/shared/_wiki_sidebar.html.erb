@@ -98,13 +98,20 @@
       <% end %>
 
       <% if @context.respond_to?(:context_modules) %>
+          <% if @context.feature_enabled?(:flipped_classes) %>
+            <% @title_message = t('insert.classes', %{Click to insert a link to this class}) %>
+            <% @link_message =  t('links.classes', "Classes List")%>
+          <% else %>
+              <% @title_message = t('insert.modules', %{Click to insert a link to this module}) %>
+              <% @link_message =  t('links.modules', "Modules List")%>
+          <% end %>
       <div>
-        <div role="tab" aria-controls="modules_panel" class="header"><a href="#"><%= t('links_to.modules', %{Modules}) %></a></div>
+        <div role="tab" aria-controls="modules_panel" class="header"><a href="#"><%= @context.feature_enabled?(:flipped_classes) ? t('links_to.class',%{Classes}) : t('links_to.modules', %{Modules}) %></a></div>
           <div id="modules_panel" role="tabpanel">
             <ul class="wiki_pages page_list">
-              <li title="<%= t('insert.modules', %{Click to insert a link to this module}) %>"><%= link_to t('links.modules', "Modules List"), context_url(@context, :context_context_modules_url) %></li>
+              <li title= <%= @title_message %>><%= link_to @link_message , context_url(@context, :context_context_modules_url) %></li>
               <% for m in @wiki_sidebar_data[:active_context_modules] %>
-                <li title="<%= t('insert.modules', %{Click to insert a link to this module}) %>"><%= link_to m.name, context_url(@context, :context_context_module_url, m) %></li>
+                <li title="<%= @title_message  %>"><%= link_to m.name, context_url(@context, :context_context_module_url, m) %></li>
               <% end %>
             </ul>
           </div>

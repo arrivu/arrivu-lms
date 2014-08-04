@@ -1110,5 +1110,14 @@ ApplicationHelper
     end
   end
 
+  def repalce_modules_with_class(word)
+    if @context.feature_enabled?(:flipped_classes)  && word.include?("module")
+      res = word.gsub! 'module', 'class'
+    else
+      res = word
+    end
+    res
+  end
+
 end
 

@@ -125,9 +125,8 @@ course will see this page first.  You can change that from [the course home page
           </div>
 
       <% end %>
-      <!--arrivu chnages-->
-      <% unless @page.url == WikiPage::DEFAULT_FAQ_FRONT_PAGE_URL || @page.url == WikiPage::DEFAULT_VIDEO_FRONT_PAGE_URL
-         @page.url == WikiPage::DEFAULT_LAB_FRONT_PAGE_URL || @page.url == Wiki::DEFAULT_FRONT_PAGE_URL%>
+      <!--arrivu chnages for -->
+      <%  unless @page.url == WikiPage::DEFAULT_FAQ_FRONT_PAGE_URL || @page.url == WikiPage::DEFAULT_VIDEO_FRONT_PAGE_URL ||@page.url == WikiPage::DEFAULT_LAB_FRONT_PAGE_URL || @page.url == Wiki::DEFAULT_FRONT_PAGE_URL%>
       <div id ="change_wiki_type" style="text-align: left">
        <%=f.label :change_wiki_type, "Change Wiki Type" %>
       <select name="wiki_type">

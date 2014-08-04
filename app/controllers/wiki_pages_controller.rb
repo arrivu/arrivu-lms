@@ -131,8 +131,10 @@ class WikiPagesController < ApplicationController
 
     if @page.update_attributes(params[:wiki_page].merge(:user_id => @current_user.id))
       #arrivu_changes
-      if @page.wiki_type != params[:wiki_type]
+      unless params[:wiki_type].nil?
+       if @page.wiki_type != params[:wiki_type]
         @page.update_attributes(:wiki_type => params[:wiki_type])
+       end
       end
       #arrivu_changes
       unless @page.context.feature_enabled?(:draft_state)

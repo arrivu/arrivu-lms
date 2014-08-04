@@ -624,8 +624,12 @@
           <li aria-label="<%= tab[:label] %>" class="navitem <%= 'enabled' if tab[:id] != Course::TAB_HOME %> <%= tab[:label].downcase %>" id="nav_edit_tab_id_<%= tab[:id] %>" tabindex="0">
             <!--Arrivu changes-->
            <%= image_tag("#{link_icon}.png",:style => 'padding: 0px 10px 0px 0px;width:15px;' ) %>
+            <% if tab[:label] == "Modules" && @context.feature_enabled?(:flipped_classes) %>
+              <%= tab[:label] = "Classes" %>
+            <% else %>
+              <%= tab[:label] %>
+            <% end %>
             <!--Arrivu changes-->
-            <%= tab[:label] %>
             <span class="disabled_message"><%= tab[:disabled_message] %></span></li>
         <% end %>
       </ul>

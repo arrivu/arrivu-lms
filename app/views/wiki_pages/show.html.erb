@@ -9,7 +9,9 @@
 
 <% if reason = @page.locked_for?(@current_user, :context => @context) %>
   <h2><%= @page.title %></h2>
-  <%= lock_explanation(reason, 'page', @context) %>
+  <% word = lock_explanation(reason, 'page', @context) %>
+    <% result = repalce_modules_with_class(word) %>
+    <%= result %>
 <% else %>
   <%= render :partial => "wiki_pages/content" %>
 <% end %>
