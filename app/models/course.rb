@@ -2532,8 +2532,6 @@ class Course < ActiveRecord::Base
   TAB_COMMENTS=25
   TAB_LABS=26
 
-  TABS_TO_HIDE =[TAB_COMMENTS,TAB_LABS,TAB_LIVECLASSLINKS,TAB_OFFERS,TAB_VIDEOS,TAB_BONUSVIDEOS,TAB_CAREERS,TAB_REFERRALS]
-
   def self.default_tabs
     [
       { :id => TAB_HOME, :label => t('#tabs.home', "Home"), :css_class => 'home', :href => :course_path },
@@ -2631,6 +2629,7 @@ class Course < ActiveRecord::Base
       # Ensure that Settings is always at the bottom
       tabs.delete_if {|t| t[:id] == TAB_SETTINGS }
       tabs << settings_tab
+
       tabs.each do |tab|
         tab[:hidden_unused] = true if tab[:id] == TAB_MODULES && !active_record_types[:modules]
         tab[:hidden_unused] = true if tab[:id] == TAB_CLASSES && !active_record_types[:classes]
@@ -2710,11 +2709,6 @@ class Course < ActiveRecord::Base
       # tabs.each_with_index{|t, i| t[:sort_index] = i }
       # tabs = tabs.sort_by{|t| [t[:hidden_unused] || t[:hidden] ? 1 : 0, t[:sort_index]] } if !self.tab_configuration || self.tab_configuration.empty?
       tabs
-    #  tabs.each do |tab|
-    #    if TABS_TO_HIDE.include?(tab[:id])
-    #      tab[:hidden] = true
-    #    end
-    #end
     end
   end
 
