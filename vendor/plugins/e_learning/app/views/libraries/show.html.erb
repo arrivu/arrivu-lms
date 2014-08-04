@@ -34,7 +34,9 @@
   <div style="font-size: 16px;">
     <br/>
     <p>
-     <%= @context.course_description.try(:short_description) %>
+     <% if @context.course_description %>
+       <%= @context.course_description.try(:short_description).html_safe %>
+     <% end %>
     </p>
   </div>
 
@@ -102,7 +104,9 @@ border: 1px solid hsl(0, 0%, 87%);border-radius: 4px;padding: 25px;background: #
     <div class="span7">
     <h1 style="border-bottom: 1px solid lightgray;font-size: 1.8em;font-weight: normal;" >Full course description</h1>
       <div class="small">
-       <p> <%= @context.course_description.try(:long_description) %></p>
+       <% if @context.course_description %>
+         <%= @context.course_description.try(:long_description).html_safe %>
+       <% end %>
       </div>
       <hr/>
 

@@ -1,3 +1,6 @@
+<%
+   jammit_css :tinymce
+%>
 <div id="tab-description">
     <div id="course_description" path="<%= course_course_descriptions_path(@context)%> ">
         <table>
@@ -8,7 +11,7 @@
             </tr>
             <tr>
                <td>
-                 <textarea <% if @context.settings[:allow_user_to_design_course_detail_page] %> readonly="readonly"<%end %> id="short_description" name="short_description_txt" style="width: 300px;height:90px;"><%= @context.course_description.short_description  if @context.course_description != nil %></textarea>
+                 <textarea <% if @context.settings[:allow_user_to_design_course_detail_page] %> readonly="readonly"<%end %> id="short_description" name="short_description_txt" style="width: 400px;"><%= @context.course_description.short_description  if @context.course_description != nil %></textarea>
                  <% if @e_learning  %>style="" <% end  %>
                </td>
             </tr>
@@ -19,7 +22,7 @@
             </tr>
             <tr>
                <td>
-                 <textarea <% if @context.settings[:allow_user_to_design_course_detail_page] %> readonly="readonly"<%end %> id="long_description" name="long_description_txt" style="width: 600px;height:100px"><%= @context.course_description.long_description if @context.course_description != nil %></textarea>
+                 <textarea <% if @context.settings[:allow_user_to_design_course_detail_page] %> readonly="readonly"<%end %> id="long_description" name="long_description_txt" class="rich_editor" style="width: 800px;"><%= @context.course_description.long_description if @context.course_description != nil %></textarea>
                </td>
             </tr>
             <tr>
@@ -38,15 +41,19 @@
     <script type="text/javascript">
         require([
             'jquery' /* $ */,
-            'jquery.disableWhileLoading'
+            'jquery.disableWhileLoading',
+            'compiled/tinymce',
+            'tinymce.editor_box'
         ],function($){
+            $("#long_description").editorBox();
+            $("#short_description").editorBox();
             $("#add_course_description").click(function(){
               $("#content").disableWhileLoading($.ajax({
                 type:'POST',
                 url:$("#course_description").attr('path'),
                 data: {
-                       'short_description': $("#short_description").val(),
-                       'long_description' : $("#long_description").val()
+                       'short_description': tinymce.get('short_description').getContent(),
+                       'long_description' : tinymce.get('long_description').getContent()
                 },
                 success: function(data){
                   $.flashMessage('Course Description Saved')
