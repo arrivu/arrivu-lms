@@ -1,3 +1,6 @@
+<style>
+    .ui-dialog { position: fixed;}
+</style>
 <% jammit_css :bootstrap
  js_bundle :login
  login_handle_name = @domain_root_account.login_handle_name rescue AccountAuthorizationConfig.default_login_handle_name
