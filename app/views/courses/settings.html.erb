@@ -711,6 +711,7 @@
   <%= render :partial => "courses/course_custom_page_design" %>
 </div>
 <% end %>
+    <%= render :partial => "courses/check_course_contents_visible_check" %>
 <% end %>
 <!--end of e-learning-->
 <% if Account.site_admin.grants_right?(@current_user, nil, :manage_courses) %>

@@ -577,6 +577,13 @@ define([
 
           }
       });
+      $("#course_make_this_course_visible_on_course_catalogue").click(function(event){
+          $("#course_visibility_catalogue_check").dialog({
+              title: I18n.t('titles.reset_course_content_dialog_help', "Reset Course Content"),
+              width: 500
+          });
+
+       });
   //end of arrivu chnages
   });
 });
