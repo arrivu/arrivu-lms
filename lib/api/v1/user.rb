@@ -114,10 +114,10 @@ module Api::V1::User
 
   def get_course_badges(user_ids)
     get_badges(true,user_ids)
-    if @tool.nil?
+    if @badge_ex_tool.nil?
       print_badge_error
     else
-      base_url = URI(@tool.url)
+      base_url = URI(@badge_ex_tool.url)
       uri = URI("#{base_url.scheme}://#{base_url.host}:#{base_url.port}/api/v1/courses/#{@tool_settings['custom_canvas_course_id']}/badges.json")
       begin
         post_to_badge(uri)

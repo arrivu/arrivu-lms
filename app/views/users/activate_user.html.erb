@@ -62,7 +62,7 @@
               <option value="facebook" <%= 'selected' if @provider == "facebook"%>><%= "Facebook" %></option>
               <option value="google" <%= 'selected' if @provider == "google"%>><%= "Google" %></option>
               <option value="linkedin" <%= 'selected' if @provider == "linkedin"%>><%= "LinkedIN" %></option>
-              <option value="" <%= 'selected' if OmniauthAuthentication.find_by_user_id(user.id) == nil %>><%= "Corporate Login" %></option>
+              <option value="" <%= 'selected' if user.omniauth_authentication.nil? || (user.omniauth_authentication && (user.omniauth_authentication.provider == '')) %>><%= "Corporate Login" %></option>
             </select>
           </td>
                 <% form_for user,  :url => url_for(:controller => 'users', :action => 'activate_user')  ,

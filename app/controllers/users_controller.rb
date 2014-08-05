@@ -283,7 +283,7 @@ class UsersController < ApplicationController
 
   def activate_user
    get_context
-    if authorized_action(@context, @current_user, :read_roster)
+    if authorized_action(@domain_root_account, @current_user, :manage_account_settings)
       @root_account = @context.root_account
       @query = (params[:user] && params[:user][:name]) || params[:term]
       js_env :ACCOUNT => account_json(@domain_root_account, nil, session, ['registration_settings'])
@@ -303,9 +303,8 @@ class UsersController < ApplicationController
           return render :json => users.map { |u| user_json(u, @current_user, session) }
         else
           @users ||= []
-          @users= User.active.order('created_at DESC').paginate(:page => params[:page], :per_page => @per_page, :total_entries => @users.size)
+          @users = @domain_root_account.all_users(9999).order('created_at DESC').paginate(:page => params[:page], :per_page => @per_page, :total_entries => @users.size)
         end
-
         respond_to do |format|
           if @users.length == 1 && params[:term]
             format.html {
@@ -334,30 +333,32 @@ class UsersController < ApplicationController
 
   def update_user
     @user = User.find(params[:id])
-    respond_to do |format|
-    if params[:state] == "checked"
-      @user.workflow_state ="registered"
-       @user.save!
-      if @user.workflow_state == "registered"
-       Mailer.send_later(:deliver_user_activation_mail,@user)
-       format.json {
+    if authorized_action(@user, @current_user, [:manage, :manage_logins])
+      respond_to do |format|
+      if params[:state] == "checked"
+        @user.workflow_state ="registered"
+         @user.save!
+        if @user.workflow_state == "registered"
+         Mailer.send_later(:deliver_user_activation_mail,@user)
+         format.json {
+            render(:json => @users)
+         }
+        end
+      elsif params[:state] == "unchecked"
+        @user.workflow_state ="inactive"
+        @user.save!
+        format.json {
           render(:json => @users)
-       }
+        }
+      else
+        @omniauth = OmniauthAuthentication.find_or_create_by_user_id(@user.id)
+        @omniauth.provider = params[:provider]
+        @omniauth.save!
+        format.json {
+          render(:json => @omniauth)
+        }
       end
-    elsif params[:state] == "unchecked"
-      @user.workflow_state ="inactive"
-      @user.save!
-      format.json {
-        render(:json => @users)
-      }
-    else
-      @omniauth = OmniauthAuthentication.find_or_create_by_user_id(@user.id)
-      @omniauth.provider = params[:provider]
-      @omniauth.save!
-      format.json {
-        render(:json => @omniauth)
-      }
-    end
+      end
     end
   end
 

@@ -551,7 +551,7 @@ ApplicationHelper
   def inst_env
     global_inst_object = { :environment =>  Rails.env }
     {
-      :allowMediaComments       => Kaltura::ClientV3.config && @context.try_rescue(:allow_media_comments?),
+      :allowMediaComments       => Kaltura::ClientV3.config && @context.try_rescue(:allow_media_comments?) && !@domain_root_account.Sublime_kaltura_disable?,
       :kalturaSettings          => Kaltura::ClientV3.config.try(:slice, 'domain', 'resource_domain', 'rtmp_domain', 'partner_id', 'subpartner_id', 'player_ui_conf', 'player_cache_st', 'kcw_ui_conf', 'upload_ui_conf', 'max_file_size_bytes', 'do_analytics', 'use_alt_record_widget', 'hide_rte_button', 'js_uploader'),
       :equellaEnabled           => !!equella_enabled?,
       :googleAnalyticsAccount   => Setting.get('google_analytics_key', nil),
@@ -934,7 +934,7 @@ ApplicationHelper
     @user ||= @current_user
     @pseudonym ||= @current_pseudonym
     if @user.nil? or @pseudonym.nil? or @user.enrollments.active.nil? or @user.enrollments.active.empty?
-      redirect_to root_url
+      redirect_back_or_default(root_url)
     else
       favourite_course_id = @pseudonym.settings[:favourite_course_id]
       if favourite_course_id.nil? || favourite_course_id.empty?
@@ -942,7 +942,7 @@ ApplicationHelper
       else
         @context = Course.find(favourite_course_id)
         if is_authorized_action?(@context, @user, :read)
-          redirect_to course_url(@context)
+          redirect_back_or_default(course_url(@context))
         else
           first_enrollment
         end
@@ -954,9 +954,9 @@ ApplicationHelper
     enrollment = @user.enrollments.active.first
     unless enrollment.nil?
       @context = Course.find_by_id(enrollment.course_id)
-      redirect_to course_url(@context)
+      redirect_back_or_default(course_url(@context))
     else
-      redirect_to  dashboard_url
+      redirect_back_or_default(dashboard_url)
     end
   end
 
