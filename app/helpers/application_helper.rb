@@ -415,6 +415,8 @@ ApplicationHelper
 
             if FileTest.exist?("#{RAILS_ROOT}/public/images/#{tab[:css_class]}.png")
               link_icon =  tab[:css_class]
+            elsif FileTest.exist?("#{RAILS_ROOT}/public/images/#{tab[:label]}.png")
+              link_icon =  tab[:label]
             else
               link_icon = "missing"
             end
