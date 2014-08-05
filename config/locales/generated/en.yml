@@ -12255,6 +12255,7 @@ en:
       labels: 
         time_elapsed: "Time Elapsed"
       login_failed: "Login failed."
+      login_again: "Login again"
       login_successful: "Login successful."
       minutes_count: 
         one: "1 Minute"

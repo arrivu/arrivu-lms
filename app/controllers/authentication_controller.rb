@@ -51,6 +51,7 @@ class AuthenticationController < ApplicationController
       @user.workflow_state = @domain_root_account.social_login_admin_approval? ? 'inactive' : 'registered'
       @user.save!
       @pseudonym.save!
+      enroll_in_to_stud_orientation(@user)
       @domain_root_account.social_login_admin_approval? ? un_successful_login : successful_login(@user)
     end
  end
@@ -91,6 +92,13 @@ class AuthenticationController < ApplicationController
    authentication.user.phone ||= auth[:info][:phone]
    authentication.user.name ||= auth[:info][:name]
    authentication.user.save!
+ end
+
+ def enroll_in_to_stud_orientation(user)
+   @course = @domain_root_account.courses.active.find_by_sis_source_id("#{@domain_root_account.name.titleize} Student Orientation")
+   if @course && !user.current_student_enrollment_course_ids.include?(@course.id)
+     @course.enroll_user(user, 'StudentEnrollment', {:enrollment_state => 'active'})
+   end
  end
 
 end
