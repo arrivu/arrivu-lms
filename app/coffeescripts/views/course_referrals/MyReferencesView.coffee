@@ -9,6 +9,7 @@ define [
     tagName: 'tr'
 
     initialize: ->
+      super
       @provider = @options.provider
       @invitation_sent_at = @options.invitation_sent_at
       @status = @options.status

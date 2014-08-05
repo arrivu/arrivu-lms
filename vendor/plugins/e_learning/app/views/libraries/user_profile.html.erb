@@ -43,7 +43,7 @@
                 </li>
                 <li class="span3 common_li" style="text-align: center;">
                   <div class="common_li_div_display">
-                    <%= @user_id.teacher_enrollments.count %> </div>
+                    <%= @user_id.teacher_enrollments.active.count %> </div>
                   <div class="common_li_icon_display">
                     <i class="icon-note-dark"></i>
                     Courses </div>
@@ -60,6 +60,8 @@
           </div>
         </div>
     </div>
+    <% course_enrolled_as_teacher  %>
+    <% unless course_enrolled_as_teacher.empty? %>
         <div>
           <ul class="teaching_ul">
             <li class="tab_teacher_li">
@@ -69,7 +71,6 @@
           <div id="teacher1">
               <div class="evenflow">
               <div class="resource-row">
-                 <% course_enrolled_as_teacher  %>
                  <ul style="list-style-type: none;text-align: center;padding: 27px;">
                    <% course_enrolled_as_teacher.each do |course| %>
                      <li style="display: inline-block;vertical-align: top">
@@ -157,13 +158,14 @@
                           <%  course_desc = course.course_description.try(:short_description) %>
                           <% if course_desc %>
                           <p class="desc course_desc" style="margin-top: 3px;float:left;font-size: 12px;margin-left: -15px;margin-bottom: 0px;">
-                            <%= truncate(course_desc, length:125, omission: '...') %>
+                            <%= truncate( ActionView::Base.full_sanitizer.sanitize(course_desc.html_safe), length:125, omission: '...') %>
                           </p>
                           <% end %>
                         </div>
                         </div>
                        </div>
                      </li>
+                   <% end %>
                    <% end %>
                  </ul>
                </div>

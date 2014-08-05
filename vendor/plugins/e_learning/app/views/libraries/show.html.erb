@@ -87,11 +87,9 @@ border: 1px solid hsl(0, 0%, 87%);border-radius: 4px;padding: 25px;background: #
       <img src=<%= teacher.avatar_url ? teacher.avatar_url : "http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&f=y" %> width="100" height="100" class="left img-circle" alt="<%= teacher.name%>">
       <h3 class="last emboss-light" style="font-size: 1.5em;font-weight: normal;word-break: break-all;line-height: 17px;">&nbsp&nbsp<%= teacher.name%></h3>
       <p class="fineprint emboss-light"><em class="small-head" style="margin-left: 10px;"><%= teacher.profile.title if  teacher.profile %></em></p>
-      <div class="instructor-bio-content">
-        <div class="commentdesc more">
+        <div class="more">
             <%= teacher.profile.bio if  teacher.profile %>
         </div>
-      </div>
       <!--<div class="instructor-bio-more" style="display: none;">-->
         <!--<a href="#" class="prompt-link">More</a>-->
       <!--</div>-->
