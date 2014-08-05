@@ -1,6 +1,10 @@
+{{#if collection.length}}
 <div class="resource-row">
     <ul class="collectionViewItems row-fluid" style="list-style-type: none;text-align: center;margin-top:-11px;width:100%;margin-left: 0px;">
 
     </ul>
 </div>
 <div class="paginatedLoadingIndicator" style="display: none"></div>
+{{else}}
+<div class="no_courses_text_display"> No Courses Found !</div>
+{{/if}}

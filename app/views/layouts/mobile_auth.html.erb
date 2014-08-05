@@ -19,6 +19,11 @@
 
 <body>
   <div id="f1_container">
+    <% if header_logo_image %>
+        <img class="account_logo_style"  src= <%= @logo_url %>>
+    <% else %>
+        <img  src= "../../images/arrivu_logo.png" class="default_logo">
+    <% end %>
     <div id="f1_card">
       <%= yield %>
     </div>

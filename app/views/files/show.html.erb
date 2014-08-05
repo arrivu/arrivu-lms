@@ -9,7 +9,9 @@
     <% if @attachment.folder && @attachment.folder.locked? %>
       <%= t 'messages.folder_locked', "The folder \"%{folder},\" which includes this file, has been locked.", :folder => @attachment.folder.name %>
     <% else %>
-      <%= locked.is_a?(Hash) ? lock_explanation(locked, 'file', @context) : t('messages.file_locked', "This file has not been unlocked yet.") %>
+      <% word = lock_explanation(locked, 'file', @context) %>
+        <% result = repalce_modules_with_class(word) %>
+      <%= locked.is_a?(Hash) ? result  : t('messages.file_locked', "This file has not been unlocked yet.") %>
     <% end %>
   </div>
 <% else %>

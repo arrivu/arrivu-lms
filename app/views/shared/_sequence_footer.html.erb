@@ -5,11 +5,19 @@
  <% else %>
   <div id="sequence_footer" style="display: none;">
     <a class="prev btn" href="#">
-      <i class="icon-arrow-left"></i> <span class="text"><%= t(:previous, "Previous") %></span>
+      <% if  @context.feature_enabled?(:flipped_classes) %>
+        <i class="icon-arrow-left"></i> <span><%= t(:previous_class_view, "Previous Class") %></span>
+      <% else %>
+        <i class="icon-arrow-left"></i> <span><%= t(:previous_module_view, "Previous Module") %></span>
+      <% end %>
       <span class="title ellipsis"></span>
     </a>
     <a class="next btn" href="#">
-      <span class="text"><%= t(:next, "Next") %></span> <i class="icon-arrow-right"></i>
+      <% if  @context.feature_enabled?(:flipped_classes) %>
+          <i class="icon-arrow-right"></i> <span><%= t(:next_class_view,"Next Class") %></span>
+      <% else %>
+          <i class="icon-arrow-right"></i> <span> <%= t(:next_module_view,"Next Module") %></span>
+     <% end %>
       <span class="title ellipsis"></span>
     </a>
     <a href="<%= context_url(context, :context_context_modules_item_details_url, asset.asset_string, :module_item_id => params[:module_item_id]) %>" style="display: none;" class="sequence_details_url">&nbsp;</a>

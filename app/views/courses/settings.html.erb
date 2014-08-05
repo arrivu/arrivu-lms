@@ -624,8 +624,12 @@
           <li aria-label="<%= tab[:label] %>" class="navitem <%= 'enabled' if tab[:id] != Course::TAB_HOME %> <%= tab[:label].downcase %>" id="nav_edit_tab_id_<%= tab[:id] %>" tabindex="0">
             <!--Arrivu changes-->
            <%= image_tag("#{link_icon}.png",:style => 'padding: 0px 10px 0px 0px;width:15px;' ) %>
+            <% if tab[:label] == "Modules" && @context.feature_enabled?(:flipped_classes) %>
+              <%= tab[:label] = "Classes" %>
+            <% else %>
+              <%= tab[:label] %>
+            <% end %>
             <!--Arrivu changes-->
-            <%= tab[:label] %>
             <span class="disabled_message"><%= tab[:disabled_message] %></span></li>
         <% end %>
       </ul>
@@ -707,6 +711,7 @@
   <%= render :partial => "courses/course_custom_page_design" %>
 </div>
 <% end %>
+    <%= render :partial => "courses/check_course_contents_visible_check" %>
 <% end %>
 <!--end of e-learning-->
 <% if Account.site_admin.grants_right?(@current_user, nil, :manage_courses) %>

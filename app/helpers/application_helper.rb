@@ -551,7 +551,7 @@ ApplicationHelper
   def inst_env
     global_inst_object = { :environment =>  Rails.env }
     {
-      :allowMediaComments       => Kaltura::ClientV3.config && @context.try_rescue(:allow_media_comments?),
+      :allowMediaComments       => Kaltura::ClientV3.config && @context.try_rescue(:allow_media_comments?) && !@domain_root_account.Sublime_kaltura_disable?,
       :kalturaSettings          => Kaltura::ClientV3.config.try(:slice, 'domain', 'resource_domain', 'rtmp_domain', 'partner_id', 'subpartner_id', 'player_ui_conf', 'player_cache_st', 'kcw_ui_conf', 'upload_ui_conf', 'max_file_size_bytes', 'do_analytics', 'use_alt_record_widget', 'hide_rte_button', 'js_uploader'),
       :equellaEnabled           => !!equella_enabled?,
       :googleAnalyticsAccount   => Setting.get('google_analytics_key', nil),
@@ -934,7 +934,7 @@ ApplicationHelper
     @user ||= @current_user
     @pseudonym ||= @current_pseudonym
     if @user.nil? or @pseudonym.nil? or @user.enrollments.active.nil? or @user.enrollments.active.empty?
-      redirect_to root_url
+      redirect_back_or_default(root_url)
     else
       favourite_course_id = @pseudonym.settings[:favourite_course_id]
       if favourite_course_id.nil? || favourite_course_id.empty?
@@ -942,7 +942,7 @@ ApplicationHelper
       else
         @context = Course.find(favourite_course_id)
         if is_authorized_action?(@context, @user, :read)
-          redirect_to course_url(@context)
+          redirect_back_or_default(course_url(@context))
         else
           first_enrollment
         end
@@ -954,9 +954,9 @@ ApplicationHelper
     enrollment = @user.enrollments.active.first
     unless enrollment.nil?
       @context = Course.find_by_id(enrollment.course_id)
-      redirect_to course_url(@context)
+      redirect_back_or_default(course_url(@context))
     else
-      redirect_to  dashboard_url
+      redirect_back_or_default(dashboard_url)
     end
   end
 
@@ -992,7 +992,8 @@ ApplicationHelper
 
   def get_badges(for_leader_board=nil,user_ids=[])
     unless @current_user.nil?
-      context_external_tool = ContextExternalTool.find_by_tool_id_and_workflow_state('canvabadges',['anonymous','name_only','email_only','public']).try(:id)
+      context_external_tool = @domain_root_account.context_external_tools.find_by_tool_id_and_workflow_state('canvabadges',['anonymous','name_only','email_only','public']).try(:id)
+
       unless context_external_tool.nil?
         @badge_ex_tool = ContextExternalTool.find_for(context_external_tool, @domain_root_account, :user_navigation)
         unless @badge_ex_tool.nil?
@@ -1098,13 +1099,24 @@ ApplicationHelper
     unless account.account_header
        account = @domain_root_account
     end
+    @logo_url = Rails.cache.fetch(['logo_url', account.try(:id)].cache_key) do
       unless account.account_header.nil?
         if Attachment.exists?(account.account_header.header_logo_url)
           @attachment = Attachment.find(account.account_header.header_logo_url)
           @logo_url = file_download_url(@attachment, { :verifier => @attachment.uuid, :download => '1', :download_frd => '1' })
         end
+        @logo_url
       end
+    end
+  end
 
+  def repalce_modules_with_class(word)
+    if @context.feature_enabled?(:flipped_classes)  && word.include?("module")
+      res = word.gsub! 'module', 'class'
+    else
+      res = word
+    end
+    res
   end
 
 end
