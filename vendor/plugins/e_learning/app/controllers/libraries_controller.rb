@@ -241,20 +241,26 @@ class LibrariesController < ApplicationController
 
   def total_students_count
     @total_students_count = 0
-    @courses = @user_id.courses
-    @courses.each do |course|
-      @student_enrollment_count = course.student_enrollments.count
-      @total_students_count += @student_enrollment_count
+    @teacher_enrollments = @user_id.teacher_enrollments
+    @teacher_enrollments.each do |teacher_enrollment|
+     course = Course.where(:id => teacher_enrollment.course_id,:workflow_state =>'available' )
+       unless course.empty?
+        @students = course[0].student_enrollments.count
+        @total_students_count += @students
+       end
     end
     @total_students_count
   end
 
   def total_review_count
     @total_reviews_count = 0
-    @courses = @user_id.courses
-    @courses.each do |course|
-      @review_count = course.comments.approved.count
-      @total_reviews_count += @review_count
+    @enrolled_courses = @user_id.teacher_enrollments
+    @enrolled_courses.each do |enrolled_courses|
+      @course = Course.where(:id => enrolled_courses.course_id,:workflow_state =>'available' )
+      unless @course.empty?
+        @review_count = @course[0].comments.approved.count if @course[0].comments
+        @total_reviews_count += @review_count
+      end
     end
     @total_reviews_count
   end
@@ -265,7 +271,7 @@ class LibrariesController < ApplicationController
       enrollments.each do |enrollment|
         course_id = enrollment.course_id
         course = Course.find(course_id)
-         if course.workflow_state == 'available'
+         if course.workflow_state == 'available' && course.settings[:make_this_course_visible_on_course_catalogue]
           courses << course
         end
       end
