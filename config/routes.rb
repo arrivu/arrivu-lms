@@ -1750,6 +1750,7 @@ routes.draw do
       match 'enroll' => 'libraries#enrollment', :as => :enrollments
       get 'payment_complete' => 'libraries#payment_complete', :as => :payment_complete
       post 'create_user' => 'libraries#create_user', :as => :create_user
+      get 'check_public_course_contents' => 'libraries#check_public_course_contents', :as => :check_public_course_contents, :path_name => 'check_public_course_contents'
     end
     get 'users/:user_id/details' => 'libraries#user_profile', :as => :user_details
 

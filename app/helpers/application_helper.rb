@@ -1118,6 +1118,5 @@ ApplicationHelper
     end
     res
   end
-
 end
 

@@ -304,4 +304,52 @@ class LibrariesController < ApplicationController
     end
   end
 
+  def check_public_course_contents
+    @courses = []
+    @context = Course.find(params[:library_id])
+    if @context.workflow_state == 'available'
+      @course_name = @context.name
+      @course_images = @context.course_image
+      @image = Attachment.find(@course_images.course_image_attachment_id) rescue nil
+      @background_image = Attachment.find(@course_images.course_back_ground_image_attachment_id) rescue nil
+      @course_desc = @context.course_description
+      @short_desc =  @course_desc.short_description.html_safe if @context.course_description
+      @long_description =  @course_desc.long_description.html_safe if @context.course_description
+      @teacher_enrollment = @context.teacher_enrollments.first
+        user_id = User.find(@teacher_enrollment.user_id) rescue nil
+        user_bio = user_id.profile.bio  rescue nil
+        if user_bio
+          @teacher_profile = user_bio
+        else
+          @teacher_profile = 0;
+        end
+      @course_tags = @context.tags.count
+      if @course_tags > 0
+        @tags = @course_tags
+      else
+        @tags = 0
+      end
+      @students_enrollments = @context.student_enrollments.count
+      if @students_enrollments > 0
+         @students = @students_enrollments
+      else
+         @students = 0;
+      end
+      respond_to do |format|
+        @course_json =   api_json(@context, @current_user, session, API_USER_JSON_OPTS).tap do |json|
+          json[:course_name] = @course_name
+          json[:course_image] = @image
+          json[:course_background_image] = @background_image
+          json[:long_desc] = @long_description
+          json[:course_short_decription] = @short_desc
+          json[:teacher_enrollment] = @teacher_profile
+          json[:course_tags] = @tags
+          json[:students_enrollemnt] = @students
+        end
+        @courses << @course_json
+        format.json {render :json => @courses}
+      end
+    end
+  end
+
 end

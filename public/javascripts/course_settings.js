@@ -578,11 +578,77 @@ define([
           }
       });
       $("#course_make_this_course_visible_on_course_catalogue").click(function(event){
+          var public_visible = true;
+          if($(this).is(":checked")) {
           $("#course_visibility_catalogue_check").dialog({
-              title: I18n.t('titles.reset_course_content_dialog_help', "Reset Course Content"),
-              width: 500
+              width: 570,
+              height:590
           });
+          $("#course_visibility_catalogue_check").disableWhileLoading($.ajax({
+              type:'GET',
+              url:$("#course_visibility_catalogue_check").attr('path'),
+              success: function(data){
+                  console.log(data);
+                if (data[0].course_image != null){
+                    $("#course_image_graded").css("display","");
+                } else{
+                    $("#course_image_not_graded").css("display","");
+                    public_visible=false;
+                }
+                if (data[0].course_background_image != null){
+                    $("#course_background_image_graded").css("display","");
+                }else {
+                    $("#course_background_image_not_graded").css("display","");
+                    public_visible=false;
+                }
+                if (data[0].long_desc != null){
+                    $("#course_desc_graded").css("display","");
+                }else{
+                    $("#course_desc_not_graded").css("display","");
+                    public_visible=false;
+                }
+                if (data[0].course_short_decription != null){
+                    $("#course_short_desc_graded").css("display","");
+                }else {
+                    $("#course_short_desc_not_graded").css("display","");
+                    public_visible=false;
+                }
+                if (data[0].teacher_enrollment != 0)  {
+                    $("#course_teachers_graded").css("display","");
+                }else {
+                    $("#course_teachers_not_graded").css("display","");
+                    public_visible=false;
+                }
+                if (data[0].course_tags != 0){
+                    $("#course_tags_graded").css("display","");
+                }else {
+                    $("#course_tags_not_graded").css("display","");
+                    public_visible=false;
+                }
+                if (data[0].students_enrollemnt != 0) {
+                    $("#course_students_graded").css("display","");
+                } else{
+                    $("#course_students_not_graded").css("display","");
+                    public_visible = false;
+                }
+                if (public_visible == false){
+                  $("#course_make_this_course_visible_on_course_catalogue").removeAttr('checked');
+                  $(".message_to_user").css("display","");
+                  $(".heading").css("display","");
+                }else{
+                    $(".success_message").css("display","");
+                    $(".message_to_user").css("display","none");
+                    $(".heading").css("display","none");
+                }
+              }
+          })
+          );
+          }
+         $(".ui-dialog-titlebar").removeClass("ui-widget-header");
        });
+      $("#dialog_close").click(function(){
+          $("#course_visibility_catalogue_check").dialog('close');
+      });
   //end of arrivu chnages
   });
 });

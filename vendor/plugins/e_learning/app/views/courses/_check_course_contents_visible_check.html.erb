@@ -1,8 +1,53 @@
-<style>
-  .ui-dialog{
-     top:100px;
-  }
-</style>
-<div id="course_visibility_catalogue_check">
-  <%= "hello" %>
+<% jammit_css :course_settings  %>
+<div id="course_visibility_catalogue_check" style="display: none;" path="<%=library_check_public_course_contents_url(@context)  %>">
+  <div class="user_messages" style="text-align: center;color: #b8860b;margin-top: -3px;display:none;"><%= "This Course will display on Course Catalogue" %></div>
+  <div class="user_messages" style="text-align: center;color: #b8860b;margin-top: -3px;display:none;"><%= "This Course Will not display on Public Catalogue" %></div>
+  <div class="heading" style="text-align: center;color: #b8860b;margin-top: 6px;display:none;"><%= t('public_course_contents', "To display this course in Public Catalogue the course should have the following items ") %></div>
+    <div id="course_contents" style="margin-top: 20px;">
+     <div class="content_items">
+      <%= "Course Image "%>
+        <img id="course_image_graded" style="float: right;display: none" src="/images/graded.png">
+        <img id="course_image_not_graded" style="float: right;display: none"  src="/images/not_graded.png">
+      </div>
+    <hr>
+    <div class="content_items">
+        <%= "Course Background Image" %>
+         <img id="course_background_image_graded" style="float: right;display: none" src="/images/graded.png">
+         <img id="course_background_image_not_graded" style="float: right;display: none" src="/images/not_graded.png">
+      </div>
+    <hr>
+    <div class="content_items">
+        <%= "Students Enrollment" %>
+         <img id="course_students_graded" style="float: right;display: none" src="/images/graded.png">
+         <img id="course_students_not_graded" style="float: right;display: none" src="/images/not_graded.png">
+    </div>
+    <hr>
+    <div class="content_items">
+        <%= "Course Tags" %>
+         <img id="course_tags_graded" style="float: right;display: none" src="/images/graded.png">
+         <img id="course_tags_not_graded" style="float: right;display: none" src="/images/not_graded.png">
+    </div>
+    <hr>
+    <div class="content_items">
+      <%= "Description" %>
+       <img id="course_desc_graded" style="float: right;display: none" src="/images/graded.png">
+       <img id="course_desc_not_graded" style="float: right;display: none" src="/images/not_graded.png">
+    </div>
+    <hr>
+    <div class="content_items" >
+      <%= "Short Description" %>
+        <img id="course_short_desc_graded" style="float: right;display: none" src="/images/graded.png" >
+        <img id="course_short_desc_not_graded" style="float: right;display: none" src="/images/not_graded.png" >
+    </div>
+    <hr>
+    <div class="content_items" >
+      <%= "Teachers Enrollment" %>
+        <img id="course_teachers_graded" style="float: right;display: none" src="/images/graded.png" >
+        <img id="course_teachers_not_graded" style="float: right;display: none" src="/images/not_graded.png" >
+    </div>
+    <hr>
+    <div class="form_actions" style="text-align: center;">
+      <button id="dialog_close" type="submit" class="btn btn-primary">Close</button>
+    </div>
+    </div>
 </div>

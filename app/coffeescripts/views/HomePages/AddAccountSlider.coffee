@@ -55,13 +55,13 @@ define [
         extension = slider.split('.').pop().toUpperCase()
       if $("#accountslider_uploaded_data").val() == ""
         @$('#upload_account_sliders').append("<div class='alert alert-error'
-        style='text-align: center;margin-top: -108px;;position:absolute;margin-left:157px'>
-        Plz Choose a File to Upload</div>")
+        style='text-align: center;margin-top: -108px;;position:absolute;margin-left:250px'>
+        Choose a File to Upload</div>")
         event.preventDefault()
       else if extension!="PNG" && extension!="JPG" && extension!="GIF" && extension!="JPEG"
         @$('#upload_account_sliders').append("<div class='alert alert-error'
-        style='text-align: center;margin-top: -108px;;position:absolute;margin-left:157px'>
-        Plz Choose a Valid File to Upload</div>")
+        style='text-align: center;margin-top: -108px;;position:absolute;margin-left:250px'>
+        Choose a Valid File to Upload</div>")
         event.preventDefault()
       else
         fileUploadOptions:
