@@ -4,7 +4,7 @@ ul.token-input-list {
     height: auto !important;
     height: 1%;
     width: 218px;
-    border: 1px solid #8496ba;
+//    border: 1px solid #8496ba;
     cursor: text;
     font-size: 12px;
     font-family: Verdana, sans-serif;
@@ -14,6 +14,8 @@ ul.token-input-list {
     padding: 0;
     background-color: #fff;
     list-style-type: none;
+    border: 1px solid #cccccc;
+    border-radius: 3px;
     clear: left;
 }
 

@@ -333,7 +333,11 @@
       </td>
     </tr>
     <% if ELEARNING && e_learning_enabled %>
+        <fieldset>
+        <div class="control-group">
         <%= render :partial => 'accounts/course_taggings'  %>
+        </div>
+        </fieldset>
         <tr><td>
           <br></td></tr>
     <% end %>

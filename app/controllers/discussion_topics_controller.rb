@@ -385,7 +385,8 @@ class DiscussionTopicsController < ApplicationController
                  :CONTEXT_ID => @context.id,
                  :CONTEXT_ACTION_SOURCE => :discussion_topic,
                  DRAFT_STATE: @topic.draft_state_enabled?,
-                 :TOPIC_TAGS => @topic.tags.map(&:attributes).to_json(:except => ["account_id","created_at","updated_at"])}
+                 :TOPIC_TAGS => @topic.tags.map(&:attributes).to_json(:except => ["account_id","created_at","updated_at"]),
+                 :COURSE_TAGGING_PATH => course_context_tags_path(@context, :format => :json)}
       append_sis_data(js_hash)
       js_env(js_hash)
       render :action => "edit"
