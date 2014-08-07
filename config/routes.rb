@@ -199,6 +199,8 @@ routes.draw do
   # and the application_helper method :context_url to make retrieving
   # these contexts, and also generating context-specific urls, easier.
   resources :courses do
+    #arrivu
+    get 'check_public_course_contents' => 'libraries#check_public_course_contents', :as => :check_public_course_contents, :path_name => 'check_public_course_contents'
     # DEPRECATED
     match 'self_enrollment/:self_enrollment' => 'courses#self_enrollment', :as => :self_enrollment, :via => :get
     match 'self_unenrollment/:self_unenrollment' => 'courses#self_unenrollment', :as => :self_unenrollment, :via => :post
@@ -1750,7 +1752,6 @@ routes.draw do
       match 'enroll' => 'libraries#enrollment', :as => :enrollments
       get 'payment_complete' => 'libraries#payment_complete', :as => :payment_complete
       post 'create_user' => 'libraries#create_user', :as => :create_user
-      get 'check_public_course_contents' => 'libraries#check_public_course_contents', :as => :check_public_course_contents, :path_name => 'check_public_course_contents'
     end
     get 'users/:user_id/details' => 'libraries#user_profile', :as => :user_details
 

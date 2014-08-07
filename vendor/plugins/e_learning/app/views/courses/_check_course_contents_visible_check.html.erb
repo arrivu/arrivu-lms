@@ -1,8 +1,8 @@
 <% jammit_css :course_settings  %>
-<div id="course_visibility_catalogue_check" style="display: none;" path="<%=library_check_public_course_contents_url(@context)  %>">
-  <div class="user_messages" style="text-align: center;color: #b8860b;margin-top: -3px;display:none;"><%= "This Course will display on Course Catalogue" %></div>
-  <div class="user_messages" style="text-align: center;color: #b8860b;margin-top: -3px;display:none;"><%= "This Course Will not display on Public Catalogue" %></div>
-  <div class="heading" style="text-align: center;color: #b8860b;margin-top: 6px;display:none;"><%= t('public_course_contents', "To display this course in Public Catalogue the course should have the following items ") %></div>
+<div id="course_visibility_catalogue_check" style="display: none;" path="<%=course_check_public_course_contents_url(@context)  %>">
+  <div class="success_message"><%= "This Course will display on Course Catalogue" %></div>
+  <div class="user_messages" ><%= "This Course Will not display on Public Catalogue" %></div>
+  <div class="heading"><%= t('public_course_contents', "To display this course in Public Catalogue the course should have the following items ") %></div>
     <div id="course_contents" style="margin-top: 20px;">
      <div class="content_items">
       <%= "Course Image "%>
@@ -15,12 +15,6 @@
          <img id="course_background_image_graded" style="float: right;display: none" src="/images/graded.png">
          <img id="course_background_image_not_graded" style="float: right;display: none" src="/images/not_graded.png">
       </div>
-    <hr>
-    <div class="content_items">
-        <%= "Students Enrollment" %>
-         <img id="course_students_graded" style="float: right;display: none" src="/images/graded.png">
-         <img id="course_students_not_graded" style="float: right;display: none" src="/images/not_graded.png">
-    </div>
     <hr>
     <div class="content_items">
         <%= "Course Tags" %>
@@ -41,9 +35,12 @@
     </div>
     <hr>
     <div class="content_items" >
-      <%= "Teachers Enrollment" %>
+      <%= "Teacher profile completion" %>
         <img id="course_teachers_graded" style="float: right;display: none" src="/images/graded.png" >
         <img id="course_teachers_not_graded" style="float: right;display: none" src="/images/not_graded.png" >
+      <ul class="teacher_list" style="list-style-type: circle;margin-top: 14px;">
+        
+      </ul>
     </div>
     <hr>
     <div class="form_actions" style="text-align: center;">

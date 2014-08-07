@@ -42,7 +42,7 @@ class PopularCoursesController < ApplicationController
           @popular_courses = @domain_root_account.popular_courses.limit(6)
           @popular_courses.each do |popular|
             course = popular.course
-            if course.settings[:make_this_course_visible_on_course_catalogue]
+            if course.settings[:make_this_course_visible_on_course_catalogue] && course.workflow_state == 'available'
               @account_courses << course
             end
           end

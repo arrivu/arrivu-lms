@@ -13,7 +13,8 @@ class LibrariesController < ApplicationController
   before_filter :check_private_e_learning
   before_filter :set_e_learning
   before_filter :check_e_learning
-  before_filter :require_context ,:only => [:course_reviews]
+  before_filter :require_context ,:only => [:course_reviews,:check_public_course_contents]
+
 
   helper_method :total_students_count
   helper_method :total_review_count
@@ -235,42 +236,39 @@ class LibrariesController < ApplicationController
   end
 
   def user_profile
-    @user_id = User.find(params[:user_id])
+    @user = User.find(params[:user_id])
 
   end
 
   def total_students_count
     @total_students_count = 0
-    @teacher_enrollments = @user_id.teacher_enrollments
+    @teacher_enrollments = @user.teacher_enrollments.active
     @teacher_enrollments.each do |teacher_enrollment|
-     course = Course.where(:id => teacher_enrollment.course_id,:workflow_state =>'available' )
-       unless course.empty?
-        @students = course[0].student_enrollments.count
-        @total_students_count += @students
+     course = teacher_enrollment.course
+       if course
+          @total_students_count += course.student_enrollments.size
        end
     end
-    @total_students_count
+    @total_students_count.to_i
   end
 
   def total_review_count
     @total_reviews_count = 0
-    @enrolled_courses = @user_id.teacher_enrollments
-    @enrolled_courses.each do |enrolled_courses|
-      @course = Course.where(:id => enrolled_courses.course_id,:workflow_state =>'available' )
-      unless @course.empty?
-        @review_count = @course[0].comments.approved.count if @course[0].comments
-        @total_reviews_count += @review_count
+    @enrolled_courses = @user.teacher_enrollments.active
+    @enrolled_courses.each do |enrolled_course|
+      @course = enrolled_course.course
+      if @course
+         @total_reviews_count += @course.comments.approved.size
       end
     end
-    @total_reviews_count
+    @total_reviews_count.to_i
   end
 
   def course_enrolled_as_teacher
-    enrollments = @user_id.teacher_enrollments
+    enrollments = @user.teacher_enrollments.active
     courses = []
       enrollments.each do |enrollment|
-        course_id = enrollment.course_id
-        course = Course.find(course_id)
+        course = enrollment.course
          if course.workflow_state == 'available' && course.settings[:make_this_course_visible_on_course_catalogue]
           courses << course
         end
@@ -305,35 +303,41 @@ class LibrariesController < ApplicationController
   end
 
   def check_public_course_contents
-    @courses = []
-    @context = Course.find(params[:library_id])
-    if @context.workflow_state == 'available'
-      @course_name = @context.name
+      @teacher_users =[]
       @course_images = @context.course_image
       @image = Attachment.find(@course_images.course_image_attachment_id) rescue nil
       @background_image = Attachment.find(@course_images.course_back_ground_image_attachment_id) rescue nil
       @course_desc = @context.course_description
       @short_desc =  @course_desc.short_description.html_safe if @context.course_description
       @long_description =  @course_desc.long_description.html_safe if @context.course_description
-      @teacher_enrollment = @context.teacher_enrollments.first
-        user_id = User.find(@teacher_enrollment.user_id) rescue nil
-        user_bio = user_id.profile.bio  rescue nil
-        if user_bio
-          @teacher_profile = user_bio
-        else
-          @teacher_profile = 0;
+      if @domain_root_account.enable_profiles?
+        @teacher_enrollments = @context.teacher_enrollments.active
+        @teacher_enrollments.each do |teacher|
+          if teacher.user.profile.bio && teacher.user.profile.bio != ""
+            @teacher_users << {:name => teacher.user.name,:completed => true}
+          else
+            @teacher_users << {:name => teacher.user.name,:completed => false}
+            @profile_check_passed = 0
+          end
         end
+      else
+        @teacher_enrollments = @context.teacher_enrollments.active
+        @teacher_enrollments.each do |teacher|
+          if teacher.user.profile.bio && teacher.user.profile.bio != ""
+            @teacher_users << {:name => teacher.user.name,:completed => true}
+          else
+            @teacher_users << {:name => teacher.user.name,:completed => false}
+            @profile_check_passed = 0
+            @account_profile_not_enabled = 0
+          end
+        end
+      end
+
       @course_tags = @context.tags.count
       if @course_tags > 0
         @tags = @course_tags
       else
         @tags = 0
-      end
-      @students_enrollments = @context.student_enrollments.count
-      if @students_enrollments > 0
-         @students = @students_enrollments
-      else
-         @students = 0;
       end
       respond_to do |format|
         @course_json =   api_json(@context, @current_user, session, API_USER_JSON_OPTS).tap do |json|
@@ -342,14 +346,15 @@ class LibrariesController < ApplicationController
           json[:course_background_image] = @background_image
           json[:long_desc] = @long_description
           json[:course_short_decription] = @short_desc
-          json[:teacher_enrollment] = @teacher_profile
+          json[:profile_check_passed] = @profile_check_passed
+          json[:teacher_users] = @teacher_users
+          json[:account_profile_enabled] = @account_profile_not_enabled
           json[:course_tags] = @tags
-          json[:students_enrollemnt] = @students
         end
-        @courses << @course_json
-        format.json {render :json => @courses}
+        @course_json
+        format.json {render :json => @course_json}
       end
-    end
+
   end
 
 end
