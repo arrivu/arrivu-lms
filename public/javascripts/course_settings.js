@@ -577,14 +577,102 @@ define([
 
           }
       });
-      $("#course_make_this_course_visible_on_course_catalogue").change(function(event){
-        if($(this).is(":checked")) {
-        $("#course_visibility_catalogue_check").dialog({
-            title: I18n.t('titles.reset_course_content_dialog_help', "Reset Course Content"),
-            width: 500
-        })
-        }
+      $("#course_make_this_course_visible_on_course_catalogue").click(function(event){
+          var public_visible = true;
+          $(".success_message").css("display","none");
+          $(".user_messages").css("display","none");
+          $(".heading").css("display","none");
+          if($(this).is(":checked")) {
+          $("#course_visibility_catalogue_check").dialog({
+              width: 570,
+              height:590
+          });
+          $("#course_visibility_catalogue_check").disableWhileLoading($.ajax({
+              type:'GET',
+              url:$("#course_visibility_catalogue_check").attr('path'),
+              success: function(data){
+                  console.log(data);
+                if (data.course_image != null){
+                    $("#course_image_graded").css("display","");
+                } else{
+                    $("#course_image_not_graded").css("display","");
+                    public_visible=false;
+                }
+                if (data.course_background_image != null){
+                    $("#course_background_image_graded").css("display","");
+                }else {
+                    $("#course_background_image_not_graded").css("display","");
+                    public_visible=false;
+                }
+                if (data.long_desc != null){
+                    $("#course_desc_graded").css("display","");
+                }else{
+                    $("#course_desc_not_graded").css("display","");
+                    public_visible=false;
+                }
+                if (data.course_short_decription != null){
+                    $("#course_short_desc_graded").css("display","");
+                }else {
+                    $("#course_short_desc_not_graded").css("display","");
+                    public_visible=false;
+                }
+                if (data.account_profile_enabled == 0){
+                    public_visible=false;
+                    $( "#course_visibility_catalogue_check" ).append( "<div class='account_disabled' style='margin-top: 23px;position: absolute;color:red;top: 0;right: 0;margin-right: 170px;'>Account Profile Feature is not Enabled</div>");
+                    $("#course_teachers_not_graded").css("display","");
+                    $("#course_teachers_graded").css("display","none");
+                    teacher_list_check(data);
+
+                } else{
+                if (data.profile_check_passed != 0)  {
+                    $("#course_teachers_graded").css("display","");
+                }else {
+                    $("#course_teachers_not_graded").css("display","");
+                    teacher_list_check(data);
+                    public_visible=false;
+                }
+                }
+                if (data.course_tags != 0) {
+                    $("#course_tags_graded").css("display","");
+                    $("#course_tags_not_graded").css("display","none");
+                }else {
+                    $("#course_tags_graded").css("display","none");
+                    $("#course_tags_not_graded").css("display","");
+                    public_visible=false;
+                }
+                if (public_visible == false){
+                  $("#course_make_this_course_visible_on_course_catalogue").removeAttr('checked');
+                  $(".user_messages").css("display","");
+                  $(".heading").css("display","");
+                }else{
+                    $(".success_message").css("display","");
+                    $(".user_messages").css("display","none");
+                    $(".heading").css("display","none");
+                }
+              }
+          })
+          );
+          }
+         $(".ui-dialog-titlebar").removeClass("ui-widget-header");
+       });
+      $("#dialog_close").click(function(){
+          $("#course_visibility_catalogue_check").dialog('close');
       });
+      function teacher_list_check(data){
+          var list = $(".teacher_list");
+          for ( var i = 0; i < data.teacher_users.length; i++ ) {
+              if (data.teacher_users[i].completed == true){
+                  path = '/images/graded.16px.png'
+              }else{
+                  path = '/images/not_graded.16px.png'
+              }
+              $(list).append(
+                  $("<li>", {style:'width:75%;margin-left:22px;',html:data.teacher_users[i].name }).append(
+                      $("<img>", {style: 'float:right;',src: path})
+                  )
+              );
+          }
+      }
   //end of arrivu chnages
   });
 });

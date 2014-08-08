@@ -5,5 +5,5 @@ require ['jquery', 'compiled/behaviors/autocomplete','jquery.tokeninput'], ($) -
       path = $(this).data('autocomplete-options')['source'].replace(/\?.+$/, '')
       window.location = "#{path}/#{ui.item.id}"
     $ ->
-      $('#course_tag_tokens').tokenInput '/context_tags.json'
+      $('#course_tag_tokens').tokenInput ENV.ACCOUNT_TAGGING_PATH
       prePopulate: $('#course_tag_tokens').data('load')

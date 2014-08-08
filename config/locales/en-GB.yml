@@ -317,7 +317,8 @@ en-GB:
     adding_course_message: "Adding course..."
     adding_user_message: "Adding user..."
     logging_message: "Logging In..."
-    login_failed: "Login Failed"
+    login_failed: "Login failed"
+    login_again: "Login again"
     additional_settings_right_side: 
       links: 
         suspend: "Suspend account"
@@ -4249,6 +4250,7 @@ en-GB:
       course_visible_on_course_catalogue: "This Course will Visible on Course Catalogue"
       not_course_visible_on_course_catalogue: "This Course will not Visible on Course Catalogue"
       course_tags: "Click to add tags of this Course"
+      public_course_contents: "To display this course in public catalogue the course should have the folowing items"
       tabs: 
         alerts: Alerts
         details: "Course details"

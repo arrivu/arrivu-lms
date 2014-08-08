@@ -42,7 +42,7 @@ class PopularCoursesController < ApplicationController
           @popular_courses = @domain_root_account.popular_courses.limit(6)
           @popular_courses.each do |popular|
             course = popular.course
-            if course.settings[:make_this_course_visible_on_course_catalogue]
+            if course.settings[:make_this_course_visible_on_course_catalogue] && course.workflow_state == 'available'
               @account_courses << course
             end
           end
@@ -74,7 +74,7 @@ class PopularCoursesController < ApplicationController
         @course_tags_count = course.tags.count.nil? ? 'false' : course.tags.count if course.tags
         @users_count = course.student_enrollments.count.nil? ? "false" : course.student_enrollments.count
         @course_tags = tag_details(course)
-        @course_desc = course.course_description.try(:short_description)
+        @course_desc = ActionView::Base.full_sanitizer.sanitize(course.course_description.short_description) unless course.course_description.nil?
         image_attachment = Attachment.find(@course_image.course_image_attachment_id) rescue nil
         background_image_attchment = Attachment.find(@course_image.course_back_ground_image_attachment_id) rescue nil
         @course_json =   api_json(course, @current_user, session, API_USER_JSON_OPTS).tap do |json|

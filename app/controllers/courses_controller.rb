@@ -844,7 +844,8 @@ class CoursesController < ApplicationController
                :manage_students => @context.grants_right?(@current_user, session, :manage_students),
                :manage_admin_users => @context.grants_right?(@current_user, session, :manage_admin_users),
                :manage_account_settings => @context.account.grants_right?(@current_user, session, :manage_account_settings),
-             })
+             },
+             :CONTEXT_TAGGING_PATH => course_context_tags_path(@context, :format => :json))
 
       @alerts = @context.alerts
       @role_types = []

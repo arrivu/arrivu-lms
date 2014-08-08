@@ -2,7 +2,7 @@ module TagsHelper
 
   def tag_tokens(query)
     tags = ActsAsTaggableOn::Tag.named_like(params[:q],@domain_root_account.id)
-    if tags.empty?
+    if tags.empty? && can_do(@context, @current_user, :manage)
       [{id: "<<<#{query}>>>", name: "New: \"#{query.strip.gsub(' ', '-')}\""}]
     else
       tags.map(&:attributes)
