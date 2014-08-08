@@ -620,6 +620,7 @@ define([
                     public_visible=false;
                     $( "#course_visibility_catalogue_check" ).append( "<div class='account_disabled' style='margin-top: 23px;position: absolute;color:red;top: 0;right: 0;margin-right: 170px;'>Account Profile Feature is not Enabled</div>");
                     $("#course_teachers_not_graded").css("display","");
+                    $("#course_teachers_graded").css("display","none");
                     teacher_list_check(data);
 
                 } else{
