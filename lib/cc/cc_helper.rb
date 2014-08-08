@@ -84,7 +84,7 @@ module CCHelper
   WIKI_FOLDER = 'wiki_content'
   MEDIA_OBJECTS_FOLDER = 'media_objects'
   CANVAS_EXPORT_FLAG = 'canvas_export.txt'
-  
+
   def create_key(object, prepend="")
     CCHelper.create_key(object, prepend)
   end
