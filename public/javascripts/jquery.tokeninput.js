@@ -35,7 +35,7 @@ define(['jquery'],function ($){
             animateDropdown: true,
             placeholder: null,
             theme: null,
-            zindex: 999,
+            zindex: 1003,
             resultsLimit: null,
 
             enableHTML: false,

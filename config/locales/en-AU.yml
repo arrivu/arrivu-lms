@@ -311,7 +311,8 @@ en-AU:
     adding_course_message: "Adding Course..."
     adding_user_message: "Adding User..."
     logging_message: "Logging In..."
-    login_failed: "Login Failed"
+    login_failed: "Login failed"
+    login_again: "Login again"
     additional_settings_right_side: 
       links: 
         suspend: "Suspend Account"

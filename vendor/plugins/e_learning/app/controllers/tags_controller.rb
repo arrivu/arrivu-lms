@@ -1,5 +1,7 @@
 class TagsController < ApplicationController
   include TagsHelper
+  before_filter :require_user, :only => [:context_tags]
+  before_filter :require_context, :only => [:context_tags]
 
   def context_tags
     respond_to do |format|

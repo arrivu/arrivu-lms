@@ -416,9 +416,14 @@ class Account < ActiveRecord::Base
     self.grants_right?(user, nil, :read) ? self.all_users : self.all_users.none
   end
 
-  def users_name_like(query="")
+  def users_name_like(query="",not_cached=nil)
     @cached_users_name_like ||= {}
-    @cached_users_name_like[query] ||= self.fast_all_users.name_like(query)
+    if not_cached
+      @cached_users_name_like[query] ||= self.all_users.name_like(query)
+    else
+      @cached_users_name_like[query] ||= self.fast_all_users.name_like(query)
+    end
+
   end
 
   def associated_courses
