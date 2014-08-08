@@ -288,8 +288,10 @@ class UsersController < ApplicationController
       @query = (params[:user] && params[:user][:name]) || params[:term]
       js_env :ACCOUNT => account_json(@domain_root_account, nil, session, ['registration_settings'])
       Shackles.activate(:slave) do
-      @users= User.active
-        if api_request?
+        if @context && @context.is_a?(Account) && @query
+          @users = @context.users_name_like(@query,true).order('created_at DESC')
+          @users = Api.paginate(@users, self, api_v1_account_users_url, :per_page => 30)
+        elsif api_request?
           search_term = params[:search_term].presence
 
           if search_term

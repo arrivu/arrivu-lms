@@ -200,6 +200,7 @@ routes.draw do
   # these contexts, and also generating context-specific urls, easier.
   resources :courses do
     # DEPRECATED
+    match '/context_tags' => 'tags#context_tags',:as => :context_tags
     match 'self_enrollment/:self_enrollment' => 'courses#self_enrollment', :as => :self_enrollment, :via => :get
     match 'self_unenrollment/:self_unenrollment' => 'courses#self_unenrollment', :as => :self_unenrollment, :via => :post
     match 'restore' => 'courses#restore', :as => :restore
@@ -553,6 +554,7 @@ routes.draw do
 
   resources :accounts do
     #arrivu changes
+    match '/context_tags' => 'tags#context_tags',:as => :context_tags
     # Subscription
     resources :subscriptions
     resources :feature_sets
@@ -1742,7 +1744,6 @@ routes.draw do
 
   match '/assets/:package.:extension' => 'jammit#package', :as => :jammit if defined?(Jammit)
   if ELEARNING
-    match '/context_tags' => 'tags#context_tags'
     resources :home_pages
     resources :teachers
     resources :libraries do
@@ -1764,7 +1765,6 @@ routes.draw do
   resources :omniauth_links
   match '/auth/:provider/callback' => 'authentication#create'
   get '/auth/failure' => 'authentication#auth_failure'
-  match '/context_tags' => 'tags#context_tags'
   get '/list_collections' =>'videos#list_collections'
   get '/get_collection/:collection_id' =>'videos#get_collection'
   match '/rr/:short_url_code' => 'referrals#referree_register',:as => :rr

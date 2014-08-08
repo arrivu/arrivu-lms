@@ -22,5 +22,5 @@ require [
 
   $(document).ready ->
     $ ->
-      $('#course_tag_tokens').tokenInput '/context_tags.json'
+      $('#course_tag_tokens').tokenInput ENV.COURSE_TAGGING_PATH
       prePopulate: $('#course_tag_tokens').data('load')

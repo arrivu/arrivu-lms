@@ -412,9 +412,17 @@ ApplicationHelper
           #Hiding bonus video
           #Arrivu changes to add flip classes view end
 
+          if tab[:label] == "Subscriptions"
+            if @domain_root_account != Account.default
+              tab[:href] = "hide_menu"
+            end
+          end
+
 
             if FileTest.exist?("#{RAILS_ROOT}/public/images/#{tab[:css_class]}.png")
               link_icon =  tab[:css_class]
+            elsif FileTest.exist?("#{RAILS_ROOT}/public/images/#{tab[:label]}.png")
+              link_icon =  tab[:label]
             else
               link_icon = "missing"
             end

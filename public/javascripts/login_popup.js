@@ -38,7 +38,7 @@ require([
         error: function(data){
             $(this).loadingImage('remove');
             $("button").attr('disabled', false)
-                .filter(".button_type_submit").text(I18n.t('login_failed', "Login Failed"));
+                .filter(".button_type_submit").text(I18n.t('login_again', "Login again"));
         }
     });
     $("#elearning_forgot_passowrd_link").click(function(event) {
