@@ -334,6 +334,15 @@ class DiscussionTopicsController < ApplicationController
     end
   end
 
+  def discussion_topic_tags
+    respond_to do |format|
+      format.json do
+        render json: @context.owned_tags.map(&:attributes).to_json(:except => ["account_id","created_at","updated_at"])
+      end
+    end
+
+  end
+
   def is_child_topic?
     root_topic_id = params[:root_discussion_topic_id]
 
@@ -386,7 +395,7 @@ class DiscussionTopicsController < ApplicationController
                  :CONTEXT_ACTION_SOURCE => :discussion_topic,
                  DRAFT_STATE: @topic.draft_state_enabled?,
                  :TOPIC_TAGS => @topic.tags.map(&:attributes).to_json(:except => ["account_id","created_at","updated_at"]),
-                 :COURSE_TAGGING_PATH => course_context_tags_path(@context, :format => :json)}
+                 :COURSE_TAGGING_PATH => named_context_url(@context, :context_context_tags_url, :format => :json) }
       append_sis_data(js_hash)
       js_env(js_hash)
       render :action => "edit"
