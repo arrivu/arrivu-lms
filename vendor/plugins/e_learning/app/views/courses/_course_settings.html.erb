@@ -9,7 +9,7 @@
      <td>
         <% if @context.course_image.nil? %>
            <img id="course_image" src="/images/course_image.jpg" style="width: 200px; min-height: 31px; max-height: 126px;margin-left: 79px;" class="thumbnail">
-        <% elsif Attachment.exists?(@context.course_image.course_image_attachment_id) == true %>
+        <% elsif course_image_url(image_url = true) %>
           <img id="course_image" src="<%= course_image_url(image_url = true) %>" style="width: 200px; min-height: 31px; max-height: 126px;margin-left: 79px;" class="thumbnail">
         <% else %>
            <img id="course_image" src="/images/course_image.jpg" style="width: 200px; min-height: 31px; max-height: 126px;margin-left: 79px;" class="thumbnail">
@@ -49,7 +49,7 @@
       <td class="space">
        <% if @context.course_image.nil? %>
             <img id="course_background_image" src="/images/course_background.jpg " style="width: 200px; min-height: 31px; max-height: 126px" class="thumbnail">
-        <% elsif  Attachment.exists?(@context.course_image.course_back_ground_image_attachment_id) == true  %>
+        <% elsif course_image_url(image_url = false)  %>
           <img id="course_background_image" src="<%= course_image_url(image_url = false) %>" style="width: 200px; min-height: 31px; max-height: 126px" class="thumbnail">
         <% else %>
           <img id="course_background_image" src="/images/course_background.jpg " style="width: 200px; min-height: 31px; max-height: 126px" class="thumbnail">
