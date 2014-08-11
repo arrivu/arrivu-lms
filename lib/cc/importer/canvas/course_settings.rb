@@ -21,6 +21,7 @@ module CC::Importer::Canvas
     include LearningOutcomesConverter
     include RubricsConverter
     include ModuleConverter
+    include CourseDescriptionConverter
     
     def settings_doc(file, html = false)
       path = File.join(@unzipped_file_path, COURSE_SETTINGS_DIR, file)
@@ -45,6 +46,7 @@ module CC::Importer::Canvas
       @course[:modules] = convert_modules(settings_doc(MODULE_META))
       @course[:rubrics] = convert_rubrics(settings_doc(RUBRICS))
       @course[:calendar_events] = convert_events(settings_doc(EVENTS))
+      @course[:course_description] = convert_course_description(settings_doc(COURSE_DESCRIPTION))
     end
 
     def convert_course_settings(doc)

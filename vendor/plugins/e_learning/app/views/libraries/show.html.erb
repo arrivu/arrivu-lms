@@ -63,7 +63,7 @@ border: 1px solid hsl(0, 0%, 87%);border-radius: 4px;padding: 25px;background: #
     <div style="font-size: 18px;">Cost per enrollment:</div>
     <div style="font-size: 18px;margin-top: 10px;font-weight: bold;
             color: darkgreen;">
-      <%unless @course_pricing.nil? %>
+      <% unless @course_pricing.nil? %>
       &#8377;
       <% end  %>
       <%= @course_pricing.nil? ? "Free" : " #{Money.new(@course_pricing.price.to_i, "INR")}" %></div>
@@ -155,7 +155,11 @@ border: 1px solid hsl(0, 0%, 87%);border-radius: 4px;padding: 25px;background: #
   <div class="price_box_on_model thumbnail">
     <div style="font-size: 18px;margin-top: 10px;">Cost per enrollment:</div>
     <div style="font-size: 18px;margin-top: 10px;font-weight: bold;
-            color: darkgreen;"><%= @course_pricing.nil? ? "Free" : "$#{@course_pricing.price}" %></div>
+            color: darkgreen;">
+      <% unless @course_pricing.nil? %>
+          &#8377;
+      <% end  %>
+      <%= @course_pricing.nil? ? "Free" : "#{Money.new(@course_pricing.price.to_i, "INR")}" %></div>
   </div>
   <br/>
   <% if @current_user %>

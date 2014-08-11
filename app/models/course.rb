@@ -1991,6 +1991,7 @@ class Course < ActiveRecord::Base
     ExternalFeed.process_migration(data, migration); migration.update_import_progress(39.5)
     GradingStandard.process_migration(data, migration); migration.update_import_progress(40)
     ContextExternalTool.process_migration(data, migration); migration.update_import_progress(45)
+    CourseDescription.process_migration(data, migration);migration.update_import_progress(47)
 
     #These need to be ran twice because they can reference each other
     Quizzes::Quiz.process_migration(data, migration, question_data); migration.update_import_progress(50)
