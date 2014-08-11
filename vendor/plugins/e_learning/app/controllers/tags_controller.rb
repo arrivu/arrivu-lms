@@ -21,12 +21,14 @@ class TagsController < ApplicationController
       end
       @course_tags.each do |tag|
         @account_tags = ActsAsTaggableOn::Tag.find_all_by_id_and_account_id(tag.tag_id,@domain_root_account)
-        @tag_name = @account_tags[0].name
-        @course_json =   api_json(tag, @current_user, session, API_USER_JSON_OPTS).tap do |json|
-          json[:id] = tag.tag_id
-          json[:tag_name] = @tag_name
+        unless @account_tags.empty?
+          @tag_name = @account_tags[0].name
+            @course_json =   api_json(tag, @current_user, session, API_USER_JSON_OPTS).tap do |json|
+              json[:id] = tag.tag_id
+              json[:tag_name] = @tag_name
+            end
+          @total_course_tags << @course_json
         end
-        @total_course_tags << @course_json
       end
       @total_course_tags = Api.paginate(@total_course_tags, self, api_v1_account_tags_url)
       format.json {render :json => @total_course_tags}

@@ -3,21 +3,21 @@
     js_bundle :bootstrap
     jammit_css :course_box,:bootstrap_and_responsive
  %>
-<%= form_for :user_profile, :url => user_profile_url(@user_id),:html => {:method=> "get",:id => "user_profile"} do |f| %>
+<%= form_for :user_profile, :url => user_profile_url(@user),:html => {:method=> "get",:id => "user_profile"} do |f| %>
     <div class="instructor-wrapper font-os">
       <div class="container" style="padding: 10px;">
             <div class="span3">
               <div>
                 <div class="web">
                   <% if service_enabled?(:avatars) %>
-                       <img src="<%= @user_id.avatar_url %>" style= "width:80%;border-radius: 500px;">
+                       <img src="<%= @user.avatar_url %>" style= "width:80%;border-radius: 500px;">
                   <% else %>
                       <img src="/images/User.png" style= "width:80%;border-radius:500px">
                   <%end %>
                 </div>
 
                 <div class="profile_link">
-                  <% @user_id.profile.links.each do |link| %>
+                  <% @user.profile.links.each do |link| %>
                     <a class= "profile_title_link" href="<%= link.url %>"><%= link.title.titleize %></a>
                   <% end %>
                 </div>
@@ -25,25 +25,25 @@
             </div>
           <div class="span8">
             <div class="fx ml40 ">
-              <h1 class="teacher_description_page_name"><%= @user_id.name %></h1>
-              <h2 class="teacher_profile_title"><%= @user_id.profile.title %></h2>
+              <h1 class="teacher_description_page_name"><%= @user.name %></h1>
+              <h2 class="teacher_profile_title"><%= @user.profile.title %></h2>
               <h3 style="margin-top: 20px;font-size: 18px;font-weight: 700;">About</h3>
               <div>
                 <div class="teacher_profile_bio" >
-                 <p> <%= @user_id.profile.bio %></p>
+                 <p> <%= @user.profile.bio %></p>
                 </div>
               </div>
               <ul class="row-fluid">
                 <li class="span3 first_display_li" style="text-align: center;">
                   <div class="div_students_count">
-                    <%=total_students_count %> </div>
+                        <%=total_students_count %> </div>
                   <div class="div_students_icon">
                     <i class="icon-user"></i>
                     Students </div>
                 </li>
                 <li class="span3 common_li" style="text-align: center;">
                   <div class="common_li_div_display">
-                    <%= @user_id.teacher_enrollments.count %> </div>
+                    <%= @user.teacher_enrollments.active.size %> </div>
                   <div class="common_li_icon_display">
                     <i class="icon-note-dark"></i>
                     Courses </div>
@@ -60,6 +60,8 @@
           </div>
         </div>
     </div>
+    <% course_enrolled_as_teacher  %>
+    <% unless course_enrolled_as_teacher.empty? %>
         <div>
           <ul class="teaching_ul">
             <li class="tab_teacher_li">
@@ -69,7 +71,6 @@
           <div id="teacher1">
               <div class="evenflow">
               <div class="resource-row">
-                 <% course_enrolled_as_teacher  %>
                  <ul style="list-style-type: none;text-align: center;padding: 27px;">
                    <% course_enrolled_as_teacher.each do |course| %>
                      <li style="display: inline-block;vertical-align: top">
@@ -157,13 +158,14 @@
                           <%  course_desc = course.course_description.try(:short_description) %>
                           <% if course_desc %>
                           <p class="desc course_desc" style="margin-top: 3px;float:left;font-size: 12px;margin-left: -15px;margin-bottom: 0px;">
-                            <%= truncate(course_desc, length:125, omission: '...') %>
+                            <%= truncate( ActionView::Base.full_sanitizer.sanitize(course_desc.html_safe), length:125, omission: '...') %>
                           </p>
                           <% end %>
                         </div>
                         </div>
                        </div>
                      </li>
+                   <% end %>
                    <% end %>
                  </ul>
                </div>

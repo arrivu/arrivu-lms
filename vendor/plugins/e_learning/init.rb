@@ -9,6 +9,7 @@ Dispatcher.to_prepare do
   UsersController.send :include,Elearning::UsersControllerExtensions
   UserListsController.send :include,Elearning::UsersListsControllerExtensions
   Enrollment.send :include,Elearning::EnrollmentExtensions
+  ProfileController.send :include,Elearning::ProfileControllerExtensions
 end
 
 

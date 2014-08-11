@@ -4633,6 +4633,7 @@ en:
       start_new_course: "Start a New Course"
       titles: 
         courses: Courses
+        leader_board: "Leader Boards"
         rss: 
           course_announcements: "Course Announcements Atom Feed"
     link_enrollment: 

@@ -4001,6 +4001,7 @@ en-AU:
       start_new_course: "Start a New Course"
       titles: 
         courses: Courses
+        leader_board: "Leader Boards"
         rss: 
           course_announcements: "Course Announcements Atom Feed"
     link_enrollment: 
@@ -4207,6 +4208,7 @@ en-AU:
       course_visible_on_course_catalogue: "This Course will Visible on Course Catalogue"
       not_course_visible_on_course_catalogue: "This Course will not Visible on Course Catalogue"
       course_tags: "Click to add tags of this Course"
+      public_course_contents: "To display this course in public catalogue the course should have the folowing items"
       tabs: 
         alerts: Alerts
         details: "Course Details"
