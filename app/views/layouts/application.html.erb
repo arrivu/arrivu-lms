@@ -38,7 +38,15 @@
 <%= render :partial => "layouts/head" %>
 <%= render :partial => 'shared/flash_notices' %>
 <% if @e_learning %>
-    <% jammit_css :bootstrap_and_responsive%>
+    <style>
+        .unread-messages-count{
+            border-radius: 8px;
+            background-color: #06a9ee;
+            padding: 1px 6px;
+            color: white;
+        }
+    </style>
+    <% jammit_css :bootstrap_and_responsive %>
     <div class="navbar">
       <div class="navbar-inner">
         <div class="container">

@@ -1,6 +1,10 @@
 class LeaderboardsController < ApplicationController
   before_filter :require_user
-  before_filter :require_context
+  before_filter :require_context,:only => [:index]
+
+  def leader_boards
+    @current_enrollments = @current_user.cached_current_enrollments(:include_enrollment_uuid => session[:enrollment_uuid]).sort_by{|e| [e.active? ? 1 : 0, Canvas::ICU.collation_key(e.long_name)] }
+  end
 
 
   def index

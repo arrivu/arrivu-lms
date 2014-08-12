@@ -526,6 +526,7 @@ routes.draw do
   end
 
   resources :groups do
+    match '/context_tags' => 'tags#context_tags',:as => :context_tags
     concerns :users
     match 'remove_user/:user_id' => 'groups#remove_user', :as => :remove_user, :via => :delete
     match 'add_user' => 'groups#add_user', :as => :add_user
@@ -1047,6 +1048,7 @@ routes.draw do
 
     scope(:controller => :discussion_topics) do
       get 'courses/:course_id/discussion_topics', :action => :index, :path_name => 'course_discussion_topics'
+      get 'courses/:course_id/discussion_topic_tags', :action => :discussion_topic_tags, :path_name => 'course_discussion_topic_tags'
       get 'groups/:group_id/discussion_topics', :action => :index, :path_name => 'group_discussion_topics'
     end
 
@@ -1064,6 +1066,15 @@ routes.draw do
       get 'courses/:course_id/content_migrations/:content_migration_id/migration_issues', :action => :index, :path_name => 'course_content_migration_migration_issue_list'
       post 'courses/:course_id/content_migrations/:content_migration_id/migration_issues', :action => :create, :path_name => 'course_content_migration_migration_issue_create'
       put 'courses/:course_id/content_migrations/:content_migration_id/migration_issues/:id', :action => :update, :path_name => 'course_content_migration_migration_issue_update'
+    end
+    scope(:controller => :tags) do
+      # @param [tag] context
+      def tag_routes(context)
+        get "#{context.pluralize}/:#{context}_id/context_tags" , :action => :context_tags, :path_name => "#{context}_context_tags"
+      end
+      tag_routes("course")
+      tag_routes("group")
+      tag_routes("account")
     end
 
     scope(:controller => :discussion_topics_api) do
@@ -1782,7 +1793,7 @@ routes.draw do
   #arrivu changes
   match '/accounts/:account_id/course_index_custom_design' => 'course_page_custom_designs#course_index_custom_design', :as => :account_course_index_custom_design, :via => :post
   match '/accounts/:account_id/account_index_custom_design' => 'course_page_custom_designs#account_index_custom_design', :as => :account_index_page_custom_design, :via => :post
-
+  match '/leader_boards' => 'leaderboards#leader_boards'
 
 
   #arrivu changes

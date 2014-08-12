@@ -52,6 +52,7 @@ class FileInContext
       @attachment.save!
 
       destroy_files(@attachment.handle_duplicates(allow_rename ? :rename : :overwrite, :caller_will_destroy => true))
+      # Arrivu changes for import course images
       if folder and Folder::COURSE_FOLDER_NAME == folder.name
           @course_image = CourseImage.find_or_create_by_course_id(context.id,
                                                                   course_image_attachment_id: @attachment.id,
@@ -65,6 +66,7 @@ class FileInContext
         @course_image.course_back_ground_image_attachment_id =  @attachment.id
         @course_image.save!
       end
+      # Arrivu changes for import course images
         @attachment
     ensure
       uploaded_data.close if uploaded_data

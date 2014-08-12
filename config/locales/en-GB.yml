@@ -4044,6 +4044,7 @@ en-GB:
       start_new_course: "Start a new course"
       titles: 
         courses: Courses
+        leader_board: "Leader Boards"
         rss: 
           course_announcements: "Course announcements Atom feed"
     link_enrollment: 

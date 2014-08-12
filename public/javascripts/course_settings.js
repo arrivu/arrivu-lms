@@ -659,6 +659,7 @@ define([
           $("#course_visibility_catalogue_check").dialog('close');
       });
       function teacher_list_check(data){
+          $(".teacher_list").empty();
           var list = $(".teacher_list");
           for ( var i = 0; i < data.teacher_users.length; i++ ) {
               if (data.teacher_users[i].completed == true){
