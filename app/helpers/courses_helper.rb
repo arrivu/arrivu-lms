@@ -99,17 +99,19 @@ module CoursesHelper
   #arrivu changes
   def course_image_url(image_url)
     if image_url == true
-      if  Attachment.exists?(@context.course_image.course_image_attachment_id) == true
-        @thumbnail = Attachment.find(@context.course_image.course_image_attachment_id).thumbnail
+        @image_attachment = Attachment.find(@context.course_image.course_image_attachment_id) rescue nil
+        if  @image_attachment && %w(available public).include?(@image_attachment.file_state)
+        @thumbnail = @image_attachment.thumbnail
         if @thumbnail
-          @logo_url = "/images/thumbnails/show/#{@thumbnail.id}/#{@thumbnail.uuid}"
+          @image = "/images/thumbnails/show/#{@thumbnail.id}/#{@thumbnail.uuid}"
         end
       end
     elsif image_url == false
-      if Attachment.exists?(@context.course_image.course_back_ground_image_attachment_id) == true
-        @thumbnail = Attachment.find(@context.course_image.course_back_ground_image_attachment_id).thumbnail
-        if @thumbnail
-          @logo_url   = "/images/thumbnails/show/#{@thumbnail.id}/#{@thumbnail.uuid}"
+        @background_attachment = Attachment.find(@context.course_image.course_back_ground_image_attachment_id) rescue nil
+      if @background_attachment && %w(available public).include?(@background_attachment.file_state)
+        @back_ground_thumbnail = @background_attachment.thumbnail
+        if @back_ground_thumbnail
+          @back_ground_image   = "/images/thumbnails/show/#{@back_ground_thumbnail.id}/#{@back_ground_thumbnail.uuid}"
         end
       end
     end

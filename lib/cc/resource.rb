@@ -27,6 +27,7 @@ module CC
     include WebResources
     include WebLinks
     include BasicLTILinks
+    include CourseDescription
     
     delegate :add_error, :set_progress, :export_object?, :export_symbol?, :for_course_copy, :add_item_to_export, :to => :@manifest
     delegate :referenced_files, :to => :@html_exporter
@@ -62,6 +63,7 @@ module CC
         run_and_set_progress(:add_assignments, 35, I18n.t('course_exports.errors.assignments', "Failed to export some assignments"))
         run_and_set_progress(:add_topics, 37, I18n.t('course_exports.errors.topics', "Failed to export some topics"))
         run_and_set_progress(:add_web_links, 40, I18n.t('course_exports.errors.web_links', "Failed to export some web links"))
+        run_and_set_progress(:add_course_description, 45, I18n.t('course_exports.errors.web_links', "Failed to export course description files"))
 
         begin
           QTI::QTIGenerator.generate_qti(@manifest, resources, @html_exporter)

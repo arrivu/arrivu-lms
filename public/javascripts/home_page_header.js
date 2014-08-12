@@ -6,19 +6,19 @@ require([
     'compiled/jquery.rails_flash_notifications'
 ], function( $) {
     $(".logo").hover(function() {
-        $(".hide").css("display","block");
+        $(".hide_edit_logo").css("display","block");
     });
     $("#header-inner").hover(function() {
-        $(".hide").css("display","none");
+        $(".hide_edit_logo").css("display","none");
     });
     $("#header-logo").hover(function() {
-        $(".hide").css("display","block");
+        $(".hide_edit_logo").css("display","block");
     });
     $(".navbar-inner").hover(function() {
-        $(".hide").css("display","none");
+        $(".hide_edit_logo").css("display","none");
     });
-    $(".hide").click(function(event) {
-        $(".hide").css("display","none");
+    $(".hide_edit_logo").click(function(event) {
+        $(".hide_edit_logo").css("display","none");
         var $dialog = $("#header_logo_dialog");
         $dialog.dialog({
             title: ( "Add Account Header Details"),
