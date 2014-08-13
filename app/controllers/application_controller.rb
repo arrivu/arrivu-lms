@@ -130,6 +130,7 @@ class ApplicationController < ActionController::Base
     @js_env[:context_asset_string] = @context.try(:asset_string) if !@js_env[:context_asset_string]
     @js_env[:TIMEZONE] = Time.zone.tzinfo.identifier if !@js_env[:TIMEZONE]
     @js_env[:LOCALE] = I18n.qualified_locale if !@js_env[:LOCALE]
+    @js_env[:is_fliped_class_enabled] = @context.feature_enabled?(:flipped_classes) if @context.is_a?(Course)
     @js_env
   end
   helper_method :js_env
