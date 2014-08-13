@@ -815,7 +815,7 @@ define([
            var next = I18n.t('buttons.next_class',"Next Class");
         }else{
             var previous = I18n.t('buttons.previous_module', "Previous Module");
-            var next = I18n.t('buttons.next_class', "Next Module");
+            var next = I18n.t('buttons.next_module', "Next Module");
         }
         if (data.current_item) {
           $('#sequence_details .current').fillTemplateData({data: data.current_item.content_tag});
