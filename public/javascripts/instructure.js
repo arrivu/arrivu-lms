@@ -810,6 +810,13 @@ define([
     if (sequence_url) {
       $.ajaxJSON(sequence_url, 'GET', {}, function(data) {
         var $sequence_footer = $('#sequence_footer');
+        if (ENV.is_fliped_class_enabled){
+           var previous = I18n.t('buttons.previous_class', "Previous Class");
+           var next = I18n.t('buttons.next_class',"Next Class");
+        }else{
+            var previous = I18n.t('buttons.previous_module', "Previous Module");
+            var next = I18n.t('buttons.next_module', "Next Module");
+        }
         if (data.current_item) {
           $('#sequence_details .current').fillTemplateData({data: data.current_item.content_tag});
           $.each({previous:'.prev', next:'.next'}, function(label, cssClass) {
@@ -824,8 +831,8 @@ define([
                   tag.title += " (" + I18n.t("draft", "Draft") + ")"
                 }
                 tag.text = (label == 'previous' ?
-                  I18n.t('buttons.previous_class', "Previous Class") :
-                  I18n.t('buttons.next_class', "Next Class"));
+                  previous :
+                  next);
                 $link.addClass('module_button');
               }
               $link.fillTemplateData({ data: tag });

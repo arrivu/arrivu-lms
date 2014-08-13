@@ -677,3 +677,14 @@ define([
   //end of arrivu chnages
   });
 });
+$(document).ready(function() {
+   if (ENV.is_fliped_class_enabled){
+      $("#nav_enabled_list").find("#nav_edit_tab_id_10").css("display","none");
+      $("#nav_disabled_list").find("#nav_edit_tab_id_10").css("display","none");
+   } else{
+      $("#nav_enabled_list").find("#nav_edit_tab_id_11").css("display","none");
+      $("#nav_disabled_list").find("#nav_edit_tab_id_11").css("display","none");
+   }
+
+
+});

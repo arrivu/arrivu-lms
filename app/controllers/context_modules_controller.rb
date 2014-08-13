@@ -24,7 +24,7 @@ class ContextModulesController < ApplicationController
     if authorized_action(@context, @current_user, :read)
       @active_tab = "modules"
       @modules = @context.modules_visible_to(@current_user)
-      check_for_flipped_class
+      #check_for_flipped_class
       @collapsed_modules = ContextModuleProgression.for_user(@current_user).for_modules(@modules).select([:context_module_id, :collapsed]).select{|p| p.collapsed? }.map(&:context_module_id)
       if @context.grants_right?(@current_user, session, :participate_as_student)
         return unless tab_enabled?(@context.class::TAB_MODULES)
@@ -40,7 +40,7 @@ class ContextModulesController < ApplicationController
       if @context.feature_enabled?(:flipped_classes)
       add_crumb(t('#crumbs.modules', "Classes"), named_context_url(@context, :context_context_modules_url) )
       @modules = @context.modules_visible_to(@current_user)
-      check_for_flipped_class
+      #check_for_flipped_class
       @collapsed_modules = ContextModuleProgression.for_user(@current_user).for_modules(@modules).select([:context_module_id, :collapsed]).select{|p| p.collapsed? }.map(&:context_module_id)
       if @context.grants_right?(@current_user, session, :participate_as_student)
         ContextModule.send(:preload_associations, @modules, [:content_tags])
@@ -349,7 +349,7 @@ class ContextModulesController < ApplicationController
   end
   
 
-  def item_details  
+  def item_details
     if authorized_action(@context, @current_user, :read)
       # namespaced models are separated by : in the url
       code = params[:id].gsub(":", "/").split("_")
