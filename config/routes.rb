@@ -1526,21 +1526,21 @@ routes.draw do
       put "groups/:group_id/pages/:url", :action => :update
       delete "courses/:course_id/pages/:url", :action => :destroy
       delete "groups/:group_id/pages/:url", :action => :destroy
+      type_regexp = Regexp.new([:wiki, :faq, :career,:video,:offer,:bonus_video, :lab].join("|"))
       [:wiki, :faq, :career,:video,:offer,:bonus_video, :lab].each do |wiki_page_type|
-        type_regexp = Regexp.new([:wiki, :faq, :career,:video,:offer,:bonus_video, :lab].join("|"))
-        get "courses/:course_id/:type/#{wiki_page_type}-front-page", action: :show_front_page
-        put "courses/:course_id/:type/#{wiki_page_type}-front-page", :action => :update_front_page
+        get "courses/:course_id/:type/#{wiki_page_type}-front-page", action: :show_front_page, constraints: { type: type_regexp }
+        put "courses/:course_id/:type/#{wiki_page_type}-front-page", :action => :update_front_page, constraints: { type: type_regexp }
 
         get "courses/:course_id/:type", :action => :index, :path_name => "course_#{wiki_page_type}s", constraints: { type: type_regexp }
         get "courses/:course_id/:type/:url", :action => :show, :path_name => "course_#{wiki_page_type}", constraints: { type: type_regexp }
-        get "courses/:course_id/:type/:url/revisions", :action => :revisions, :path_name => "course_#{wiki_page_type}_revisions"
+        get "courses/:course_id/:type/:url/revisions", :action => :revisions, :path_name => "course_#{wiki_page_type}_revisions", constraints: { type: type_regexp }
       end
-      get "courses/:course_id/:type/:url/revisions/latest", :action => :show_revision
-      get "courses/:course_id/:type/:url/revisions/:revision_id", :action => :show_revision
-      post "courses/:course_id/:type/:url/revisions/:revision_id", :action => :revert
-      post "courses/:course_id/:type", :action => :create
-      put "courses/:course_id/:type/:url", :action => :update
-      delete "courses/:course_id/:type/:url", :action => :destroy
+      get "courses/:course_id/:type/:url/revisions/latest", :action => :show_revision, constraints: { type: type_regexp }
+      get "courses/:course_id/:type/:url/revisions/:revision_id", :action => :show_revision, constraints: { type: type_regexp }
+      post "courses/:course_id/:type/:url/revisions/:revision_id", :action => :revert, constraints: { type: type_regexp }
+      post "courses/:course_id/:type", :action => :create, constraints: { type: type_regexp }
+      put "courses/:course_id/:type/:url", :action => :update, constraints: { type: type_regexp }
+      delete "courses/:course_id/:type/:url", :action => :destroy, constraints: { type: type_regexp }
     end
 
     scope(:controller => :context_modules_api) do

@@ -276,12 +276,11 @@ class WikiPagesController < ApplicationController
 
   def comments_create
     authorized = can_do(@page, @current_user, :update)
-    @page_details = WikiPage.find(@page.id)
     if authorized
-      @comment = @page_details.page_comments.build(message:params[:page_comment][:message],page_id:@page.id,
+      @comment = @page.page_comments.build(message:params[:page_comment][:message],
                                                  page_type:params[:type],user_id:@current_user.id,is_approved: true)
     else
-      @comment = @page_details.page_comments.build(message:params[:page_comment][:message],page_id:@page.id,
+      @comment = @page.page_comments.build(message:params[:page_comment][:message],
                                                    page_type:params[:type],user_id:@current_user.id,is_approved: false)
     end
     respond_to do |format|
@@ -305,12 +304,9 @@ class WikiPagesController < ApplicationController
 
 
   def comment_destroy
-    if authorized_action(@page, @current_user, :update)
-      @page_details = WikiPage.find(@page.id)
-      @comment = PageComment.find(params[:id])
-         @comment.destroy
-        render :json => @comment.to_json
-    end
+    @comment = PageComment.find(params[:id])
+    @comment.destroy
+    render :json => @comment.to_json
   end
 
   def comment_approve
