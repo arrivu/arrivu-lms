@@ -4,8 +4,6 @@ class CourseDescription < ActiveRecord::Base
   belongs_to :account
   validates_presence_of :course_id,:presence =>true
   validates_presence_of :account_id,:presence =>true
-  validates_presence_of :short_description, :presence =>true
-  validates_presence_of :long_description, :presence =>true
 
   def self.process_migration(data, migration)
     course_description = data['course_description'] ? data['course_description']: []

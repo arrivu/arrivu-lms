@@ -17,7 +17,6 @@
 #
 
 class PageComment < ActiveRecord::Base
-  belongs_to :page, :polymorphic => true
   belongs_to :user
   validates_length_of :message, :maximum => maximum_text_length, :allow_nil => true, :allow_blank => true
   attr_accessible :message,:page_id,:page_type,:user_id,:is_approved

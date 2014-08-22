@@ -40,7 +40,7 @@ class WikiPage < ActiveRecord::Base
   TITLE_LENGTH = WikiPage.columns_hash['title'].limit rescue 255
   SIMPLY_VERSIONED_EXCLUDE_FIELDS = [:workflow_state, :hide_from_students, :editing_roles, :notify_of_update]
 
-  has_many :page_comments
+  has_many :page_comments,:foreign_key => 'page_id'
 
   def validate_front_page_visibility
     if !published? && self.is_front_page?
