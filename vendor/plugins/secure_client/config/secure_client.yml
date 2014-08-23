@@ -1,0 +1,6 @@
+development:
+  secure_client_api_url: "https://192.168.1.87:44300/api/Validate"
+
+production:
+  secure_client_api_url: "https://192.168.1.87:44300/api/Validate"
+

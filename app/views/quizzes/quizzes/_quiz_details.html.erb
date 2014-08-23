@@ -67,7 +67,7 @@
 
   <% if @quiz.require_lockdown_browser %>
     <li>
-      <span class="value"><%= t(:requires_lockdown, "Requires Respondus LockDown Browser") %></span>
+      <span class="value"><%= t('headers.requires_secure_client', "Secure Client Browser Required") %></span>
     </li>
   <% end %>
 </ul>

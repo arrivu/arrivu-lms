@@ -11774,11 +11774,14 @@ en:
       lockdown_browser_required: 
         headers: 
           requires_lockdown: "Respondus LockDown Browser Required"
+          requires_secure_client: "Secure Client Browser Required"
         labels: 
           download_lockdown: "If you have not already installed the browser, please download it from here"
         links: 
           download_lockdown: "[Download Respondus LockDown Browser]"
+          download_secure_client: "[Download Secure Client Browser]"
         requires_lockdown: "This quiz requires Respondus LockDown Browser. Please launch Respondus LockDown Browser to take this quiz or view your quiz results."
+        requires_secure_client: "This quiz requires Secure Client Browser. Please launch Secure Client Browser to take this quiz or view your quiz results."
       managed_quiz_data: 
         anonymous_student: "Student %{user_counter}"
         logged_out_user: "Logged Out User %{user_counter}"
