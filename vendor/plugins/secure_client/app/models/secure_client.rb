@@ -15,27 +15,39 @@ class SecureClient
 
   end
 
-  def self.authorized?(context)
+  def self.authorized?(context,request=nil)
     q = context.instance_variable_get('@quiz')
-    if q.require_lockdown_browser
-      config = SecureClient.from_secure_client_config("secure_client")
-      uri = URI(config['secure_client_api_url'])
     begin
-      req = Net::HTTP::Post.new(uri.path)
-      req.set_form_data(account: 1,context: 57,quizz: 102,requesthash: "a7a9464b7a344a33aeb7439305cac11dae2fd6e3c05b8b639549418ecf58f60a")
-      sock = Net::HTTP.new(uri.host, uri.port)
-      if uri.scheme == 'https'
-        sock.use_ssl = true
-        sock.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      end
-      res  = sock.start {|http| http.request(req) }
-      res  = JSON.parse(res.body)
-        unless res.empty?
-         return res['Status']
+      if q and q.require_lockdown_browser
+        config = SecureClient.from_secure_client_config("secure_client")
+        uri = URI(config['secure_client_api_url'])
+        req = Net::HTTP::Post.new(uri.path)
+        req.set_form_data(account: q.context.account.root_account.id,
+                          context: q.context.id,
+                          quizz: q.id,
+                          requesthash: request.headers['HTTP_X_SAFEEXAMBROWSER_REQUESTHASH'],
+                          access_token: config['access_token'])
+        sock = Net::HTTP.new(uri.host, uri.port)
+        if uri.scheme == 'https'
+          sock.use_ssl = true
+          sock.verify_mode = OpenSSL::SSL::VERIFY_NONE
         end
+        res  = sock.start {|http| http.request(req) }
+        res  = JSON.parse(res.body)
+          unless res.empty?
+           if res['Status'] == "true"
+            return true
+           elsif request.headers['HTTP_X_SAFEEXAMBROWSER_REQUESTHASH']
+             context.instance_variable_set '@invalid_config', true
+             return false
+           else
+             return false
+           end
+          end
+      end
     rescue => e
-      logger.error("Error while connecting secure client server:#{e}")
-    end
+      Rails.logger.error("Error while connecting secure client server:#{e}")
+      return false
     end
   end
 

@@ -1,6 +1,7 @@
 development:
   secure_client_api_url: "https://192.168.1.87:44300/api/Validate"
+  access_token: "2aac4af7a1ac4ae7"
 
 production:
   secure_client_api_url: "https://192.168.1.87:44300/api/Validate"
-
+  access_token: "2aac4af7a1ac4ae7"

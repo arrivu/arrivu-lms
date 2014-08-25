@@ -1,12 +1,17 @@
-<h1>
-  <%= t('headers.requires_secure_client', "Secure Client Browser Required") %>
-</h1>
+<% if params[:not_valid_config] %>
+    <%= "Its is not a valid secure config file" %>
+<% else  %>
+    <h1>
+      <%= t('headers.requires_secure_client', "Secure Client Browser Required") %>
+    </h1>
 
-<p>
-  <%= t(:requires_secure_client, "This quiz requires Secure Client Browser.  Please launch Secure Client Browser to take this quiz or view your quiz results.") %>
-</p>
+    <p>
+      <%= t(:requires_secure_client, "This quiz requires Secure Client Browser.  Please launch Secure Client Browser to take this quiz or view your quiz results.") %>
+    </p>
 
-<% unless @lockdown_browser_download_url.blank? %>
+<% end %>
+
+    <% unless @lockdown_browser_download_url.blank? %>
     <p>
       <%= before_label(:download_lockdown, "If you have not already installed the browser, please download it from here") %>
       <%= link_to(t('links.download_secure_client', "[Download Secure Client Browser]"), @lockdown_browser_download_url) %>
