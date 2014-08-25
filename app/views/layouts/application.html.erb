@@ -38,7 +38,15 @@
 <%= render :partial => "layouts/head" %>
 <%= render :partial => 'shared/flash_notices' %>
 <% if @e_learning %>
-    <% jammit_css :bootstrap_and_responsive%>
+    <style>
+        .unread-messages-count{
+            border-radius: 8px;
+            background-color: #06a9ee;
+            padding: 1px 6px;
+            color: white;
+        }
+    </style>
+    <% jammit_css :bootstrap_and_responsive %>
     <div class="navbar">
       <div class="navbar-inner">
         <div class="container">
@@ -52,12 +60,12 @@
                 <a class="brand" style="width: 174px;height: 63px;left: 2px;bottom: 4px;" href="<%= root_url %>"><img class="logo custom_logo_fit <%= 'logo_bottom' if (@e_learning) %>"
                                                 src= <%= @logo_url %>></a>
               <% if @can_change_logo %>
-              <i class="icon-edit hide" style="position: absolute;display:none;margin-left: 160px;margin-top: 40px;background-color: black;color:white;padding: 6px;"></i>
+              <i class="icon-edit hide_edit_logo" style="position: absolute;display:none;margin-left: 160px;margin-top: 40px;background-color: black;color:white;padding: 6px;"></i>
               <% end %>
             <% else %>
                 <a class="brand" id="header-logo" href="<%= logo_root_url %>" <% if @e_learning  %>style="" <% end  %>><%= t 'links.dashboard', "My Dashboard" %></a>
               <% if @can_change_logo %>
-                <i class="icon-edit hide" style="position: absolute;display:none;top: 48px;left: 190px;background-color: black;color:white;padding: 6px;"></i>
+                <i class="icon-edit hide_edit_logo" style="position: absolute;display:none;top: 48px;left: 190px;background-color: black;color:white;padding: 6px;"></i>
               <% end %>
         <% end %>
             <!--Arrivu changes-->
@@ -68,10 +76,10 @@
                   <li><%= link_to "Course Library", libraries_path%></li>
               <% if !@current_user %>
                   <li class="divider-vertical"></li>
+                         <%= render :partial => 'shared/elearning_pop_up' %>
                   <% if !@domain_root_account || @domain_root_account == Account.default %>
                       <% if ELEARNING %>
                           <%= render :partial => 'shared/solo_teacher_account' %>
-                          <%= render :partial => 'shared/elearning_pop_up' %>
                       <% end %>
                   <% else  %>
                       <li><%= link_to t('links.sign_up_as_teacher', "Sign Up as a Teacher"), register_path %></li>
@@ -132,12 +140,12 @@
                     top:7px;position:absolute;"><img class="logo custom_logo_fit <%= 'logo_bottom' if (@e_learning) %>"
                                             src= <%= @logo_url %>></a>
          <% if @can_change_logo %>
-          <i class="icon-edit hide" style="position: absolute;display:none;left:156px;bottom:10px;background-color:black;color:white;padding: 6px;"></i>
+          <i class="icon-edit hide_edit_logo" style="position: absolute;display:none;left:156px;bottom:10px;background-color:black;color:white;padding: 6px;"></i>
          <% end  %>
         <% else  %>
              <a id="header-logo" href="<%= root_url %>"><%= t 'links.dashboard', "My Dashboard" %></a>
         <% if @can_change_logo %>
-         <i class="icon-edit hide" style="position: absolute;display:none;margin-left: 160px;background-color:black;color:white;padding: 6px;"></i>
+         <i class="icon-edit hide_edit_logo" style="position: absolute;display:none;margin-left: 160px;background-color:black;color:white;padding: 6px;"></i>
         <% end %>
     <% end  %>
     <!--Arrivu changes-->

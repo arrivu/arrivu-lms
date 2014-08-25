@@ -199,7 +199,10 @@ routes.draw do
   # and the application_helper method :context_url to make retrieving
   # these contexts, and also generating context-specific urls, easier.
   resources :courses do
+    #arrivu
+    get 'check_public_course_contents' => 'libraries#check_public_course_contents', :as => :check_public_course_contents, :path_name => 'check_public_course_contents'
     # DEPRECATED
+    match '/context_tags' => 'tags#context_tags',:as => :context_tags
     match 'self_enrollment/:self_enrollment' => 'courses#self_enrollment', :as => :self_enrollment, :via => :get
     match 'self_unenrollment/:self_unenrollment' => 'courses#self_unenrollment', :as => :self_unenrollment, :via => :post
     match 'restore' => 'courses#restore', :as => :restore
@@ -523,6 +526,7 @@ routes.draw do
   end
 
   resources :groups do
+    match '/context_tags' => 'tags#context_tags',:as => :context_tags
     concerns :users
     match 'remove_user/:user_id' => 'groups#remove_user', :as => :remove_user, :via => :delete
     match 'add_user' => 'groups#add_user', :as => :add_user
@@ -553,6 +557,7 @@ routes.draw do
 
   resources :accounts do
     #arrivu changes
+    match '/context_tags' => 'tags#context_tags',:as => :context_tags
     # Subscription
     resources :subscriptions
     resources :feature_sets
@@ -1043,6 +1048,7 @@ routes.draw do
 
     scope(:controller => :discussion_topics) do
       get 'courses/:course_id/discussion_topics', :action => :index, :path_name => 'course_discussion_topics'
+      get 'courses/:course_id/discussion_topic_tags', :action => :discussion_topic_tags, :path_name => 'course_discussion_topic_tags'
       get 'groups/:group_id/discussion_topics', :action => :index, :path_name => 'group_discussion_topics'
     end
 
@@ -1060,6 +1066,15 @@ routes.draw do
       get 'courses/:course_id/content_migrations/:content_migration_id/migration_issues', :action => :index, :path_name => 'course_content_migration_migration_issue_list'
       post 'courses/:course_id/content_migrations/:content_migration_id/migration_issues', :action => :create, :path_name => 'course_content_migration_migration_issue_create'
       put 'courses/:course_id/content_migrations/:content_migration_id/migration_issues/:id', :action => :update, :path_name => 'course_content_migration_migration_issue_update'
+    end
+    scope(:controller => :tags) do
+      # @param [tag] context
+      def tag_routes(context)
+        get "#{context.pluralize}/:#{context}_id/context_tags" , :action => :context_tags, :path_name => "#{context}_context_tags"
+      end
+      tag_routes("course")
+      tag_routes("group")
+      tag_routes("account")
     end
 
     scope(:controller => :discussion_topics_api) do
@@ -1511,21 +1526,21 @@ routes.draw do
       put "groups/:group_id/pages/:url", :action => :update
       delete "courses/:course_id/pages/:url", :action => :destroy
       delete "groups/:group_id/pages/:url", :action => :destroy
+      type_regexp = Regexp.new([:wiki, :faq, :career,:video,:offer,:bonus_video, :lab].join("|"))
       [:wiki, :faq, :career,:video,:offer,:bonus_video, :lab].each do |wiki_page_type|
-        type_regexp = Regexp.new([:wiki, :faq, :career,:video,:offer,:bonus_video, :lab].join("|"))
-        get "courses/:course_id/:type/#{wiki_page_type}-front-page", action: :show_front_page
-        put "courses/:course_id/:type/#{wiki_page_type}-front-page", :action => :update_front_page
+        get "courses/:course_id/:type/#{wiki_page_type}-front-page", action: :show_front_page, constraints: { type: type_regexp }
+        put "courses/:course_id/:type/#{wiki_page_type}-front-page", :action => :update_front_page, constraints: { type: type_regexp }
 
         get "courses/:course_id/:type", :action => :index, :path_name => "course_#{wiki_page_type}s", constraints: { type: type_regexp }
         get "courses/:course_id/:type/:url", :action => :show, :path_name => "course_#{wiki_page_type}", constraints: { type: type_regexp }
-        get "courses/:course_id/:type/:url/revisions", :action => :revisions, :path_name => "course_#{wiki_page_type}_revisions"
+        get "courses/:course_id/:type/:url/revisions", :action => :revisions, :path_name => "course_#{wiki_page_type}_revisions", constraints: { type: type_regexp }
       end
-      get "courses/:course_id/:type/:url/revisions/latest", :action => :show_revision
-      get "courses/:course_id/:type/:url/revisions/:revision_id", :action => :show_revision
-      post "courses/:course_id/:type/:url/revisions/:revision_id", :action => :revert
-      post "courses/:course_id/:type", :action => :create
-      put "courses/:course_id/:type/:url", :action => :update
-      delete "courses/:course_id/:type/:url", :action => :destroy
+      get "courses/:course_id/:type/:url/revisions/latest", :action => :show_revision, constraints: { type: type_regexp }
+      get "courses/:course_id/:type/:url/revisions/:revision_id", :action => :show_revision, constraints: { type: type_regexp }
+      post "courses/:course_id/:type/:url/revisions/:revision_id", :action => :revert, constraints: { type: type_regexp }
+      post "courses/:course_id/:type", :action => :create, constraints: { type: type_regexp }
+      put "courses/:course_id/:type/:url", :action => :update, constraints: { type: type_regexp }
+      delete "courses/:course_id/:type/:url", :action => :destroy, constraints: { type: type_regexp }
     end
 
     scope(:controller => :context_modules_api) do
@@ -1742,7 +1757,6 @@ routes.draw do
 
   match '/assets/:package.:extension' => 'jammit#package', :as => :jammit if defined?(Jammit)
   if ELEARNING
-    match '/context_tags' => 'tags#context_tags'
     resources :home_pages
     resources :teachers
     resources :libraries do
@@ -1764,7 +1778,6 @@ routes.draw do
   resources :omniauth_links
   match '/auth/:provider/callback' => 'authentication#create'
   get '/auth/failure' => 'authentication#auth_failure'
-  match '/context_tags' => 'tags#context_tags'
   get '/list_collections' =>'videos#list_collections'
   get '/get_collection/:collection_id' =>'videos#get_collection'
   match '/rr/:short_url_code' => 'referrals#referree_register',:as => :rr
@@ -1780,7 +1793,7 @@ routes.draw do
   #arrivu changes
   match '/accounts/:account_id/course_index_custom_design' => 'course_page_custom_designs#course_index_custom_design', :as => :account_course_index_custom_design, :via => :post
   match '/accounts/:account_id/account_index_custom_design' => 'course_page_custom_designs#account_index_custom_design', :as => :account_index_page_custom_design, :via => :post
-
+  match '/leader_boards' => 'leaderboards#leader_boards'
 
 
   #arrivu changes

@@ -1,5 +1,8 @@
 <%
-   @current_user_badges = get_user_badges_for_header
+   @current_user_badges = Rails.cache.fetch(['user_badges', @current_user.try(:id)].cache_key,:expires_in => 1.day) do
+     @current_user_badges = get_user_badges_for_header
+   end
+
 %>
 <% if @current_user_badges and !@current_user_badges.empty?  %>
     <div class="main_navigation_badges" style="background: #ffffff;">

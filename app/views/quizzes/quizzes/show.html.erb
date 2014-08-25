@@ -435,7 +435,9 @@
       <% if !@submission || !@submission.completed? || @quiz.unlimited_attempts? || (@submission.completed? && @submission.attempts_left > 0) %>
         <% if @locked && !can_do(@quiz, @current_user, :update) %>
           <div class="lock_explanation">
-            <%= lock_explanation(@locked_reason, 'quiz', @context) %>
+            <% word = lock_explanation(@locked_reason, 'quiz', @context) %>
+            <%= repalce_modules_with_class(word) %>
+
           </div>
         <% elsif !@current_user && @quiz.graded? %>
           <div class="lock_explanation">

@@ -30,6 +30,8 @@ class Folder < ActiveRecord::Base
   PROFILE_PICS_FOLDER_NAME = "profile pictures"
   MY_FILES_FOLDER_NAME = "my files"
   CONVERSATION_ATTACHMENTS_FOLDER_NAME = "conversation attachments"
+  COURSE_FOLDER_NAME ='image'
+  COURSE_BG_FOLDER_NAME ='back_ground_image'
 
   belongs_to :context, :polymorphic => true
   belongs_to :cloned_item
@@ -305,6 +307,16 @@ class Folder < ActiveRecord::Base
     folder = context.folders.find_by_parent_folder_id_and_workflow_state_and_name(Folder.root_folders(context).first.id, 'visible', 'unfiled')
     unless folder
       folder = context.folders.build(:parent_folder => Folder.root_folders(context).first, :name => 'unfiled')
+      folder.workflow_state = 'visible'
+      folder.save!
+    end
+    folder
+  end
+
+  def self.course_image(context,type)
+    folder = context.folders.find_by_parent_folder_id_and_workflow_state_and_name(Folder.root_folders(context).first.id, 'visible', type)
+    unless folder
+      folder = context.folders.build(:parent_folder => Folder.root_folders(context).first, :name => type)
       folder.workflow_state = 'visible'
       folder.save!
     end

@@ -2,8 +2,8 @@
     <meta content="Referral Registration" property="og:title" />
     <meta content="Reward" property="og:type" />
     <meta content= "<%=url_for(:only_path => false)%>" property="og:url" />
-    <meta property="og:image" content="https://arrivusystems.net/images/canvas/jigsaw_logo1.png"/>
-    <meta property="og:image:secure_url" content="https://arrivusystems.net/images/canvas/jigsaw_logo1.png"/>
+    <meta property="og:image" content="/images/arrivu_logo.png"/>
+    <meta property="og:image:secure_url" content="/images/arrivu_logo.png"/>
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="400" />
     <meta property="og:image:height" content="268" />
@@ -20,6 +20,11 @@
 
 <div id="modal-box">
   <h2>Welcome</h2>
+  <% if header_logo_image %>
+      <img class="account_logo" src= <%= @logo_url %>>
+  <% else %>
+      <a id="default_header_logo"></a>
+  <% end %>
   <% if @reward.nil? %>
   <center>Sorry, There is no reward program at this moment.</center>
   <% else  %>

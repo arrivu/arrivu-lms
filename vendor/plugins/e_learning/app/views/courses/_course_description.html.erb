@@ -1,25 +1,36 @@
+<%
+   jammit_css :tinymce
+%>
 <div id="tab-description">
     <div id="course_description" path="<%= course_course_descriptions_path(@context)%> ">
         <table>
             <tr>
-               <td>
+               <td style="float:left;">
                  <h3><%= "Short Description" %></h3>
                </td>
             </tr>
             <tr>
-               <td>
-                 <textarea <% if @context.settings[:allow_user_to_design_course_detail_page] %> readonly="readonly"<%end %> id="short_description" name="short_description_txt" style="width: 300px;height:90px;"><%= @context.course_description.short_description  if @context.course_description != nil %></textarea>
+              <td style="float: right;">
+                 <a href="#" class="short_desc_switch_views_link" style="display: inline;">HTML Editor</a>
+                 <a href="#" class="short_desc_switch_views_link" style="display: none;">Visual Editor</a>
+              </td>
+               <td style="float:left;">
+                 <textarea <% if @context.settings[:allow_user_to_design_course_detail_page] %> readonly="readonly"<%end %> id="short_description" name="short_description_txt" style="width: 400px;height:150px;"><%= @context.course_description.short_description  if @context.course_description != nil %></textarea>
                  <% if @e_learning  %>style="" <% end  %>
                </td>
             </tr>
             <tr>
-               <td>
+               <td style="float: left;">
                  <h3><%= "Description" %></h3>
                </td>
+               <td style="float: right;">
+                 <a href="#" class="long_desc_switch_views_link" style="display: inline;">HTML Editor</a>
+                 <a href="#" class="long_desc_switch_views_link" style="display: none;">Visual Editor</a>
+                </td>
             </tr>
             <tr>
                <td>
-                 <textarea <% if @context.settings[:allow_user_to_design_course_detail_page] %> readonly="readonly"<%end %> id="long_description" name="long_description_txt" style="width: 600px;height:100px"><%= @context.course_description.long_description if @context.course_description != nil %></textarea>
+                 <textarea <% if @context.settings[:allow_user_to_design_course_detail_page] %> readonly="readonly"<%end %> id="long_description" name="long_description_txt" class="rich_editor" style="width: 800px;height:300px;"><%= @context.course_description.long_description if @context.course_description != nil %></textarea>
                </td>
             </tr>
             <tr>
@@ -38,15 +49,30 @@
     <script type="text/javascript">
         require([
             'jquery' /* $ */,
-            'jquery.disableWhileLoading'
+            'jquery.disableWhileLoading',
+            'compiled/tinymce',
+            'tinymce.editor_box'
         ],function($){
+            $('.short_desc_switch_views_link').click(function(event) {
+                event.preventDefault();
+                $("#short_description").editorBox('toggle');
+                // When JQuery is upgraded, use .addBack instead of .andSelf.
+                $(this).siblings(".short_desc_switch_views_link").andSelf().toggle();
+            });
+            $(".long_desc_switch_views_link").click(function(event){
+                event.preventDefault();
+                $("#long_description").editorBox('toggle');
+                $(this).siblings(".long_desc_switch_views_link").andSelf().toggle();
+            })
+            $("#long_description").editorBox();
+            $("#short_description").editorBox();
             $("#add_course_description").click(function(){
               $("#content").disableWhileLoading($.ajax({
                 type:'POST',
                 url:$("#course_description").attr('path'),
                 data: {
-                       'short_description': $("#short_description").val(),
-                       'long_description' : $("#long_description").val()
+                       'short_description': tinymce.get('short_description').getContent(),
+                       'long_description' : tinymce.get('long_description').getContent()
                 },
                 success: function(data){
                   $.flashMessage('Course Description Saved')

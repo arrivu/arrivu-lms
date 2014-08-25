@@ -1991,6 +1991,7 @@ class Course < ActiveRecord::Base
     ExternalFeed.process_migration(data, migration); migration.update_import_progress(39.5)
     GradingStandard.process_migration(data, migration); migration.update_import_progress(40)
     ContextExternalTool.process_migration(data, migration); migration.update_import_progress(45)
+    CourseDescription.process_migration(data, migration);migration.update_import_progress(47)
 
     #These need to be ran twice because they can reference each other
     Quizzes::Quiz.process_migration(data, migration, question_data); migration.update_import_progress(50)
@@ -2550,14 +2551,14 @@ class Course < ActiveRecord::Base
       { :id => TAB_CONFERENCES, :label => t('#tabs.conferences', "Conferences"), :css_class => 'conferences', :href => :course_conferences_path },
       { :id => TAB_COLLABORATIONS, :label => t('#tabs.collaborations', "Collaborations"), :css_class => 'collaborations', :href => :course_collaborations_path },
       { :id => TAB_FAQS, :label =>t('#tabs.faq', "FAQ"), :css_class => 'faq',:href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_FAQS  },
-      { :id => TAB_CAREERS, :label =>t('#tabs.careers', "Careers"), :css_class => 'career', :href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_CAREERS },
-      { :id => TAB_REFERRALS, :label => t('#tabs.referrals', "Refer a friend"), :css_class => 'referrals', :href => :course_referrals_path},
-      { :id => TAB_VIDEOS, :label => t('#tabs.videos', "Videos"), :css_class => 'videos',:href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_VIDEOS },
-      { :id => TAB_OFFERS, :label => t('#tabs.offers', "Offers"), :css_class => 'offer',:href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_OFFERS },
-      { :id => TAB_BONUSVIDEOS, :label => t('#tabs.bonus_videos', "Bonus Videos"), :css_class => 'bonus_videos', :href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_BONUS_VIDEOS },
-      { :id => TAB_LABS, :label => t('#tabs.labs', "Labs"), :css_class => 'labs', :href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_LABS },
-      {:id => TAB_COMMENTS, :label => t('#tabs.testimonial', "Testimonial"), :css_class => 'comments', :href => :course_comments_path},
-      {:id => TAB_LIVECLASSLINKS, :label => t('#tabs.live_class_links', "Live Class Links"), :css_class => 'live_class_links', :href => :course_live_class_links_path},
+      { :id => TAB_CAREERS, :label =>t('#tabs.careers', "Careers"), :css_class => 'career', :href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_CAREERS,:hidden => true },
+      { :id => TAB_REFERRALS, :label => t('#tabs.referrals', "Refer a friend"), :css_class => 'referrals', :href => :course_referrals_path,:hidden => true},
+      { :id => TAB_VIDEOS, :label => t('#tabs.videos', "Videos"), :css_class => 'videos',:href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_VIDEOS,:hidden => true },
+      { :id => TAB_OFFERS, :label => t('#tabs.offers', "Offers"), :css_class => 'offer',:href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_OFFERS,:hidden => true },
+      { :id => TAB_BONUSVIDEOS, :label => t('#tabs.bonus_videos', "Bonus Videos"), :css_class => 'bonus_videos', :href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_BONUS_VIDEOS,:hidden => true },
+      { :id => TAB_LABS, :label => t('#tabs.labs', "Labs"), :css_class => 'labs', :href => :course_wiki_pages_path, :type => WikiPage::WIKI_TYPE_LABS,:hidden => true },
+      {:id => TAB_COMMENTS, :label => t('#tabs.testimonial', "Testimonial"), :css_class => 'comments', :href => :course_comments_path,:hidden => true},
+      {:id => TAB_LIVECLASSLINKS, :label => t('#tabs.live_class_links', "Live Class Links"), :css_class => 'live_class_links', :href => :course_live_class_links_path,:hidden => true},
       { :id => TAB_SETTINGS, :label => t('#tabs.settings', "Settings"), :css_class => 'settings', :href => :course_settings_path }
 
     ]

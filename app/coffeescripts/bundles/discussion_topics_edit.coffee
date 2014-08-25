@@ -43,7 +43,7 @@ splitAssetString) ->
     $('#discussion-title').focus()
 
   $ ->
-    $('#discussion_tag_tokens').tokenInput '/context_tags.json'
+    $('#discussion_tag_tokens').tokenInput ENV.CONTEXT_TAGGING_PATH
     prePopulate: $('#discussion_tag_tokens').data('load')
 
   view

@@ -1,0 +1,15 @@
+<% content_for :page_title, t('titles.leader_board', 'Leader Boards') %>
+
+<% jammit_css :context_list %>
+
+<% unless @current_enrollments.empty? %>
+    <h2>Leader Boards</h2>
+    <ul class=" context_list current_enrollments">
+      <% @courses = @current_user.courses_with_primary_enrollment(:current_and_invited_courses) %>
+      <% @courses.each do |course| %>
+          <a href="<%= course_path(course) %>/leaderboard">
+          <h4><%= course.name %></h4>
+          </a>
+      <% end %>
+    </ul>
+<% end %>

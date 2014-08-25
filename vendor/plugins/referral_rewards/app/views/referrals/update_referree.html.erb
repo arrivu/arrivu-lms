@@ -7,7 +7,11 @@
 
 <div id="modal-box">
   <h2>Welcome</h2>
-
+  <% if header_logo_image %>
+      <img class="account_logo" src= <%= @logo_url %>>
+  <% else %>
+      <a id="default_header_logo"></a>
+  <% end %>
       <% if @referree.coupon_code%>
       <center><h1>Your Reward code:&nbsp;<b><%= @referree.coupon_code %></b>  </h1></center>
        <% else  %>

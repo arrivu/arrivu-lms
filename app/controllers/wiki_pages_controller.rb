@@ -130,6 +130,13 @@ class WikiPagesController < ApplicationController
     end
 
     if @page.update_attributes(params[:wiki_page].merge(:user_id => @current_user.id))
+      #arrivu_changes
+      unless params[:wiki_type].nil?
+       if @page.wiki_type != params[:wiki_type]
+        @page.update_attributes(:wiki_type => params[:wiki_type])
+       end
+      end
+      #arrivu_changes
       unless @page.context.feature_enabled?(:draft_state)
         @page.set_as_front_page! if @page.is_front_page?
       end
@@ -269,12 +276,11 @@ class WikiPagesController < ApplicationController
 
   def comments_create
     authorized = can_do(@page, @current_user, :update)
-    @page_details = WikiPage.find(@page.id)
     if authorized
-      @comment = @page_details.page_comments.build(message:params[:page_comment][:message],page_id:@page.id,
+      @comment = @page.page_comments.build(message:params[:page_comment][:message],
                                                  page_type:params[:type],user_id:@current_user.id,is_approved: true)
     else
-      @comment = @page_details.page_comments.build(message:params[:page_comment][:message],page_id:@page.id,
+      @comment = @page.page_comments.build(message:params[:page_comment][:message],
                                                    page_type:params[:type],user_id:@current_user.id,is_approved: false)
     end
     respond_to do |format|
@@ -298,12 +304,9 @@ class WikiPagesController < ApplicationController
 
 
   def comment_destroy
-    if authorized_action(@page, @current_user, :update)
-      @page_details = WikiPage.find(@page.id)
-      @comment = PageComment.find(params[:id])
-         @comment.destroy
-        render :json => @comment.to_json
-    end
+    @comment = PageComment.find(params[:id])
+    @comment.destroy
+    render :json => @comment.to_json
   end
 
   def comment_approve
@@ -349,17 +352,17 @@ class WikiPagesController < ApplicationController
   end
 
   def tab_type(wiki_type='wiki')
-    if wiki_type == 'faq'
+    if wiki_type == WikiPage::WIKI_TYPE_FAQS
        @context.class::TAB_FAQS
-    elsif wiki_type == 'career'
+    elsif wiki_type == WikiPage::WIKI_TYPE_CAREERS
        @context.class::TAB_CAREERS
-    elsif wiki_type == 'video'
+    elsif wiki_type == WikiPage::WIKI_TYPE_VIDEOS
       @context.class::TAB_VIDEOS
-    elsif wiki_type == 'offer'
+    elsif wiki_type == WikiPage::WIKI_TYPE_OFFERS
       @context.class::TAB_OFFERS
-    elsif wiki_type == 'bonus_video'
+    elsif wiki_type == WikiPage::WIKI_TYPE_BONUS_VIDEOS
       @context.class::TAB_BONUSVIDEOS
-    elsif wiki_type == 'labs'
+    elsif wiki_type == WikiPage::WIKI_TYPE_LABS
       @context.class::TAB_LABS
     else
        @context.class::TAB_PAGES

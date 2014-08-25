@@ -130,6 +130,7 @@ class ApplicationController < ActionController::Base
     @js_env[:context_asset_string] = @context.try(:asset_string) if !@js_env[:context_asset_string]
     @js_env[:TIMEZONE] = Time.zone.tzinfo.identifier if !@js_env[:TIMEZONE]
     @js_env[:LOCALE] = I18n.qualified_locale if !@js_env[:LOCALE]
+    @js_env[:is_fliped_class_enabled] = @context.feature_enabled?(:flipped_classes) if @context.is_a?(Course)
     @js_env
   end
   helper_method :js_env
@@ -1319,9 +1320,9 @@ class ApplicationController < ActionController::Base
       elsif feature == :etherpad
         !!EtherpadCollaboration.config
       elsif feature == :kaltura
-        !!Kaltura::ClientV3.config and !!!@domain_root_account.Sublime_kaltura_disable?
+        !!Kaltura::ClientV3.config unless @domain_root_account.Sublime_kaltura_disable?
       elsif feature == :web_conferences
-        !!WebConference.config and !!!@domain_root_account.Sublime_bbb_disable?
+        !!WebConference.config unless @domain_root_account.Sublime_bbb_disable?
       elsif feature == :scribd
         !!ScribdAPI.config
       elsif feature == :scribd_html5

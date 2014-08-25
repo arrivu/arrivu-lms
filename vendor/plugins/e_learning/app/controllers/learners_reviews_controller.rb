@@ -6,6 +6,7 @@ class LearnersReviewsController < ApplicationController
 
   def index
     respond_to do |format|
+      @all_courses_comments  = Rails.cache.fetch(['learners_reviews', @domain_root_account.try(:id)].cache_key,:expires_in => 1.day) do
       @all_courses_comments = []
       @domain_root_account.associated_courses.active.sample(8).each do |course|
             comment = course.comments.approved.first
@@ -18,10 +19,11 @@ class LearnersReviewsController < ApplicationController
              end
             @all_courses_comments << @comments
             end
-         end
-         format.json {render :json => @all_courses_comments.to_json}
+      end
+      @all_courses_comments
+      end
+      format.json {render :json => @all_courses_comments.to_json}
     end
-    end
-
+   end
   end
 

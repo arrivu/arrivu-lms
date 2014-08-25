@@ -105,6 +105,7 @@ namespace :db do
           raise "unknown error saving password"
         end
         @account.add_user(user, 'AccountAdmin')
+        @account.enroll_to_stud_orientation(user)
         user
       rescue Exception => e
         STDERR.puts "Problem creating administrative account, please try again:{#e.mesaage}\n#{e.backtrace} "

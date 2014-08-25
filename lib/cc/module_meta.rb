@@ -84,6 +84,9 @@ module CC
                   end
                   item_node.url ct.url if ct.content_type == 'ExternalUrl'
                   item_node.position ct.position
+                  #arrivu changes
+                  item_node.item_category ct.category
+                  #arrivu changes
                   item_node.new_tab ct.new_tab
                   item_node.indent ct.indent
                 end

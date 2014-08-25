@@ -317,6 +317,8 @@ en-GB:
     adding_course_message: "Adding course..."
     adding_user_message: "Adding user..."
     logging_message: "Logging In..."
+    login_failed: "Login failed"
+    login_again: "Login again"
     additional_settings_right_side: 
       links: 
         suspend: "Suspend account"
@@ -1021,6 +1023,7 @@ en-GB:
             text: "This is a report of all courses that have none of the following items: assignments, announcements, discussions, files, modules, pages, or quizzes."
     update_failed_notice: "Account settings update failed"
     user_add_failed_message: "Adding user failed, please try again"
+    create_account_failed_message: "Create account Failed, please try again"
     user_deleted_message: "%{username} successfully deleted"
     user_inactivity_csv_description: 
       account_reports: 
@@ -2495,7 +2498,7 @@ en-GB:
         need_integer: "Please enter an integer for the play list cache"
   canvas_cartridge_description: "This enables converting a Arrivu LMS export to the intermediary json format to be imported"
   canvas_cartridge_display: "Arrivu LMS Common Cartridge"
-  canvas_cartridge_file_description: "Arrivu LMS course export package"
+  canvas_cartridge_file_description: "LMS course export package"
   canvas_cartridge_name: "Arrivu LMS cartridge importer"
   cc: 
     by: "CC attribution"
@@ -3159,7 +3162,9 @@ en-GB:
       update: "Update module"
     confirm: 
       delete: "Are you sure you want to delete this module?"
+      delete_class: "Are you sure you want to delete this class"
       delete_item: "Are you sure you want to remove this item from the module?"
+      delete_class_view_item: "Are you sure you want to remove this item from the class?"
     content: 
       add_prerequisite: "Add prerequisite to *%{module}*"
       assignment_points_possible: "out of %{points_possible}"
@@ -3217,7 +3222,11 @@ en-GB:
           next: "Next %{name_module_or_class}/item"
           outdent: "Outdent current item"
           previous: "Previous %{name_module_or_class}/item"
-      keycode_descriptions: 
+          next_module_view: "Next Module"
+          previous_module_view: "Previous Module"
+          next_class_view: "Next Class"
+          previous_class_view: "Previous Class"
+      keycode_descriptions:
         next_module_item: "Select next module or module item"
         previous_module_item: "Select previous module or module item"
         toggle_module_dragging: "Select item to begin dragging, or drop previously selected item"
@@ -3235,8 +3244,11 @@ en-GB:
       labels: 
         indent: Indent
         module_complete_when: "This module is complete when"
+        class_complete_when: "This class is complete when"
         modules: 
           before_students_view: "Before students can view this module"
+        class:
+          before_syudents_view: "Before students can view this class"
         new_tab: "Load this tool in a new tab"
         require_sequential_progress: "students must move through requirements in this module in sequential order"
         sort_by: "Sort by"
@@ -3263,6 +3275,7 @@ en-GB:
       prerequisites: 
         another_module: "Another module"
       prerequisites_need_item: "You'll need to add items before you can specify how a user will complete this module"
+      prerequisites_need_class: "You'll need to add items before you can specify how a user will complete this class"
       requirements: 
         must_contribute: "contribute to the page"
         must_score_at_least: "score at least"
@@ -3711,7 +3724,7 @@ en-GB:
   course_copy_argument_error: "A course copy requires a source course."
   course_copy_description: "Migration plugin for copying Arrivu LMS courses"
   course_copy_display: "Course copy"
-  course_copy_file_description: "Copy a Arrivu LMS course"
+  course_copy_file_description: "Copy a LMS course"
   course_copy_name: "Copy Arrivu LMS course"
   course_copy_no_course_error: "The source course was not found."
   course_copy_not_allowed_error: "You are not allowed to copy the source course."
@@ -4031,6 +4044,7 @@ en-GB:
       start_new_course: "Start a new course"
       titles: 
         courses: Courses
+        leader_board: "Leader Boards"
         rss: 
           course_announcements: "Course announcements Atom feed"
     link_enrollment: 
@@ -4237,6 +4251,7 @@ en-GB:
       course_visible_on_course_catalogue: "This Course will Visible on Course Catalogue"
       not_course_visible_on_course_catalogue: "This Course will not Visible on Course Catalogue"
       course_tags: "Click to add tags of this Course"
+      public_course_contents: "To display this course in public catalogue the course should have the folowing items"
       tabs: 
         alerts: Alerts
         details: "Course details"
@@ -8931,7 +8946,7 @@ en-GB:
         subject: "Updated Wiki Page: %{title}, %{user}"
       twitter: 
         tweet: "Arrivu LMS Alert - Page Updated: %{title}, %{user}."
-    visit_modules_page: "*Visit the course modules page for information on how to unlock this content.*"
+    visit_modules_page: "*Visit the course module page for information on how to unlock this content.*"
     web_conference_invitation: 
       email: 
         body: "You've been invited to participate in a web conference, %{title} for %{name}."
@@ -12279,6 +12294,7 @@ en-GB:
         files_page: "Click to insert a link to the files page"
         grades_page: "Click to insert a link to the grades page"
         modules: "Click to insert a link to this module"
+        classes: "Click to insert a link to this class"
         modules_page: "Click to insert a link to the modules page"
         quizzes: "Click to insert a link to this quiz"
         syllabus_page: "Click to insert a link to the syllabus"
@@ -12298,7 +12314,8 @@ en-GB:
         files_page: "Files index"
         find_on_flickr: "Find images on flickr creative commons"
         grades_page: Grades
-        modules: "Modules list"
+        modules: "Modules List"
+        classes: "Classes List"
         modules_page: Modules
         new_page: "Link to a new page"
         quizzes: "Quiz list"
@@ -12312,6 +12329,7 @@ en-GB:
         assignments: Assignments
         discussions: Discussions
         modules: Modules
+        class: Classes
         nav: 
           course: "Course navigation"
           group: "Group navigation"

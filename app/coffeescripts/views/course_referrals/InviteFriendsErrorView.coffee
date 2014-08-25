@@ -11,6 +11,7 @@ define [
     @optionProperty 'errored_users_list'
 
     initialize: ->
+      super
       @errored_users = eval(this.options.errored_users_list)
 
 

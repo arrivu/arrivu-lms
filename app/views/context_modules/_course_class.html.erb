@@ -11,31 +11,31 @@
   <div class="module_statistics">
     <!--videos-->
     <ul class="modules_ul">
-      <% if object.content_tags.active.pre_class_videos.size > 0 %>
-          <% videos_count = object.content_tags.active.pre_class_videos.size  %>
-         <li class="modules_items" data-tooltip title="This Module has <%= videos_count %> videos">
+      <% if object.content_tags.not_deleted.pre_class_videos.size > 0 %>
+          <% videos_count = object.content_tags.not_deleted.pre_class_videos.size  %>
+         <li class="modules_items" data-tooltip title="This Class has <%= videos_count %> videos">
           <img src="/images/videos.png" style="width:24px;height: 21px;" >
          </li>
       <% end %>
         <!--pre-class reading materials-->
       <% if object.content_tags.pre_class_reading_materials.not_deleted.size > 0 %>
           <% materials_count = object.content_tags.pre_class_reading_materials.not_deleted.size %>
-         <li class="modules_items" data-tooltip title="This Module Contains <%= materials_count %> reading materials">
+         <li class="modules_items" data-tooltip title="This Class Contains <%= materials_count %> reading materials">
            <img src="/images/reading_materials.ico" style="width: 17px;">
          </li>
       <% end %>
         <!--assignments-->
       <% if object.content_tags.pre_class_assignments.not_deleted.size > 0 %>
           <% assignments_count = object.content_tags.pre_class_assignments.not_deleted.size  %>
-         <li class="modules_items" data-tooltip title="This module has <%= assignments_count %> assignments">
-           <img src="/images/assignments.png" style="height: 20px;width: 26px;">
+         <li class="modules_items" data-tooltip title="This Class has <%= assignments_count %> assignments">
+           <img src="/images/assignments.png" style="height: 20px;width: 26px;opacity:0.8">
          </li>
       <% end %>
         <!--presentations-->
       <% if object.content_tags.pre_class_presentation.not_deleted.size > 0 %>
           <% presentation_count = object.content_tags.pre_class_presentation.not_deleted.size %>
-         <li class="modules_items" data-tooltip title="This module has <%= presentation_count %> presentation">
-           <img src="/images/presentation.ico" style="width: 17px;height: 17px;">
+         <li class="modules_items" data-tooltip title="This Class has <%= presentation_count %> presentation">
+           <img src="/images/presentation.ico" style="width: 17px;height: 17px;opacity:0.5">
          </li>
       <% end %>
     </ul>

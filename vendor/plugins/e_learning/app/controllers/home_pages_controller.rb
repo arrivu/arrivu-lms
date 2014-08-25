@@ -6,21 +6,44 @@ class HomePagesController < ApplicationController
   before_filter :check_e_learning, :only => [:index]
 
   def index
-    js_env :add_image_url => account_sliders_path(@domain_root_account.id)
-    js_env :context_asset_string => @domain_root_account.try(:asset_string)
-    js_env :PERMISSIONS => { enable_links:  can_do((@account ||= @domain_root_account), @current_user, :manage_account_settings)}
-    js_env :Account_Statistics => {
-          users_count: @domain_root_account.fast_all_users.count,
-          courses_count: public_courses_count,
-          modules_count:total_account_modules_count,
-          topics_count:@domain_root_account.topics.count
-    }
-    js_env :account_has_sliders => @domain_root_account.account_sliders.count > 0
-    js_env :add_knowledge_partners_url => account_knowledge_partners_path(@domain_root_account)
-    js_env :popular_courses_count => true if PopularCourse.find(:all).count > 6 rescue nil
-    js_env :show_knowledge_banner => true if @domain_root_account.knowledge_partners.count >= 1 rescue nil
-    js_env :enable_account_statistics => true if @domain_root_account.settings[:account_statistics]
-    js_env :show_popular => true if @domain_root_account.popular_courses.count > 0
+      hash = {}
+      cached_hash = get_cached_values
+      hash[:add_image_url] = cached_hash[:account_sliders_path]
+      hash[:context_asset_string] = cached_hash[:account_asset_string]
+      hash[:Account_Statistics] = cached_hash[:statistics]
+      hash[:account_has_sliders] = cached_hash[:account_sliders]
+      hash[:add_knowledge_partners_url] = cached_hash[:account_knowledge_partners_path]
+      hash[:popular_courses_count] = true if cached_hash[:popular_courses_count]
+      hash[:show_knowledge_banner] = true if cached_hash[:show_knowledge_banner]
+      hash[:enable_account_statistics] = true if cached_hash[:enable_account_statistics]
+      hash[:show_popular] = true if cached_hash[:show_popular]
+      hash[:PERMISSIONS] = get_user_permission
+      js_env hash
+  end
+
+  def get_cached_values
+    cached_hash = Rails.cache.fetch(['account_statistics', @domain_root_account.try(:id)].cache_key, :expires_in => 1.day) do
+      cached_hash = {}
+      cached_hash[:account_sliders_path] = account_sliders_path(@domain_root_account.id)
+      cached_hash[:account_asset_string] = @domain_root_account.try(:asset_string)
+      cached_hash[:account_sliders] = @domain_root_account.account_sliders.size > 0
+      cached_hash[:account_knowledge_partners_path] = account_knowledge_partners_path(@domain_root_account)
+      cached_hash[:popular_courses_count] = PopularCourse.find(:all).size > 6 rescue nil
+      cached_hash[:show_knowledge_banner] = @domain_root_account.knowledge_partners.size >= 1 rescue nil
+      cached_hash[:enable_account_statistics] = @domain_root_account.settings[:account_statistics]
+      cached_hash[:show_popular] = @domain_root_account.popular_courses.size > 0
+      cached_hash[:statistics]  = {users_count: @domain_root_account.fast_all_users.count,courses_count: public_courses_count,
+         modules_count:total_account_modules_count,topics_count:@domain_root_account.topics.count}
+      cached_hash
+    end
+  end
+
+
+  def get_user_permission
+    user_permission = Rails.cache.fetch([@current_user.try(:id),'account_permission', @domain_root_account.try(:id)].cache_key, :expires_in => 1.day) do
+      user_permission = { enable_links:  can_do((@account ||= @domain_root_account), @current_user, :manage_account_settings)}
+
+    end
   end
 
 
@@ -62,6 +85,7 @@ class HomePagesController < ApplicationController
           end
             deleted_attachments = @attachment.handle_duplicates(duplicate_handling)
           if success
+            Rails.cache.delete(['logo_url', @account.try(:id)].cache_key)
             if @account.account_header.nil?
               @account.build_account_header(account_id: @domain_root_account.id,header_logo_url: @attachment.id )
             else
@@ -117,13 +141,16 @@ class HomePagesController < ApplicationController
  def  public_courses_count
    @account_courses = []
    @published_courses = @domain_root_account.associated_courses.active.available
+   if @published_courses.empty?
+     @courses_count = 0
+   else
    @published_courses.each do|publish_course|
      if publish_course.settings[:make_this_course_visible_on_course_catalogue]
        @account_courses << publish_course
        @courses_count = @account_courses.count
      end
    end
+   end
    @courses_count
  end
-
 end

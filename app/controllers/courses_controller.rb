@@ -844,7 +844,8 @@ class CoursesController < ApplicationController
                :manage_students => @context.grants_right?(@current_user, session, :manage_students),
                :manage_admin_users => @context.grants_right?(@current_user, session, :manage_admin_users),
                :manage_account_settings => @context.account.grants_right?(@current_user, session, :manage_account_settings),
-             })
+             },
+             :CONTEXT_TAGGING_PATH => course_context_tags_path(@context, :format => :json))
 
       @alerts = @context.alerts
       @role_types = []
@@ -1886,7 +1887,7 @@ class CoursesController < ApplicationController
     if (folder_id = params[:attachment].delete(:folder_id)) && folder_id.present?
       @folder = @context.folders.active.find_by_id(folder_id)
     end
-    @folder ||= Folder.unfiled_folder(@context)
+    @folder ||= Folder.course_image(@context,params[:course_image_upload])
     params[:attachment][:uploaded_data] ||= params[:attachment_uploaded_data]
     params[:attachment][:uploaded_data] ||= params[:file]
     params[:attachment][:user] = @current_user
@@ -1904,7 +1905,8 @@ class CoursesController < ApplicationController
         @attachment.workflow_state = nil
         @attachment.file_state = 'available'
         success = nil
-        if params[:attachment][:uploaded_data]
+        if params[:attachment][:uploaded_data] && params[:attachment][:uploaded_data].content_type =~ /\Aimage\/.*\Z/
+          params[:attachment][:display_name] = params[:attachment][:uploaded_data].original_filename
           success = @attachment.update_attributes(params[:attachment])
           @attachment.errors.add(:base, t('errors.server_error', "Upload failed, server error, please try again.")) unless success
         else

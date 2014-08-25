@@ -42,6 +42,13 @@ module CC::Importer::Canvas
       wiki[:workflow_state] = meta['workflow_state']
       wiki[:workflow_state] = 'unpublished' if meta['hide_from_students'] == 'true' && (wiki[:workflow_state].nil? || wiki[:workflow_state] == 'active')
       wiki[:front_page] = meta['front_page'] == 'true'
+      #arrivu changes
+      if meta['wiki_type'].nil?
+      wiki[:wiki_type] = 'wiki'
+      else
+      wiki[:wiki_type] = meta['wiki_type']
+      end
+      #arrivu changes
       wiki[:text] = body
       wiki[:url_name] = wiki_name
       wiki

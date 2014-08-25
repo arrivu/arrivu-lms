@@ -1234,6 +1234,7 @@ en:
       ta: "Ta Enrollments"
       teachers: "Teacher Enrollments"
     user_add_failed_message: "Adding User Failed, please try again"
+    create_account_failed_message: "Create account Failed, please try again"
     user_added_message: "*%{user}* successfully added!"
     user_added_message_sent_message: "*%{user}* successfully added! They should receive an email confirmation shortly."
     user_deleted_message: "%{username} successfully deleted"
@@ -4632,6 +4633,7 @@ en:
       start_new_course: "Start a New Course"
       titles: 
         courses: Courses
+        leader_board: "Leader Boards"
         rss: 
           course_announcements: "Course Announcements Atom Feed"
     link_enrollment: 
@@ -12257,6 +12259,7 @@ en:
       labels: 
         time_elapsed: "Time Elapsed"
       login_failed: "Login failed."
+      login_again: "Login again"
       login_successful: "Login successful."
       minutes_count: 
         one: "1 Minute"

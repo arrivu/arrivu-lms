@@ -112,7 +112,7 @@ Canvas::Plugin.register 'canvas_cartridge_importer', :export_system, {
   :author_website => 'http://www.instructure.com',
   :description => lambda{ I18n.t :canvas_cartridge_description, 'This enables converting a canvas export to the intermediary json format to be imported' },
   :version => '1.0.0',
-  :select_text => lambda{ I18n.t :canvas_cartridge_file_description, "Canvas Course Export Package" },
+  :select_text => lambda{ I18n.t :canvas_cartridge_file_description, "LMS Course Export Package"},
   :sort_order => 1,
   :settings => {
     :worker => 'CCWorker',
@@ -129,7 +129,7 @@ Canvas::Plugin.register 'course_copy_importer', :export_system, {
         :author_website => 'http://www.instructure.com',
         :description => lambda { I18n.t :course_copy_description, 'Migration plugin for copying canvas courses' },
         :version => '1.0.0',
-        :select_text => lambda { I18n.t :course_copy_file_description, "Copy a Canvas Course" },
+        :select_text => lambda { I18n.t :course_copy_file_description, "Copy a LMS Course" },
         :sort_order => 0,
         :settings => {
                 :worker => 'CourseCopyWorker',
